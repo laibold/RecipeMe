@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mainFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_food_bank_24"
+        android:title="@string/recipes" />
+    <item
+        android:id="@+id/shoppingListFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_shopping_basket_24"
+        android:title="@string/shopping_list" />
+    <item
+        android:id="@+id/profileFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:title="@string/profile" />
+</menu>
