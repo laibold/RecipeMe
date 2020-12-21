@@ -12,7 +12,6 @@
         tools:layout="@layout/main_fragment">
 
         <action android:id="@+id/action_mainFragment_to_profileFragment" />
-
         <action android:id="@+id/action_mainFragment_to_shoppingListFragment" />
     </fragment>
 
@@ -20,16 +19,12 @@
         android:id="@+id/shoppingListFragment"
         android:name="de.hs_rm.recipe_me.ui.shopping_list.ShoppingListFragment"
         android:label="Shopping List Fragment"
-        tools:layout="@layout/shopping_list_fragment">
-
-    </fragment>
+        tools:layout="@layout/shopping_list_fragment" />
 
     <fragment
         android:id="@+id/profileFragment"
         android:name="de.hs_rm.recipe_me.ui.profile.ProfileFragment"
         android:label="Profile Fragment"
-        tools:layout="@layout/profile_fragment">
-
-    </fragment>
+        tools:layout="@layout/profile_fragment" />
 
 </navigation>
