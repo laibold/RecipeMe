@@ -3,4 +3,7 @@
     <string name="recipes">Rezepte</string>
     <string name="shopping_list">Einkaufsliste</string>
     <string name="profile">Profil</string>
+    <string name="next">Weiter</string>
+    <string name="back">Zurück</string>
+    <string name="add">Hinzufügen</string>
 </resources>

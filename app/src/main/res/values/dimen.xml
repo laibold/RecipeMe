@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--layout-->
+    <dimen name="outline_horizontal">20dp</dimen>
+    <dimen name="margin_top">20dp</dimen>
+    <dimen name="space_below_headline_1">35dp</dimen>
+    <item name="wrap_content" format="integer" type="dimen">-2</item>
+
+    <!--button size-->
+    <dimen name="button_width_big">150sp</dimen>
+    <dimen name="button_height_big">55dp</dimen>
+    <dimen name="button_width_small">@dimen/wrap_content</dimen>
+    <dimen name="button_height_small">40dp</dimen>
+
+    <!--text size-->
+    <dimen name="font_size_headline_1">35dp</dimen>
+    <dimen name="font_size_text">16sp</dimen>
+    <dimen name="font_size_tertiary">13sp</dimen>
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">30sp</dimen>
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">30sp</dimen>
+
+</resources>
