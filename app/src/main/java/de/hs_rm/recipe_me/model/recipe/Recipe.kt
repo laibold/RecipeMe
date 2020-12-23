@@ -11,7 +11,7 @@ data class Recipe(
     var name: String,
     var servings: Int,
     var category: RecipeCategory,
-    var image: Int
+    var imageUri: String,
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

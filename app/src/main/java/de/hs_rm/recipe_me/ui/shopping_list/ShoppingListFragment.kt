@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import de.hs_rm.recipe_me.R
-import de.hs_rm.recipe_me.databinding.MainFragmentBinding
 import de.hs_rm.recipe_me.databinding.ShoppingListFragmentBinding
 
 class ShoppingListFragment : Fragment() {

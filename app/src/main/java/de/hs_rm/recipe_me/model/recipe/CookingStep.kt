@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class CookingStep(
     val recipeId: Long,
-    var imageResId: Int,
+    var imageUri: String,
     var text: String,
     var seconds: Int
 ) {

@@ -9,7 +9,7 @@ import de.hs_rm.recipe_me.model.recipe.Recipe
 /**
  * Room Database for this app. Use Daos with Dependency Injection
  */
-@Database(entities = [Recipe::class, Ingredient::class, CookingStep::class], version = 2, exportSchema = false)
+@Database(entities = [Recipe::class, Ingredient::class, CookingStep::class], version = 3, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun recipeDao(): RecipeDao
