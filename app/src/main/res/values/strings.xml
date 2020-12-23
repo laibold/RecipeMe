@@ -6,4 +6,12 @@
     <string name="next">Weiter</string>
     <string name="back">Zurück</string>
     <string name="add">Hinzufügen</string>
+    <string name="baked_goods">Backwaren</string>
+    <string name="salads">Salate</string>
+    <string name="main_dishes">Hauptspeisen</string>
+    <string name="desserts">Desserts</string>
+    <string name="soups">Suppen</string>
+    <string name="snacks">Snacks</string>
+    <string name="breakfast">Frühstück</string>
+    <string name="beverages">Getränke</string>
 </resources>
