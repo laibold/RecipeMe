@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeFragmentBinding
+import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 
 @AndroidEntryPoint
 class RecipeFragment : Fragment() {
@@ -29,13 +30,9 @@ class RecipeFragment : Fragment() {
             false
         )
 
-        // Testing
-        viewModel.clear()
-        viewModel.insertTestRecipes()
-        viewModel.recipes.observe(viewLifecycleOwner, {
-            val r = viewModel.recipes.value
-            println()
-        })
+        val list = binding.list
+        val categories = RecipeCategory.values()
+        list.adapter = CategoryListAdapter(requireContext(), R.layout.category_listitem, categories)
 
         return binding.root
     }

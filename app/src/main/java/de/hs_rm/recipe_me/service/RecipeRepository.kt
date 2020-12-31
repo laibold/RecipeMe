@@ -34,7 +34,7 @@ class RecipeRepository @Inject constructor(
     }
 
     /**
-     * Get all recipies
+     * Get all recipes
      */
     fun getRecipes(): LiveData<List<RecipeWithRelations>> {
         return recipeDao.getRecipes()
