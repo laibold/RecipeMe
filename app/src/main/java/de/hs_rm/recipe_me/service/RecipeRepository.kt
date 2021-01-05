@@ -22,8 +22,8 @@ class RecipeRepository @Inject constructor(
     suspend fun insertTestRecipes() {
         val r1 = Recipe("Börex", 1, RecipeCategory.BAKED_GOODS, "boerex.jpg")
         val id = recipeDao.insert(r1)
-        val i1 = Ingredient(id, "Teig", 1, "Einheit")
-        val i2 = Ingredient(id, "Spinat", 1, "Einheit")
+        val i1 = Ingredient(id, "Teig", 1.0, "Einheit")
+        val i2 = Ingredient(id, "Spinat", 1.0, "Einheit")
         val s1 = CookingStep(id, "boerex-step1.jpg", "rollen", 0)
         val s2 = CookingStep(id, "boerex-step2.jpg", "backen", 0)
 
