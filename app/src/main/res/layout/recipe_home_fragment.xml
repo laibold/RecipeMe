@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/recipe_fragment"
+        android:id="@+id/recipe_home_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.recipe.RecipeFragment">
+        tools:context=".ui.recipe.RecipeHomeFragment">
 
         <TextView
             android:id="@+id/recipe_headline"

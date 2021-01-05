@@ -7,7 +7,7 @@ import de.hs_rm.recipe_me.service.RecipeRepository
 import kotlinx.coroutines.launch
 
 /**
- * ViewModel for [RecipeFragment]
+ * ViewModel for [RecipeHomeFragment]
  */
 class RecipeViewModel @ViewModelInject constructor(
     private val repository: RecipeRepository
