@@ -14,4 +14,6 @@
     <string name="snacks">Snacks</string>
     <string name="breakfast">Frühstück</string>
     <string name="beverages">Getränke</string>
+    <string name="new_recipe">Neues Rezept</string>
+    <string name="desc_add_recipe">Rezept hinzufügen</string>
 </resources>

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeHomeFragmentBinding
@@ -29,6 +30,11 @@ class RecipeHomeFragment : Fragment() {
             container,
             false
         )
+
+        binding.addButton.setOnClickListener {
+            val direction = RecipeHomeFragmentDirections.actionRecipeHomeFragmentToAddRecipeFragment()
+            findNavController().navigate(direction)
+        }
 
         val list = binding.list
         val categories = RecipeCategory.values()

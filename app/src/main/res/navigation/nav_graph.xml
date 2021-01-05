@@ -13,7 +13,16 @@
 
         <action android:id="@+id/action_recipeHomeFragment_to_profileFragment" />
         <action android:id="@+id/action_recipeHomeFragment_to_shoppingListFragment" />
+        <action
+            android:id="@+id/action_recipeHomeFragment_to_add_recipe_fragment"
+            app:destination="@id/add_recipe_fragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/add_recipe_fragment"
+        android:name="de.hs_rm.recipe_me.ui.recipe.AddRecipeFragment"
+        android:label="Add Recipe Fragment"
+        tools:layout="@layout/add_recipe_fragment" />
 
     <fragment
         android:id="@+id/shoppingListFragment"
