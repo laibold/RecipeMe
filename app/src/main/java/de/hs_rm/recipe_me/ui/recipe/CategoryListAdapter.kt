@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.CategoryListitemBinding
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
@@ -32,7 +34,6 @@ class CategoryListAdapter(
             ) as CategoryListitemBinding
 
             holder = CategoryViewHolder(viewBinding)
-
             holder.view.tag = holder
         } else {
             holder = convertView.tag as CategoryViewHolder
@@ -41,6 +42,11 @@ class CategoryListAdapter(
         val category = objects[position]
         holder.binding.categoryName.text = context.resources.getString(category.nameResId)
         holder.binding.imageView.setBackgroundResource(category.drawableResId)
+        holder.binding.root.setOnClickListener {
+            val direction =
+                RecipeHomeFragmentDirections.actionRecipeHomeFragmentToRecipeCategoryFragment(category)
+            it.findNavController().navigate(direction)
+        }
 
         return holder.view
     }

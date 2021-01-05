@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/recipeHomeFragment"
+        android:id="@+id/recipe_home_fragment"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_food_bank_24"
         android:title="@string/recipes" />
     <item
-        android:id="@+id/shoppingListFragment"
+        android:id="@+id/shopping_list_fragment"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_shopping_basket_24"
         android:title="@string/shopping_list" />
     <item
-        android:id="@+id/profileFragment"
+        android:id="@+id/profile_fragment"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_person_24"
         android:title="@string/profile" />
