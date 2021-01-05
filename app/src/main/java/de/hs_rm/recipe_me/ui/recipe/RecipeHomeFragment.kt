@@ -9,15 +9,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
-import de.hs_rm.recipe_me.databinding.RecipeFragmentBinding
+import de.hs_rm.recipe_me.databinding.RecipeHomeFragmentBinding
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 
 @AndroidEntryPoint
-class RecipeFragment : Fragment() {
+class RecipeHomeFragment : Fragment() {
 
     private val viewModel: RecipeViewModel by viewModels()
 
-    private lateinit var binding: RecipeFragmentBinding
+    private lateinit var binding: RecipeHomeFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,7 +25,7 @@ class RecipeFragment : Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.recipe_fragment,
+            R.layout.recipe_home_fragment,
             container,
             false
         )
