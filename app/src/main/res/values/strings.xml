@@ -38,4 +38,8 @@
     <string name="sprig_sg">Zweig</string>
     <string name="sprig_pl">Zweige</string>
     <string name="none_unit" />
+    <string name="name_hint">Name</string>
+    <string name="label_recipe_name">Name</string>
+    <string name="hint_recipe_name">z.B. Leckerer Hummus</string>
+    <string name="category">Kategorie</string>
 </resources>

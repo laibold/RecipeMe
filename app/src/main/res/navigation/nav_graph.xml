@@ -20,9 +20,9 @@
 
     <fragment
         android:id="@+id/add_recipe_fragment"
-        android:name="de.hs_rm.recipe_me.ui.recipe.AddRecipeFragment"
+        android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment1"
         android:label="Add Recipe Fragment"
-        tools:layout="@layout/add_recipe_fragment" />
+        tools:layout="@layout/add_recipe_fragment1" />
 
     <fragment
         android:id="@+id/shoppingListFragment"

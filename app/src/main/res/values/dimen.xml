@@ -7,7 +7,7 @@
     <item name="wrap_content" format="integer" type="dimen">-2</item>
 
     <!--button size-->
-    <dimen name="button_width_big">150sp</dimen>
+    <dimen name="button_width_big">160sp</dimen>
     <dimen name="button_height_big">55dp</dimen>
     <dimen name="button_width_small">@dimen/wrap_content</dimen>
     <dimen name="button_height_small">40dp</dimen>
