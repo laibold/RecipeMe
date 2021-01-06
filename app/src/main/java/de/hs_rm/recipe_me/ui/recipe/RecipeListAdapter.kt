@@ -5,55 +5,51 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
+
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
+import androidx.lifecycle.LiveData
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.CategoryListitemBinding
+import de.hs_rm.recipe_me.databinding.RecipeListitemBinding
+import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 
 /**
- * Adapter for View of RecipeCategories. Layout: category_listitem in ListView
+ * Adapter for View of Recipes by RecipeCategory. Layout: recipe_listitem in ListView
  */
-class CategoryListAdapter(
+class RecipeListAdapter(
     context: Context,
     resource: Int,
-    private val objects: Array<RecipeCategory>
+    private val objects: Array<Recipe>
 ) :
-    ArrayAdapter<RecipeCategory>(context, resource, objects) {
+    ArrayAdapter<Recipe>(context, resource, objects) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val holder: CategoryViewHolder
+        val holder: RecipeViewHolder
 
         if (convertView == null) {
             val viewBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.category_listitem,
+                R.layout.recipe_listitem,
                 parent,
                 false
-            ) as CategoryListitemBinding
+            ) as RecipeListitemBinding
 
-            holder = CategoryViewHolder(viewBinding)
+            holder = RecipeViewHolder(viewBinding)
             holder.view.tag = holder
         } else {
-            holder = convertView.tag as CategoryViewHolder
+            holder = convertView.tag as RecipeViewHolder
         }
 
-        val category = objects[position]
-        holder.binding.categoryName.text = context.resources.getString(category.nameResId)
-        holder.binding.imageView.setImageResource(category.drawableResId)
-        holder.binding.root.setOnClickListener {
-            val direction =
-                RecipeHomeFragmentDirections.actionRecipeHomeFragmentToRecipeCategoryFragment(category)
-            it.findNavController().navigate(direction)
-        }
+        val recipe = objects[position]
+        holder.binding.recipeName.text = recipe.name
 
         return holder.view
     }
 
     // https://www.spreys.com/view-holder-design-pattern-for-android/
     // https://stackoverflow.com/questions/43973490/how-to-do-android-data-binding-a-customadapter-inherited-from-baseadapter-for-sp
-    private class CategoryViewHolder(val binding: CategoryListitemBinding) {
+    private class RecipeViewHolder(val binding: RecipeListitemBinding) {
         val view: View = binding.root
     }
 }

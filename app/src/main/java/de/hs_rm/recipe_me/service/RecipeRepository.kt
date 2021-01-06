@@ -19,8 +19,8 @@ class RecipeRepository @Inject constructor(
     suspend fun insertTestRecipes() {
         val r1 = Recipe("Börex", 1, RecipeCategory.BAKED_GOODS, "boerex.jpg")
         val id = recipeDao.insert(r1)
-        val i1 = Ingredient(id, "Teig", 1, IngredientUnit.NONE)
-        val i2 = Ingredient(id, "Spinat", 1, IngredientUnit.NONE)
+        val i1 = Ingredient(id, "Teig", 1.0, IngredientUnit.NONE)
+        val i2 = Ingredient(id, "Spinat", 1.0, IngredientUnit.NONE)
         val s1 = CookingStep(id, "boerex-step1.jpg", "rollen", 0)
         val s2 = CookingStep(id, "boerex-step2.jpg", "backen", 0)
 
@@ -42,6 +42,13 @@ class RecipeRepository @Inject constructor(
      */
     suspend fun clearRecipes() {
         recipeDao.clear()
+    }
+
+    /**
+     * Get recipes by category
+     */
+    fun getRecipesByCategory(recipeCategory: RecipeCategory): LiveData<List<Recipe>> {
+        return recipeDao.getRecipesByCategory(recipeCategory)
     }
 
 }

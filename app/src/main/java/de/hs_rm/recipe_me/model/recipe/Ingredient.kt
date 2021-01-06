@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey
 data class Ingredient(
     val recipeId: Long,
     var name: String,
-    var quantity: Int,
+    var quantity: Double,
     var unit: IngredientUnit
 ) {
     @PrimaryKey(autoGenerate = true)

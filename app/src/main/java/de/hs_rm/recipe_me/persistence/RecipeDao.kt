@@ -5,6 +5,7 @@ import androidx.room.*
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.Recipe
+import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
 
 /**
@@ -29,4 +30,7 @@ interface RecipeDao {
     @Transaction
     @Query("SELECT * FROM Recipe")
     fun getRecipes(): LiveData<List<RecipeWithRelations>>
+
+    @Query("SELECT * FROM Recipe WHERE category = :recipeCategory")
+    fun getRecipesByCategory(recipeCategory: RecipeCategory): LiveData<List<Recipe>>
 }

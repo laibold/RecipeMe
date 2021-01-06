@@ -9,13 +9,14 @@ import de.hs_rm.recipe_me.model.recipe.Recipe
 /**
  * Room Database for this app. Use Daos with Dependency Injection
  */
-@Database(entities = [Recipe::class, Ingredient::class, CookingStep::class], version = 3, exportSchema = false)
+@Database(entities = [Recipe::class, Ingredient::class, CookingStep::class], version = 3)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun recipeDao(): RecipeDao
 
     companion object {
         private const val DATABASE_NAME = "test_db"
+        private const val ASSET_NAME = "database/data.db"
 
         // For Singleton instantiation
         @Volatile
@@ -30,9 +31,10 @@ abstract class AppDatabase : RoomDatabase() {
         // Create and pre-populate the database. See this article for more details:
         // https://medium.com/google-developers/7-pro-tips-for-room-fbadea4bfbd1#4785
         private fun buildDatabase(context: Context): AppDatabase {
-            return Room.databaseBuilder(
-                context, AppDatabase::class.java, DATABASE_NAME
-            ).fallbackToDestructiveMigration().build()
+            return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
+                .createFromAsset(ASSET_NAME)
+                .fallbackToDestructiveMigration()
+                .build()
         }
 
     }
