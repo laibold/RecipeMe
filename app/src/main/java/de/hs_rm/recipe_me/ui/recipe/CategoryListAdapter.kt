@@ -44,7 +44,9 @@ class CategoryListAdapter(
         holder.binding.imageView.setImageResource(category.drawableResId)
         holder.binding.root.setOnClickListener {
             val direction =
-                RecipeHomeFragmentDirections.actionRecipeHomeFragmentToRecipeCategoryFragment(category)
+                RecipeHomeFragmentDirections.actionRecipeHomeFragmentToRecipeCategoryFragment(
+                    category
+                )
             it.findNavController().navigate(direction)
         }
 

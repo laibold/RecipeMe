@@ -17,7 +17,6 @@ import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 class RecipeHomeFragment : Fragment() {
 
     private val viewModel: RecipeViewModel by viewModels()
-
     private lateinit var binding: RecipeHomeFragmentBinding
 
     override fun onCreateView(
@@ -41,10 +40,6 @@ class RecipeHomeFragment : Fragment() {
         list.adapter = CategoryListAdapter(requireContext(), R.layout.category_listitem, categories)
 
         return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
     }
 
 }

@@ -42,7 +42,13 @@
         android:id="@+id/add_recipe_fragment1"
         android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment1"
         android:label="Add Recipe Fragment 1"
-        tools:layout="@layout/add_recipe_fragment1" />
+        tools:layout="@layout/add_recipe_fragment1">
+
+        <argument
+            android:name="recipeCategory"
+            app:argType="de.hs_rm.recipe_me.model.recipe.RecipeCategory"
+            android:defaultValue="MAIN_DISHES"/>
+    </fragment>
 
     <fragment
         android:id="@+id/shopping_list_fragment"

@@ -17,9 +17,7 @@ import de.hs_rm.recipe_me.databinding.RecipeCategoryFragmentBinding
 class RecipeCategoryFragment : Fragment() {
 
     private val viewModel: RecipeViewModel by viewModels()
-
     private val args: RecipeCategoryFragmentArgs by navArgs()
-
     private lateinit var binding: RecipeCategoryFragmentBinding
 
     override fun onCreateView(
@@ -39,13 +37,17 @@ class RecipeCategoryFragment : Fragment() {
         binding.categoryHeadline.text = name
 
         binding.addButton.setOnClickListener {
-            val direction = RecipeCategoryFragmentDirections.actionRecipeCategoryFragmentToAddRecipeFragment()
+            val direction =
+                RecipeCategoryFragmentDirections.actionRecipeCategoryFragmentToAddRecipeFragment(
+                    category
+                )
             findNavController().navigate(direction)
         }
 
         val list = binding.recipeList
         viewModel.getRecipesByCategory(category).observe(this.viewLifecycleOwner, {
-            val adapter = RecipeListAdapter(requireContext(), R.layout.recipe_listitem, it.toTypedArray())
+            val adapter =
+                RecipeListAdapter(requireContext(), R.layout.recipe_listitem, it.toTypedArray())
             list.adapter = adapter
             adapter.notifyDataSetChanged()
         })
