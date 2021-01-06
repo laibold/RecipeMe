@@ -11,7 +11,7 @@ data class Ingredient(
     val recipeId: Long,
     var name: String,
     var quantity: Int,
-    var unit: String
+    var unit: IngredientUnit
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

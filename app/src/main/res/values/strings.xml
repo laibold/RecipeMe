@@ -16,4 +16,26 @@
     <string name="beverages">Getränke</string>
     <string name="new_recipe">Neues Rezept</string>
     <string name="desc_add_recipe">Rezept hinzufügen</string>
+    <string name="gram">Gramm</string>
+    <string name="milliliter">ml</string>
+    <string name="teaspoon">TL</string>
+    <string name="tablespoon">EL</string>
+    <string name="centimeter">cm</string>
+    <string name="package_sg">Packung</string>
+    <string name="package_pl">Packungen</string>
+    <string name="pack_sg">Päckchen</string>
+    <string name="pack_pl">Päckchen</string>
+    <string name="pinch_sg">Prise</string>
+    <string name="pinch_pl">Prisen</string>
+    <string name="slice_sg">Scheibe</string>
+    <string name="slice_pl">Scheiben</string>
+    <string name="dash_sg">Spritzer</string>
+    <string name="dash_pl">Spritzer</string>
+    <string name="stick_sg">Stange</string>
+    <string name="stick_pl">Stangen</string>
+    <string name="clove_sg">Zehe</string>
+    <string name="clove_pl">Zehen</string>
+    <string name="sprig_sg">Zweig</string>
+    <string name="sprig_pl">Zweige</string>
+    <string name="none_unit" />
 </resources>
