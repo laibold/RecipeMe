@@ -14,6 +14,7 @@
 
     <!--text size-->
     <dimen name="font_size_headline_1">35dp</dimen>
+    <dimen name="font_size_headline_2">20dp</dimen>
     <dimen name="font_size_text">16sp</dimen>
     <dimen name="font_size_tertiary">13sp</dimen>
     <dimen name="design_bottom_navigation_text_size" tools:override="true">30sp</dimen>

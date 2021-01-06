@@ -47,4 +47,11 @@ class RecipeRepository @Inject constructor(
         recipeDao.clear()
     }
 
+    /**
+     * Get recipes by category
+     */
+    fun getRecipesByCategory(recipeCategory: RecipeCategory): LiveData<List<Recipe>> {
+        return recipeDao.getRecipesByCategory(recipeCategory)
+    }
+
 }

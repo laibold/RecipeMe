@@ -6,14 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeCategoryFragmentBinding
-import de.hs_rm.recipe_me.model.recipe.RecipeCategory
+import de.hs_rm.recipe_me.service.RecipeRepository
 
 @AndroidEntryPoint
 class RecipeCategoryFragment : Fragment() {
+
+    private val viewModel: RecipeViewModel by viewModels()
 
     private val args: RecipeCategoryFragmentArgs by navArgs()
 
@@ -34,6 +38,18 @@ class RecipeCategoryFragment : Fragment() {
         val category = args.recipeCategory
         val name = context?.resources?.getString(category.nameResId)
         binding.categoryHeadline.text = name
+
+        binding.addButton.setOnClickListener {
+            val direction = RecipeCategoryFragmentDirections.actionRecipeCategoryFragmentToAddRecipeFragment()
+            findNavController().navigate(direction)
+        }
+
+        val list = binding.recipeList
+        viewModel.getRecipesByCategory(category).observe(this.viewLifecycleOwner, {
+            val adapter = RecipeListAdapter(requireContext(), R.layout.recipe_listitem, it.toTypedArray())
+            list.adapter = adapter
+            adapter.notifyDataSetChanged()
+        })
 
         return binding.root
     }
