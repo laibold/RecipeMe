@@ -55,7 +55,7 @@
             tools:ignore="RtlSymmetry" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_primary"
+            android:id="@+id/next_button"
             style="@style/primary_button"
             android:layout_marginTop="100dp"
             android:layout_marginEnd="@dimen/outline_horizontal"

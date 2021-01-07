@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
@@ -38,6 +39,12 @@ class AddRecipeFragment1 : Fragment() {
 
         val category = args.recipeCategory
         binding.categorySpinner.setSelection(category.ordinal)
+
+        binding.nextButton.setOnClickListener {
+            val direction =
+                AddRecipeFragment1Directions.actionAddRecipeFragment1ToAddRecipeFragment2()
+            findNavController().navigate(direction)
+        }
 
         return binding.root
     }

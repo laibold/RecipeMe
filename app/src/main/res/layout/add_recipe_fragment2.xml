@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/add_recipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/headline"
+            style="@style/headline_1"
+            android:text="@string/new_recipe"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/label"
+            android:layout_marginStart="@dimen/outline_horizontal"
+            android:text="@string/label_ingredient_name"
+            app:layout_constraintBottom_toTopOf="@id/ingredient_name_field"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/ingredient_name_field"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/outline_horizontal"
+            android:layout_marginTop="50dp"
+            android:hint="@string/hint_ingredient_name"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headline" />
+
+        <TextView
+            style="@style/label"
+            android:layout_marginStart="@dimen/outline_horizontal"
+            android:text="@string/label_ingredient_amount"
+            app:layout_constraintBottom_toTopOf="@id/ingredient_amount_field"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/ingredient_amount_field"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/outline_horizontal"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="100dp"
+            android:hint="@string/hint_ingredient_amount"
+            android:importantForAutofill="no"
+            android:inputType="numberDecimal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ingredient_name_field" />
+        <!--TODO allow comma as seperator-->
+
+        <TextView
+            style="@style/label"
+            android:layout_marginStart="30dp"
+            android:text="@string/label_ingredient_unit"
+            app:layout_constraintBottom_toTopOf="@id/ingredient_unit_spinner"
+            app:layout_constraintStart_toEndOf="@id/ingredient_amount_field" />
+
+        <Spinner
+            android:id="@+id/ingredient_unit_spinner"
+            android:layout_width="140dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="100dp"
+            android:paddingEnd="10dp"
+            android:spinnerMode="dropdown"
+            app:layout_constraintStart_toEndOf="@id/ingredient_amount_field"
+            app:layout_constraintTop_toBottomOf="@id/ingredient_name_field"
+            tools:ignore="RtlSymmetry" />
+        <!--TODO set maximum dropdown size-->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_ingredient_button"
+            style="@style/button_tertiary"
+            android:layout_marginStart="@dimen/outline_horizontal"
+            android:layout_marginTop="20dp"
+            android:text="@string/add"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ingredient_amount_field" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/back_button"
+            style="@style/secondary_button"
+            android:layout_marginStart="@dimen/outline_horizontal"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="20dp"
+            android:text="@string/back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/next_button"
+            style="@style/primary_button"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="@dimen/outline_horizontal"
+            android:layout_marginBottom="20dp"
+            android:text="@string/next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

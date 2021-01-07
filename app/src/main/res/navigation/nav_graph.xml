@@ -31,10 +31,10 @@
             android:name="recipeCategory"
             app:argType="de.hs_rm.recipe_me.model.recipe.RecipeCategory" />
 
-        <action android:id="@+id/action_recipeCategoryFragment_to_profileFragment" />
-        <action android:id="@+id/action_recipeCategoryFragment_to_shoppingListFragment" />
+        <action android:id="@+id/action_recipe_categoryFragment_to_profile_fragment" />
+        <action android:id="@+id/action_recipe_categoryFragment_to_shopping_list_fragment" />
         <action
-            android:id="@+id/action_recipeCategoryFragment_to_add_recipe_fragment"
+            android:id="@+id/action_recipe_category_fragment_to_add_recipe_fragment"
             app:destination="@id/add_recipe_fragment1" />
     </fragment>
 
@@ -46,8 +46,23 @@
 
         <argument
             android:name="recipeCategory"
-            app:argType="de.hs_rm.recipe_me.model.recipe.RecipeCategory"
-            android:defaultValue="MAIN_DISHES"/>
+            android:defaultValue="MAIN_DISHES"
+            app:argType="de.hs_rm.recipe_me.model.recipe.RecipeCategory" />
+
+        <action
+            android:id="@+id/action_add_recipe_fragment1_to_add_recipe_fragment2"
+            app:destination="@+id/add_recipe_fragment2" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/add_recipe_fragment2"
+        android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment2"
+        android:label="Add Recipe Fragment 2"
+        tools:layout="@layout/add_recipe_fragment2">
+
+        <action
+            android:id="@+id/action_add_recipe_fragment2_to_add_recipe_fragment1"
+            app:destination="@+id/add_recipe_fragment1" />
     </fragment>
 
     <fragment
