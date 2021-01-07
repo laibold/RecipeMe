@@ -14,7 +14,7 @@
     <string name="snacks">Snacks</string>
     <string name="breakfast">Frühstück</string>
     <string name="beverages">Getränke</string>
-    <string name="gram">Gramm</string>
+    <string name="gram">g</string>
     <string name="milliliter">ml</string>
     <string name="teaspoon">TL</string>
     <string name="tablespoon">EL</string>
@@ -37,7 +37,7 @@
     <string name="sprig_pl">Zweige</string>
     <string name="none_unit">---</string>
     <string name="name_hint">Name</string>
-    <string name="label_recipe_name">Name</string>
+    <string name="label_recipe_name">Name des Rezepts</string>
     <string name="hint_recipe_name">z.B. Leckerer Hummus</string>
     <string name="category">Kategorie</string>
     <string name="recipe">Rezept</string>
@@ -45,7 +45,7 @@
     <string name="desc_add_recipe">Rezept hinzufügen</string>
     <string name="label_ingredient_name">Name der Zutat</string>
     <string name="hint_ingredient_name">z.B. Kichererbsen</string>
-    <string name="hint_ingredient_amount">10</string>
+    <string name="hint_ingredient_amount">z.B. 1,5</string>
     <string name="label_ingredient_amount">Menge</string>
     <string name="label_ingredient_unit">Einheit</string>
 </resources>

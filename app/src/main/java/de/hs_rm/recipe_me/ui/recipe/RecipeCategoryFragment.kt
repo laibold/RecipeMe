@@ -32,7 +32,7 @@ class RecipeCategoryFragment : Fragment() {
             false
         )
 
-        val category = args.recipeCategory
+        val category = args.recipeCategory //TODO in ViewModel
         val name = context?.resources?.getString(category.nameResId)
         binding.categoryHeadline.text = name
 

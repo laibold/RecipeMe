@@ -35,10 +35,10 @@ class AddRecipeFragment1 : Fragment() {
         val names = RecipeCategory.values().map { resources.getString(it.nameResId) }
         val adapter =
             ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, names)
-        binding.categorySpinner.adapter = adapter
+        binding.recipeCategorySpinner.adapter = adapter
 
         val category = args.recipeCategory
-        binding.categorySpinner.setSelection(category.ordinal)
+        binding.recipeCategorySpinner.setSelection(category.ordinal)
 
         binding.nextButton.setOnClickListener {
             val direction =

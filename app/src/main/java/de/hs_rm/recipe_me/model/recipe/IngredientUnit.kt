@@ -5,9 +5,9 @@ import de.hs_rm.recipe_me.R
 /**
  * Unit for describing amounts of Ingredients. Singular and plural names given
  */
-enum class IngredientUnit(val singularRedId: Int, val pluralRedId: Int) {
+enum class IngredientUnit(val singularResId: Int, val pluralResId: Int) {
 
-    NONE(R.string.none_unit,R.string.none_unit),
+    NONE(R.string.none_unit, R.string.none_unit),
     GRAM(R.string.gram, R.string.gram),
     MILLILITER(R.string.milliliter, R.string.milliliter),
     TEASPOON(R.string.teaspoon, R.string.teaspoon),
