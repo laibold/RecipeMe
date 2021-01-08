@@ -18,7 +18,6 @@ import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment2Binding
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 
-
 @AndroidEntryPoint
 class AddRecipeFragment2 : Fragment() {
 
@@ -39,6 +38,11 @@ class AddRecipeFragment2 : Fragment() {
         binding.backButton.setOnClickListener {
             val direction =
                 AddRecipeFragment2Directions.actionAddRecipeFragment2ToAddRecipeFragment1()
+            findNavController().navigate(direction)
+        }
+
+        binding.nextButton.setOnClickListener {
+            val direction = AddRecipeFragment2Directions.toAddRecipeFragment3()
             findNavController().navigate(direction)
         }
 

@@ -10,28 +10,41 @@
 
         <TextView
             style="@style/text"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:maxLines="1"
+            android:maxLines="2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/button_wrapper"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="200g Kichererbsen aus dem Glas" />
+            tools:text="Ein Sieb auf eine Schüssel stellen. Kichererbsen abtropfen lassen. Den Saft auffangen und mit Zitronensaft würzen." />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="40dp"
+            android:id="@+id/button_wrapper"
+            android:layout_width="90dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/remove_button"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@drawable/ic_baseline_remove_circle_outline_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/edit_button"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/edit_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/ic_baseline_edit_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/remove_button"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

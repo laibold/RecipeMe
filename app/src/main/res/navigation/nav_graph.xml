@@ -63,6 +63,20 @@
         <action
             android:id="@+id/action_add_recipe_fragment2_to_add_recipe_fragment1"
             app:destination="@+id/add_recipe_fragment1" />
+        <action
+            android:id="@+id/to_add_recipe_fragment3"
+            app:destination="@+id/add_recipe_fragment3" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/add_recipe_fragment3"
+        android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment3"
+        android:label="Add Recipe Fragment 3"
+        tools:layout="@layout/add_recipe_fragment3">
+
+        <action
+            android:id="@+id/to_add_recipe_fragment2"
+            app:destination="@+id/add_recipe_fragment2" />
     </fragment>
 
     <fragment

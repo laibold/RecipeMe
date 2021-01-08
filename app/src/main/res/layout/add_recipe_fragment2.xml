@@ -103,7 +103,7 @@
             android:layout_height="0dp"
             android:layout_marginHorizontal="@dimen/outline_horizontal"
             android:layout_marginVertical="30dp"
-            android:divider="none"
+            android:divider="@android:color/transparent"
             app:layout_constraintBottom_toTopOf="@id/back_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ingredient_form_wrapper"

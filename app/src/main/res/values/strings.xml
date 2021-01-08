@@ -48,4 +48,16 @@
     <string name="hint_ingredient_amount">z.B. 1,5</string>
     <string name="label_ingredient_amount">Menge</string>
     <string name="label_ingredient_unit">Einheit</string>
+    <string name="done">Fertig!</string>
+    <string name="label_cooking_step">Beschreibung des Schrittes</string>
+    <string name="hint_cooking_step">z.B. Zitronen halbieren und…</string>
+    <string name="label_cooking_step_time">Timer-Zeit falls erforderlich</string>
+    <string name="hint_cooking_step_time">z.B. 90</string>
+    <string name="second_sg">Sekunde</string>
+    <string name="second_pl">Sekunden</string>
+    <string name="minute_sg">Minute</string>
+    <string name="hour_sg">Stunde</string>
+    <string name="hour_pl">Stunden</string>
+    <string name="minute_pl">Minuten</string>
+    <string name="none_time">---</string>
 </resources>
