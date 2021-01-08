@@ -5,7 +5,8 @@ import de.hs_rm.recipe_me.R
 /**
  * Unit for describing amounts of Ingredients. Singular and plural names given
  */
-enum class IngredientUnit(val singularResId: Int, val pluralResId: Int) {
+enum class IngredientUnit(private val singularResId: Int, private val pluralResId: Int) :
+    NumberModel {
 
     NONE(R.string.none_unit, R.string.none_unit),
     GRAM(R.string.gram, R.string.gram),
@@ -20,6 +21,13 @@ enum class IngredientUnit(val singularResId: Int, val pluralResId: Int) {
     DASH(R.string.dash_sg, R.string.dash_pl),
     STICK(R.string.stick_sg, R.string.stick_pl),
     CLOVE(R.string.clove_sg, R.string.clove_pl),
-    SPRIG(R.string.sprig_sg, R.string.sprig_pl)
+    SPRIG(R.string.sprig_sg, R.string.sprig_pl);
 
+    override fun getSingularId(): Int {
+        return singularResId
+    }
+
+    override fun getPluralId(): Int {
+        return pluralResId
+    }
 }

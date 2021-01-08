@@ -16,7 +16,9 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment2Binding
+import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
+import de.hs_rm.recipe_me.service.NumberResolver
 
 @AndroidEntryPoint
 class AddRecipeFragment2 : Fragment() {
@@ -45,6 +47,15 @@ class AddRecipeFragment2 : Fragment() {
             val direction = AddRecipeFragment2Directions.toAddRecipeFragment3()
             findNavController().navigate(direction)
         }
+
+        //TODO remove
+        val items = arrayOf(
+            Ingredient(0, "Teig", 200.0, IngredientUnit.GRAM),
+            Ingredient(0, "Spinat", 2.5, IngredientUnit.PACKAGE)
+        )
+
+        val adapter = IngredientListAdapter(requireContext(), R.layout.ingredient_listitem, items)
+        binding.ingredientListView.adapter = adapter
 
         // TODO in ViewModel
         // https://developer.android.com/topic/libraries/architecture/viewmodel#sharing
@@ -77,11 +88,7 @@ class AddRecipeFragment2 : Fragment() {
      * Refill adapter for unit spinner with units in singular or plural depending on amount
      */
     private fun setUnitAdapter(amount: Double?) {
-        val names = if (amount == null || amount == 1.0) {
-            IngredientUnit.values().map { resources.getString(it.singularResId) }
-        } else {
-            IngredientUnit.values().map { resources.getString(it.pluralResId) }
-        }
+        val names = NumberResolver.getNumberResourceId<IngredientUnit>(resources, amount)
 
         val adapter =
             ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, names)
