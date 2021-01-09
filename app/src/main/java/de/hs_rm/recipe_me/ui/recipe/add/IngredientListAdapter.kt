@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.IngredientListitemBinding
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
+import java.text.DecimalFormat
 
 class IngredientListAdapter(
     context: Context,
@@ -36,20 +38,29 @@ class IngredientListAdapter(
         }
 
         val ingredient = objects[position]
+
+        holder.binding.ingredientTextView.text = getIngredientText(ingredient)
+
+        holder.binding.removeIngredientButton.setOnClickListener {
+            Toast.makeText(context, ingredient.name + " entfernen", Toast.LENGTH_SHORT).show()
+        }
+
+        return holder.view
+    }
+
+    private fun getIngredientText(ingredient: Ingredient): CharSequence {
         var unitText = ""
 
         if (ingredient.unit != IngredientUnit.NONE) {
-            unitText = ingredient.quantity.toString() +
-                    " " +
-                    ingredient.unit.getNumberString(context.resources, ingredient.quantity) +
-                    " "
+            val quantityString =
+                DecimalFormat("#.##").format(ingredient.quantity).replace(".", ",")
+            val numberString =
+                ingredient.unit.getNumberString(context.resources, ingredient.quantity)
+
+            unitText = "$quantityString $numberString "
         }
 
-        val text = unitText + ingredient.name
-
-        holder.binding.ingredientNameView.text = text
-
-        return holder.view
+        return unitText + ingredient.name
     }
 
     // https://www.spreys.com/view-holder-design-pattern-for-android/

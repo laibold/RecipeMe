@@ -9,7 +9,7 @@
         android:paddingVertical="8dp">
 
         <TextView
-            android:id="@+id/ingredient_name_view"
+            android:id="@+id/ingredient_text_view"
             style="@style/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,6 +20,7 @@
             tools:text="200g Kichererbsen aus dem Glas" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/remove_ingredient_wrapper"
             android:layout_width="40dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -27,6 +28,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/remove_ingredient_button"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@drawable/ic_baseline_remove_circle_outline_24"
