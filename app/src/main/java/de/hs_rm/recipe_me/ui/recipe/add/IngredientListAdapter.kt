@@ -6,14 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
 import de.hs_rm.recipe_me.R
-import de.hs_rm.recipe_me.databinding.CategoryListitemBinding
 import de.hs_rm.recipe_me.databinding.IngredientListitemBinding
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
-import de.hs_rm.recipe_me.model.recipe.RecipeCategory
-import de.hs_rm.recipe_me.ui.recipe.RecipeHomeFragmentDirections
 
 class IngredientListAdapter(
     context: Context,
@@ -45,7 +41,7 @@ class IngredientListAdapter(
         if (ingredient.unit != IngredientUnit.NONE) {
             unitText = ingredient.quantity.toString() +
                     " " +
-                    getNumberString(ingredient.quantity, ingredient.unit) +
+                    ingredient.unit.getNumberString(context.resources, ingredient.quantity) +
                     " "
         }
 
@@ -54,14 +50,6 @@ class IngredientListAdapter(
         holder.binding.ingredientNameView.text = text
 
         return holder.view
-    }
-
-    private fun getNumberString(amount: Double, unit: IngredientUnit): String {
-        return if (amount == 1.0) {
-            context.resources.getString(unit.getSingularId())
-        } else {
-            context.resources.getString(unit.getPluralId())
-        }
     }
 
     // https://www.spreys.com/view-holder-design-pattern-for-android/

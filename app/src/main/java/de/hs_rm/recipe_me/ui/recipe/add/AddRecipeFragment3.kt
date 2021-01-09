@@ -16,7 +16,6 @@ import de.hs_rm.recipe_me.R
 
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment3Binding;
 import de.hs_rm.recipe_me.model.recipe.TimeUnit
-import de.hs_rm.recipe_me.service.NumberResolver
 
 @AndroidEntryPoint
 class AddRecipeFragment3 : Fragment() {
@@ -74,7 +73,7 @@ class AddRecipeFragment3 : Fragment() {
      * in time field
      */
     private fun setTimeAdapter(number: Int?) {
-        val names = NumberResolver.getNumberResourceId<TimeUnit>(resources, number)
+        val names = TimeUnit.getNumberStringList(resources, number)
 
         val adapter =
             ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, names)

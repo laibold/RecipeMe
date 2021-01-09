@@ -1,12 +1,12 @@
 package de.hs_rm.recipe_me.model.recipe
 
+import android.content.res.Resources
 import de.hs_rm.recipe_me.R
 
 /**
  * Unit for describing amounts of Ingredients. Singular and plural names given
  */
-enum class IngredientUnit(private val singularResId: Int, private val pluralResId: Int) :
-    NumberModel {
+enum class IngredientUnit(private val singularResId: Int, private val pluralResId: Int) {
 
     NONE(R.string.none_unit, R.string.none_unit),
     GRAM(R.string.gram, R.string.gram),
@@ -23,11 +23,21 @@ enum class IngredientUnit(private val singularResId: Int, private val pluralResI
     CLOVE(R.string.clove_sg, R.string.clove_pl),
     SPRIG(R.string.sprig_sg, R.string.sprig_pl);
 
-    override fun getSingularId(): Int {
-        return singularResId
+    companion object {
+        fun getNumberStringList(resources: Resources, amount: Double?): List<String> {
+            return values().map { it.getNumberString(resources, amount) }
+        }
     }
 
-    override fun getPluralId(): Int {
-        return pluralResId
+    fun getNumberString(
+        resources: Resources,
+        amount: Double?
+    ): String {
+        return if (amount == null || amount == 1.0) {
+            resources.getString(singularResId)
+        } else {
+            resources.getString(pluralResId)
+        }
     }
+
 }

@@ -18,7 +18,6 @@ import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment2Binding
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
-import de.hs_rm.recipe_me.service.NumberResolver
 
 @AndroidEntryPoint
 class AddRecipeFragment2 : Fragment() {
@@ -88,7 +87,7 @@ class AddRecipeFragment2 : Fragment() {
      * Refill adapter for unit spinner with units in singular or plural depending on amount
      */
     private fun setUnitAdapter(amount: Double?) {
-        val names = NumberResolver.getNumberResourceId<IngredientUnit>(resources, amount)
+        val names = IngredientUnit.getNumberStringList(resources, amount)
 
         val adapter =
             ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, names)
