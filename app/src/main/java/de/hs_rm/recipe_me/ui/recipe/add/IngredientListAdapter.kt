@@ -15,7 +15,7 @@ import java.text.DecimalFormat
 
 class IngredientListAdapter(
     context: Context,
-    resource: Int,
+    private val resource: Int,
     private val objects: Array<Ingredient>
 ) :
     ArrayAdapter<Ingredient>(context, resource, objects) {
@@ -26,7 +26,7 @@ class IngredientListAdapter(
         if (convertView == null) {
             val viewBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.ingredient_listitem,
+                resource,
                 parent,
                 false
             ) as IngredientListitemBinding

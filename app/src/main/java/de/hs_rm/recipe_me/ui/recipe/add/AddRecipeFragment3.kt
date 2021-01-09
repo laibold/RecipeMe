@@ -15,6 +15,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment3Binding;
+import de.hs_rm.recipe_me.model.recipe.CookingStep
+import de.hs_rm.recipe_me.model.recipe.Ingredient
+import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.model.recipe.TimeUnit
 
 @AndroidEntryPoint
@@ -64,6 +67,15 @@ class AddRecipeFragment3 : Fragment() {
 
             binding.cookingStepTimeSpinner.setSelection(selectedSpinnerItemId.toInt())
         }
+
+        //TODO remove
+        val items = arrayOf(
+            CookingStep(0, "boerex-step1.jpg", "Teig ausrollen. Dabei beachten, dass er möglichst dünn ist. Anschließend mit Öl bestreichen", 0),
+            CookingStep(1, "boerex-step2.jpg", "Den Teig dünn mit Spinat bestreichen und zusammenrollen.", 0)
+        )
+
+        val adapter = CookingStepListAdapter(requireContext(), R.layout.cooking_step_listitem, items)
+        binding.cookingStepListView.adapter = adapter
 
         return binding.root
     }
