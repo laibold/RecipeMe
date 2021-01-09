@@ -13,6 +13,7 @@
             style="@style/text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:maxLines="2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/button_wrapper"

@@ -14,20 +14,27 @@ class RecipeRepository @Inject constructor(
 ) {
 
     /**
-     * Insert test recipes
+     * Insert [Recipe] to repository
+     * @return id of inserted Recipe
      */
-    suspend fun insertTestRecipes() {
-        val r1 = Recipe("Börex", 1, RecipeCategory.BAKED_GOODS, "boerex.jpg")
-        val id = recipeDao.insert(r1)
-        val i1 = Ingredient(id, "Teig", 1.0, IngredientUnit.NONE)
-        val i2 = Ingredient(id, "Spinat", 1.0, IngredientUnit.NONE)
-        val s1 = CookingStep(id, "boerex-step1.jpg", "rollen", 0)
-        val s2 = CookingStep(id, "boerex-step2.jpg", "backen", 0)
+    suspend fun insert(recipe: Recipe): Long {
+        return recipeDao.insert(recipe)
+    }
 
-        recipeDao.insert(i1)
-        recipeDao.insert(i2)
-        recipeDao.insert(s1)
-        recipeDao.insert(s2)
+    /**
+     * Insert [CookingStep] to repository
+     * @return id of inserted CookingStep
+     */
+    suspend fun insert(cookingStep: CookingStep): Long {
+        return recipeDao.insert(cookingStep)
+    }
+
+    /**
+     * Insert [Ingredient] to repository
+     * @return id of inserted Ingredient
+     */
+    suspend fun insert(ingredient: Ingredient): Long {
+        return recipeDao.insert(ingredient)
     }
 
     /**

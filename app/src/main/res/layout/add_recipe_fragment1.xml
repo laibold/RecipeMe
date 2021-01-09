@@ -36,6 +36,7 @@
                 android:layout_width="match_parent"
                 android:hint="@string/hint_recipe_name"
                 android:importantForAutofill="no"
+                android:maxLength="30"
                 android:inputType="text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
