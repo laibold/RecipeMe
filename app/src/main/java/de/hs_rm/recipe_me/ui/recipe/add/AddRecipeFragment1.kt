@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,21 +33,25 @@ class AddRecipeFragment1 : Fragment() {
             false
         )
 
-        val names = RecipeCategory.values().map { resources.getString(it.nameResId) }
-        val adapter =
-            ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, names)
-        binding.recipeCategorySpinner.adapter = adapter
-
+        // Pre-set category in spinner depending on navigation source, default none
         val category = args.recipeCategory
+        binding.recipeCategorySpinner.adapter = spinnerAdapter()
         binding.recipeCategorySpinner.setSelection(category.ordinal)
 
-        binding.nextButton.setOnClickListener {
-            val direction =
-                AddRecipeFragment1Directions.actionAddRecipeFragment1ToAddRecipeFragment2()
-            findNavController().navigate(direction)
-        }
+        binding.nextButton.setOnClickListener { onNext() }
 
         return binding.root
+    }
+
+    private fun spinnerAdapter(): ArrayAdapter<String> {
+        val names = RecipeCategory.getStringList(resources)
+        return ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, names)
+    }
+
+    private fun onNext() {
+        val direction =
+            AddRecipeFragment1Directions.actionAddRecipeFragment1ToAddRecipeFragment2()
+        findNavController().navigate(direction)
     }
 
 }

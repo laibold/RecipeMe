@@ -1,6 +1,7 @@
 package de.hs_rm.recipe_me.ui.recipe.add
 
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
@@ -36,51 +37,68 @@ class AddRecipeFragment2 : Fragment() {
             false
         )
 
-        binding.backButton.setOnClickListener {
-            val direction =
-                AddRecipeFragment2Directions.actionAddRecipeFragment2ToAddRecipeFragment1()
-            findNavController().navigate(direction)
-        }
-
-        binding.nextButton.setOnClickListener {
-            val direction = AddRecipeFragment2Directions.toAddRecipeFragment3()
-            findNavController().navigate(direction)
-        }
-
         //TODO remove
         val items = arrayOf(
             Ingredient(0, "Teig", 200.0, IngredientUnit.GRAM),
             Ingredient(0, "Spinat", 2.5, IngredientUnit.PACKAGE)
         )
 
-        val adapter = IngredientListAdapter(requireContext(), R.layout.ingredient_listitem, items)
-        binding.ingredientListView.adapter = adapter
-
-        // TODO in ViewModel
-        // https://developer.android.com/topic/libraries/architecture/viewmodel#sharing
+        binding.ingredientListView.adapter = ingredientListAdapter(items)
         setUnitAdapter(null)
+        setUnitSpinnerPopupHeight(binding.ingredientUnitSpinner)
 
         binding.ingredientAmountField.doAfterTextChanged { editable ->
-            // spinner will be reset by refill, so save and set selected item here
-            val selectedSpinnerItemId = binding.ingredientUnitSpinner.selectedItemId
-
-            if (editable != null && !TextUtils.isEmpty(editable)) {
-                try {
-                    // allow comma as separator
-                    val amount = editable.toString().replace(',', '.').toDouble()
-                    setUnitAdapter(amount)
-                } catch (e: NumberFormatException) {
-                    // clear if editable cannot be parsed to double
-                    editable.clear()
-                }
-            }
-
-            binding.ingredientUnitSpinner.setSelection(selectedSpinnerItemId.toInt())
+            afterAmountTextChanged(editable)
         }
 
-        setSpinnerPopupHeight(binding.ingredientUnitSpinner)
+        binding.backButton.setOnClickListener { onBack() }
+        binding.nextButton.setOnClickListener { onNext() }
 
         return binding.root
+    }
+
+    /**
+     * @return IngredientListAdapter for IngredientListView
+     */
+    private fun ingredientListAdapter(items: Array<Ingredient>): IngredientListAdapter {
+        return IngredientListAdapter(requireContext(), R.layout.ingredient_listitem, items)
+    }
+
+    /**
+     * Set height of spinner to given pixels
+     * https://readyandroid.wordpress.com/2020/04/13/limit-the-height-of-spinner-drop-down-view-android
+     */
+    private fun setUnitSpinnerPopupHeight(spinner: Spinner) {
+        try {
+            val popup = Spinner::class.java.getDeclaredField("mPopup")
+            popup.isAccessible = true
+            val popupWindow: ListPopupWindow = popup.get(spinner) as ListPopupWindow
+            popupWindow.height = spinnerHeight
+        } catch (ex: Exception) {
+            Log.e("AddRecipeFragment2", "Error at resizing spinner popupWindow")
+        }
+    }
+
+    /**
+     * Format content of amount field and check for invalid input,
+     * fill unit spinner (singular/plural) if input is valid
+     */
+    private fun afterAmountTextChanged(editable: Editable?) {
+        // spinner will be reset by refill, so save and set selected item here
+        val selectedSpinnerItemId = binding.ingredientUnitSpinner.selectedItemId
+
+        if (editable != null && !TextUtils.isEmpty(editable)) {
+            try {
+                // allow comma as separator
+                val amount = editable.toString().replace(',', '.').toDouble()
+                setUnitAdapter(amount)
+            } catch (e: NumberFormatException) {
+                // clear if editable cannot be parsed to double
+                editable.clear()
+            }
+        }
+
+        binding.ingredientUnitSpinner.setSelection(selectedSpinnerItemId.toInt())
     }
 
     /**
@@ -95,18 +113,20 @@ class AddRecipeFragment2 : Fragment() {
     }
 
     /**
-     * Set height of spinner to given pixels
-     * https://readyandroid.wordpress.com/2020/04/13/limit-the-height-of-spinner-drop-down-view-android
+     * Navigation on back button
      */
-    private fun setSpinnerPopupHeight(spinner: Spinner) {
-        try {
-            val popup = Spinner::class.java.getDeclaredField("mPopup")
-            popup.isAccessible = true
-            val popupWindow: ListPopupWindow = popup.get(spinner) as ListPopupWindow
-            popupWindow.height = spinnerHeight
-        } catch (ex: Exception) {
-            Log.e("AddRecipeFragment2", "Error at resizing spinner popupWindow")
-        }
+    private fun onBack() {
+        val direction =
+            AddRecipeFragment2Directions.actionAddRecipeFragment2ToAddRecipeFragment1()
+        findNavController().navigate(direction)
+    }
+
+    /**
+     * Navigation on next button
+     */
+    private fun onNext() {
+        val direction = AddRecipeFragment2Directions.toAddRecipeFragment3()
+        findNavController().navigate(direction)
     }
 
 }
