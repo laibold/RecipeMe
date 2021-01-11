@@ -41,7 +41,7 @@ class AddRecipeFragment2 : Fragment() {
 
         viewModel.ingredients.observe(viewLifecycleOwner, {
             val adapter = viewModel.ingredients.value?.let { list -> ingredientListAdapter(list) }
-            binding.ingredientListView.adapter = adapter
+            binding.ingredientsListView.adapter = adapter
             adapter?.notifyDataSetChanged()
         })
 
@@ -120,15 +120,13 @@ class AddRecipeFragment2 : Fragment() {
      * clear fields afterwards
      */
     private fun addIngredient() {
-        val name = binding.ingredientNameField.text.toString()
-        val quantity = binding.ingredientQuantityField.text.toString()
-        var quantityDouble = 0.0
-        val unit = IngredientUnit.values()[binding.ingredientUnitSpinner.selectedItemPosition]
-        if (name != "" && quantity != "") {
-            if (quantity != "") {
-                quantityDouble = quantity.replace(",", ".").toDouble()
-            }
-            viewModel.addIngredient(name, quantityDouble, unit)
+        val success = viewModel.addIngredient(
+            binding.ingredientNameField.text.toString(),
+            binding.ingredientQuantityField.text.toString(),
+            IngredientUnit.values()[binding.ingredientUnitSpinner.selectedItemPosition]
+        )
+
+        if (success) {
             binding.ingredientNameField.text.clear()
             binding.ingredientQuantityField.text.clear()
             binding.ingredientUnitSpinner.setSelection(0)

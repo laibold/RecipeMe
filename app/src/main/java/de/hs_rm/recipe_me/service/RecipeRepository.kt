@@ -30,11 +30,31 @@ class RecipeRepository @Inject constructor(
     }
 
     /**
+     * Insert List of [CookingStep]s to repository
+     */
+    @JvmName("insertCookingSteps")
+    suspend fun insert(cookingSteps: MutableList<CookingStep>) {
+        for (cookingStep in cookingSteps) {
+            insert(cookingStep)
+        }
+    }
+
+    /**
      * Insert [Ingredient] to repository
      * @return id of inserted Ingredient
      */
     suspend fun insert(ingredient: Ingredient): Long {
         return recipeDao.insert(ingredient)
+    }
+
+    /**
+     * Insert List of [Ingredient]s to repository
+     */
+    @JvmName("insertIngredients")
+    suspend fun insert(ingredients: MutableList<Ingredient>) {
+        for (ingredient in ingredients) {
+            insert(ingredient)
+        }
     }
 
     /**

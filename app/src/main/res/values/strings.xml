@@ -60,4 +60,5 @@
     <string name="hour_pl">Stunden</string>
     <string name="minute_pl">Minuten</string>
     <string name="none_time">---</string>
+    <string name="update">Speichern</string>
 </resources>

@@ -18,6 +18,7 @@ import de.hs_rm.recipe_me.R
 
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment3Binding
 import de.hs_rm.recipe_me.declaration.CallbackAdapter
+import de.hs_rm.recipe_me.model.SaveAction
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.TimeUnit
 
@@ -26,6 +27,7 @@ class AddRecipeFragment3 : Fragment(), CallbackAdapter {
 
     private lateinit var binding: AddRecipeFragment3Binding
     private val viewModel: AddRecipeViewModel by activityViewModels()
+    private var adapter: CookingStepListAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +42,7 @@ class AddRecipeFragment3 : Fragment(), CallbackAdapter {
         )
 
         viewModel.cookingSteps.observe(viewLifecycleOwner, {
-            val adapter = viewModel.cookingSteps.value?.let { list -> cookingStepListAdapter(list) }
+            adapter = viewModel.cookingSteps.value?.let { list -> cookingStepListAdapter(list) }
             binding.cookingStepListView.adapter = adapter
 
             adapter?.notifyDataSetChanged()
@@ -52,7 +54,20 @@ class AddRecipeFragment3 : Fragment(), CallbackAdapter {
             afterTimeTextChanged(editable)
         }
 
-        binding.addCookingStepButton.setOnClickListener { addCookingStep() }
+        viewModel.saveAction.value = SaveAction.ADD
+        viewModel.saveAction.observe(viewLifecycleOwner, {
+            if (it == SaveAction.ADD) {
+                binding.addCookingStepButton.setOnClickListener { addCookingStep() }
+                binding.addCookingStepButton.text = resources.getString(R.string.add)
+                adapter?.editingEnabled = true
+                adapter?.notifyDataSetChanged()
+            } else if (it == SaveAction.UPDATE) {
+                binding.addCookingStepButton.setOnClickListener { updateCookingStep() }
+                binding.addCookingStepButton.text = resources.getString(R.string.update)
+                adapter?.editingEnabled = false
+                adapter?.notifyDataSetChanged()
+            }
+        })
 
         binding.backButton.setOnClickListener { onBack() }
         binding.nextButton.setOnClickListener { onNext() }
@@ -93,15 +108,27 @@ class AddRecipeFragment3 : Fragment(), CallbackAdapter {
      * Add cooking step to ViewModel scope
      */
     private fun addCookingStep() {
-        val text = binding.cookingStepField.text.toString()
-        val time = binding.cookingStepTimeField.text.toString()
-        var timeInt = 0
-        val unit = TimeUnit.values()[binding.cookingStepTimeSpinner.selectedItemPosition]
-        if (text != "") {
-            if (time != "") {
-                timeInt = time.toInt()
-            }
-            viewModel.addCookingStep(text, timeInt, unit)
+        val success = viewModel.addCookingStep(
+            binding.cookingStepField.text.toString(),
+            binding.cookingStepTimeField.text.toString(),
+            TimeUnit.values()[binding.cookingStepTimeSpinner.selectedItemPosition]
+        )
+
+        if (success) {
+            binding.cookingStepField.text.clear()
+            binding.cookingStepTimeField.text.clear()
+            binding.cookingStepTimeSpinner.setSelection(0)
+        }
+    }
+
+    private fun updateCookingStep() {
+        val success = viewModel.updateCookingStep(
+            binding.cookingStepField.text.toString(),
+            binding.cookingStepTimeField.text.toString(),
+            TimeUnit.values()[binding.cookingStepTimeSpinner.selectedItemPosition]
+        )
+
+        if (success) {
             binding.cookingStepField.text.clear()
             binding.cookingStepTimeField.text.clear()
             binding.cookingStepTimeSpinner.setSelection(0)
@@ -133,15 +160,21 @@ class AddRecipeFragment3 : Fragment(), CallbackAdapter {
      */
     private fun onNext() {
         //TODO navigate to recipe view
+        viewModel.persistEntities()
         Toast.makeText(context, "Fertig!", Toast.LENGTH_SHORT).show()
     }
 
-    override fun onCallback(cookingStep: CookingStep) {
-//        TODO set values back to form and highlight element
-//        binding.cookingStepField.text = cookingStep.text
-//        if (cookingStep.seconds > 0) {
-//            binding.cookingStepTimeField.text = cookingStep.
-//        }
+    /**
+     * Gets called from Adapter when edit was pressed for a CookingStep item
+     */
+    override fun onCallback(cookingStep: CookingStep, position: Int) {
+        binding.cookingStepField.setText(cookingStep.text)
+        if (cookingStep.timeUnit != TimeUnit.NONE) {
+            binding.cookingStepTimeField.setText(cookingStep.time.toString())
+            binding.cookingStepTimeSpinner.setSelection(cookingStep.timeUnit.ordinal)
+        }
+        viewModel.prepareCookingStepUpdate(position)
+        //TODO highlight item
     }
 
 }

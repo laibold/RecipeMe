@@ -4,9 +4,12 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import de.hs_rm.recipe_me.declaration.notifyObserver
+import de.hs_rm.recipe_me.model.SaveAction
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.service.RecipeRepository
+import kotlinx.coroutines.launch
 
 /**
  * Shared ViewModel for adding recipes.
@@ -17,6 +20,9 @@ class AddRecipeViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     lateinit var recipeCategory: RecipeCategory
+    private var updatingCookingStepIndex = -1
+
+    val saveAction = MutableLiveData<SaveAction>()
 
     private val _recipe = MutableLiveData<Recipe>()
     val recipe: LiveData<Recipe>
@@ -33,6 +39,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
     init {
         _ingredients.value = mutableListOf()
         _cookingSteps.value = mutableListOf()
+        saveAction.value = SaveAction.ADD
     }
 
     /**
@@ -46,18 +53,100 @@ class AddRecipeViewModel @ViewModelInject constructor(
 
     /**
      * Add ingredient to ViewModel scope
+     * @param name Name of ingredient (won't get added without it)
+     * @param quantity Quantity as String
+     * @param unit IngredientUnit
+     * @return true if ingredient could be added
      */
-    fun addIngredient(name: String, quantity: Double, unit: IngredientUnit) {
-        _ingredients.value?.add(Ingredient(name, quantity, unit))
-        _ingredients.notifyObserver()
+    fun addIngredient(name: String, quantity: String, unit: IngredientUnit): Boolean {
+        var quantityDouble = 0.0
+
+        if (name != "") {
+            if (quantity != "") {
+                quantityDouble = quantity.replace(",", ".").toDouble()
+            }
+            _ingredients.value?.add(Ingredient(name, quantityDouble, unit))
+            _ingredients.notifyObserver()
+            return true
+        }
+        return false
     }
 
     /**
      * Add cooking step to ViewModel scope
+     * @param text Text of cooking step (won't get added without it)
+     * @param time Time as String
+     * @param timeUnit TimeUnit
+     * @return true if cooking step could be added
      */
-    fun addCookingStep(text: String, time: Int, timeUnit: TimeUnit) {
-        _cookingSteps.value?.add(CookingStep(text, time, timeUnit))
-        _cookingSteps.notifyObserver()
+    fun addCookingStep(text: String, time: String, timeUnit: TimeUnit): Boolean {
+        val cookingStep = getCookingStep(text, time, timeUnit)
+        if (cookingStep != null) {
+            _cookingSteps.value?.add(cookingStep)
+            _cookingSteps.notifyObserver()
+            return true
+        }
+        return false
+    }
+
+    /**
+     * Update cooking step to ViewModel scope
+     * @param text Text of cooking step (won't get updated without it)
+     * @param time Time as String
+     * @param timeUnit TimeUnit
+     * @return true if cooking step could be updated
+     */
+    fun updateCookingStep(text: String, time: String, timeUnit: TimeUnit): Boolean {
+        val cookingStep = getCookingStep(text, time, timeUnit)
+        if (cookingStep != null) {
+            _cookingSteps.value?.set(updatingCookingStepIndex, cookingStep)
+            _cookingSteps.notifyObserver()
+            saveAction.value = SaveAction.ADD
+            return true
+        }
+        return false
+    }
+
+    /**
+     * Create cooking step from given parameters, return null if text is empty
+     * @param text Text of cooking step (won't get created without it)
+     * @param time Time as String
+     * @param timeUnit TimeUnit
+     * @return true if cooking step could be created
+     */
+    private fun getCookingStep(text: String, time: String, timeUnit: TimeUnit): CookingStep? {
+        var timeInt = 0
+        if (text != "") {
+            if (time != "") {
+                timeInt = time.toInt()
+            }
+            return CookingStep(text, timeInt, timeUnit)
+        }
+        return null
+    }
+
+    /**
+     * Switch internal states to update cooking steps instead of adding
+     * @param position Index of [CookingStep] in [CookingStepListAdapter] to be updated
+     */
+    fun prepareCookingStepUpdate(position: Int) {
+        updatingCookingStepIndex = position
+        saveAction.value = SaveAction.UPDATE
+    }
+
+    /**
+     * Persist entities to repository. Clears ViewModel content afterwards
+     */
+    fun persistEntities() {
+        viewModelScope.launch {
+            _recipe.value?.let { repository.insert(it) }
+            _ingredients.value?.let { repository.insert(it) }
+            _cookingSteps.value?.let { repository.insert(it) }
+        }
+
+        _recipe.value = Recipe(RecipeCategory.values()[0])
+        _ingredients.value = mutableListOf()
+        _cookingSteps.value = mutableListOf()
     }
 
 }

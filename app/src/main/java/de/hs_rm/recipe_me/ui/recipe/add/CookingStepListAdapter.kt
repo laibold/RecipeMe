@@ -4,9 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import de.hs_rm.recipe_me.databinding.CookingStepListitemBinding
 import de.hs_rm.recipe_me.declaration.CallbackAdapter
@@ -20,6 +18,8 @@ class CookingStepListAdapter(
 ) :
     ArrayAdapter<CookingStep>(context, resource, objects) {
 
+    var editingEnabled = true
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val holder: CookingStepListAdapter.CookingStepViewHolder
 
@@ -31,24 +31,38 @@ class CookingStepListAdapter(
                 false
             ) as CookingStepListitemBinding
 
-            holder = CookingStepListAdapter.CookingStepViewHolder(viewBinding)
+            holder = CookingStepViewHolder(viewBinding)
             holder.view.tag = holder
         } else {
-            holder = convertView.tag as CookingStepListAdapter.CookingStepViewHolder
+            holder = convertView.tag as CookingStepViewHolder
         }
 
         val cookingStep = objects[position]
 
         holder.binding.cookingStepText.text = cookingStep.text
 
-        holder.binding.editButton.setOnClickListener {
-            callbackListener.onCallback(objects[position])
-            Toast.makeText(context, "$position bearbeiten", Toast.LENGTH_SHORT).show()
+        if (editingEnabled) {
+            enableButtons(holder, position)
+        } else {
+            disableButtons(holder)
         }
 
+        return holder.view
+    }
+
+    private fun enableButtons(holder: CookingStepViewHolder, position: Int) {
+        holder.binding.removeButton.visibility = View.VISIBLE
         holder.binding.removeButton.setOnClickListener { removeObject(position) }
 
-        return holder.view
+        holder.binding.editButton.visibility = View.VISIBLE
+        holder.binding.editButton.setOnClickListener {
+            callbackListener.onCallback(objects[position], position)
+        }
+    }
+
+    private fun disableButtons(holder: CookingStepListAdapter.CookingStepViewHolder) {
+        holder.binding.removeButton.visibility = View.GONE
+        holder.binding.editButton.visibility = View.GONE
     }
 
     /**
