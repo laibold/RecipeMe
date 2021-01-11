@@ -4,16 +4,19 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import de.hs_rm.recipe_me.databinding.CookingStepListitemBinding
+import de.hs_rm.recipe_me.declaration.CallbackAdapter
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 
 class CookingStepListAdapter(
     context: Context,
     private val resource: Int,
-    private val objects: MutableList<CookingStep>
+    private val objects: MutableList<CookingStep>,
+    private val callbackListener: CallbackAdapter
 ) :
     ArrayAdapter<CookingStep>(context, resource, objects) {
 
@@ -39,6 +42,7 @@ class CookingStepListAdapter(
         holder.binding.cookingStepText.text = cookingStep.text
 
         holder.binding.editButton.setOnClickListener {
+            callbackListener.onCallback(objects[position])
             Toast.makeText(context, "$position bearbeiten", Toast.LENGTH_SHORT).show()
         }
 

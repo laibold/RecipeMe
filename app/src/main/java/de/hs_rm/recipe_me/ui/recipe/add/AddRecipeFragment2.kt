@@ -122,9 +122,12 @@ class AddRecipeFragment2 : Fragment() {
     private fun addIngredient() {
         val name = binding.ingredientNameField.text.toString()
         val quantity = binding.ingredientQuantityField.text.toString()
+        var quantityDouble = 0.0
         val unit = IngredientUnit.values()[binding.ingredientUnitSpinner.selectedItemPosition]
         if (name != "" && quantity != "") {
-            val quantityDouble = quantity.replace(",", ".").toDouble()
+            if (quantity != "") {
+                quantityDouble = quantity.replace(",", ".").toDouble()
+            }
             viewModel.addIngredient(name, quantityDouble, unit)
             binding.ingredientNameField.text.clear()
             binding.ingredientQuantityField.text.clear()

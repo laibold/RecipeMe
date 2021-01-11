@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
@@ -17,11 +18,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment3Binding
+import de.hs_rm.recipe_me.declaration.CallbackAdapter
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.TimeUnit
 
 @AndroidEntryPoint
-class AddRecipeFragment3 : Fragment() {
+class AddRecipeFragment3 : Fragment(), CallbackAdapter {
 
     private lateinit var binding: AddRecipeFragment3Binding
     private val viewModel: AddRecipeViewModel by activityViewModels()
@@ -41,6 +43,7 @@ class AddRecipeFragment3 : Fragment() {
         viewModel.cookingSteps.observe(viewLifecycleOwner, {
             val adapter = viewModel.cookingSteps.value?.let { list -> cookingStepListAdapter(list) }
             binding.cookingStepListView.adapter = adapter
+
             adapter?.notifyDataSetChanged()
         })
 
@@ -84,7 +87,7 @@ class AddRecipeFragment3 : Fragment() {
      * @return CookingStepListAdapter for CookingStepListView
      */
     private fun cookingStepListAdapter(items: MutableList<CookingStep>): CookingStepListAdapter {
-        return CookingStepListAdapter(requireContext(), R.layout.cooking_step_listitem, items)
+        return CookingStepListAdapter(requireContext(), R.layout.cooking_step_listitem, items, this)
     }
 
     /**
@@ -93,9 +96,12 @@ class AddRecipeFragment3 : Fragment() {
     private fun addCookingStep() {
         val text = binding.cookingStepField.text.toString()
         val time = binding.cookingStepTimeField.text.toString()
+        var timeInt = 0
         val unit = TimeUnit.values()[binding.cookingStepTimeSpinner.selectedItemPosition]
-        if (text != "" && time != "") {
-            val timeInt = time.toInt()
+        if (text != "") {
+            if (time != "") {
+                timeInt = time.toInt()
+            }
             viewModel.addCookingStep(text, timeInt, unit)
             binding.cookingStepField.text.clear()
             binding.cookingStepTimeField.text.clear()
@@ -129,6 +135,14 @@ class AddRecipeFragment3 : Fragment() {
     private fun onNext() {
         //TODO navigate to recipe view
         Toast.makeText(context, "Fertig!", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onCallback(cookingStep: CookingStep) {
+//        TODO set values back to form and highlight element
+//        binding.cookingStepField.text = cookingStep.text
+//        if (cookingStep.seconds > 0) {
+//            binding.cookingStepTimeField.text = cookingStep.
+//        }
     }
 
 }
