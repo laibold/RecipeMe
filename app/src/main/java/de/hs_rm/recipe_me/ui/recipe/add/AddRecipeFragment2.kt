@@ -146,8 +146,25 @@ class AddRecipeFragment2 : Fragment() {
      * Navigation on next button
      */
     private fun onNext() {
-        val direction = AddRecipeFragment2Directions.toAddRecipeFragment3()
-        findNavController().navigate(direction)
+        val validationOk = validate()
+
+        if (validationOk) {
+            val direction = AddRecipeFragment2Directions.toAddRecipeFragment3()
+            findNavController().navigate(direction)
+        }
+    }
+
+    /**
+     * Validate ingredients
+     * @return true if all fields are valid
+     */
+    private fun validate(): Boolean {
+        val ingredientsValid = viewModel.validateIngredients()
+        if (ingredientsValid != 0) {
+            binding.ingredientNameField.error =
+                requireContext().resources.getString(ingredientsValid)
+        }
+        return ingredientsValid == 0
     }
 
 }

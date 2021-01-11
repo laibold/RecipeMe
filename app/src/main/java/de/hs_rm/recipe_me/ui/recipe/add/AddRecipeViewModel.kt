@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.declaration.notifyObserver
 import de.hs_rm.recipe_me.model.SaveAction
 import de.hs_rm.recipe_me.model.recipe.*
@@ -167,6 +168,53 @@ class AddRecipeViewModel @ViewModelInject constructor(
         _recipe.value = Recipe(RecipeCategory.values()[0])
         _ingredients.value = mutableListOf()
         _cookingSteps.value = mutableListOf()
+    }
+
+    /**
+     * Validate recipe name (not empty)
+     * @return 0 if valid, otherwise string id for error message
+     */
+    fun validateName(name: String): Int {
+        if (name == "") {
+            return R.string.err_enter_name
+        }
+        return 0
+    }
+
+    /**
+     * Validate recipe servings (not empty and greater than 0)
+     * @return 0 if valid, otherwise string id for error message
+     */
+    fun validateServings(servings: String): Int {
+        if (servings == "") {
+            return R.string.err_enter_servings
+        }
+        if (servings.toInt() < 1) {
+            return R.string.err_servings_greater_than_zero
+        }
+        return 0
+    }
+
+    /**
+     * Validate ingredients (at least one)
+     * @return 0 if valid, otherwise string id for error message
+     */
+    fun validateIngredients(): Int {
+        if (_ingredients.value?.size == 0) {
+            return R.string.err_at_least_one_ingredient
+        }
+        return 0
+    }
+
+    /**
+     * Validate cooking steps (at least one)
+     * @return 0 if valid, otherwise string id for error message
+     */
+    fun validateCookingSteps(): Int {
+        if (_cookingSteps.value?.size == 0) {
+            return R.string.err_at_least_one_cooking_step
+        }
+        return 0
     }
 
 }

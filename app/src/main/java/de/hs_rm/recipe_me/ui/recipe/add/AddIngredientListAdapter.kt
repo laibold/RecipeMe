@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
-import de.hs_rm.recipe_me.databinding.IngredientListitemBinding
+import de.hs_rm.recipe_me.databinding.AddIngredientListitemBinding
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import java.text.DecimalFormat
@@ -27,7 +27,7 @@ class AddIngredientListAdapter(
                 resource,
                 parent,
                 false
-            ) as IngredientListitemBinding
+            ) as AddIngredientListitemBinding
 
             holder = IngredientViewHolder(viewBinding)
             holder.view.tag = holder
@@ -76,7 +76,7 @@ class AddIngredientListAdapter(
 
     // https://www.spreys.com/view-holder-design-pattern-for-android/
     // https://stackoverflow.com/questions/43973490/how-to-do-android-data-binding-a-customadapter-inherited-from-baseadapter-for-sp
-    private class IngredientViewHolder(val binding: IngredientListitemBinding) {
+    private class IngredientViewHolder(val binding: AddIngredientListitemBinding) {
         val view: View = binding.root
     }
 

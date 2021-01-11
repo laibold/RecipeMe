@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
-import de.hs_rm.recipe_me.databinding.CookingStepListitemBinding
+import de.hs_rm.recipe_me.databinding.AddCookingStepListitemBinding
 import de.hs_rm.recipe_me.declaration.CallbackAdapter
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 
@@ -21,7 +21,7 @@ class AddCookingStepListAdapter(
     var editingEnabled = true
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val holder: AddCookingStepListAdapter.CookingStepViewHolder
+        val holder: CookingStepViewHolder
 
         if (convertView == null) {
             val viewBinding = DataBindingUtil.inflate(
@@ -29,7 +29,7 @@ class AddCookingStepListAdapter(
                 resource,
                 parent,
                 false
-            ) as CookingStepListitemBinding
+            ) as AddCookingStepListitemBinding
 
             holder = CookingStepViewHolder(viewBinding)
             holder.view.tag = holder
@@ -75,7 +75,7 @@ class AddCookingStepListAdapter(
 
     // https://www.spreys.com/view-holder-design-pattern-for-android/
     // https://stackoverflow.com/questions/43973490/how-to-do-android-data-binding-a-customadapter-inherited-from-baseadapter-for-sp
-    private class CookingStepViewHolder(val binding: CookingStepListitemBinding) {
+    private class CookingStepViewHolder(val binding: AddCookingStepListitemBinding) {
         val view: View = binding.root
     }
 }

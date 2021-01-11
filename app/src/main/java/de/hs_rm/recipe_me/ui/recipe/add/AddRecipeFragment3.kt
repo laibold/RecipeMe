@@ -101,7 +101,12 @@ class AddRecipeFragment3 : Fragment(), CallbackAdapter {
      * @return CookingStepListAdapter for CookingStepListView
      */
     private fun cookingStepListAdapter(items: MutableList<CookingStep>): AddCookingStepListAdapter {
-        return AddCookingStepListAdapter(requireContext(), R.layout.add_cooking_step_listitem, items, this)
+        return AddCookingStepListAdapter(
+            requireContext(),
+            R.layout.add_cooking_step_listitem,
+            items,
+            this
+        )
     }
 
     /**
@@ -159,9 +164,19 @@ class AddRecipeFragment3 : Fragment(), CallbackAdapter {
      * Navigation on next button
      */
     private fun onNext() {
-        //TODO navigate to recipe view
-        viewModel.persistEntities()
-        Toast.makeText(context, "Fertig!", Toast.LENGTH_SHORT).show()
+        val validationOk = validate()
+
+        if (validationOk) {
+            viewModel.persistEntities()
+
+            //TODO navigate to recipe view
+            val direction = viewModel.recipe.value?.category?.let {
+                AddRecipeFragment3Directions.toRecipeCategoryFragment(it)
+            }
+            if (direction != null) {
+                findNavController().navigate(direction)
+            }
+        }
     }
 
     /**
@@ -175,6 +190,19 @@ class AddRecipeFragment3 : Fragment(), CallbackAdapter {
         }
         viewModel.prepareCookingStepUpdate(position)
         //TODO highlight item
+    }
+
+    /**
+     * Validate cooking steps
+     * @return true if all fields are valid
+     */
+    private fun validate(): Boolean {
+        val cookingStepsValid = viewModel.validateCookingSteps()
+        if (cookingStepsValid != 0) {
+            binding.cookingStepField.error = requireContext().resources.getString(cookingStepsValid)
+            return false
+        }
+        return cookingStepsValid == 0
     }
 
 }

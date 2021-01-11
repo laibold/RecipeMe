@@ -18,7 +18,7 @@ data class Recipe(
 
     constructor(recipeCategory: RecipeCategory) : this(
         "",
-        2,
+        0,
         recipeCategory,
         ""
     )

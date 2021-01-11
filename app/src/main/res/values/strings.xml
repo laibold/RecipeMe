@@ -63,4 +63,9 @@
     <string name="update">Speichern</string>
     <string name="label_recipe_servings">Anzahl Portionen</string>
     <string name="hint_recipe_servings">z.B. 2</string>
+    <string name="err_enter_name">Namen eingeben</string>
+    <string name="err_enter_servings">Portionen angeben</string>
+    <string name="err_servings_greater_than_zero">Wert größer als 0 angeben</string>
+    <string name="err_at_least_one_ingredient">Mindestens eine Zutat angeben</string>
+    <string name="err_at_least_one_cooking_step">Mindestens einen Schritt angeben</string>
 </resources>

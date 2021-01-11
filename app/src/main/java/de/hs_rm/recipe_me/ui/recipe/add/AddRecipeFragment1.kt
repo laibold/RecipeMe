@@ -44,6 +44,9 @@ class AddRecipeFragment1 : Fragment() {
         if (viewModel.recipe.value?.name != "") {
             binding.recipeNameField.setText(viewModel.recipe.value!!.name)
         }
+        if (viewModel.recipe.value?.servings != 0) {
+            binding.recipeServingsField.setText(viewModel.recipe.value!!.servings.toString())
+        }
 
         binding.nextButton.setOnClickListener { onNext() }
 
@@ -62,15 +65,37 @@ class AddRecipeFragment1 : Fragment() {
      * Navigation on next button
      */
     private fun onNext() {
-        viewModel.setRecipeAttributes(
-            binding.recipeNameField.text.toString(),
-            binding.recipeServingsField.text.toString(),
-            RecipeCategory.values()[binding.recipeCategorySpinner.selectedItemPosition]
-        )
+        val validationOk = validate()
 
-        val direction =
-            AddRecipeFragment1Directions.actionAddRecipeFragment1ToAddRecipeFragment2()
-        findNavController().navigate(direction)
+        if (validationOk) {
+            viewModel.setRecipeAttributes(
+                binding.recipeNameField.text.toString(),
+                binding.recipeServingsField.text.toString(),
+                RecipeCategory.values()[binding.recipeCategorySpinner.selectedItemPosition]
+            )
+
+            val direction =
+                AddRecipeFragment1Directions.actionAddRecipeFragment1ToAddRecipeFragment2()
+            findNavController().navigate(direction)
+        }
+    }
+
+    /**
+     * Validate input fields
+     * @return true if all fields are valid
+     */
+    private fun validate(): Boolean {
+        val nameValid = viewModel.validateName(binding.recipeNameField.text.toString())
+        if (nameValid != 0) {
+            binding.recipeNameField.error = requireContext().resources.getString(nameValid)
+        }
+
+        val servingsValid = viewModel.validateServings(binding.recipeServingsField.text.toString())
+        if (servingsValid != 0) {
+            binding.recipeServingsField.error = requireContext().resources.getString(servingsValid)
+        }
+
+        return nameValid == 0 && servingsValid == 0
     }
 
 }
