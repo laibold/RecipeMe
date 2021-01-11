@@ -38,9 +38,14 @@ class AddRecipeFragment1 : Fragment() {
         binding.recipeCategorySpinner.adapter = spinnerAdapter()
         binding.recipeCategorySpinner.setSelection(viewModel.recipeCategory.ordinal)
 
-        binding.nextButton.setOnClickListener { onNext() }
-
         viewModel.initRecipe()
+
+        // If user has already set a name and navigates back to this fragment, show name in field
+        if (viewModel.recipe.value?.name != "") {
+            binding.recipeNameField.setText(viewModel.recipe.value!!.name)
+        }
+
+        binding.nextButton.setOnClickListener { onNext() }
 
         return binding.root
     }

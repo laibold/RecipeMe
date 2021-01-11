@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.CookingStepListitemBinding
-import de.hs_rm.recipe_me.databinding.IngredientListitemBinding
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 
 class CookingStepListAdapter(
@@ -44,11 +42,17 @@ class CookingStepListAdapter(
             Toast.makeText(context, "$position bearbeiten", Toast.LENGTH_SHORT).show()
         }
 
-        holder.binding.removeButton.setOnClickListener {
-            Toast.makeText(context, "$position entfernen", Toast.LENGTH_SHORT).show()
-        }
+        holder.binding.removeButton.setOnClickListener { removeObject(position) }
 
         return holder.view
+    }
+
+    /**
+     * Remove object from list and update list
+     */
+    private fun removeObject(position: Int) {
+        objects.removeAt(position)
+        notifyDataSetChanged()
     }
 
     // https://www.spreys.com/view-holder-design-pattern-for-android/

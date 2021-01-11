@@ -36,10 +36,12 @@ class AddRecipeViewModel @ViewModelInject constructor(
     }
 
     /**
-     * Initialize recipe
+     * Initialize recipe if not already done
      */
     fun initRecipe() {
-        _recipe.value = Recipe(recipeCategory)
+        if (_recipe.value == null) {
+            _recipe.value = Recipe(recipeCategory)
+        }
     }
 
     /**
