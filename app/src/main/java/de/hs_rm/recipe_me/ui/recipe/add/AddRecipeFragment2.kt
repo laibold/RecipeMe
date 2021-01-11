@@ -63,8 +63,8 @@ class AddRecipeFragment2 : Fragment() {
     /**
      * @return IngredientListAdapter for IngredientListView
      */
-    private fun ingredientListAdapter(items: MutableList<Ingredient>): IngredientListAdapter {
-        return IngredientListAdapter(requireContext(), R.layout.ingredient_listitem, items)
+    private fun ingredientListAdapter(items: MutableList<Ingredient>): AddIngredientListAdapter {
+        return AddIngredientListAdapter(requireContext(), R.layout.add_ingredient_listitem, items)
     }
 
     /**

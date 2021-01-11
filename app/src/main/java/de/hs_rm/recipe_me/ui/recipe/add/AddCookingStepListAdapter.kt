@@ -10,7 +10,7 @@ import de.hs_rm.recipe_me.databinding.CookingStepListitemBinding
 import de.hs_rm.recipe_me.declaration.CallbackAdapter
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 
-class CookingStepListAdapter(
+class AddCookingStepListAdapter(
     context: Context,
     private val resource: Int,
     private val objects: MutableList<CookingStep>,
@@ -21,7 +21,7 @@ class CookingStepListAdapter(
     var editingEnabled = true
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val holder: CookingStepListAdapter.CookingStepViewHolder
+        val holder: AddCookingStepListAdapter.CookingStepViewHolder
 
         if (convertView == null) {
             val viewBinding = DataBindingUtil.inflate(
@@ -60,7 +60,7 @@ class CookingStepListAdapter(
         }
     }
 
-    private fun disableButtons(holder: CookingStepListAdapter.CookingStepViewHolder) {
+    private fun disableButtons(holder: AddCookingStepListAdapter.CookingStepViewHolder) {
         holder.binding.removeButton.visibility = View.GONE
         holder.binding.editButton.visibility = View.GONE
     }

@@ -109,7 +109,7 @@
             app:layout_constraintBottom_toTopOf="@id/back_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ingredient_form_wrapper"
-            tools:listitem="@layout/ingredient_listitem" />
+            tools:listitem="@layout/add_ingredient_listitem" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/back_button"

@@ -147,7 +147,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
 
     /**
      * Switch internal states to update cooking steps instead of adding
-     * @param position Index of [CookingStep] in [CookingStepListAdapter] to be updated
+     * @param position Index of [CookingStep] in [AddCookingStepListAdapter] to be updated
      */
     fun prepareCookingStepUpdate(position: Int) {
         updatingCookingStepIndex = position

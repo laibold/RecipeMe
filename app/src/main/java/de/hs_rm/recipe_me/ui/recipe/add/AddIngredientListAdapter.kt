@@ -11,7 +11,7 @@ import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import java.text.DecimalFormat
 
-class IngredientListAdapter(
+class AddIngredientListAdapter(
     context: Context,
     private val resource: Int,
     private val objects: MutableList<Ingredient>

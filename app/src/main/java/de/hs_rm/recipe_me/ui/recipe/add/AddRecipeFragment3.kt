@@ -27,7 +27,7 @@ class AddRecipeFragment3 : Fragment(), CallbackAdapter {
 
     private lateinit var binding: AddRecipeFragment3Binding
     private val viewModel: AddRecipeViewModel by activityViewModels()
-    private var adapter: CookingStepListAdapter? = null
+    private var adapter: AddCookingStepListAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -100,8 +100,8 @@ class AddRecipeFragment3 : Fragment(), CallbackAdapter {
     /**
      * @return CookingStepListAdapter for CookingStepListView
      */
-    private fun cookingStepListAdapter(items: MutableList<CookingStep>): CookingStepListAdapter {
-        return CookingStepListAdapter(requireContext(), R.layout.cooking_step_listitem, items, this)
+    private fun cookingStepListAdapter(items: MutableList<CookingStep>): AddCookingStepListAdapter {
+        return AddCookingStepListAdapter(requireContext(), R.layout.add_cooking_step_listitem, items, this)
     }
 
     /**
