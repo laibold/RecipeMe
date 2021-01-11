@@ -41,13 +41,14 @@ class IngredientListAdapter(
 
         holder.binding.ingredientTextView.text = getIngredientText(ingredient)
 
-        holder.binding.removeIngredientButton.setOnClickListener {
-            Toast.makeText(context, ingredient.name + " entfernen", Toast.LENGTH_SHORT).show()
-        }
+        holder.binding.removeIngredientButton.setOnClickListener { removeObject(position) }
 
         return holder.view
     }
 
+    /**
+     * Create text for ingredient in form of "(quantity unit) name"
+     */
     private fun getIngredientText(ingredient: Ingredient): CharSequence {
         var unitText = ""
 
@@ -61,6 +62,14 @@ class IngredientListAdapter(
         }
 
         return unitText + ingredient.name
+    }
+
+    /**
+     * Remove object from list and update list
+     */
+    private fun removeObject(position: Int) {
+        objects.removeAt(position)
+        notifyDataSetChanged()
     }
 
     // https://www.spreys.com/view-holder-design-pattern-for-android/

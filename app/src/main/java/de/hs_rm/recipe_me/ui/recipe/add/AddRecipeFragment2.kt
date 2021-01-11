@@ -121,12 +121,15 @@ class AddRecipeFragment2 : Fragment() {
      */
     private fun addIngredient() {
         val name = binding.ingredientNameField.text.toString()
-        val quantity = binding.ingredientQuantityField.text.toString().replace(",", ".").toDouble()
+        val quantity = binding.ingredientQuantityField.text.toString()
         val unit = IngredientUnit.values()[binding.ingredientUnitSpinner.selectedItemPosition]
-        viewModel.addIngredient(name, quantity, unit)
-        binding.ingredientNameField.text.clear()
-        binding.ingredientQuantityField.text.clear()
-        binding.ingredientUnitSpinner.setSelection(0)
+        if (name != "" && quantity != "") {
+            val quantityDouble = quantity.replace(",", ".").toDouble()
+            viewModel.addIngredient(name, quantityDouble, unit)
+            binding.ingredientNameField.text.clear()
+            binding.ingredientQuantityField.text.clear()
+            binding.ingredientUnitSpinner.setSelection(0)
+        }
     }
 
     /**
