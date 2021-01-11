@@ -11,7 +11,8 @@ data class CookingStep(
     val recipeId: Long,
     var imageUri: String,
     var text: String,
-    var seconds: Int
+    var time: Int,
+    var timeUnit: TimeUnit
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
@@ -20,18 +21,8 @@ data class CookingStep(
         -1,
         "",
         text,
-        timeAndUnitToSeconds(time, timeUnit)
+        time,
+        timeUnit
     )
-
-    companion object {
-        private fun timeAndUnitToSeconds(time: Int, timeUnit: TimeUnit): Int {
-            return when (timeUnit) {
-                TimeUnit.SECOND -> time
-                TimeUnit.MINUTE -> time * 60
-                TimeUnit.HOUR -> time * 3600
-                else -> 0
-            }
-        }
-    }
 
 }
