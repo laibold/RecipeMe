@@ -5,10 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import de.hs_rm.recipe_me.declaration.notifyObserver
-import de.hs_rm.recipe_me.model.recipe.Ingredient
-import de.hs_rm.recipe_me.model.recipe.IngredientUnit
-import de.hs_rm.recipe_me.model.recipe.Recipe
-import de.hs_rm.recipe_me.model.recipe.RecipeCategory
+import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.service.RecipeRepository
 
 /**
@@ -28,8 +25,14 @@ class AddRecipeViewModel @ViewModelInject constructor(
     private val _ingredients = MutableLiveData<MutableList<Ingredient>>()
     val ingredients: LiveData<MutableList<Ingredient>>
         get() = _ingredients
+
+    private val _cookingSteps = MutableLiveData<MutableList<CookingStep>>()
+    val cookingSteps: LiveData<MutableList<CookingStep>>
+        get() = _cookingSteps
+
     init {
         _ingredients.value = mutableListOf()
+        _cookingSteps.value = mutableListOf()
     }
 
     /**
@@ -45,6 +48,14 @@ class AddRecipeViewModel @ViewModelInject constructor(
     fun addIngredient(name: String, quantity: Double, unit: IngredientUnit) {
         _ingredients.value?.add(Ingredient(name, quantity, unit))
         _ingredients.notifyObserver()
+    }
+
+    /**
+     * Add cooking step to ViewModel scope
+     */
+    fun addCookingStep(text: String, time: Int, timeUnit: TimeUnit) {
+        _cookingSteps.value?.add(CookingStep(text, time, timeUnit))
+        _cookingSteps.notifyObserver()
     }
 
 }

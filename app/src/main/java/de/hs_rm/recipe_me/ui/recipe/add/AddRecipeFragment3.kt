@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
@@ -23,6 +24,7 @@ import de.hs_rm.recipe_me.model.recipe.TimeUnit
 class AddRecipeFragment3 : Fragment() {
 
     private lateinit var binding: AddRecipeFragment3Binding
+    private val viewModel: AddRecipeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,30 +38,19 @@ class AddRecipeFragment3 : Fragment() {
             false
         )
 
-        // TODO in ViewModel
-        setTimeAdapter(null)
+        viewModel.cookingSteps.observe(viewLifecycleOwner, {
+            val adapter = viewModel.cookingSteps.value?.let { list -> cookingStepListAdapter(list) }
+            binding.cookingStepListView.adapter = adapter
+            adapter?.notifyDataSetChanged()
+        })
 
-        //TODO remove
-        val items = arrayOf(
-            CookingStep(
-                0,
-                "boerex-step1.jpg",
-                "Teig ausrollen. Dabei beachten, dass er möglichst dünn ist. Anschließend mit Öl bestreichen",
-                0
-            ),
-            CookingStep(
-                1,
-                "boerex-step2.jpg",
-                "Den Teig dünn mit Spinat bestreichen und zusammenrollen.",
-                0
-            )
-        )
+        setTimeAdapter(null)
 
         binding.cookingStepTimeField.doAfterTextChanged { editable ->
             afterTimeTextChanged(editable)
         }
 
-        binding.cookingStepListView.adapter = cookingStepListAdapter(items)
+        binding.addCookingStepButton.setOnClickListener { addCookingStep() }
 
         binding.backButton.setOnClickListener { onBack() }
         binding.nextButton.setOnClickListener { onNext() }
@@ -90,6 +81,29 @@ class AddRecipeFragment3 : Fragment() {
     }
 
     /**
+     * @return CookingStepListAdapter for CookingStepListView
+     */
+    private fun cookingStepListAdapter(items: MutableList<CookingStep>): CookingStepListAdapter {
+        return CookingStepListAdapter(requireContext(), R.layout.cooking_step_listitem, items)
+    }
+
+    /**
+     * Add cooking step to ViewModel scope
+     */
+    private fun addCookingStep() {
+        val text = binding.cookingStepField.text.toString()
+        val time = binding.cookingStepTimeField.text.toString()
+        val unit = TimeUnit.values()[binding.cookingStepTimeSpinner.selectedItemPosition]
+        if (text != "" && time != "") {
+            val timeInt = time.toInt()
+            viewModel.addCookingStep(text, timeInt, unit)
+            binding.cookingStepField.text.clear()
+            binding.cookingStepTimeField.text.clear()
+            binding.cookingStepTimeSpinner.setSelection(0)
+        }
+    }
+
+    /**
      * Refill adapter for time spinner with time units in singular or plural depending on number
      * in time field
      */
@@ -99,13 +113,6 @@ class AddRecipeFragment3 : Fragment() {
         val adapter =
             ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, names)
         binding.cookingStepTimeSpinner.adapter = adapter
-    }
-
-    /**
-     * @return Adapter for cooking step ListView
-     */
-    private fun cookingStepListAdapter(items: Array<CookingStep>): CookingStepListAdapter {
-        return CookingStepListAdapter(requireContext(), R.layout.cooking_step_listitem, items)
     }
 
     /**

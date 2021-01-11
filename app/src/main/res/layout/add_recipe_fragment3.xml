@@ -84,7 +84,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/cooking_step_button"
+                android:id="@+id/add_cooking_step_button"
                 style="@style/button_tertiary"
                 android:layout_marginTop="10dp"
                 android:text="@string/add"

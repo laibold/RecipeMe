@@ -40,13 +40,13 @@ class AddRecipeFragment2 : Fragment() {
         )
 
         viewModel.ingredients.observe(viewLifecycleOwner, {
-            val adapter = viewModel.ingredients.value?.let { it1 -> ingredientListAdapter(it1) }
+            val adapter = viewModel.ingredients.value?.let { list -> ingredientListAdapter(list) }
             binding.ingredientListView.adapter = adapter
             adapter?.notifyDataSetChanged()
         })
 
         setUnitAdapter(null)
-        setUnitSpinnerPopupHeight(binding.ingredientUnitSpinner) //FIXME
+        setUnitSpinnerPopupHeight(binding.ingredientUnitSpinner) //FIXME restrict size
 
         binding.ingredientQuantityField.doAfterTextChanged { editable ->
             afterAmountTextChanged(editable)

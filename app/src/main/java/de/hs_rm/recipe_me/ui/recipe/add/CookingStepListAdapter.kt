@@ -15,7 +15,7 @@ import de.hs_rm.recipe_me.model.recipe.CookingStep
 class CookingStepListAdapter(
     context: Context,
     private val resource: Int,
-    private val objects: Array<CookingStep>
+    private val objects: MutableList<CookingStep>
 ) :
     ArrayAdapter<CookingStep>(context, resource, objects) {
 
