@@ -62,13 +62,11 @@ class AddRecipeFragment1 : Fragment() {
      * Navigation on next button
      */
     private fun onNext() {
-        val recipe = viewModel.recipe.value
-        if (recipe != null) {
-            recipe.name = binding.recipeNameField.text.toString()
-            recipe.servings // TODO
-            val position = binding.recipeCategorySpinner.selectedItemPosition
-            recipe.category = RecipeCategory.values()[position]
-        }
+        viewModel.setRecipeAttributes(
+            binding.recipeNameField.text.toString(),
+            binding.recipeServingsField.text.toString(),
+            RecipeCategory.values()[binding.recipeCategorySpinner.selectedItemPosition]
+        )
 
         val direction =
             AddRecipeFragment1Directions.actionAddRecipeFragment1ToAddRecipeFragment2()

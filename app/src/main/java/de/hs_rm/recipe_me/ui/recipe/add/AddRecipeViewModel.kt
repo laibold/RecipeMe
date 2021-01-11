@@ -52,6 +52,26 @@ class AddRecipeViewModel @ViewModelInject constructor(
     }
 
     /**
+     * Set attributes to new [Recipe]
+     * @param name Name of the Recipe (must not be empty)
+     * @param servings Number of servings (must be greater than 0)
+     * @param category Category of the Recipe
+     * @return true if input was valid
+     */
+    fun setRecipeAttributes(name: String, servings: String, category: RecipeCategory): Boolean {
+        if (name != "" && servings != "") {
+            val servingsInt = servings.toInt()
+            if (servingsInt > 0) {
+                _recipe.value?.name = name
+                _recipe.value?.servings = servingsInt
+                _recipe.value?.category = category
+                return true
+            }
+        }
+        return false
+    }
+
+    /**
      * Add ingredient to ViewModel scope
      * @param name Name of ingredient (won't get added without it)
      * @param quantity Quantity as String

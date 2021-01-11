@@ -61,4 +61,6 @@
     <string name="minute_pl">Minuten</string>
     <string name="none_time">---</string>
     <string name="update">Speichern</string>
+    <string name="label_recipe_servings">Anzahl Portionen</string>
+    <string name="hint_recipe_servings">z.B. 2</string>
 </resources>
