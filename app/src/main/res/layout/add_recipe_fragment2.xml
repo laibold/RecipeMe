@@ -39,7 +39,7 @@
                 android:hint="@string/hint_ingredient_name"
                 android:maxLength="30"
                 android:importantForAutofill="no"
-                android:inputType="text"
+                android:inputType="textCapSentences"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ingredient_name_label" />
 
@@ -53,22 +53,22 @@
                 app:layout_constraintTop_toBottomOf="@id/ingredient_name_field">
 
                 <TextView
-                    android:id="@+id/ingredient_amount_label"
+                    android:id="@+id/ingredient_quantity_label"
                     style="@style/label"
-                    android:text="@string/label_ingredient_amount"
+                    android:text="@string/label_ingredient_quantity"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
-                    android:id="@+id/ingredient_amount_field"
+                    android:id="@+id/ingredient_quantity_field"
                     style="@style/edit_text"
                     android:layout_width="100dp"
                     android:digits="0123456789.,"
-                    android:hint="@string/hint_ingredient_amount"
+                    android:hint="@string/hint_ingredient_quantity"
                     android:importantForAutofill="no"
                     android:inputType="numberDecimal"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ingredient_amount_label" />
+                    app:layout_constraintTop_toBottomOf="@id/ingredient_quantity_label" />
 
                 <TextView
                     android:id="@+id/ingredient_unit_label"
@@ -84,7 +84,7 @@
                     android:layout_marginStart="30dp"
                     android:spinnerMode="dropdown"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/ingredient_amount_field"
+                    app:layout_constraintStart_toEndOf="@id/ingredient_quantity_field"
                     app:layout_constraintTop_toBottomOf="@id/ingredient_unit_label" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

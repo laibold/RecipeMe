@@ -8,11 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ListPopupWindow
 import android.widget.Spinner
-import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
@@ -25,6 +26,7 @@ class AddRecipeFragment2 : Fragment() {
 
     private lateinit var binding: AddRecipeFragment2Binding
     private val spinnerHeight = 1000
+    private val viewModel: AddRecipeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,19 +39,20 @@ class AddRecipeFragment2 : Fragment() {
             false
         )
 
-        //TODO remove
-        val items = arrayOf(
-            Ingredient(0, "Teig", 200.0, IngredientUnit.GRAM),
-            Ingredient(0, "Spinat", 2.5, IngredientUnit.PACKAGE)
-        )
+        viewModel.ingredients.observe(viewLifecycleOwner, {
+            val adapter = viewModel.ingredients.value?.let { it1 -> ingredientListAdapter(it1) }
+            binding.ingredientListView.adapter = adapter
+            adapter?.notifyDataSetChanged()
+        })
 
-        binding.ingredientListView.adapter = ingredientListAdapter(items)
         setUnitAdapter(null)
-        setUnitSpinnerPopupHeight(binding.ingredientUnitSpinner)
+        setUnitSpinnerPopupHeight(binding.ingredientUnitSpinner) //FIXME
 
-        binding.ingredientAmountField.doAfterTextChanged { editable ->
+        binding.ingredientQuantityField.doAfterTextChanged { editable ->
             afterAmountTextChanged(editable)
         }
+
+        binding.addIngredientButton.setOnClickListener { addIngredient() }
 
         binding.backButton.setOnClickListener { onBack() }
         binding.nextButton.setOnClickListener { onNext() }
@@ -60,7 +63,7 @@ class AddRecipeFragment2 : Fragment() {
     /**
      * @return IngredientListAdapter for IngredientListView
      */
-    private fun ingredientListAdapter(items: Array<Ingredient>): IngredientListAdapter {
+    private fun ingredientListAdapter(items: MutableList<Ingredient>): IngredientListAdapter {
         return IngredientListAdapter(requireContext(), R.layout.ingredient_listitem, items)
     }
 
@@ -110,6 +113,20 @@ class AddRecipeFragment2 : Fragment() {
         val adapter =
             ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, names)
         binding.ingredientUnitSpinner.adapter = adapter
+    }
+
+    /**
+     * Get values from form fields and send them to viewModel to add an [Ingredient],
+     * clear fields afterwards
+     */
+    private fun addIngredient() {
+        val name = binding.ingredientNameField.text.toString()
+        val quantity = binding.ingredientQuantityField.text.toString().replace(",", ".").toDouble()
+        val unit = IngredientUnit.values()[binding.ingredientUnitSpinner.selectedItemPosition]
+        viewModel.addIngredient(name, quantity, unit)
+        binding.ingredientNameField.text.clear()
+        binding.ingredientQuantityField.text.clear()
+        binding.ingredientUnitSpinner.setSelection(0)
     }
 
     /**

@@ -45,8 +45,8 @@
     <string name="desc_add_recipe">Rezept hinzufügen</string>
     <string name="label_ingredient_name">Name der Zutat</string>
     <string name="hint_ingredient_name">z.B. Kichererbsen</string>
-    <string name="hint_ingredient_amount">z.B. 1,5</string>
-    <string name="label_ingredient_amount">Menge</string>
+    <string name="hint_ingredient_quantity">z.B. 1,5</string>
+    <string name="label_ingredient_quantity">Menge</string>
     <string name="label_ingredient_unit">Einheit</string>
     <string name="done">Fertig!</string>
     <string name="label_cooking_step">Beschreibung des Schrittes</string>

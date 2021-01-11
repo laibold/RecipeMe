@@ -19,15 +19,6 @@ class RecipeViewModel @ViewModelInject constructor(
     val recipes = repository.getRecipes()
 
     /**
-     * Insert recipes into database
-     */
-    fun insertTestRecipes() {
-        viewModelScope.launch {
-            repository.insertTestRecipes()
-        }
-    }
-
-    /**
      * Clear database
      */
     fun clear() {

@@ -14,13 +14,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment1Binding
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
-import de.hs_rm.recipe_me.ui.recipe.RecipeCategoryFragmentArgs
 
 @AndroidEntryPoint
 class AddRecipeFragment1 : Fragment() {
 
     private lateinit var binding: AddRecipeFragment1Binding
     private val args: AddRecipeFragment1Args by navArgs()
+    private val viewModel: AddRecipeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,21 +34,37 @@ class AddRecipeFragment1 : Fragment() {
         )
 
         // Pre-set category in spinner depending on navigation source, default none
-        val category = args.recipeCategory
+        viewModel.recipeCategory = args.recipeCategory
         binding.recipeCategorySpinner.adapter = spinnerAdapter()
-        binding.recipeCategorySpinner.setSelection(category.ordinal)
+        binding.recipeCategorySpinner.setSelection(viewModel.recipeCategory.ordinal)
 
         binding.nextButton.setOnClickListener { onNext() }
+
+        viewModel.initRecipe()
 
         return binding.root
     }
 
+    /**
+     * Adapter for recipe category spinner
+     */
     private fun spinnerAdapter(): ArrayAdapter<String> {
         val names = RecipeCategory.getStringList(resources)
         return ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, names)
     }
 
+    /**
+     * Navigation on next button
+     */
     private fun onNext() {
+        val recipe = viewModel.recipe.value
+        if (recipe != null) {
+            recipe.name = binding.recipeNameField.text.toString()
+            recipe.servings // TODO
+            val position = binding.recipeCategorySpinner.selectedItemPosition
+            recipe.category = RecipeCategory.values()[position]
+        }
+
         val direction =
             AddRecipeFragment1Directions.actionAddRecipeFragment1ToAddRecipeFragment2()
         findNavController().navigate(direction)

@@ -15,4 +15,11 @@ data class Recipe(
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
+
+    constructor(recipeCategory: RecipeCategory) : this(
+        "",
+        2,
+        recipeCategory,
+        ""
+    )
 }

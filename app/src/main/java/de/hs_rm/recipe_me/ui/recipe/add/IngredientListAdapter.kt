@@ -16,7 +16,7 @@ import java.text.DecimalFormat
 class IngredientListAdapter(
     context: Context,
     private val resource: Int,
-    private val objects: Array<Ingredient>
+    private val objects: MutableList<Ingredient>
 ) :
     ArrayAdapter<Ingredient>(context, resource, objects) {
 

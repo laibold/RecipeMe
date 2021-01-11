@@ -45,7 +45,7 @@ class RecipeCategoryFragment : Fragment() {
         }
 
         val list = binding.recipeList
-        viewModel.getRecipesByCategory(category).observe(this.viewLifecycleOwner, {
+        viewModel.getRecipesByCategory(category).observe(viewLifecycleOwner, {
             val adapter =
                 RecipeListAdapter(requireContext(), R.layout.recipe_listitem, it.toTypedArray())
             list.adapter = adapter

@@ -15,4 +15,11 @@ data class Ingredient(
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
+
+    constructor(name: String, quantity: Double, unit: IngredientUnit) : this(
+        -1,
+        name,
+        quantity,
+        unit
+    )
 }
