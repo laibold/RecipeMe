@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_wrapper"
         android:layout_width="match_parent"
         android:layout_height="150dp">
 
@@ -11,8 +12,8 @@
             android:id="@+id/recipeImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/hummus_default"
             android:scaleType="centerCrop"
+            android:src="@drawable/hummus_default"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,6 +28,13 @@
             android:text="@string/recipe"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <include
+            android:id="@+id/edit_overlay"
+            layout="@layout/edit_recipe_overlay"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
