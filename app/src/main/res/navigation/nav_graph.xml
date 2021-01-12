@@ -3,26 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/recipeHomeFragment">
+    app:startDestination="@id/recipe_home_fragment">
 
     <fragment
-        android:id="@+id/recipeHomeFragment"
+        android:id="@+id/recipe_home_fragment"
         android:name="de.hs_rm.recipe_me.ui.recipe.RecipeHomeFragment"
         android:label="Recipe Home Fragment"
         tools:layout="@layout/recipe_home_fragment">
 
-        <action android:id="@+id/action_recipeHomeFragment_to_profileFragment" />
-        <action android:id="@+id/action_recipeHomeFragment_to_shoppingListFragment" />
+        <action android:id="@+id/action_recipeHome_fragment_to_profile_fragment" />
+        <action android:id="@+id/action_recipeHome_fragment_to_shopping_list_fragment" />
         <action
             android:id="@+id/action_recipe_home_fragment_to_recipe_category_fragment"
-            app:destination="@id/recipeCategoryFragment" />
+            app:destination="@id/recipe_category_fragment" />
         <action
-            android:id="@+id/action_recipeHomeFragment_to_add_recipe_fragment"
+            android:id="@+id/action_recipe_home_fragment_to_add_recipe_fragment"
             app:destination="@id/add_recipe_fragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/recipeCategoryFragment"
+        android:id="@+id/recipe_category_fragment"
         android:name="de.hs_rm.recipe_me.ui.recipe.RecipeCategoryFragment"
         android:label="Recipe Category Fragment"
         tools:layout="@layout/recipe_category_fragment">
@@ -31,11 +31,14 @@
             android:name="recipeCategory"
             app:argType="de.hs_rm.recipe_me.model.recipe.RecipeCategory" />
 
-        <action android:id="@+id/action_recipeCategoryFragment_to_profileFragment" />
-        <action android:id="@+id/action_recipeCategoryFragment_to_shoppingListFragment" />
+        <action android:id="@+id/action_recipe_category_fragment_to_profile_fragment" />
+        <action android:id="@+id/action_recipe_category_fragment_to_shopping_list_fragment" />
         <action
-            android:id="@+id/action_recipeCategoryFragment_to_add_recipe_fragment"
+            android:id="@+id/action_recipeCategory_fragment_to_add_recipe_fragment"
             app:destination="@id/add_recipe_fragment" />
+        <action
+            android:id="@+id/to_recipe_home_fragment"
+            app:destination="@+id/recipe_home_fragment" />
     </fragment>
 
     <fragment
@@ -45,13 +48,13 @@
         tools:layout="@layout/add_recipe_fragment" />
 
     <fragment
-        android:id="@+id/shoppingListFragment"
+        android:id="@+id/shopping_list_fragment"
         android:name="de.hs_rm.recipe_me.ui.shopping_list.ShoppingListFragment"
         android:label="Shopping List Fragment"
         tools:layout="@layout/shopping_list_fragment" />
 
     <fragment
-        android:id="@+id/profileFragment"
+        android:id="@+id/profile_fragment"
         android:name="de.hs_rm.recipe_me.ui.profile.ProfileFragment"
         android:label="Profile Fragment"
         tools:layout="@layout/profile_fragment" />

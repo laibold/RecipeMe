@@ -27,11 +27,11 @@ interface RecipeDao {
     @Delete
     suspend fun delete(recipe: Recipe)
 
-    @Delete
-    suspend fun delete(ingredient: Ingredient)
+    @Query("DELETE FROM Ingredient WHERE recipeId = :recipeId")
+    suspend fun deleteIngredients(recipeId: Long)
 
-    @Delete
-    suspend fun delete(cookingStep: CookingStep)
+    @Query("DELETE FROM CookingStep WHERE recipeId = :recipeId")
+    suspend fun deleteCookingSteps(recipeId: Long)
 
     @Query("DELETE FROM Recipe")
     suspend fun clear()

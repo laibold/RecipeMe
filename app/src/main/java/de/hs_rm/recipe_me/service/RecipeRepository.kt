@@ -35,14 +35,13 @@ class RecipeRepository @Inject constructor(
         return recipeDao.getRecipesByCategory(recipeCategory)
     }
 
-    suspend fun deleteRecipeWithRelations(recipe: RecipeWithRelations) {
-        recipeDao.delete(recipe.recipe)
-        for (ingredient in recipe.ingredients) {
-            recipeDao.delete(ingredient)
-        }
-        for (cookingStep in recipe.cookingSteps) {
-            recipeDao.delete(cookingStep)
-        }
+    /**
+     * Delete recipe and it's belonging Ingredients and CookingSteps
+     */
+    suspend fun deleteRecipeAndRelations(recipe: Recipe) {
+        recipeDao.deleteIngredients(recipe.id)
+        recipeDao.deleteCookingSteps(recipe.id)
+        recipeDao.delete(recipe)
     }
 
 }

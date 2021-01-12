@@ -53,7 +53,7 @@ class RecipeRepositoryTest {
         val sizeBefore = recipes.size
 
         // https://proandroiddev.com/testing-kotlin-coroutines-d904738b846d
-        runBlocking { repository.deleteRecipeWithRelations(recipes[0]) }
+        runBlocking { repository.deleteRecipeAndRelations(recipes[0].recipe) }
 
         recipes = repository.getRecipes().getOrAwaitValue()
         val sizeAfter = recipes.size

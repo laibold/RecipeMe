@@ -11,21 +11,14 @@ import kotlinx.coroutines.launch
 
 /**
  * ViewModel for [RecipeHomeFragment]
+ * TODO rename to RecipeCategoryViewModel
  */
 class RecipeViewModel @ViewModelInject constructor(
     private val repository: RecipeRepository
 ) : ViewModel() {
 
-    val recipes = repository.getRecipes()
-
-    /**
-     * Insert recipes into database
-     */
-    fun insertTestRecipes() {
-        viewModelScope.launch {
-            repository.insertTestRecipes()
-        }
-    }
+    private val recipes = repository.getRecipes()
+    lateinit var category: RecipeCategory
 
     /**
      * Clear database
@@ -41,6 +34,15 @@ class RecipeViewModel @ViewModelInject constructor(
      */
     fun getRecipesByCategory(recipeCategory: RecipeCategory): LiveData<List<Recipe>> {
         return repository.getRecipesByCategory(recipeCategory)
+    }
+
+    /**
+     * Delete recipe and it's belonging Ingredients and CookingSteps
+     */
+    fun deleteRecipeAndRelations(recipe: Recipe) {
+        viewModelScope.launch {
+            repository.deleteRecipeAndRelations(recipe)
+        }
     }
 
 }
