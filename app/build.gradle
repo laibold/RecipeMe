@@ -18,7 +18,7 @@ android {
         versionCode 1
         versionName '0.2'
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "de.hs_rm.recipe_me.CustomTestRunner"
 
         kapt {
             arguments {
@@ -47,7 +47,7 @@ android {
 }
 
 dependencies {
-    def room_version = "2.2.6"
+    def room_version = "2.2.0"
     def hilt_jetpack_version = "1.0.0-alpha02"
     def lifecycle_version = "2.2.0"
 
@@ -83,6 +83,10 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     testImplementation "androidx.room:room-testing:$room_version"
+    testImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
+    androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
+    kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
+    androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
 }
 
 gradle.projectsEvaluated {
