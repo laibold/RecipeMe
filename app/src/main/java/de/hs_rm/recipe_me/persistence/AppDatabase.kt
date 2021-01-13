@@ -33,7 +33,6 @@ abstract class AppDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
                 .createFromAsset(ASSET_NAME)
-                .fallbackToDestructiveMigration()
                 .build()
         }
 
