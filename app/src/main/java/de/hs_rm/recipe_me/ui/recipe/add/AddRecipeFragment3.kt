@@ -184,7 +184,7 @@ class AddRecipeFragment3 : Fragment(), CallbackAdapter {
      */
     override fun onCallback(cookingStep: CookingStep, position: Int) {
         binding.cookingStepField.setText(cookingStep.text)
-        if (cookingStep.timeUnit != TimeUnit.NONE) {
+        if (cookingStep.time != CookingStep.DEFAULT_TIME) {
             binding.cookingStepTimeField.setText(cookingStep.time.toString())
             binding.cookingStepTimeSpinner.setSelection(cookingStep.timeUnit.ordinal)
         }

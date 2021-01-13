@@ -1,6 +1,7 @@
 package de.hs_rm.recipe_me.model.recipe
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 /**
@@ -24,5 +25,10 @@ data class CookingStep(
         time,
         timeUnit
     )
+
+    companion object {
+        @Ignore
+        const val DEFAULT_TIME = 0
+    }
 
 }

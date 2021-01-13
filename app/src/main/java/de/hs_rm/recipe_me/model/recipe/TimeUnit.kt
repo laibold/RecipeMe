@@ -8,7 +8,6 @@ import de.hs_rm.recipe_me.R
  */
 enum class TimeUnit(private val singularResId: Int, private val pluralResId: Int) {
 
-    NONE(R.string.none_time, R.string.none_time),
     SECOND(R.string.second_sg, R.string.second_pl),
     MINUTE(R.string.minute_sg, R.string.minute_pl),
     HOUR(R.string.hour_sg, R.string.hour_pl);

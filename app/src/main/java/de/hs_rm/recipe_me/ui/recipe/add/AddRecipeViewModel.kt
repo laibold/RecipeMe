@@ -136,7 +136,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
      * @return true if cooking step could be created
      */
     private fun getCookingStep(text: String, time: String, timeUnit: TimeUnit): CookingStep? {
-        var timeInt = 0
+        var timeInt = CookingStep.DEFAULT_TIME
         if (text != "") {
             if (time != "") {
                 timeInt = time.toInt()
