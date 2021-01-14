@@ -1,5 +1,6 @@
 package de.hs_rm.recipe_me.model.recipe
 
+import android.content.res.Resources
 import androidx.room.Entity
 import de.hs_rm.recipe_me.R
 
@@ -17,5 +18,11 @@ enum class RecipeCategory(val nameResId: Int, val drawableResId: Int) {
     BREAKFAST(R.string.breakfast, R.drawable.category_breakfast),
     BAKED_GOODS(R.string.baked_goods, R.drawable.category_baked_goods),
     BEVERAGES(R.string.beverages, R.drawable.category_beverages);
+
+    companion object {
+        fun getStringList(resources: Resources): List<String> {
+            return values().map { resources.getString(it.nameResId) }
+        }
+    }
 
 }

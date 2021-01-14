@@ -41,7 +41,6 @@
             app:layout_constraintTop_toBottomOf="@id/alert_headline"
             tools:text="Rezept wirklich löschen?" />
 
-        <!--TODO adapt button style-->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/alert_button_negative"
             style="@style/secondary_button"
@@ -50,7 +49,6 @@
             android:layout_marginTop="30dp"
             android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toStartOf="@id/alert_button_positive"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/alert_text"
             tools:text="Abbrechen" />
 
@@ -62,7 +60,6 @@
             android:layout_marginTop="30dp"
             android:layout_marginEnd="@dimen/outline_horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/alert_button_negative"
             app:layout_constraintTop_toBottomOf="@id/alert_text"
             tools:text="Löschen" />
 

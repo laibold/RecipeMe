@@ -9,7 +9,7 @@ import de.hs_rm.recipe_me.model.recipe.Recipe
 /**
  * Room Database for this app. Use Daos with Dependency Injection
  */
-@Database(entities = [Recipe::class, Ingredient::class, CookingStep::class], version = 3)
+@Database(entities = [Recipe::class, Ingredient::class, CookingStep::class], version = 4)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun recipeDao(): RecipeDao
@@ -33,7 +33,6 @@ abstract class AppDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
                 .createFromAsset(ASSET_NAME)
-                .fallbackToDestructiveMigration()
                 .build()
         }
 

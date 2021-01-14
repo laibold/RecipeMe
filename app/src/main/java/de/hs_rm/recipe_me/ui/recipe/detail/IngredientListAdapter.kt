@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.ui.recipe
+package de.hs_rm.recipe_me.ui.recipe.detail
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.Observable
-import androidx.databinding.ObservableDouble
 import de.hs_rm.recipe_me.databinding.IngredientListitemBinding
 import de.hs_rm.recipe_me.model.recipe.Ingredient
+import de.hs_rm.recipe_me.model.recipe.IngredientUnit
+import de.hs_rm.recipe_me.service.Formatter
 
 /**
  * Adapter for Ingredients in recipe detail view
@@ -51,10 +51,19 @@ class IngredientListAdapter(
      * Create text for ingredient in form of "(quantity unit) name"
      */
     private fun getIngredientText(ingredient: Ingredient): CharSequence {
-        //TODO: add unit
         val calculatedQuantity = ingredient.quantity * multiplier
 
-        return calculatedQuantity.toString() + " " + ingredient.name
+        var quantity = ""
+        if (calculatedQuantity != 0.0) {
+            quantity = Formatter.formatIngredientQuantity(calculatedQuantity) + " "
+        }
+
+        var unit = ""
+        if (ingredient.unit != IngredientUnit.NONE) {
+            unit = ingredient.unit.getNumberString(context.resources, calculatedQuantity) + " "
+        }
+
+        return quantity + unit + " " + ingredient.name
     }
 
     // https://www.spreys.com/view-holder-design-pattern-for-android/

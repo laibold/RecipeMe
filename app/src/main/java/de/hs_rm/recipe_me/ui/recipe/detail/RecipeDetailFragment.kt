@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.ui.recipe
+package de.hs_rm.recipe_me.ui.recipe.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -110,7 +110,7 @@ class RecipeDetailFragment : Fragment() {
     private fun setCookingSteps(recipeWithRelations: RecipeWithRelations) {
         var allCookingSteps = ""
         for (cookingStep in recipeWithRelations.cookingSteps)
-            allCookingSteps += cookingStep.text + "\n"
+            allCookingSteps += cookingStep.text + "\n\n"
         binding.recipeInfo.steps.text = allCookingSteps
     }
 

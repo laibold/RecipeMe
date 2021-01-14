@@ -13,7 +13,7 @@
         <TextView
             android:id="@+id/headline"
             style="@style/headline_1"
-            android:text="Backwaren"
+            tools:text="Backwaren"
             app:layout_constraintBottom_toTopOf="@id/message"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -25,36 +25,30 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/outline_horizontal"
             android:layout_marginTop="@dimen/space_below_headline_1"
-            android:text="200 g Mehl\n2 Eier\n150 ml Milch\n1/2 TL Zimt\n3 EL Honig\n2 EL Kakaopulver\n50 g Schokostreusel\n100 g Zurück"
+            tools:text="200 g Mehl\n2 Eier\n150 ml Milch\n1/2 TL Zimt\n3 EL Honig\n2 EL Kakaopulver\n50 g Schokostreusel\n100 g Zurück"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/headline" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_secondary"
             style="@style/secondary_button"
-            android:layout_width="0dp"
             android:layout_marginStart="@dimen/outline_horizontal"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
             android:text="@string/back"
-            app:layout_constraintEnd_toStartOf="@id/button_primary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/message" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_primary"
             style="@style/primary_button"
-            android:layout_width="0dp"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="@dimen/outline_horizontal"
             android:text="@string/next"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/button_secondary"
             app:layout_constraintTop_toBottomOf="@id/message" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_tertiary"
+            android:id="@+id/tertiary_button"
             style="@style/tertiary_button"
             android:layout_marginStart="@dimen/outline_horizontal"
             android:layout_marginTop="20dp"

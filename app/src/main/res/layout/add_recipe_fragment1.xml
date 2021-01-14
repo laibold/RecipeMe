@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/add_recipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/headline"
+            style="@style/headline_1"
+            android:text="@string/new_recipe"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/outline_horizontal"
+            android:layout_marginTop="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headline"
+            app:layout_constraintWidth_percent="0.7">
+
+            <TextView
+                android:id="@+id/recipe_name_label"
+                style="@style/label"
+                android:text="@string/label_recipe_name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/recipe_name_field"
+                style="@style/edit_text"
+                android:layout_width="match_parent"
+                android:hint="@string/hint_recipe_name"
+                android:importantForAutofill="no"
+                android:inputType="textCapSentences"
+                android:maxLength="50"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recipe_name_label" />
+
+            <TextView
+                android:id="@+id/recipe_category_label"
+                style="@style/label"
+                android:layout_marginTop="20dp"
+                android:text="@string/category"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recipe_name_field" />
+
+            <Spinner
+                android:id="@+id/recipe_category_spinner"
+                style="@style/spinner"
+                android:layout_width="wrap_content"
+                android:spinnerMode="dropdown"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recipe_category_label" />
+
+            <TextView
+                android:id="@+id/recipe_servings_label"
+                style="@style/label"
+                android:layout_marginTop="20dp"
+                android:text="@string/label_recipe_servings"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recipe_category_spinner" />
+
+            <EditText
+                android:id="@+id/recipe_servings_field"
+                style="@style/edit_text"
+                android:layout_width="100dp"
+                android:hint="@string/hint_recipe_servings"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:maxLength="3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recipe_servings_label" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/next_button"
+            style="@style/primary_button"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="@dimen/outline_horizontal"
+            android:layout_marginBottom="20dp"
+            android:text="@string/next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

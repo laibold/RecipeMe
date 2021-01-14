@@ -42,9 +42,9 @@ class CategoryListAdapter(
         val category = objects[position]
         holder.binding.categoryName.text = context.resources.getString(category.nameResId)
         holder.binding.imageView.setImageResource(category.drawableResId)
+
         holder.binding.root.setOnClickListener {
-            val direction =
-                RecipeHomeFragmentDirections.actionRecipeHomeFragmentToRecipeCategoryFragment(category)
+            val direction = RecipeHomeFragmentDirections.toRecipeCategoryFragment(category)
             it.findNavController().navigate(direction)
         }
 

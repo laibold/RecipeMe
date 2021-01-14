@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.ui.recipe
+package de.hs_rm.recipe_me.ui.recipe.detail
 
 import androidx.databinding.ObservableInt
 import androidx.hilt.lifecycle.ViewModelInject

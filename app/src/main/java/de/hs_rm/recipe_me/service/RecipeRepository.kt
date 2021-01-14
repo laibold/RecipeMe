@@ -1,8 +1,10 @@
 package de.hs_rm.recipe_me.service
 
 import androidx.lifecycle.LiveData
+import androidx.room.Room
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
+import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
 import de.hs_rm.recipe_me.persistence.RecipeDao
 import javax.inject.Inject
@@ -13,6 +15,50 @@ import javax.inject.Inject
 class RecipeRepository @Inject constructor(
     private val recipeDao: RecipeDao
 ) {
+
+    /**
+     * Insert [Recipe] to repository
+     * @return id of inserted Recipe
+     */
+    suspend fun insert(recipe: Recipe): Long {
+        return recipeDao.insert(recipe)
+    }
+
+    /**
+     * Insert [CookingStep] to repository
+     * @return id of inserted CookingStep
+     */
+    suspend fun insert(cookingStep: CookingStep): Long {
+        return recipeDao.insert(cookingStep)
+    }
+
+    /**
+     * Insert List of [CookingStep]s to repository
+     */
+    @JvmName("insertCookingSteps")
+    suspend fun insert(cookingSteps: MutableList<CookingStep>) {
+        for (cookingStep in cookingSteps) {
+            insert(cookingStep)
+        }
+    }
+
+    /**
+     * Insert [Ingredient] to repository
+     * @return id of inserted Ingredient
+     */
+    suspend fun insert(ingredient: Ingredient): Long {
+        return recipeDao.insert(ingredient)
+    }
+
+    /**
+     * Insert List of [Ingredient]s to repository
+     */
+    @JvmName("insertIngredients")
+    suspend fun insert(ingredients: MutableList<Ingredient>) {
+        for (ingredient in ingredients) {
+            insert(ingredient)
+        }
+    }
 
     /**
      * Get all recipes

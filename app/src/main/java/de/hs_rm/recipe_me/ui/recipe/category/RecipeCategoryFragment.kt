@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.ui.recipe
+package de.hs_rm.recipe_me.ui.recipe.category
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,7 +20,7 @@ import de.hs_rm.recipe_me.ui.component.CustomAlertDialog
 @AndroidEntryPoint
 class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
 
-    private val viewModel: RecipeViewModel by viewModels()
+    private val viewModel: RecipeCategoryViewModel by viewModels()
     private val args: RecipeCategoryFragmentArgs by navArgs()
     private lateinit var binding: RecipeCategoryFragmentBinding
     private lateinit var adapter: RecipeListAdapter
@@ -42,8 +42,7 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
         binding.categoryHeadline.text = name
 
         binding.addButton.setOnClickListener {
-            val direction =
-                RecipeCategoryFragmentDirections.actionRecipeCategoryFragmentToAddRecipeFragment()
+            val direction = RecipeCategoryFragmentDirections.toAddRecipeNavGraph(viewModel.category)
             findNavController().navigate(direction)
         }
 

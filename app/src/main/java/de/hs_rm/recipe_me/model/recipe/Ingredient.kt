@@ -1,6 +1,8 @@
 package de.hs_rm.recipe_me.model.recipe
 
+import androidx.annotation.NonNull
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 /**
@@ -8,11 +10,24 @@ import androidx.room.PrimaryKey
  */
 @Entity
 data class Ingredient(
-    val recipeId: Long,
+    var recipeId: Long,
     var name: String,
     var quantity: Double,
-    var unit: String
+    var unit: IngredientUnit
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
+
+    constructor(name: String, quantity: Double, unit: IngredientUnit) : this(
+        -1,
+        name,
+        quantity,
+        unit
+    )
+
+    companion object {
+        @Ignore
+        const val DEFAULT_QUANTITY = 0.0
+    }
+
 }

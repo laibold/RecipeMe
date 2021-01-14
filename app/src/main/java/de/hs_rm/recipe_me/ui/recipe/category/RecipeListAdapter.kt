@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.ui.recipe
+package de.hs_rm.recipe_me.ui.recipe.category
 
 import android.content.Context
 import android.os.VibrationEffect
@@ -77,10 +77,7 @@ class RecipeListAdapter(
             if (itemSelected.get()) {
                 itemSelected.set(false)
             } else {
-                val direction =
-                    RecipeCategoryFragmentDirections.actionRecipeCategoryFragmentToRecipeDetailFragment(
-                        recipe.id
-                    )
+                val direction = RecipeCategoryFragmentDirections.toRecipeDetailFragment(recipe.id)
                 it.findNavController().navigate(direction)
             }
         }

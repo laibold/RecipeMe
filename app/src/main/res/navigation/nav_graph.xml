@@ -11,19 +11,19 @@
         android:label="Recipe Home Fragment"
         tools:layout="@layout/recipe_home_fragment">
 
-        <action android:id="@+id/action_recipeHome_fragment_to_profile_fragment" />
-        <action android:id="@+id/action_recipeHome_fragment_to_shopping_list_fragment" />
+        <action android:id="@+id/to_profileFragment" />
+        <action android:id="@+id/to_shoppingListFragment" />
         <action
-            android:id="@+id/action_recipe_home_fragment_to_recipe_category_fragment"
+            android:id="@+id/to_recipe_category_fragment"
             app:destination="@id/recipe_category_fragment" />
         <action
-            android:id="@+id/action_recipe_home_fragment_to_add_recipe_fragment"
-            app:destination="@id/add_recipe_fragment" />
+            android:id="@+id/to_add_recipe_nav_graph"
+            app:destination="@id/add_recipe_nav_graph" />
     </fragment>
 
     <fragment
         android:id="@+id/recipe_category_fragment"
-        android:name="de.hs_rm.recipe_me.ui.recipe.RecipeCategoryFragment"
+        android:name="de.hs_rm.recipe_me.ui.recipe.category.RecipeCategoryFragment"
         android:label="Recipe Category Fragment"
         tools:layout="@layout/recipe_category_fragment">
 
@@ -31,24 +31,76 @@
             android:name="recipeCategory"
             app:argType="de.hs_rm.recipe_me.model.recipe.RecipeCategory" />
 
-        <action android:id="@+id/action_recipe_category_fragment_to_profile_fragment" />
-        <action android:id="@+id/action_recipe_category_fragment_to_shopping_list_fragment" />
-        <action
-            android:id="@+id/action_recipeCategory_fragment_to_add_recipe_fragment"
-            app:destination="@id/add_recipe_fragment" />
+        <action android:id="@+id/to_profile_fragment" />
+        <action android:id="@+id/to_shopping_list_fragment" />
         <action
             android:id="@+id/to_recipe_home_fragment"
             app:destination="@+id/recipe_home_fragment" />
         <action
-            android:id="@+id/action_recipeCategoryFragment_to_recipeDetailFragment"
-            app:destination="@+id/recipeDetailFragment" />
+            android:id="@+id/to_recipe_detail_fragment"
+            app:destination="@+id/recipe_detail_fragment" />
+        <action
+            android:id="@+id/to_add_recipe_nav_graph"
+            app:destination="@id/add_recipe_nav_graph" />
     </fragment>
 
-    <fragment
-        android:id="@+id/add_recipe_fragment"
-        android:name="de.hs_rm.recipe_me.ui.recipe.AddRecipeFragment"
-        android:label="Add Recipe Fragment"
-        tools:layout="@layout/add_recipe_fragment" />
+    <navigation
+        android:id="@+id/add_recipe_nav_graph"
+        app:startDestination="@id/add_recipe_fragment1">
+
+        <argument
+            android:name="recipeCategory"
+            android:defaultValue="MAIN_DISHES"
+            app:argType="de.hs_rm.recipe_me.model.recipe.RecipeCategory" />
+
+        <fragment
+            android:id="@+id/add_recipe_fragment1"
+            android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment1"
+            android:label="Add Recipe Fragment 1"
+            tools:layout="@layout/add_recipe_fragment1">
+
+            <argument
+                android:name="recipeCategory"
+                android:defaultValue="MAIN_DISHES"
+                app:argType="de.hs_rm.recipe_me.model.recipe.RecipeCategory" />
+
+            <action
+                android:id="@+id/to_add_recipe_fragment2"
+                app:destination="@+id/add_recipe_fragment2" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/add_recipe_fragment2"
+            android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment2"
+            android:label="Add Recipe Fragment 2"
+            tools:layout="@layout/add_recipe_fragment2">
+
+            <action
+                android:id="@+id/to_add_recipe_fragment1"
+                app:destination="@+id/add_recipe_fragment1" />
+            <action
+                android:id="@+id/to_add_recipe_fragment3"
+                app:destination="@+id/add_recipe_fragment3" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/add_recipe_fragment3"
+            android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment3"
+            android:label="Add Recipe Fragment 3"
+            tools:layout="@layout/add_recipe_fragment3">
+
+            <action
+                android:id="@+id/to_add_recipe_fragment2"
+                app:destination="@+id/add_recipe_fragment2" />
+            <action
+                android:id="@+id/to_recipe_category_fragment"
+                app:destination="@+id/recipe_category_fragment" />
+            <action
+                android:id="@+id/to_recipe_detail_fragment"
+                app:destination="@+id/recipe_detail_fragment" />
+        </fragment>
+
+    </navigation>
 
     <fragment
         android:id="@+id/shopping_list_fragment"
@@ -63,15 +115,14 @@
         tools:layout="@layout/profile_fragment" />
 
     <fragment
-        android:id="@+id/recipeDetailFragment"
-        android:name="de.hs_rm.recipe_me.ui.recipe.RecipeDetailFragment"
+        android:id="@+id/recipe_detail_fragment"
+        android:name="de.hs_rm.recipe_me.ui.recipe.detail.RecipeDetailFragment"
         android:label="Recipe Detail Fragment"
         tools:layout="@layout/recipe_detail_fragment">
 
         <argument
             android:name="recipeId"
             app:argType="long" />
-
     </fragment>
 
 </navigation>

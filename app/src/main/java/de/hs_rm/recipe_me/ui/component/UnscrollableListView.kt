@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.ui.recipe
+package de.hs_rm.recipe_me.ui.component
 
 import android.content.Context
 import android.util.AttributeSet

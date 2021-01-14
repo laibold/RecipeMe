@@ -7,16 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeHomeFragmentBinding
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
+import de.hs_rm.recipe_me.ui.recipe.category.RecipeCategoryViewModel
 
 @AndroidEntryPoint
 class RecipeHomeFragment : Fragment() {
 
-    private val viewModel: RecipeViewModel by viewModels()
-
+    private val viewModel: RecipeCategoryViewModel by viewModels()
     private lateinit var binding: RecipeHomeFragmentBinding
 
     override fun onCreateView(
@@ -30,15 +31,16 @@ class RecipeHomeFragment : Fragment() {
             false
         )
 
+        binding.addButton.setOnClickListener {
+            val direction = RecipeHomeFragmentDirections.toAddRecipeNavGraph()
+            findNavController().navigate(direction)
+        }
+
         val list = binding.list
         val categories = RecipeCategory.values()
         list.adapter = CategoryListAdapter(requireContext(), R.layout.category_listitem, categories)
 
         return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
     }
 
 }

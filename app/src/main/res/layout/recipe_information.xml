@@ -42,11 +42,11 @@
             app:layout_constraintBottom_toBottomOf="@id/recipe_info_headline"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <de.hs_rm.recipe_me.ui.recipe.UnscrollableListView
+        <de.hs_rm.recipe_me.ui.component.UnscrollableListView
             android:id="@+id/ingredients_list_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/margin_top"
+            android:layout_marginTop="@dimen/margin_top"
             android:divider="@android:color/transparent"
             android:dividerHeight="0dp"
             android:listSelector="@android:color/transparent"
@@ -84,6 +84,7 @@
             style="@style/text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cooking_steps_headline"
             tools:text="Hier stehen die Steps." />

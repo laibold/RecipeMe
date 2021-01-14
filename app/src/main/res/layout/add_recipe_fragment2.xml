@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/add_recipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/headline"
+            style="@style/headline_1"
+            android:text="@string/new_recipe"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ingredient_form_wrapper"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/outline_horizontal"
+            android:layout_marginTop="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headline"
+            app:layout_constraintWidth_percent="0.7">
+
+            <TextView
+                android:id="@+id/ingredient_name_label"
+                style="@style/label"
+                android:text="@string/label_ingredient_name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/ingredient_name_field"
+                style="@style/edit_text"
+                android:layout_width="match_parent"
+                android:hint="@string/hint_ingredient_name"
+                android:maxLength="30"
+                android:importantForAutofill="no"
+                android:inputType="textCapSentences"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ingredient_name_label" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/second_row_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ingredient_name_field">
+
+                <TextView
+                    android:id="@+id/ingredient_quantity_label"
+                    style="@style/label"
+                    android:text="@string/label_ingredient_quantity"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/ingredient_quantity_field"
+                    style="@style/edit_text"
+                    android:layout_width="100dp"
+                    android:digits="0123456789.,"
+                    android:hint="@string/hint_ingredient_quantity"
+                    android:importantForAutofill="no"
+                    android:inputType="numberDecimal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ingredient_quantity_label" />
+
+                <TextView
+                    android:id="@+id/ingredient_unit_label"
+                    style="@style/label"
+                    android:text="@string/label_ingredient_unit"
+                    app:layout_constraintBottom_toTopOf="@id/ingredient_unit_spinner"
+                    app:layout_constraintStart_toStartOf="@id/ingredient_unit_spinner" />
+
+                <Spinner
+                    android:id="@+id/ingredient_unit_spinner"
+                    style="@style/spinner"
+                    android:layout_width="0dp"
+                    android:layout_marginStart="30dp"
+                    android:spinnerMode="dropdown"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ingredient_quantity_field"
+                    app:layout_constraintTop_toBottomOf="@id/ingredient_unit_label" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/add_ingredient_button"
+                style="@style/tertiary_button"
+                android:layout_marginTop="10dp"
+                android:text="@string/add"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/second_row_layout" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ListView
+            android:id="@+id/ingredients_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="@dimen/outline_horizontal"
+            android:layout_marginVertical="30dp"
+            android:divider="@android:color/transparent"
+            app:layout_constraintBottom_toTopOf="@id/back_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ingredient_form_wrapper"
+            tools:listitem="@layout/add_ingredient_listitem" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/back_button"
+            style="@style/secondary_button"
+            android:layout_marginStart="@dimen/outline_horizontal"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="20dp"
+            android:text="@string/back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/next_button"
+            style="@style/primary_button"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="@dimen/outline_horizontal"
+            android:layout_marginBottom="20dp"
+            android:text="@string/next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
