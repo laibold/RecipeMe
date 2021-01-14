@@ -211,7 +211,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
     fun persistEntities() {
         viewModelScope.launch {
             _recipe.value?.let { r ->
-                id = repository.insert(r)
+                val id = repository.insert(r)
 
                 for (ingredient in _ingredients.value!!) {
                     ingredient.recipeId = id
