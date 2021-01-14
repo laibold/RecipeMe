@@ -23,4 +23,5 @@
     <string name="servings">Portionen</string>
     <string name="recipe_image">Rezept-Bild</string>
     <string name="desc_cook_recipe">Rezept kochen</string>
+    <string name="steps">Schritte</string>
 </resources>

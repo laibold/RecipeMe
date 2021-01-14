@@ -48,31 +48,44 @@
             app:layout_constraintTop_toBottomOf="@+id/recipe_info_headline"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginHorizontal="@dimen/outline_horizontal"
-            android:layout_marginVertical="30dp"
+            android:layout_marginVertical="@dimen/margin_top"
             android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"
             tools:listitem="@layout/ingredient_listitem" />
-
-        <TextView
-            android:id="@+id/steps"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/ingredients_list_view"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Hier stehen die Steps."
-            android:layout_margin="@dimen/outline_horizontal"
-            style="@style/text"/>
 
         <ImageButton
             android:id="@+id/add_to_shopping_list_button"
             android:layout_width="@dimen/small_circle_button"
             android:layout_height="@dimen/small_circle_button"
-            app:layout_constraintTop_toBottomOf="@id/steps"
+            app:layout_constraintTop_toBottomOf="@id/ingredients_list_view"
             app:layout_constraintStart_toStartOf="parent"
             android:background="@drawable/round_button"
             android:src="@drawable/ic_clipboards"
             android:tint="@color/white"
             android:layout_marginStart="@dimen/outline_horizontal"
+            android:layout_marginVertical="@dimen/margin_top"
             android:paddingBottom="2dp"/>
+
+        <TextView
+            android:id="@+id/cooking_steps_headline"
+            style="@style/headline_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_below_headline_1"
+            android:gravity="center_vertical"
+            android:text="@string/steps"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_to_shopping_list_button" />
+
+        <TextView
+            android:id="@+id/steps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/cooking_steps_headline"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Hier stehen die Steps."
+            android:layout_margin="@dimen/outline_horizontal"
+            style="@style/text"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
