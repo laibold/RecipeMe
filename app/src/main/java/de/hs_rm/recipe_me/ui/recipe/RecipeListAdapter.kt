@@ -28,7 +28,6 @@ class RecipeListAdapter(
 ) :
     ArrayAdapter<Recipe>(context, resource, objects) {
 
-
     /**
      * Indicates whether a recipe list item is selected. Other items will observe this value
      * and unset their own selection if value switches to false. This happens when any item is
@@ -109,6 +108,13 @@ class RecipeListAdapter(
      */
     private fun hideOverlay(binding: RecipeListitemBinding) {
         binding.editOverlay.overlayWrapper.visibility = View.GONE
+        itemSelected.set(false)
+    }
+
+    /**
+     * Remove selection overlay
+     */
+    fun removeSelection() {
         itemSelected.set(false)
     }
 

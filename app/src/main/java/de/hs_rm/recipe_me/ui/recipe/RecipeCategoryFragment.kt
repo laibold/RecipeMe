@@ -15,6 +15,7 @@ import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeCategoryFragmentBinding
 import de.hs_rm.recipe_me.declaration.DeleteRecipeCallbackAdapter
 import de.hs_rm.recipe_me.model.recipe.Recipe
+import de.hs_rm.recipe_me.ui.component.CustomAlertDialog
 
 @AndroidEntryPoint
 class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
@@ -60,7 +61,7 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (adapter.itemSelected.get()) {
-                        adapter.itemSelected.set(false)
+                        adapter.removeSelection()
                     } else {
                         val direction = RecipeCategoryFragmentDirections.toRecipeHomeFragment()
                         findNavController().navigate(direction)
@@ -83,11 +84,30 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
     }
 
     /**
+     * Create delete dialog to let the user confirm the deletion of a recipe
+     */
+    private fun deleteDialog(recipe: Recipe): CustomAlertDialog {
+        return CustomAlertDialog.Builder(requireActivity())
+            .title(R.string.delete)
+            .message(R.string.delete_recipe_message)
+            .icon(R.drawable.ic_baseline_delete_24) // TODO
+            .positiveButton(R.string.delete) {
+                viewModel.deleteRecipeAndRelations(recipe)
+                adapter.notifyDataSetChanged()
+            }
+            .negativeButton(
+                R.string.cancel
+            ) {
+                adapter.removeSelection()
+            }
+            .create()
+    }
+
+    /**
      * On callback from RecipeListAdapter delete selected Recipe
      */
     override fun onCallback(recipe: Recipe) {
-        viewModel.deleteRecipeAndRelations(recipe)
-        adapter.notifyDataSetChanged()
+        deleteDialog(recipe).show()
     }
 
 }
