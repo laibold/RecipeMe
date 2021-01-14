@@ -9,8 +9,10 @@ import android.view.View
 import android.view.View.*
 import android.view.Window
 import android.view.WindowManager
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.button.MaterialButton
 import de.hs_rm.recipe_me.R
@@ -40,8 +42,10 @@ class CustomAlertDialog private constructor(
         val width = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
         window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
 
-        val iconView = findViewById<ImageView>(R.id.alert_icon)
-        iconView.background = ResourcesCompat.getDrawable(activity.resources, customIcon, null)
+        if (customIcon != -1) {
+            val iconView = findViewById<ImageButton>(R.id.delete_icon)
+            iconView.background = ResourcesCompat.getDrawable(activity.resources, customIcon, null)
+        }
 
         // to reach in one action and to dismiss the dialog after clicking
         // we set two different listeners here, found no better solution

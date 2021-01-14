@@ -8,25 +8,25 @@
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/outline_horizontal">
 
-        <!--TODO design-->
-        <ImageView
-            android:id="@+id/alert_icon"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="25dp"
-            tools:background="@drawable/ic_baseline_delete_24"
-            android:backgroundTint="@color/dark_red"
+        <ImageButton
+            android:id="@+id/delete_icon"
+            android:layout_width="@dimen/small_circle_button"
+            android:layout_height="@dimen/small_circle_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+            android:background="@drawable/round_button"
+            android:contentDescription="@string/delete"
+            android:src="@drawable/ic_baseline_delete_24"
+            android:layout_marginTop="23dp"
+            android:layout_marginStart="25dp"
+            android:clickable="false"/>
 
         <TextView
             android:id="@+id/alert_headline"
-            style="@style/headline_1"
+            style="@style/headline_2"
             android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
-            app:layout_constraintStart_toEndOf="@id/alert_icon"
+            app:layout_constraintStart_toEndOf="@id/delete_icon"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Löschen" />
 

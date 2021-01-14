@@ -90,7 +90,6 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
         return CustomAlertDialog.Builder(requireActivity())
             .title(R.string.delete)
             .message(R.string.delete_recipe_message)
-            .icon(R.drawable.ic_baseline_delete_24) // TODO
             .positiveButton(R.string.delete) {
                 viewModel.deleteRecipeAndRelations(recipe)
                 adapter.notifyDataSetChanged()

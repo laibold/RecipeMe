@@ -58,7 +58,7 @@
             android:layout_width="@dimen/small_circle_button"
             android:layout_height="@dimen/small_circle_button"
             android:layout_marginVertical="@dimen/margin_top"
-            android:background="@drawable/round_button"
+            android:background="@drawable/round_button_filled"
             android:contentDescription="@string/add_to_shopping_list"
             android:paddingBottom="2dp"
             android:src="@drawable/ic_clipboards"
