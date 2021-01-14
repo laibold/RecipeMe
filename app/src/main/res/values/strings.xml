@@ -67,4 +67,8 @@
     <string name="err_servings_greater_than_zero">Wert größer als 0 angeben</string>
     <string name="err_at_least_one_ingredient">Mindestens eine Zutat angeben</string>
     <string name="err_at_least_one_cooking_step">Mindestens einen Schritt angeben</string>
+    <string name="can_sg">Dose</string>
+    <string name="can_pl">Dosen</string>
+    <string name="glas_sg">Glas</string>
+    <string name="glas_pl">Gläser</string>
 </resources>

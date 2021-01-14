@@ -37,7 +37,7 @@
                 android:hint="@string/hint_recipe_name"
                 android:importantForAutofill="no"
                 android:inputType="textCapSentences"
-                android:maxLength="30"
+                android:maxLength="50"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/recipe_name_label" />
