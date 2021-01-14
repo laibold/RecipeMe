@@ -11,6 +11,16 @@
         <item name="android:layout_marginTop">@dimen/margin_top</item>
     </style>
 
+    <style name="headline_2">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:fontFamily">@font/raleway_extrabold</item>
+        <item name="android:textSize">@dimen/font_size_headline_2</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="android:layout_marginStart">@dimen/outline_horizontal</item>
+        <item name="android:layout_marginTop">@dimen/margin_top</item>
+    </style>
+
     <style name="headline_image">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
@@ -57,7 +67,7 @@
         <item name="strokeColor">?attr/colorPrimaryVariant</item>
     </style>
 
-    <style name="button_tertiary" parent="styled_button">
+    <style name="tertiary_button" parent="styled_button">
         <item name="android:layout_width">@dimen/button_width_small</item>
         <item name="android:layout_height">@dimen/button_height_small</item>
         <item name="android:textColor">?attr/colorOnSecondary</item>

@@ -7,10 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
 import androidx.databinding.ObservableBoolean
+import androidx.navigation.findNavController
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeListitemBinding
 import de.hs_rm.recipe_me.declaration.DeleteRecipeCallbackAdapter
@@ -78,7 +78,9 @@ class RecipeListAdapter(
             if (itemSelected.get()) {
                 itemSelected.set(false)
             } else {
-                Toast.makeText(context, "navigate", Toast.LENGTH_SHORT).show()
+                val direction =
+                    RecipeCategoryFragmentDirections.actionRecipeCategoryFragmentToRecipeDetailFragment(recipe.id)
+                it.findNavController().navigate(direction)
             }
         }
 

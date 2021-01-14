@@ -18,4 +18,9 @@
     <string name="category">Kategorie</string>
     <string name="new_recipe">Neues Rezept</string>
     <string name="desc_add_recipe">Rezept hinzufügen</string>
+    <string name="ingredients">Zutaten</string>
+    <string name="serving">Portion</string>
+    <string name="servings">Portionen</string>
+    <string name="recipe_image">Rezept-Bild</string>
+    <string name="desc_cook_recipe">Rezept kochen</string>
 </resources>

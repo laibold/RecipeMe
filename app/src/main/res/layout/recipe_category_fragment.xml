@@ -23,7 +23,7 @@
             android:layout_height="0dp"
             tools:listitem="@layout/recipe_listitem"
             android:divider="@android:color/transparent"
-            android:dividerHeight="35dp"
+            android:dividerHeight="@dimen/divider_big"
             app:layout_constraintTop_toBottomOf="@id/category_headline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
