@@ -19,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment2Binding
 import de.hs_rm.recipe_me.declaration.EditIngredientAdapter
+import de.hs_rm.recipe_me.declaration.closeKeyboard
 import de.hs_rm.recipe_me.model.SaveAction
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
@@ -154,6 +155,7 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
             binding.ingredientNameField.text.clear()
             binding.ingredientQuantityField.text.clear()
             binding.ingredientUnitSpinner.setSelection(0)
+            activity.closeKeyboard()
         }
     }
 
@@ -171,6 +173,7 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
             binding.ingredientNameField.text.clear()
             binding.ingredientQuantityField.text.clear()
             binding.ingredientUnitSpinner.setSelection(0)
+            activity.closeKeyboard()
         }
     }
 

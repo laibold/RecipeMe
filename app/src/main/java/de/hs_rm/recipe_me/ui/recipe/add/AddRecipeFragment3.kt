@@ -20,6 +20,7 @@ import de.hs_rm.recipe_me.declaration.EditCookingStepAdapter
 import de.hs_rm.recipe_me.model.SaveAction
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.TimeUnit
+import de.hs_rm.recipe_me.declaration.closeKeyboard
 
 @AndroidEntryPoint
 class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
@@ -122,6 +123,7 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
             binding.cookingStepField.text.clear()
             binding.cookingStepTimeField.text.clear()
             binding.cookingStepTimeSpinner.setSelection(0)
+            activity.closeKeyboard()
         }
     }
 
@@ -139,6 +141,7 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
             binding.cookingStepField.text.clear()
             binding.cookingStepTimeField.text.clear()
             binding.cookingStepTimeSpinner.setSelection(0)
+            activity.closeKeyboard()
         }
     }
 
