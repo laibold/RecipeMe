@@ -13,16 +13,17 @@
             android:layout_height="match_parent"
             android:background="#B5FFFFFF" />
 
-        <!--TODO style anwenden-->
-        <com.google.android.material.button.MaterialButton
+        <ImageButton
             android:id="@+id/delete_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/ic_baseline_delete_24"
+            android:layout_width="@dimen/small_circle_button"
+            android:layout_height="@dimen/small_circle_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/round_button"
+            android:contentDescription="@string/delete"
+            android:src="@drawable/ic_baseline_delete_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
