@@ -3,6 +3,8 @@ package de.hs_rm.recipe_me.ui.component
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
@@ -16,6 +18,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.button.MaterialButton
 import de.hs_rm.recipe_me.R
+
+private const val DEFAULT_ICON_VALUE = -1
 
 /**
  * Alert Dialog with custom design. Use [CustomAlertDialog.Builder] to create an instance
@@ -37,12 +41,14 @@ class CustomAlertDialog private constructor(
         super.onCreate(savedInstanceState)
 
         requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
         setContentView(R.layout.delete_alert_dialog)
 
         val width = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
         window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
 
-        if (customIcon != -1) {
+        if (customIcon != DEFAULT_ICON_VALUE) {
             val iconView = findViewById<ImageButton>(R.id.delete_icon)
             iconView.background = ResourcesCompat.getDrawable(activity.resources, customIcon, null)
         }
@@ -90,7 +96,7 @@ class CustomAlertDialog private constructor(
         val activity: Activity,
         var title: String = "",
         var message: String = "",
-        var icon: Int = -1,
+        var icon: Int = DEFAULT_ICON_VALUE,
         var positiveButtonText: CharSequence = "",
         var positiveButtonListener: OnClickListener = OnClickListener {},
         var negativeButtonText: CharSequence = "",
