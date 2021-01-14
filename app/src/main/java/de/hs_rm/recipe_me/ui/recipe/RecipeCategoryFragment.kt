@@ -38,7 +38,7 @@ class RecipeCategoryFragment : Fragment() {
 
         binding.addButton.setOnClickListener {
             val direction =
-                RecipeCategoryFragmentDirections.actionRecipeCategoryFragmentToAddRecipeFragment(
+                RecipeCategoryFragmentDirections.actionRecipeCategoryFragmentToAddRecipeNavGraph(
                     category
                 )
             findNavController().navigate(direction)

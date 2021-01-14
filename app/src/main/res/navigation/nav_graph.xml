@@ -17,8 +17,8 @@
             android:id="@+id/action_recipe_home_fragment_to_recipe_category_fragment"
             app:destination="@id/recipe_category_fragment" />
         <action
-            android:id="@+id/action_recipe_home_fragment_to_add_recipe_fragment"
-            app:destination="@id/add_recipe_fragment1" />
+            android:id="@+id/action_recipe_home_fragment_to_add_recipe_nav_graph"
+            app:destination="@id/add_recipe_nav_graph" />
     </fragment>
 
     <fragment
@@ -31,56 +31,67 @@
             android:name="recipeCategory"
             app:argType="de.hs_rm.recipe_me.model.recipe.RecipeCategory" />
 
+        <action
+            android:id="@+id/action_recipe_category_fragment_to_add_recipe_nav_graph"
+            app:destination="@id/add_recipe_nav_graph" />
         <action android:id="@+id/action_recipe_categoryFragment_to_profile_fragment" />
         <action android:id="@+id/action_recipe_categoryFragment_to_shopping_list_fragment" />
-        <action
-            android:id="@+id/action_recipe_category_fragment_to_add_recipe_fragment"
-            app:destination="@id/add_recipe_fragment1" />
+
     </fragment>
 
-    <fragment
-        android:id="@+id/add_recipe_fragment1"
-        android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment1"
-        android:label="Add Recipe Fragment 1"
-        tools:layout="@layout/add_recipe_fragment1">
-
+    <navigation
+        android:id="@+id/add_recipe_nav_graph"
+        app:startDestination="@id/add_recipe_fragment1">
         <argument
             android:name="recipeCategory"
             android:defaultValue="MAIN_DISHES"
             app:argType="de.hs_rm.recipe_me.model.recipe.RecipeCategory" />
 
-        <action
-            android:id="@+id/action_add_recipe_fragment1_to_add_recipe_fragment2"
-            app:destination="@+id/add_recipe_fragment2" />
-    </fragment>
+        <fragment
+            android:id="@+id/add_recipe_fragment1"
+            android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment1"
+            android:label="Add Recipe Fragment 1"
+            tools:layout="@layout/add_recipe_fragment1">
 
-    <fragment
-        android:id="@+id/add_recipe_fragment2"
-        android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment2"
-        android:label="Add Recipe Fragment 2"
-        tools:layout="@layout/add_recipe_fragment2">
+            <argument
+                android:name="recipeCategory"
+                android:defaultValue="MAIN_DISHES"
+                app:argType="de.hs_rm.recipe_me.model.recipe.RecipeCategory" />
 
-        <action
-            android:id="@+id/action_add_recipe_fragment2_to_add_recipe_fragment1"
-            app:destination="@+id/add_recipe_fragment1" />
-        <action
-            android:id="@+id/to_add_recipe_fragment3"
-            app:destination="@+id/add_recipe_fragment3" />
-    </fragment>
+            <action
+                android:id="@+id/action_add_recipe_fragment1_to_add_recipe_fragment2"
+                app:destination="@+id/add_recipe_fragment2" />
+        </fragment>
 
-    <fragment
-        android:id="@+id/add_recipe_fragment3"
-        android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment3"
-        android:label="Add Recipe Fragment 3"
-        tools:layout="@layout/add_recipe_fragment3">
+        <fragment
+            android:id="@+id/add_recipe_fragment2"
+            android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment2"
+            android:label="Add Recipe Fragment 2"
+            tools:layout="@layout/add_recipe_fragment2">
 
-        <action
-            android:id="@+id/to_add_recipe_fragment2"
-            app:destination="@+id/add_recipe_fragment2" />
-        <action
-            android:id="@+id/to_recipe_category_fragment"
-            app:destination="@+id/recipe_category_fragment" />
-    </fragment>
+            <action
+                android:id="@+id/action_add_recipe_fragment2_to_add_recipe_fragment1"
+                app:destination="@+id/add_recipe_fragment1" />
+            <action
+                android:id="@+id/to_add_recipe_fragment3"
+                app:destination="@+id/add_recipe_fragment3" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/add_recipe_fragment3"
+            android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment3"
+            android:label="Add Recipe Fragment 3"
+            tools:layout="@layout/add_recipe_fragment3">
+
+            <action
+                android:id="@+id/to_add_recipe_fragment2"
+                app:destination="@+id/add_recipe_fragment2" />
+            <action
+                android:id="@+id/to_recipe_category_fragment"
+                app:destination="@+id/recipe_category_fragment" />
+        </fragment>
+
+    </navigation>
 
     <fragment
         android:id="@+id/shopping_list_fragment"

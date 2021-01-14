@@ -31,7 +31,7 @@ class RecipeHomeFragment : Fragment() {
         )
 
         binding.addButton.setOnClickListener {
-            val direction = RecipeHomeFragmentDirections.actionRecipeHomeFragmentToAddRecipeFragment()
+            val direction = RecipeHomeFragmentDirections.actionRecipeHomeFragmentToAddRecipeNavGraph()
             findNavController().navigate(direction)
         }
 
