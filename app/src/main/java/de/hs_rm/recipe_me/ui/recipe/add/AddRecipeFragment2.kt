@@ -18,15 +18,19 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment2Binding
+import de.hs_rm.recipe_me.declaration.EditIngredientAdapter
+import de.hs_rm.recipe_me.model.SaveAction
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
+import de.hs_rm.recipe_me.service.Formatter
 
 @AndroidEntryPoint
-class AddRecipeFragment2 : Fragment() {
+class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
 
     private lateinit var binding: AddRecipeFragment2Binding
     private val spinnerHeight = 1000
     private val viewModel: AddRecipeViewModel by activityViewModels()
+    private var adapter: AddIngredientListAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,8 +43,9 @@ class AddRecipeFragment2 : Fragment() {
             false
         )
 
+        viewModel.ingredientSaveAction.value = SaveAction.ADD
         viewModel.ingredients.observe(viewLifecycleOwner, {
-            val adapter = viewModel.ingredients.value?.let { list -> ingredientListAdapter(list) }
+            adapter = viewModel.ingredients.value?.let { list -> ingredientListAdapter(list) }
             binding.ingredientsListView.adapter = adapter
             adapter?.notifyDataSetChanged()
         })
@@ -54,6 +59,20 @@ class AddRecipeFragment2 : Fragment() {
 
         binding.addIngredientButton.setOnClickListener { addIngredient() }
 
+        viewModel.ingredientSaveAction.observe(viewLifecycleOwner, {
+            if (it == SaveAction.ADD) {
+                binding.addIngredientButton.setOnClickListener { addIngredient() }
+                binding.addIngredientButton.text = resources.getString(R.string.add)
+                adapter?.editingEnabled = true
+                adapter?.notifyDataSetChanged()
+            } else if (it == SaveAction.UPDATE) {
+                binding.addIngredientButton.setOnClickListener { updateIngredient() }
+                binding.addIngredientButton.text = resources.getString(R.string.update)
+                adapter?.editingEnabled = false
+                adapter?.notifyDataSetChanged()
+            }
+        })
+
         binding.backButton.setOnClickListener { onBack() }
         binding.nextButton.setOnClickListener { onNext() }
 
@@ -64,7 +83,12 @@ class AddRecipeFragment2 : Fragment() {
      * @return IngredientListAdapter for IngredientListView
      */
     private fun ingredientListAdapter(items: MutableList<Ingredient>): AddIngredientListAdapter {
-        return AddIngredientListAdapter(requireContext(), R.layout.add_ingredient_listitem, items)
+        return AddIngredientListAdapter(
+            requireContext(),
+            R.layout.add_ingredient_listitem,
+            items,
+            this
+        )
     }
 
     /**
@@ -134,6 +158,23 @@ class AddRecipeFragment2 : Fragment() {
     }
 
     /**
+     * Update ingredient that is already in ViewModel. Clear form if updating succeeds
+     */
+    private fun updateIngredient() {
+        val success = viewModel.updateIngredient(
+            binding.ingredientNameField.text.toString(),
+            binding.ingredientQuantityField.text.toString(),
+            IngredientUnit.values()[binding.ingredientUnitSpinner.selectedItemPosition]
+        )
+
+        if (success) {
+            binding.ingredientNameField.text.clear()
+            binding.ingredientQuantityField.text.clear()
+            binding.ingredientUnitSpinner.setSelection(0)
+        }
+    }
+
+    /**
      * Navigation on back button
      */
     private fun onBack() {
@@ -165,6 +206,18 @@ class AddRecipeFragment2 : Fragment() {
                 requireContext().resources.getString(ingredientsValid)
         }
         return ingredientsValid == 0
+    }
+
+    /**
+     * Gets called from Adapter when edit was pressed for an Ingredient item
+     */
+    override fun onCallback(ingredient: Ingredient, position: Int) {
+        binding.ingredientNameField.setText(ingredient.name)
+        if (ingredient.quantity != Ingredient.DEFAULT_QUANTITY) {
+            binding.ingredientQuantityField.setText(Formatter.formatIngredientQuantity(ingredient.quantity))
+            binding.ingredientUnitSpinner.setSelection(ingredient.unit.ordinal)
+        }
+        viewModel.prepareIngredientUpdate(position)
     }
 
 }

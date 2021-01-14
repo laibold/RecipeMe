@@ -5,8 +5,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="8dp">
+        android:layout_height="46dp">
 
         <TextView
             android:id="@+id/ingredient_text_view"
@@ -20,22 +19,33 @@
             tools:text="200g Kichererbsen aus dem Glas" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/remove_ingredient_wrapper"
-            android:layout_width="40dp"
+            android:id="@+id/button_wrapper"
+            android:layout_width="72dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/remove_ingredient_button"
+                android:id="@+id/edit_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/ic_baseline_edit_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/remove_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <!--TODO dark red-->
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/remove_button"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@drawable/ic_baseline_remove_circle_outline_24"
                 android:backgroundTint="@color/dark_red"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/edit_button"
                 app:layout_constraintTop_toTopOf="parent" />
             <!--TODO dark red-->
 

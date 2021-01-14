@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -17,13 +16,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment3Binding
-import de.hs_rm.recipe_me.declaration.CallbackAdapter
+import de.hs_rm.recipe_me.declaration.EditCookingStepAdapter
 import de.hs_rm.recipe_me.model.SaveAction
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.TimeUnit
 
 @AndroidEntryPoint
-class AddRecipeFragment3 : Fragment(), CallbackAdapter {
+class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
 
     private lateinit var binding: AddRecipeFragment3Binding
     private val viewModel: AddRecipeViewModel by activityViewModels()
@@ -54,8 +53,8 @@ class AddRecipeFragment3 : Fragment(), CallbackAdapter {
             afterTimeTextChanged(editable)
         }
 
-        viewModel.saveAction.value = SaveAction.ADD
-        viewModel.saveAction.observe(viewLifecycleOwner, {
+        viewModel.cookingStepSaveAction.value = SaveAction.ADD
+        viewModel.cookingStepSaveAction.observe(viewLifecycleOwner, {
             if (it == SaveAction.ADD) {
                 binding.addCookingStepButton.setOnClickListener { addCookingStep() }
                 binding.addCookingStepButton.text = resources.getString(R.string.add)
@@ -126,6 +125,9 @@ class AddRecipeFragment3 : Fragment(), CallbackAdapter {
         }
     }
 
+    /**
+     * Update cooking step that is already in ViewModel. Clear form if updating succeeds
+     */
     private fun updateCookingStep() {
         val success = viewModel.updateCookingStep(
             binding.cookingStepField.text.toString(),
@@ -189,7 +191,6 @@ class AddRecipeFragment3 : Fragment(), CallbackAdapter {
             binding.cookingStepTimeSpinner.setSelection(cookingStep.timeUnit.ordinal)
         }
         viewModel.prepareCookingStepUpdate(position)
-        //TODO highlight item
     }
 
     /**
