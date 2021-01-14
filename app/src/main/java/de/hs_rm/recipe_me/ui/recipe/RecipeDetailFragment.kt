@@ -58,6 +58,10 @@ class RecipeDetailFragment : Fragment() {
             viewModel.increaseServings()
         }
 
+        binding.scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+            onScroll(scrollY)
+        }
+
         binding.recipeInfo.addToShoppingListButton.setOnClickListener {
             Toast.makeText(
                 context,
@@ -126,6 +130,17 @@ class RecipeDetailFragment : Fragment() {
         if (::adapter.isInitialized) {
             adapter.multiplier = viewModel.getServingsMultiplier()
             adapter.notifyDataSetChanged()
+        }
+    }
+
+    /**
+     * Zooms into image when ScrollView gets moved upwards and the other way round
+     */
+    private fun onScroll(scrollY: Int) {
+        if (scrollY < 1500) { // TODO check on tablet
+            val scaleVal = (1 + (scrollY.toFloat() / 9000))
+            binding.recipeDetailImage.scaleX = scaleVal
+            binding.recipeDetailImage.scaleY = scaleVal
         }
     }
 
