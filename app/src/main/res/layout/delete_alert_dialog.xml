@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/outline_horizontal">
+
+        <!--TODO design-->
+        <ImageView
+            android:id="@+id/alert_icon"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="25dp"
+            tools:background="@drawable/ic_baseline_delete_24"
+            android:backgroundTint="@color/dark_red"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/alert_headline"
+            style="@style/headline_1"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toEndOf="@id/alert_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Löschen" />
+
+        <TextView
+            android:id="@+id/alert_text"
+            style="@style/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/alert_headline"
+            app:layout_constraintTop_toBottomOf="@id/alert_headline"
+            tools:text="Rezept wirklich löschen?" />
+
+        <!--TODO adapt button style-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/alert_button_negative"
+            style="@style/secondary_button"
+            android:layout_width="0dp"
+            android:layout_marginStart="@dimen/outline_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toStartOf="@id/alert_button_positive"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/alert_text"
+            tools:text="Abbrechen" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/alert_button_positive"
+            style="@style/primary_button"
+            android:layout_width="0dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="@dimen/outline_horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/alert_button_negative"
+            app:layout_constraintTop_toBottomOf="@id/alert_text"
+            tools:text="Löschen" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
