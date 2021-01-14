@@ -11,6 +11,9 @@ import androidx.databinding.ObservableDouble
 import de.hs_rm.recipe_me.databinding.IngredientListitemBinding
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 
+/**
+ * Adapter for Ingredients in recipe detail view
+ */
 class IngredientListAdapter(
     context: Context,
     private val resource: Int,

@@ -30,11 +30,11 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:background="@drawable/gradient_overlay"
             app:layout_constraintBottom_toTopOf="@+id/guideline_imageview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/gradient_overlay" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/recipe_detail_name"
@@ -50,14 +50,14 @@
             android:id="@+id/forward_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:useCompatPadding="true"
-            app:borderWidth="0dp"
-            app:backgroundTint="@color/dark_red"
-            app:tint="@color/white"
             android:contentDescription="@string/desc_cook_recipe"
             android:src="@drawable/ic_chef_hat"
+            app:backgroundTint="@color/dark_red"
+            app:borderWidth="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/white"
+            app:useCompatPadding="true" />
 
         <ScrollView
             android:id="@+id/scroll_view"
@@ -75,6 +75,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <!--Dummy to let proper view start at 420dp-->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="420dp" />

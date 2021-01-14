@@ -4,6 +4,9 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.ListView
 
+/**
+ * ListView that extends itself based on it's content. For usage in ScrollViews
+ */
 class UnscrollableListView : ListView {
 
     constructor(ctx: Context) : super(ctx)
