@@ -49,6 +49,7 @@
             android:layout_marginVertical="@dimen/margin_top"
             android:divider="@android:color/transparent"
             android:dividerHeight="0dp"
+            android:listSelector="@android:color/transparent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recipe_info_headline"
             tools:listitem="@layout/ingredient_listitem" />
