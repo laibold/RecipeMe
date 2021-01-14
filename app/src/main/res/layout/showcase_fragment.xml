@@ -55,7 +55,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_tertiary"
-            style="@style/button_tertiary"
+            style="@style/tertiary_button"
             android:layout_marginStart="@dimen/outline_horizontal"
             android:layout_marginTop="20dp"
             android:text="@string/add"

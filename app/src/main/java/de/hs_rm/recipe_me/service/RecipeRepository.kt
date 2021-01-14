@@ -36,6 +36,13 @@ class RecipeRepository @Inject constructor(
     }
 
     /**
+     * Get a recipe by its id
+     */
+    fun getRecipeById(id: Long): LiveData<RecipeWithRelations> {
+        return recipeDao.getRecipeById(id)
+    }
+
+    /**
      * Delete recipe and it's belonging Ingredients and CookingSteps
      */
     suspend fun deleteRecipeAndRelations(recipe: Recipe) {

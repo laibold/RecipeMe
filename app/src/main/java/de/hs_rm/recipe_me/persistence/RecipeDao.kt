@@ -42,4 +42,8 @@ interface RecipeDao {
 
     @Query("SELECT * FROM Recipe WHERE category = :recipeCategory")
     fun getRecipesByCategory(recipeCategory: RecipeCategory): LiveData<List<Recipe>>
+
+    @Transaction
+    @Query("SELECT * FROM Recipe WHERE id = :id")
+    fun getRecipeById(id: Long): LiveData<RecipeWithRelations>
 }

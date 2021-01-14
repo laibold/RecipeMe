@@ -39,6 +39,9 @@
         <action
             android:id="@+id/to_recipe_home_fragment"
             app:destination="@+id/recipe_home_fragment" />
+        <action
+            android:id="@+id/action_recipeCategoryFragment_to_recipeDetailFragment"
+            app:destination="@+id/recipeDetailFragment" />
     </fragment>
 
     <fragment
@@ -58,5 +61,17 @@
         android:name="de.hs_rm.recipe_me.ui.profile.ProfileFragment"
         android:label="Profile Fragment"
         tools:layout="@layout/profile_fragment" />
+
+    <fragment
+        android:id="@+id/recipeDetailFragment"
+        android:name="de.hs_rm.recipe_me.ui.recipe.RecipeDetailFragment"
+        android:label="Recipe Detail Fragment"
+        tools:layout="@layout/recipe_detail_fragment">
+
+        <argument
+            android:name="recipeId"
+            app:argType="long" />
+
+    </fragment>
 
 </navigation>

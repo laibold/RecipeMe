@@ -21,4 +21,13 @@
     <string name="delete">Löschen</string>
     <string name="cancel">Abbrechen</string>
     <string name="delete_recipe_message">Rezept wirklich löschen?</string>
+    <string name="ingredients">Zutaten</string>
+    <string name="serving">Portion</string>
+    <string name="servings">Portionen</string>
+    <string name="recipe_image">Rezept-Bild</string>
+    <string name="desc_cook_recipe">Rezept kochen</string>
+    <string name="steps">Schritte</string>
+    <string name="add_to_shopping_list">Zur Einkaufsliste hinzufügen</string>
+    <string name="decrease_servings">Portionen verringern</string>
+    <string name="increase_servings">Portionen erhöhen</string>
 </resources>
