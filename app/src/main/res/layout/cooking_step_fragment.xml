@@ -31,12 +31,13 @@
         <ListView
             android:id="@+id/cooking_step_list_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="30dp"
             android:divider="@android:color/transparent"
-            android:dividerHeight="60dp"
+            android:dividerHeight="40dp"
             android:listSelector="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/headline_wrapper"
             tools:listitem="@layout/cooking_step_listitem" />
