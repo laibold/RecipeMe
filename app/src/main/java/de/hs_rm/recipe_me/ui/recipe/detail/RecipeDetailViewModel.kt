@@ -8,7 +8,7 @@ import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
 import de.hs_rm.recipe_me.service.RecipeRepository
 
 /**
- * ViewModel for [RecipeDetailFragment]
+ * Shared ViewModel for [RecipeDetailFragment] and [CookingStepFragment]
  */
 class RecipeDetailViewModel @ViewModelInject constructor(
     private val repository: RecipeRepository
