@@ -34,10 +34,10 @@
             android:layout_height="0dp"
             android:layout_marginTop="30dp"
             android:divider="@android:color/transparent"
-            android:dividerHeight="40dp"
+            android:dividerHeight="30dp"
             android:listSelector="@android:color/transparent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/headline_wrapper"
             tools:listitem="@layout/cooking_step_listitem" />
