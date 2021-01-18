@@ -16,6 +16,13 @@ data class Recipe(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 
+    constructor() : this(
+        "",
+        0,
+        RecipeCategory.values()[0],
+        ""
+    )
+
     constructor(recipeCategory: RecipeCategory) : this(
         "",
         0,

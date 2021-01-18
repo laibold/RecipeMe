@@ -10,15 +10,15 @@ import de.hs_rm.recipe_me.model.recipe.Recipe
  * Class that merges recipes with their 1:n relations (ingredients and cookingSteps)
  */
 data class RecipeWithRelations(
-    @Embedded val recipe: Recipe,
+    @Embedded var recipe: Recipe,
     @Relation(
         parentColumn = "id",
         entityColumn = "recipeId"
     )
-    val ingredients: List<Ingredient>,
+    var ingredients: List<Ingredient>,
     @Relation(
         parentColumn = "id",
         entityColumn = "recipeId"
     )
-    val cookingSteps: List<CookingStep>
+    var cookingSteps: List<CookingStep>
 )

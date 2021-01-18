@@ -1,5 +1,6 @@
 package de.hs_rm.recipe_me.ui.recipe.detail
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -79,6 +80,11 @@ class RecipeDetailFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.clearRecipe()
     }
 
     /**
