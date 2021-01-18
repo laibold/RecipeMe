@@ -60,10 +60,10 @@ class IngredientListAdapter(
 
         var unit = ""
         if (ingredient.unit != IngredientUnit.NONE) {
-            unit = ingredient.unit.getNumberString(context.resources, calculatedQuantity) + " "
+            unit = ingredient.unit.getNumberString(context.resources, calculatedQuantity) + "  "
         }
 
-        return quantity + unit + " " + ingredient.name
+        return quantity + unit + ingredient.name
     }
 
     // https://www.spreys.com/view-holder-design-pattern-for-android/
