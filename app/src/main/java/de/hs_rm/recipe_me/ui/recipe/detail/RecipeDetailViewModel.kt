@@ -3,12 +3,14 @@ package de.hs_rm.recipe_me.ui.recipe.detail
 import androidx.databinding.ObservableInt
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
 import de.hs_rm.recipe_me.service.RecipeRepository
 
 /**
- * ViewModel for [RecipeDetailFragment]
+ * Shared ViewModel for [RecipeDetailFragment] and [CookingStepFragment]
  */
 class RecipeDetailViewModel @ViewModelInject constructor(
     private val repository: RecipeRepository
@@ -22,6 +24,15 @@ class RecipeDetailViewModel @ViewModelInject constructor(
      */
     fun loadRecipe(id: Long) {
         recipe = repository.getRecipeById(id)
+    }
+
+    /**
+     * Set recipe to empty instance of [RecipeWithRelations]
+     */
+    fun clearRecipe() {
+        recipe.value?.recipe = Recipe()
+        recipe.value?.ingredients = listOf()
+        recipe.value?.cookingSteps = listOf()
     }
 
     /**

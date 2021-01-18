@@ -1,5 +1,6 @@
 package de.hs_rm.recipe_me.ui.recipe.detail
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
 import androidx.databinding.ObservableInt
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
@@ -21,8 +24,8 @@ class RecipeDetailFragment : Fragment() {
 
     private lateinit var binding: RecipeDetailFragmentBinding
     private val args: RecipeDetailFragmentArgs by navArgs()
-    private val viewModel: RecipeDetailViewModel by viewModels()
-    private lateinit var adapter: IngredientListAdapter
+    private val viewModel: RecipeDetailViewModel by activityViewModels()
+    private var adapter: IngredientListAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +43,7 @@ class RecipeDetailFragment : Fragment() {
 
         viewModel.recipe.observe(viewLifecycleOwner, { recipeWithRelations ->
             onRecipeChanged(recipeWithRelations)
+            viewModel.servings.set(recipeWithRelations.recipe.servings)
         })
 
         viewModel.servings.addOnPropertyChangedCallback(object :
@@ -71,14 +75,16 @@ class RecipeDetailFragment : Fragment() {
         }
 
         binding.forwardButton.setOnClickListener {
-            Toast.makeText(
-                context,
-                "Hier kannst du bald dein Rezept Schritt für Schritt kochen",
-                Toast.LENGTH_LONG
-            ).show()
+            val direction = RecipeDetailFragmentDirections.toCookingStepFragment()
+            findNavController().navigate(direction)
         }
-        
+
         return binding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.clearRecipe()
     }
 
     /**
@@ -86,7 +92,7 @@ class RecipeDetailFragment : Fragment() {
      */
     private fun onRecipeChanged(recipeWithRelations: RecipeWithRelations) {
         binding.recipeDetailName.text = recipeWithRelations.recipe.name
-        viewModel.servings.set(recipeWithRelations.recipe.servings)
+        onServingsChanged(recipeWithRelations.recipe.servings)
         setIngredientAdapter(recipeWithRelations)
         setCookingSteps(recipeWithRelations)
     }
@@ -127,9 +133,9 @@ class RecipeDetailFragment : Fragment() {
             binding.recipeInfo.servingsElement.servingsText.text =
                 requireContext().resources.getString(R.string.serving)
 
-        if (::adapter.isInitialized) {
-            adapter.multiplier = viewModel.getServingsMultiplier()
-            adapter.notifyDataSetChanged()
+        if (adapter != null) {
+            adapter!!.multiplier = viewModel.getServingsMultiplier()
+            adapter!!.notifyDataSetChanged()
         }
     }
 

@@ -22,7 +22,7 @@ import java.util.*
  */
 class RecipeListAdapter(
     context: Context,
-    resource: Int,
+    private val resource: Int,
     private val objects: List<Recipe>,
     private val callbackListener: DeleteRecipeCallbackAdapter
 ) :
@@ -42,7 +42,7 @@ class RecipeListAdapter(
         if (convertView == null) {
             val viewBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.recipe_listitem,
+                resource,
                 parent,
                 false
             ) as RecipeListitemBinding

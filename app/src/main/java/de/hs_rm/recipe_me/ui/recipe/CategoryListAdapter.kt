@@ -17,7 +17,7 @@ import de.hs_rm.recipe_me.model.recipe.RecipeCategory
  */
 class CategoryListAdapter(
     context: Context,
-    resource: Int,
+    private val resource: Int,
     private val objects: Array<RecipeCategory>
 ) :
     ArrayAdapter<RecipeCategory>(context, resource, objects) {
@@ -28,7 +28,7 @@ class CategoryListAdapter(
         if (convertView == null) {
             val viewBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.category_listitem,
+                resource,
                 parent,
                 false
             ) as CategoryListitemBinding
