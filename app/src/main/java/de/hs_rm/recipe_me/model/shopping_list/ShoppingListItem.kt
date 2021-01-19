@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import de.hs_rm.recipe_me.model.recipe.Ingredient
+import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.service.Formatter
 
 /**
@@ -14,20 +15,26 @@ import de.hs_rm.recipe_me.service.Formatter
  */
 @Entity
 class ShoppingListItem(
-    var ingredients: MutableList<Ingredient>
+    var name: String = "",
+    var quantity: Double = Ingredient.DEFAULT_QUANTITY,
+    var unit: IngredientUnit = IngredientUnit.NONE
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
     var checked: Boolean = false
 
-    fun format(context: Context): String {
-        val name = ingredients[0].name
-        val unit = ingredients[0].unit
-        var quantitySum = 0.0
-        for (ingredient in ingredients) {
-            quantitySum += ingredient.quantity
-        }
+    constructor(ingredient: Ingredient) : this(
+        ingredient.name,
+        ingredient.quantity,
+        ingredient.unit
+    )
 
-        return Formatter.formatIngredient(context, Ingredient(name, quantitySum, unit))
+    @Throws(MismatchingIngredientException::class)
+    fun addIngredient(ingredient: Ingredient) {
+        if (ingredient.name != this.name && ingredient.unit != this.unit) {
+            this.quantity += ingredient.quantity
+        } else {
+            throw MismatchingIngredientException()
+        }
     }
 }
