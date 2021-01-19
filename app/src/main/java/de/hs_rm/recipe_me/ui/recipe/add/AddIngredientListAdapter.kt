@@ -58,21 +58,7 @@ class AddIngredientListAdapter(
      * Create text for ingredient in form of "(quantity (unit)) name"
      */
     private fun getIngredientText(ingredient: Ingredient): CharSequence {
-        var unitText = ""
-
-        if (ingredient.quantity > 0.0) {
-            val quantityString = Formatter.formatIngredientQuantity(ingredient.quantity)
-
-            var numberString = ""
-            if (ingredient.unit != IngredientUnit.NONE) {
-                numberString =
-                    ingredient.unit.getNumberString(context.resources, ingredient.quantity)
-            }
-
-            unitText = "$quantityString $numberString "
-        }
-
-        return unitText + ingredient.name
+        return Formatter.formatIngredient(context, ingredient)
     }
 
     /**

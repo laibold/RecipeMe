@@ -51,19 +51,7 @@ class IngredientListAdapter(
      * Create text for ingredient in form of "(quantity unit) name"
      */
     private fun getIngredientText(ingredient: Ingredient): CharSequence {
-        val calculatedQuantity = ingredient.quantity * multiplier
-
-        var quantity = ""
-        if (calculatedQuantity != 0.0) {
-            quantity = Formatter.formatIngredientQuantity(calculatedQuantity) + " "
-        }
-
-        var unit = ""
-        if (ingredient.unit != IngredientUnit.NONE) {
-            unit = ingredient.unit.getNumberString(context.resources, calculatedQuantity) + "  "
-        }
-
-        return quantity + unit + ingredient.name
+        return Formatter.formatIngredient(context, ingredient, multiplier)
     }
 
     // https://www.spreys.com/view-holder-design-pattern-for-android/

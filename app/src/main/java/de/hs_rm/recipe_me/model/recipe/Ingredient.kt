@@ -1,6 +1,5 @@
 package de.hs_rm.recipe_me.model.recipe
 
-import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
