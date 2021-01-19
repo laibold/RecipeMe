@@ -46,7 +46,7 @@ class ShoppingListRepository @Inject constructor(
     /**
      * Get LiveData with List of all Items
      */
-    private fun getAllItems(): LiveData<List<ShoppingListItem>> {
+    fun getAllItems(): LiveData<List<ShoppingListItem>> {
         return shoppingListDao.getItems()
     }
 
