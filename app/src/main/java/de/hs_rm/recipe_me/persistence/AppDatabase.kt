@@ -19,6 +19,7 @@ import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun recipeDao(): RecipeDao
+    abstract fun shoppingListDao(): ShoppingListDao
 
     companion object {
         private const val DATABASE_NAME = "test_db"
