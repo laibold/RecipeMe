@@ -56,14 +56,11 @@
 
         <ImageButton
             android:id="@+id/add_to_shopping_list_button"
-            android:layout_width="@dimen/small_circle_button"
-            android:layout_height="@dimen/small_circle_button"
+            style="@style/small_circle_button"
             android:layout_marginVertical="@dimen/margin_top"
-            android:background="@drawable/round_button_filled"
             android:contentDescription="@string/add_to_shopping_list"
             android:paddingBottom="2dp"
             android:src="@drawable/ic_clipboards"
-            android:tint="@color/white"
             android:tooltipText="@string/add_to_shopping_list"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ingredients_list_view" />
@@ -78,6 +75,7 @@
             android:text="@string/steps"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/add_to_shopping_list_button" />
+        <!--TODO center_vertical?-->
 
         <TextView
             android:id="@+id/steps"

@@ -11,14 +11,14 @@
 
         <ImageButton
             android:id="@+id/delete_icon"
-            android:layout_width="@dimen/small_circle_button"
-            android:layout_height="@dimen/small_circle_button"
+            style="@style/small_circle_button"
             android:layout_marginStart="25dp"
             android:layout_marginTop="23dp"
             android:background="@drawable/round_button"
             android:clickable="false"
             android:contentDescription="@string/delete"
             android:src="@drawable/ic_baseline_delete_24"
+            android:tint="?attr/colorPrimaryVariant"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

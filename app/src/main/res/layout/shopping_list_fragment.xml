@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/shopping_list_layout"
@@ -8,10 +9,74 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/shopping_list_headline"
             style="@style/headline_1"
             android:text="@string/shopping_list"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <!--todo wrapper mit padding-->
+        <EditText
+            android:id="@+id/add_item_edit_text"
+            style="@style/edit_text"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/outline_horizontal"
+            android:layout_marginTop="30dp"
+            android:hint="Neue Zutat"
+            android:importantForAutofill="no"
+            android:inputType="textCapSentences"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/shopping_list_headline"
+            app:layout_constraintWidth_percent="0.7"
+            tools:ignore="LabelFor" />
+
+        <ImageButton
+            android:id="@+id/plus_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_button_text"
+            android:layout_marginBottom="12dp"
+            android:background="@null"
+            android:contentDescription="@string/increase_servings"
+            android:src="@drawable/ic_baseline_add_circle_outline_24"
+            app:layout_constraintBottom_toBottomOf="@id/add_item_edit_text"
+            app:layout_constraintStart_toEndOf="@id/add_item_edit_text" />
+
+        <ListView
+            android:id="@+id/shopping_list_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/outline_horizontal"
+            android:layout_marginTop="10dp"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"
+            android:paddingHorizontal="9dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_item_edit_text"
+            tools:ignore="RtlSymmetry"
+            tools:listitem="@layout/shopping_list_listitem" />
+
+        <ImageButton
+            android:id="@+id/clear_list_button"
+            style="@style/small_circle_button"
+            android:layout_marginHorizontal="@dimen/outline_horizontal"
+            android:layout_marginTop="30dp"
+            android:contentDescription="@string/add_to_shopping_list"
+            android:paddingBottom="2dp"
+            android:src="@drawable/ic_baseline_clear_all_24"
+            android:tooltipText="@string/add_to_shopping_list"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/shopping_list_list_view" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_button"
+            style="@style/custom_floating_action_button"
+            android:contentDescription="@string/desc_add_recipe"
+            android:src="@drawable/ic_baseline_share_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
