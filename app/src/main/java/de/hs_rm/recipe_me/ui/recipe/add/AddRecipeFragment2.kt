@@ -18,7 +18,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment2Binding
-import de.hs_rm.recipe_me.declaration.EditIngredientAdapter
+import de.hs_rm.recipe_me.declaration.ui.fragments.EditIngredientAdapter
 import de.hs_rm.recipe_me.declaration.closeKeyboard
 import de.hs_rm.recipe_me.model.SaveAction
 import de.hs_rm.recipe_me.model.recipe.Ingredient

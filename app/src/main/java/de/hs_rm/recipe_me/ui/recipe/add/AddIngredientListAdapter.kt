@@ -9,9 +9,8 @@ import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddIngredientListitemBinding
-import de.hs_rm.recipe_me.declaration.EditIngredientAdapter
+import de.hs_rm.recipe_me.declaration.ui.fragments.EditIngredientAdapter
 import de.hs_rm.recipe_me.model.recipe.Ingredient
-import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.service.Formatter
 
 class AddIngredientListAdapter(
