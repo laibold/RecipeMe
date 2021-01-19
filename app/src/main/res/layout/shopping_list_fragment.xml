@@ -19,7 +19,7 @@
         <EditText
             android:id="@+id/add_item_edit_text"
             style="@style/edit_text"
-            android:layout_width="300dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/outline_horizontal"
             android:layout_marginTop="30dp"
