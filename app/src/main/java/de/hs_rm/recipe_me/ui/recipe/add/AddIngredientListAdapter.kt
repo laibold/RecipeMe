@@ -18,8 +18,7 @@ class AddIngredientListAdapter(
     private val resource: Int,
     private val objects: MutableList<Ingredient>,
     private val callbackListener: EditIngredientAdapter
-) :
-    ArrayAdapter<Ingredient>(context, resource, objects) {
+) : ArrayAdapter<Ingredient>(context, resource, objects) {
 
     var editingEnabled = true
 

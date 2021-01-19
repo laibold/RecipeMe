@@ -13,12 +13,17 @@ class ShoppingListRepository @Inject constructor(
     private val shoppingListDao: ShoppingListDao
 ) {
 
+    suspend fun addFromString(name: String) {
+        val newShoppingListItem = ShoppingListItem(name)
+        shoppingListDao.insert(newShoppingListItem)
+    }
+
     /**
      * Hand in an Ingredient. If there is already is an item with the same name and unit in the repo,
      * the quantity of the item will be increased. If not, the item will be added to the list.
      * @param ingredient Ingredient to be added to the repository
      */
-    suspend fun insertOrUpdateFromIngredient(ingredient: Ingredient) {
+    suspend fun addOrUpdateFromIngredient(ingredient: Ingredient) {
         val item = findExistingItem(ingredient)
         if (item != null) {
             item.addIngredient(ingredient)

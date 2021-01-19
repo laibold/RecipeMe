@@ -37,4 +37,9 @@ class ShoppingListItem(
             throw MismatchingIngredientException()
         }
     }
+
+    fun format(context: Context): String {
+        return Formatter.formatIngredientValues(context, name, quantity, unit)
+    }
+
 }

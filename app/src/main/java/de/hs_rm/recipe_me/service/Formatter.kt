@@ -23,21 +23,37 @@ object Formatter {
         ingredient: Ingredient,
         multiplier: Double = 1.0
     ): String {
-        val calculatedQuantity = ingredient.quantity * multiplier
+        return formatIngredientValues(
+            context,
+            ingredient.name,
+            ingredient.quantity,
+            ingredient.unit,
+            multiplier
+        )
+    }
+
+    fun formatIngredientValues(
+        context: Context,
+        name: String,
+        quantity: Double,
+        unit: IngredientUnit,
+        multiplier: Double = 0.0
+    ): String {
+        val calculatedQuantity = quantity * multiplier
         var unitText = ""
 
         if (calculatedQuantity > Ingredient.DEFAULT_QUANTITY) {
             // quantity existing, there will be no ingredient with 0.0 (Unit)
-            var quantity = ""
-            var unit = ""
+            var quantityStr = ""
+            var unitStr = ""
 
-            quantity = formatIngredientQuantity(calculatedQuantity) + " "
-            unit = ingredient.unit.getNumberString(context.resources, calculatedQuantity) + "  "
+            quantityStr = formatIngredientQuantity(calculatedQuantity) + " "
+            unitStr = unit.getNumberString(context.resources, calculatedQuantity) + "  "
 
-            unitText = "$quantity $unit  "
+            unitText = "$quantityStr $unitStr  "
         }
 
-        return unitText + ingredient.name
+        return unitText + name
     }
 
 }

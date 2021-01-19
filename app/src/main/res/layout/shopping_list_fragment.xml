@@ -43,32 +43,56 @@
             app:layout_constraintBottom_toBottomOf="@id/add_item_edit_text"
             app:layout_constraintStart_toEndOf="@id/add_item_edit_text" />
 
-        <ListView
-            android:id="@+id/shopping_list_list_view"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/outline_horizontal"
-            android:layout_marginTop="10dp"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="0dp"
-            android:paddingHorizontal="9dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_item_edit_text"
-            tools:ignore="RtlSymmetry"
-            tools:listitem="@layout/shopping_list_listitem" />
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_item_edit_text">
 
-        <ImageButton
-            android:id="@+id/clear_list_button"
-            style="@style/small_circle_button"
-            android:layout_marginHorizontal="@dimen/outline_horizontal"
-            android:layout_marginTop="30dp"
-            android:contentDescription="@string/add_to_shopping_list"
-            android:paddingBottom="2dp"
-            android:src="@drawable/ic_baseline_clear_all_24"
-            android:tooltipText="@string/add_to_shopping_list"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/shopping_list_list_view" />
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:paddingBottom="30dp"
+                    android:layout_height="match_parent">
+
+                    <de.hs_rm.recipe_me.ui.component.UnscrollableListView
+                        android:id="@+id/shopping_list_list_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/outline_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:divider="@android:color/transparent"
+                        android:dividerHeight="0dp"
+                        android:paddingHorizontal="9dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="RtlSymmetry"
+                        tools:listitem="@layout/shopping_list_listitem" />
+
+                    <ImageButton
+                        android:id="@+id/clear_list_button"
+                        style="@style/small_circle_button"
+                        android:layout_marginHorizontal="@dimen/outline_horizontal"
+                        android:layout_marginTop="30dp"
+                        android:contentDescription="@string/add_to_shopping_list"
+                        android:paddingBottom="2dp"
+                        android:src="@drawable/ic_baseline_clear_all_24"
+                        android:tooltipText="@string/add_to_shopping_list"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/shopping_list_list_view" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_button"
