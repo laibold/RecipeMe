@@ -51,11 +51,11 @@ class ShoppingListFragment : Fragment() {
                 list
             )
 
-        binding.shoppingListListView.setOnItemClickListener { _, _, _, id ->
+        binding.shoppingListListLayout.listView.setOnItemClickListener { _, _, _, id ->
             viewModel.toggleItemChecked(id.toInt())
         }
 
-        binding.shoppingListListView.adapter = adapter
+        binding.shoppingListListLayout.listView.adapter = adapter
     }
 
     /**
@@ -64,9 +64,9 @@ class ShoppingListFragment : Fragment() {
      */
     private fun toggleClearButtonVisibility(listNotEmpty: Boolean) {
         if (listNotEmpty) {
-            binding.clearListButton.visibility = View.VISIBLE
+            binding.shoppingListListLayout.clearListButton.visibility = View.VISIBLE
         } else {
-            binding.clearListButton.visibility = View.GONE
+            binding.shoppingListListLayout.clearListButton.visibility = View.GONE
         }
     }
 

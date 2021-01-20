@@ -84,4 +84,5 @@
     <string name="glas_sg">Glas</string>
     <string name="glas_pl">Gläser</string>
     <string name="new_ingredient">Neue Zutat</string>
+    <string name="remove_checked_items">Markierte Elemente entfernen</string>
 </resources>
