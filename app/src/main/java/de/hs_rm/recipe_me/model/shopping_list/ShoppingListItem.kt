@@ -42,4 +42,8 @@ class ShoppingListItem(
         return Formatter.formatIngredientValues(context, name, quantity, unit)
     }
 
+    fun toggleChecked() {
+        checked = !checked
+    }
+
 }

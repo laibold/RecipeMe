@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import de.hs_rm.recipe_me.databinding.ShoppingListListitemBinding
-import de.hs_rm.recipe_me.declaration.ui.fragments.ShoppingListAdapter
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 
 /**
@@ -17,8 +16,7 @@ import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 class ShoppingListListViewAdapter(
     context: Context,
     private val resource: Int,
-    private val objects: List<ShoppingListItem>,
-    private val callbackListener: ShoppingListAdapter
+    private val objects: List<ShoppingListItem>
 ) : ArrayAdapter<ShoppingListItem>(context, resource, objects) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -39,25 +37,17 @@ class ShoppingListListViewAdapter(
         }
 
         val listItem = objects[position]
+        val checkbox = holder.binding.itemCheckbox
+        val textView = holder.binding.itemText
 
-        holder.binding.itemText.text = listItem.format(context)
+        textView.text = listItem.format(context)
 
-        val checked = listItem.checked
-        holder.binding.itemCheckbox.isChecked = listItem.checked
-//        if (checked) {
-//            holder.binding.itemText.paintFlags =
-//                holder.binding.itemText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-//        } else {
-//            holder.binding.itemText.paintFlags =
-//                holder.binding.itemText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG.inv()
-//        }
-//
-//        holder.binding.itemCheckbox.isChecked = checked
-//        listItem.checked = checked
-
-        holder.binding.root.setOnClickListener {
-            listItem.checked = !listItem.checked
-            notifyDataSetChanged()
+        if (listItem.checked) {
+            checkbox.isChecked = true
+            textView.paintFlags = textView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        } else {
+            checkbox.isChecked = false
+            textView.paintFlags = textView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
 
         return holder.view

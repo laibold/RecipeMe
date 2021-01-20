@@ -22,8 +22,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/outline_horizontal"
-            android:layout_marginTop="30dp"
-            android:hint="Neue Zutat"
+            android:layout_marginTop="@dimen/default_margin"
+            android:hint="@string/new_ingredient"
             android:importantForAutofill="no"
             android:inputType="textCapSentences"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,8 +58,8 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:paddingBottom="30dp"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:paddingBottom="30dp">
 
                     <de.hs_rm.recipe_me.ui.component.UnscrollableListView
                         android:id="@+id/shopping_list_list_view"
@@ -69,6 +69,7 @@
                         android:layout_marginTop="10dp"
                         android:divider="@android:color/transparent"
                         android:dividerHeight="0dp"
+                        android:listSelector="@android:color/transparent"
                         android:paddingHorizontal="9dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -85,6 +86,7 @@
                         android:paddingBottom="2dp"
                         android:src="@drawable/ic_baseline_clear_all_24"
                         android:tooltipText="@string/add_to_shopping_list"
+                        android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/shopping_list_list_view" />
 

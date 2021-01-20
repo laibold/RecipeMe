@@ -10,11 +10,10 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.ShoppingListFragmentBinding
-import de.hs_rm.recipe_me.declaration.ui.fragments.ShoppingListAdapter
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 
 @AndroidEntryPoint
-class ShoppingListFragment : Fragment(), ShoppingListAdapter {
+class ShoppingListFragment : Fragment() {
 
     private lateinit var binding: ShoppingListFragmentBinding
     private val viewModel: ShoppingListViewModel by viewModels()
@@ -31,28 +30,44 @@ class ShoppingListFragment : Fragment(), ShoppingListAdapter {
             false
         )
 
-//        viewModel.addShoppingListItem("3 Bananen")
-//        viewModel.addShoppingListItem("5 Banonen")
-//        viewModel.addShoppingListItem("Citron")
-
         viewModel.loadShoppingListItems()
 
         viewModel.shoppingListItems.observe(viewLifecycleOwner, {
             setAdapter(it)
+            toggleClearButtonVisibility(it.isNotEmpty())
         })
 
         return binding.root
     }
 
+    /**
+     * Set Adapter to ListView and ClickListener to its items
+     */
     private fun setAdapter(list: List<ShoppingListItem>) {
         adapter =
             ShoppingListListViewAdapter(
                 requireContext(),
                 R.layout.shopping_list_listitem,
-                list,
-                this
+                list
             )
+
+        binding.shoppingListListView.setOnItemClickListener { _, _, _, id ->
+            viewModel.toggleItemChecked(id.toInt())
+        }
+
         binding.shoppingListListView.adapter = adapter
+    }
+
+    /**
+     * Toggle visibility of clear list button. Button should be displayed if list is not empty
+     * @param listNotEmpty true if list is not empty
+     */
+    private fun toggleClearButtonVisibility(listNotEmpty: Boolean) {
+        if (listNotEmpty) {
+            binding.clearListButton.visibility = View.VISIBLE
+        } else {
+            binding.clearListButton.visibility = View.GONE
+        }
     }
 
 }
