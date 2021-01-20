@@ -41,6 +41,11 @@ class ShoppingListFragment : Fragment() {
             onAddButtonClicked()
         }
 
+
+        binding.shoppingListListLayout.clearListButton.setOnClickListener {
+            viewModel.clearCheckedItems()
+        }
+
         return binding.root
     }
 

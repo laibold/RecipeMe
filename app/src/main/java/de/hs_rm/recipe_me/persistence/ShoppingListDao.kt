@@ -20,6 +20,9 @@ interface ShoppingListDao {
     @Delete
     suspend fun delete(item: ShoppingListItem)
 
+    @Query("DELETE FROM ShoppingListItem WHERE checked = 1")
+    suspend fun deleteChecked()
+
     @Query("SELECT * FROM ShoppingListItem ORDER BY id DESC")
     fun getItems(): LiveData<List<ShoppingListItem>>
 

@@ -55,4 +55,13 @@ class ShoppingListViewModel @ViewModelInject constructor(
         }
     }
 
+    /**
+     * Delete Checked Items from repository
+     */
+    fun clearCheckedItems() {
+        viewModelScope.launch {
+            repository.clearCheckedItems()
+        }
+    }
+
 }

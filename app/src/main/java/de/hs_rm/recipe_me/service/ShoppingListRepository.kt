@@ -62,4 +62,11 @@ class ShoppingListRepository @Inject constructor(
         return shoppingListDao.getItemByNameAndUnit(ingredient.name, ingredient.unit)
     }
 
+    /**
+     * Delete Items where checked == true
+     */
+    suspend fun clearCheckedItems() {
+        shoppingListDao.deleteChecked()
+    }
+
 }
