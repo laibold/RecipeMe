@@ -54,16 +54,54 @@
             app:layout_constraintTop_toBottomOf="@+id/recipe_info_headline"
             tools:listitem="@layout/ingredient_listitem" />
 
-        <ImageButton
-            android:id="@+id/add_to_shopping_list_button"
-            style="@style/small_circle_button"
-            android:layout_marginVertical="@dimen/margin_top"
-            android:contentDescription="@string/add_to_shopping_list"
-            android:paddingBottom="2dp"
-            android:src="@drawable/ic_clipboards"
-            android:tooltipText="@string/add_to_shopping_list"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/shopping_list_button_wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ingredients_list_view" />
+            app:layout_constraintTop_toBottomOf="@id/ingredients_list_view">
+
+            <ImageButton
+                android:id="@+id/add_to_shopping_list_button"
+                style="@style/small_circle_button"
+                android:layout_marginVertical="@dimen/margin_top"
+                android:contentDescription="@string/add_to_shopping_list"
+                android:paddingBottom="2dp"
+                android:src="@drawable/ic_clipboards"
+                android:tooltipText="@string/add_to_shopping_list"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/to_shopping_list_accept_button"
+                style="@style/small_circle_button"
+                android:layout_marginVertical="@dimen/margin_top"
+                android:contentDescription="@string/add_to_shopping_list"
+                android:src="@drawable/ic_baseline_check_24"
+                android:tooltipText="@string/add_to_shopping_list"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
+
+            <ImageButton
+                android:id="@+id/to_shopping_list_cancel_button"
+                style="@style/small_circle_button"
+                android:layout_marginVertical="@dimen/margin_top"
+                android:layout_marginStart="@dimen/default_margin"
+                android:background="@drawable/round_button_2dp"
+                android:contentDescription="@string/cancel"
+                android:src="@drawable/ic_baseline_clear_24"
+                android:tint="?attr/colorPrimaryVariant"
+                android:tooltipText="@string/cancel"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@id/to_shopping_list_accept_button"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/cooking_steps_headline"
@@ -74,7 +112,7 @@
             android:gravity="center_vertical"
             android:text="@string/steps"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_to_shopping_list_button" />
+            app:layout_constraintTop_toBottomOf="@id/shopping_list_button_wrapper" />
         <!--TODO center_vertical?-->
 
         <TextView
