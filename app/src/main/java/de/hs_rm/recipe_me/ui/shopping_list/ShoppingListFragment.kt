@@ -1,5 +1,6 @@
 package de.hs_rm.recipe_me.ui.shopping_list
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.ShoppingListFragmentBinding
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
+import de.hs_rm.recipe_me.service.Formatter
+import de.hs_rm.recipe_me.service.TextSharer
 
 @AndroidEntryPoint
 class ShoppingListFragment : Fragment() {
@@ -44,6 +47,10 @@ class ShoppingListFragment : Fragment() {
 
         binding.shoppingListListLayout.clearListButton.setOnClickListener {
             viewModel.clearCheckedItems()
+        }
+
+        binding.shareButton.setOnClickListener {
+            TextSharer.share(requireContext(), getShareText())
         }
 
         return binding.root
@@ -92,6 +99,28 @@ class ShoppingListFragment : Fragment() {
             binding.shoppingListListLayout.scrollView.smoothScrollTo(0, 0)
             binding.addItemEditText.text.clear()
         }
+    }
+
+    /**
+     * @return Text for sharing list items to other apps
+     */
+    private fun getShareText(): String {
+        var s =
+            requireContext().resources.getString(R.string.shopping_list_export_headline) + "\n\n"
+        viewModel.shoppingListItems.value?.let {
+            for (item in it) {
+                if (!item.checked) {
+                    s += Formatter.formatIngredientValues(
+                        requireContext(),
+                        item.name,
+                        item.quantity,
+                        item.unit
+                    ) + "\n"
+                }
+            }
+        }
+        s += "\n" + requireContext().resources.getString(R.string.store_link)
+        return s
     }
 
 }

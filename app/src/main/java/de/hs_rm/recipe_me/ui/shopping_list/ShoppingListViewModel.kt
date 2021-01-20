@@ -3,7 +3,6 @@ package de.hs_rm.recipe_me.ui.shopping_list
 import android.text.Editable
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem

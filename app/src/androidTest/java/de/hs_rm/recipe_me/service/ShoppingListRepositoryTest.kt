@@ -67,5 +67,5 @@ class ShoppingListRepositoryTest {
             testIds.add(repository.insertItem(ShoppingListItem("Item", 3.0, IngredientUnit.GRAM)))
         }
     }
-    
+
 }

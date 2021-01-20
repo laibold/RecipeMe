@@ -86,4 +86,6 @@
     <string name="new_ingredient">Neue Zutat</string>
     <string name="remove_checked_items">Markierte Elemente entfernen</string>
     <string name="err_enter_text">Text eingeben</string>
+    <string name="shopping_list_export_headline">Sieh, was auf meiner RecipeMe-Einkaufsliste steht:</string>
+    <string name="store_link">http://play.google.com/store/apps/details?id=de.hs_rm.recipe_me</string>
 </resources>
