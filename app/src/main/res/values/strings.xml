@@ -83,4 +83,12 @@
     <string name="can_pl">Dosen</string>
     <string name="glas_sg">Glas</string>
     <string name="glas_pl">Gläser</string>
+    <string name="profile_greeting">Hallo, Chefkoch!</string>
+    <string name="change_profile_picture">Profilbild ändern</string>
+    <string name="site_notice">Impressum</string>
+    <string name="recipe_total_text_1">Du hast bisher</string>
+    <string name="recipe_total_text_3_one">Rezept erstellt - da geht noch mehr!</string>
+    <string name="recipe_total_text_3_zero_to_ten">Rezepte erstellt - da geht noch mehr!</string>
+    <string name="recipe_total_text_3_more_than_ten">Rezepte erstellt - toll!</string>
+    <string name="photo_credits">Bildnachweis</string>
 </resources>
