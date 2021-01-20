@@ -112,7 +112,12 @@
         android:id="@+id/profile_fragment"
         android:name="de.hs_rm.recipe_me.ui.profile.ProfileFragment"
         android:label="Profile Fragment"
-        tools:layout="@layout/profile_fragment" />
+        tools:layout="@layout/profile_fragment">
+
+        <action
+            android:id="@+id/to_site_notice_fragment"
+            app:destination="@+id/site_notice_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/recipe_detail_fragment"
@@ -133,6 +138,12 @@
         android:id="@+id/cooking_step_fragment"
         android:name="de.hs_rm.recipe_me.ui.recipe.detail.CookingStepFragment"
         android:label="Cooking Step Fragment"
-        tools:layout="@layout/cooking_step_fragment"/>
+        tools:layout="@layout/cooking_step_fragment" />
+
+    <fragment
+        android:id="@+id/site_notice_fragment"
+        android:name="de.hs_rm.recipe_me.ui.profile.SiteNoticeFragment"
+        android:label="Site Notice Fragment"
+        tools:layout="@layout/site_notice_fragment" />
 
 </navigation>

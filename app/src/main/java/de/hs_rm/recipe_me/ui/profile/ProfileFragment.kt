@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.ProfileFragmentBinding
@@ -41,6 +42,11 @@ class ProfileFragment : Fragment() {
                 "Hier kannst du bald dein Profilbild ändern",
                 Toast.LENGTH_LONG
             ).show()
+        }
+
+        binding.toSiteNoticeButton.setOnClickListener {
+            val direction = ProfileFragmentDirections.toSiteNoticeFragment()
+            findNavController().navigate(direction)
         }
 
         return binding.root

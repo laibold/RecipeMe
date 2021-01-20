@@ -1,6 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/profile_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/site_notice_headline"
+            style="@style/headline_1"
+            android:text="@string/site_notice"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/site_notice_text"
+            style="@style/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/outline_horizontal"
+            android:layout_marginTop="@dimen/margin_top"
+            android:text="Beckbold Development\nChristina Becker, Marvin Laibold\nbeckbold.development@gmail.com"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/site_notice_headline" />
+
+        <TextView
+            android:id="@+id/photo_credits_headline"
+            style="@style/headline_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/outline_horizontal"
+            android:layout_marginTop="@dimen/margin_top"
+            android:text="@string/photo_credits"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/site_notice_text" />
+
+        <TextView
+            android:id="@+id/contributions_text"
+            style="@style/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/outline_horizontal"
+            android:layout_marginTop="@dimen/space_below_headline_2"
+            android:text="App icon made by monkik from www.flaticon.com \nClipboard icon made by Freepik from www.flaticon.com\nMain dishes photo by by Natalia Y on Unsplash\nSnacks photo by Kyle Brinker on Unsplash\nSoups photo by Cayla1 on Unsplash\nBeverages photo by Kim Daniels on Unsplash\nBaked goods photo by Rebecca Matthews on Unsplash\nBreakfast photo by Dani Rendina on Unsplash\nDesserts photo by Jennifer Schmidt on Unsplash\nSalad photo by Taylor Kiser on Unsplash"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/photo_credits_headline" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -18,7 +18,7 @@
             android:id="@+id/profile_picture"
             android:layout_width="180dp"
             android:layout_height="180dp"
-            android:layout_marginTop="@dimen/margin_top"
+            android:layout_marginTop="@dimen/space_below_headline_1"
             android:background="@drawable/profile_picture_default"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/outline_horizontal"
-            android:layout_marginTop="@dimen/margin_top"
+            android:layout_marginTop="@dimen/space_below_headline_2"
             android:layout_marginEnd="@dimen/outline_horizontal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/profile_greeting" />
