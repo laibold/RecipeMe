@@ -81,7 +81,7 @@
                         android:id="@+id/clear_list_button"
                         style="@style/small_circle_button"
                         android:layout_marginHorizontal="@dimen/outline_horizontal"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginTop="@dimen/default_margin"
                         android:contentDescription="@string/add_to_shopping_list"
                         android:paddingBottom="2dp"
                         android:src="@drawable/ic_baseline_clear_all_24"
