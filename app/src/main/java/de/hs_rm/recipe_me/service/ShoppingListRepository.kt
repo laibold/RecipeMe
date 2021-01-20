@@ -35,10 +35,24 @@ class ShoppingListRepository @Inject constructor(
     }
 
     /**
+     * Insert the given item
+     */
+    suspend fun insertItem(item: ShoppingListItem): Long {
+        return shoppingListDao.insert(item)
+    }
+
+    /**
      * Update the given item
      */
     suspend fun updateItem(item: ShoppingListItem) {
         shoppingListDao.update(item)
+    }
+
+    /**
+     * Delete item by given id
+     */
+    suspend fun deleteItemById(id: Long) {
+        shoppingListDao.delete(id)
     }
 
     /**
