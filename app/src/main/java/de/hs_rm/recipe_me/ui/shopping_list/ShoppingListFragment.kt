@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.ShoppingListFragmentBinding
+import de.hs_rm.recipe_me.declaration.ui.closeKeyboard
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 import de.hs_rm.recipe_me.service.Formatter
 import de.hs_rm.recipe_me.service.TextSharer
@@ -99,6 +100,7 @@ class ShoppingListFragment : Fragment() {
             binding.shoppingListListLayout.scrollView.smoothScrollTo(0, 0)
             binding.addItemEditText.text.clear()
         }
+        activity.closeKeyboard()
     }
 
     /**
