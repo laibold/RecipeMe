@@ -1,5 +1,6 @@
 package de.hs_rm.recipe_me.ui.shopping_list
 
+import android.text.Editable
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -37,9 +38,9 @@ class ShoppingListViewModel @ViewModelInject constructor(
     /**
      * Add item to shopping list
      */
-    fun addShoppingListItem(name: String) {
+    fun addShoppingListItem(name: Editable) {
         viewModelScope.launch {
-            repository.addFromString(name)
+            repository.addFromString(name.toString().trim())
         }
     }
 

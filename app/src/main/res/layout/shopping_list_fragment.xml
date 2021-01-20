@@ -66,6 +66,7 @@
                 layout="@layout/shopping_list_list_layout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +75,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_button"
+            android:id="@+id/share_button"
             style="@style/custom_floating_action_button"
             android:contentDescription="@string/desc_add_recipe"
             android:src="@drawable/ic_baseline_share_24"

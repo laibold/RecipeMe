@@ -37,6 +37,10 @@ class ShoppingListFragment : Fragment() {
             toggleClearButtonVisibility(it.isNotEmpty())
         })
 
+        binding.addItemButton.setOnClickListener {
+            onAddButtonClicked()
+        }
+
         return binding.root
     }
 
@@ -67,6 +71,21 @@ class ShoppingListFragment : Fragment() {
             binding.shoppingListListLayout.clearListButton.visibility = View.VISIBLE
         } else {
             binding.shoppingListListLayout.clearListButton.visibility = View.GONE
+        }
+    }
+
+    /**
+     * Validate text content. If valid, add new item to list and scroll to top to make it visible
+     */
+    private fun onAddButtonClicked() {
+        if (binding.addItemEditText.text.isBlank()) {
+            binding.addItemEditText.text.clear()
+            binding.addItemEditText.error =
+                requireContext().resources.getString(R.string.err_enter_text)
+        } else {
+            viewModel.addShoppingListItem(binding.addItemEditText.text)
+            binding.shoppingListListLayout.scrollView.smoothScrollTo(0, 0)
+            binding.addItemEditText.text.clear()
         }
     }
 

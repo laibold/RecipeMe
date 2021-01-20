@@ -20,7 +20,7 @@ interface ShoppingListDao {
     @Delete
     suspend fun delete(item: ShoppingListItem)
 
-    @Query("SELECT * FROM ShoppingListItem")
+    @Query("SELECT * FROM ShoppingListItem ORDER BY id DESC")
     fun getItems(): LiveData<List<ShoppingListItem>>
 
     @Query("SELECT * FROM ShoppingListItem WHERE name = :name AND unit = :unit LIMIT 1")
