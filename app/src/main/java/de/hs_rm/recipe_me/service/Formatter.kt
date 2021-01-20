@@ -37,20 +37,21 @@ object Formatter {
         name: String,
         quantity: Double,
         unit: IngredientUnit,
-        multiplier: Double = 0.0
+        multiplier: Double = 1.0
     ): String {
         val calculatedQuantity = quantity * multiplier
         var unitText = ""
 
         if (calculatedQuantity > Ingredient.DEFAULT_QUANTITY) {
             // quantity existing, there will be no ingredient with 0.0 (Unit)
-            var quantityStr = ""
-            var unitStr = ""
+            val quantityStr = formatIngredientQuantity(calculatedQuantity)
 
-            quantityStr = formatIngredientQuantity(calculatedQuantity) + " "
-            unitStr = unit.getNumberString(context.resources, calculatedQuantity) + "  "
+            var unitStr = " "
+            if (unit != IngredientUnit.NONE) {
+                unitStr = unit.getNumberString(context.resources, calculatedQuantity) + "  "
+            }
 
-            unitText = "$quantityStr $unitStr  "
+            unitText = "$quantityStr $unitStr"
         }
 
         return unitText + name
