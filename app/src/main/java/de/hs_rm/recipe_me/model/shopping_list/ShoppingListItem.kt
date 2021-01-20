@@ -31,7 +31,7 @@ class ShoppingListItem(
 
     @Throws(MismatchingIngredientException::class)
     fun addIngredient(ingredient: Ingredient) {
-        if (ingredient.name != this.name && ingredient.unit != this.unit) {
+        if (ingredient.name == this.name && ingredient.unit == this.unit) {
             this.quantity += ingredient.quantity
         } else {
             throw MismatchingIngredientException()

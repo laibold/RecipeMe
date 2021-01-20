@@ -42,13 +42,6 @@ class ShoppingListRepository @Inject constructor(
     }
 
     /**
-     * Delete the given item
-     */
-    suspend fun deleteItem(item: ShoppingListItem) {
-        shoppingListDao.delete(item)
-    }
-
-    /**
      * Get LiveData with List of all Items
      */
     fun getAllItems(): LiveData<List<ShoppingListItem>> {
@@ -56,9 +49,9 @@ class ShoppingListRepository @Inject constructor(
     }
 
     /**
-     * Private method to find an existing item
+     * Private method to find an existing item by its name and unit
      */
-    private fun findExistingItem(ingredient: Ingredient): ShoppingListItem? {
+    private suspend fun findExistingItem(ingredient: Ingredient): ShoppingListItem? {
         return shoppingListDao.getItemByNameAndUnit(ingredient.name, ingredient.unit)
     }
 

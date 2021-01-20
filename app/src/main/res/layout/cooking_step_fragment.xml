@@ -7,26 +7,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!--TODO LinearLayout just for paddingEnd, improve?-->
-        <LinearLayout
-            android:id="@+id/headline_wrapper"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/recipe_name_headline"
+            style="@style/headline_1"
+            android:layout_width="0dp"
             android:paddingEnd="@dimen/outline_horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="RtlSymmetry">
-
-            <TextView
-                android:id="@+id/recipe_name_headline"
-                style="@style/headline_1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="RtlSymmetry"
-                tools:maxLength="50"
-                tools:text="@tools:sample/lorem/random" />
-        </LinearLayout>
+            tools:ignore="RtlSymmetry"
+            tools:maxLength="50"
+            tools:text="@tools:sample/lorem/random" />
 
         <ListView
             android:id="@+id/cooking_step_list_view"
@@ -39,7 +30,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/headline_wrapper"
+            app:layout_constraintTop_toBottomOf="@id/recipe_name_headline"
             tools:listitem="@layout/cooking_step_listitem" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

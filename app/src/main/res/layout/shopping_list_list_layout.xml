@@ -10,9 +10,9 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/scroll_view"
             android:layout_width="match_parent"
-            android:overScrollMode="never"
             android:layout_height="match_parent"
             android:fillViewport="true"
+            android:overScrollMode="never"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 

@@ -27,6 +27,6 @@ interface ShoppingListDao {
     fun getItems(): LiveData<List<ShoppingListItem>>
 
     @Query("SELECT * FROM ShoppingListItem WHERE name = :name AND unit = :unit LIMIT 1")
-    fun getItemByNameAndUnit(name: String, unit: IngredientUnit): ShoppingListItem?
+    suspend fun getItemByNameAndUnit(name: String, unit: IngredientUnit): ShoppingListItem?
 
 }
