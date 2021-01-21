@@ -43,6 +43,14 @@
         <item name="android:textSize">@dimen/font_size_text</item>
     </style>
 
+    <style name="small_text" parent="text">
+        <item name="android:textSize">@dimen/font_size_tertiary</item>
+    </style>
+
+    <style name="bold_text" parent="text">
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="label" parent="text">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>

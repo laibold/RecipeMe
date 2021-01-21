@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import de.hs_rm.recipe_me.BuildConfig
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.ProfileFragmentBinding
 
@@ -44,10 +45,14 @@ class ProfileFragment : Fragment() {
             ).show()
         }
 
-        binding.toSiteNoticeButton.setOnClickListener {
+        binding.toSiteNoticeElement.setOnClickListener {
             val direction = ProfileFragmentDirections.toSiteNoticeFragment()
             findNavController().navigate(direction)
         }
+
+        val versionNumber = BuildConfig.VERSION_NAME
+
+        binding.versionText.text = requireContext().resources.getString(R.string.version) + ": " + versionNumber
 
         return binding.root
     }
