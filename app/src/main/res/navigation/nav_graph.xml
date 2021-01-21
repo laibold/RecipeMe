@@ -35,7 +35,8 @@
         <action android:id="@+id/to_shopping_list_fragment" />
         <action
             android:id="@+id/to_recipe_home_fragment"
-            app:destination="@+id/recipe_home_fragment" />
+            app:destination="@+id/recipe_home_fragment"
+            app:popUpTo="@id/recipe_home_fragment" />
         <action
             android:id="@+id/to_recipe_detail_fragment"
             app:destination="@+id/recipe_detail_fragment" />
