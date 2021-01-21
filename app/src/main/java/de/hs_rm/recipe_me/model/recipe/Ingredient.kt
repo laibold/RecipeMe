@@ -1,6 +1,5 @@
 package de.hs_rm.recipe_me.model.recipe
 
-import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
@@ -17,6 +16,8 @@ data class Ingredient(
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
+    @Ignore
+    var checked = false
 
     constructor(name: String, quantity: Double, unit: IngredientUnit) : this(
         -1,

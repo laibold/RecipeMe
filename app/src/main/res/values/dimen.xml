@@ -7,6 +7,7 @@
     <dimen name="space_button_text">10dp</dimen>
     <item name="wrap_content" format="integer" type="dimen">-2</item>
     <dimen name="form_long">270dp</dimen>
+    <dimen name="default_margin">30dp</dimen>
 
     <!--button size-->
     <dimen name="button_width_big">150sp</dimen>

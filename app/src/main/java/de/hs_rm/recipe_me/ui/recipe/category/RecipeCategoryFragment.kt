@@ -13,7 +13,7 @@ import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeCategoryFragmentBinding
-import de.hs_rm.recipe_me.declaration.DeleteRecipeCallbackAdapter
+import de.hs_rm.recipe_me.declaration.ui.fragments.DeleteRecipeCallbackAdapter
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.ui.component.CustomAlertDialog
 

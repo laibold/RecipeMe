@@ -85,6 +85,14 @@
         <item name="strokeColor">?attr/colorOnSecondary</item>
     </style>
 
+    <style name="small_circle_button">
+        <item name="android:layout_width">@dimen/small_circle_button</item>
+        <item name="android:layout_height">@dimen/small_circle_button</item>
+        <item name="android:background">@drawable/round_button_filled</item>
+        <item name="android:tint">@color/white</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
     <style name="edit_text">
         <item name="android:backgroundTint">?attr/colorAccent</item>
         <item name="android:layout_height">46dp</item>
@@ -94,6 +102,14 @@
         <item name="android:backgroundTint">?attr/colorAccent</item>
         <item name="android:layout_height">46dp</item>
         <item name="android:paddingEnd">10dp</item>
+    </style>
+
+    <style name="custom_floating_action_button">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:backgroundTint">?attr/colorOnPrimary</item>
+        <item name="borderWidth">0dp</item>
+        <item name="useCompatPadding">true</item>
     </style>
 
 </resources>

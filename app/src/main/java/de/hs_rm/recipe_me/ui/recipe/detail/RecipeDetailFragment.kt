@@ -1,17 +1,15 @@
 package de.hs_rm.recipe_me.ui.recipe.detail
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
+import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,12 +65,29 @@ class RecipeDetailFragment : Fragment() {
         }
 
         binding.recipeInfo.addToShoppingListButton.setOnClickListener {
-            Toast.makeText(
-                context,
-                "Hier kannst du bald Zutaten zur Einkaufsliste hinzufügen",
-                Toast.LENGTH_LONG
-            ).show()
+            viewModel.ingredientSelectionActive.set(true)
         }
+
+        binding.recipeInfo.toShoppingListAcceptButton.setOnClickListener {
+            viewModel.addSelectedIngredientsToShoppingList()
+            closeIngredientSelection()
+        }
+
+        binding.recipeInfo.toShoppingListCancelButton.setOnClickListener {
+            closeIngredientSelection()
+        }
+
+        viewModel.ingredientSelectionActive.addOnPropertyChangedCallback(object :
+            Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(observable: Observable, i: Int) {
+                val active = observable as ObservableBoolean
+                if (active.get()) {
+                    setIngredientSelectionActive()
+                } else {
+                    setIngredientSelectionInactive()
+                }
+            }
+        })
 
         binding.forwardButton.setOnClickListener {
             val direction = RecipeDetailFragmentDirections.toCookingStepFragment()
@@ -82,16 +97,12 @@ class RecipeDetailFragment : Fragment() {
         return binding.root
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.clearRecipe()
-    }
-
     /**
      * Set recipe name, servings, ingredients and cooking steps to view
      */
     private fun onRecipeChanged(recipeWithRelations: RecipeWithRelations) {
         binding.recipeDetailName.text = recipeWithRelations.recipe.name
+        binding.recipeInfo.wrapper.visibility = View.VISIBLE
         onServingsChanged(recipeWithRelations.recipe.servings)
         setIngredientAdapter(recipeWithRelations)
         setCookingSteps(recipeWithRelations)
@@ -105,9 +116,18 @@ class RecipeDetailFragment : Fragment() {
         adapter = IngredientListAdapter(
             requireContext(),
             R.layout.ingredient_listitem,
-            recipeWithRelations.ingredients
+            recipeWithRelations.ingredients,
+            viewModel.ingredientSelectionActive
         )
         list.adapter = adapter
+
+        list.setOnItemClickListener { _, _, _, id ->
+            if (viewModel.ingredientSelectionActive.get()) {
+                val recipe = viewModel.recipe.value!!.ingredients[id.toInt()]
+                recipe.checked = !recipe.checked
+                adapter!!.notifyDataSetChanged()
+            }
+        }
     }
 
     /**
@@ -148,6 +168,33 @@ class RecipeDetailFragment : Fragment() {
             binding.recipeDetailImage.scaleX = scaleVal
             binding.recipeDetailImage.scaleY = scaleVal
         }
+    }
+
+    /**
+     * Hide all selection elements and re-show the add-to-recipe button
+     */
+    private fun closeIngredientSelection() {
+        viewModel.ingredientSelectionActive.set(false)
+        viewModel.clearSelections()
+        adapter?.notifyDataSetChanged()
+    }
+
+    /**
+     * Hide add-to-recipe button and show accept and cancel buttons
+     */
+    private fun setIngredientSelectionActive() {
+        binding.recipeInfo.addToShoppingListButton.visibility = View.GONE
+        binding.recipeInfo.toShoppingListAcceptButton.visibility = View.VISIBLE
+        binding.recipeInfo.toShoppingListCancelButton.visibility = View.VISIBLE
+    }
+
+    /**
+     * Show add-to-recipe button and hide accept and cancel buttons
+     */
+    private fun setIngredientSelectionInactive() {
+        binding.recipeInfo.addToShoppingListButton.visibility = View.VISIBLE
+        binding.recipeInfo.toShoppingListAcceptButton.visibility = View.GONE
+        binding.recipeInfo.toShoppingListCancelButton.visibility = View.GONE
     }
 
 }

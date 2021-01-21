@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.declaration
+package de.hs_rm.recipe_me.declaration.ui
 
 import android.content.Context
 import android.view.View

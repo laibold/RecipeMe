@@ -6,9 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.Observable
+import androidx.databinding.ObservableBoolean
 import de.hs_rm.recipe_me.databinding.IngredientListitemBinding
 import de.hs_rm.recipe_me.model.recipe.Ingredient
-import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.service.Formatter
 
 /**
@@ -17,7 +18,8 @@ import de.hs_rm.recipe_me.service.Formatter
 class IngredientListAdapter(
     context: Context,
     private val resource: Int,
-    private val objects: List<Ingredient>
+    private val objects: List<Ingredient>,
+    private val ingredientSelectionActive: ObservableBoolean
 ) :
     ArrayAdapter<Ingredient>(context, resource, objects) {
 
@@ -43,6 +45,20 @@ class IngredientListAdapter(
         val ingredient = objects[position]
 
         holder.binding.ingredientTextView.text = getIngredientText(ingredient)
+        holder.binding.itemCheckbox.isChecked = ingredient.checked
+
+        // Show and hide checkboxes depending on ingredientSelectionActive state
+        ingredientSelectionActive.addOnPropertyChangedCallback(object :
+            Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(observable: Observable, i: Int) {
+                val active = observable as ObservableBoolean
+                if (active.get()) {
+                    holder.binding.itemCheckbox.visibility = View.VISIBLE
+                } else {
+                    holder.binding.itemCheckbox.visibility = View.GONE
+                }
+            }
+        })
 
         return holder.view
     }
@@ -51,19 +67,7 @@ class IngredientListAdapter(
      * Create text for ingredient in form of "(quantity unit) name"
      */
     private fun getIngredientText(ingredient: Ingredient): CharSequence {
-        val calculatedQuantity = ingredient.quantity * multiplier
-
-        var quantity = ""
-        if (calculatedQuantity != 0.0) {
-            quantity = Formatter.formatIngredientQuantity(calculatedQuantity) + " "
-        }
-
-        var unit = ""
-        if (ingredient.unit != IngredientUnit.NONE) {
-            unit = ingredient.unit.getNumberString(context.resources, calculatedQuantity) + "  "
-        }
-
-        return quantity + unit + ingredient.name
+        return Formatter.formatIngredient(context, ingredient, multiplier)
     }
 
     // https://www.spreys.com/view-holder-design-pattern-for-android/

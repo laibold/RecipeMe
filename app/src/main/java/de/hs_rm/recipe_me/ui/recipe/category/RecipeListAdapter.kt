@@ -11,9 +11,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
 import androidx.databinding.ObservableBoolean
 import androidx.navigation.findNavController
-import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeListitemBinding
-import de.hs_rm.recipe_me.declaration.DeleteRecipeCallbackAdapter
+import de.hs_rm.recipe_me.declaration.ui.fragments.DeleteRecipeCallbackAdapter
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import java.util.*
 

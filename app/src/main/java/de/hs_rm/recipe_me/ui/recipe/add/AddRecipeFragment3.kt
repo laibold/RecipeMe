@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -17,11 +16,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment3Binding
-import de.hs_rm.recipe_me.declaration.EditCookingStepAdapter
+import de.hs_rm.recipe_me.declaration.ui.fragments.EditCookingStepAdapter
 import de.hs_rm.recipe_me.model.SaveAction
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.TimeUnit
-import de.hs_rm.recipe_me.declaration.closeKeyboard
+import de.hs_rm.recipe_me.declaration.ui.closeKeyboard
 
 @AndroidEntryPoint
 class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {

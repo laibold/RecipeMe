@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 4,
-    "identityHash": "6f2f09d5f26a14f9d250736f395bc0ac",
+    "version": 5,
+    "identityHash": "0e564273f6f96b2bd54fe77e867c1fa3",
     "entities": [
       {
         "tableName": "Recipe",
@@ -144,7 +144,7 @@
       },
       {
         "tableName": "ShoppingListItem",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `checked` INTEGER NOT NULL, `ingredients` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `checked` INTEGER NOT NULL, `name` TEXT NOT NULL, `quantity` REAL NOT NULL, `unit` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -159,9 +159,21 @@
             "notNull": true
           },
           {
-            "fieldPath": "ingredients",
-            "columnName": "ingredients",
+            "fieldPath": "name",
+            "columnName": "name",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quantity",
+            "columnName": "quantity",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unit",
+            "columnName": "unit",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -178,7 +190,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6f2f09d5f26a14f9d250736f395bc0ac')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0e564273f6f96b2bd54fe77e867c1fa3')"
     ]
   }
 }

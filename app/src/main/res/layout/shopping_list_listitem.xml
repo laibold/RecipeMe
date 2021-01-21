@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:descendantFocusability="blocksDescendants"
+        android:orientation="horizontal"
+        android:paddingVertical="10dp">
+
+        <CheckBox
+            android:id="@+id/item_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:button="@drawable/checkbox_selector"
+            android:buttonTint="?attr/colorOnSecondary"
+            android:clickable="false"
+            android:color="?attr/colorOnSecondary"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            tools:checked="true"
+            tools:text="‎" />
+
+        <TextView
+            android:id="@+id/item_text"
+            style="@style/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            tools:text="400g  Kichererbsen" />
+
+    </LinearLayout>
+
+</layout>
