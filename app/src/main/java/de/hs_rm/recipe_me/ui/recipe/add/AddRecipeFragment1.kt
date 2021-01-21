@@ -69,7 +69,7 @@ class AddRecipeFragment1 : Fragment() {
 
         if (validationOk) {
             viewModel.setRecipeAttributes(
-                binding.recipeNameField.text.toString(),
+                binding.recipeNameField.text.toString().trim(),
                 binding.recipeServingsField.text.toString(),
                 RecipeCategory.values()[binding.recipeCategorySpinner.selectedItemPosition]
             )
@@ -84,12 +84,12 @@ class AddRecipeFragment1 : Fragment() {
      * @return true if all fields are valid
      */
     private fun validate(): Boolean {
-        val nameValid = viewModel.validateName(binding.recipeNameField.text.toString())
+        val nameValid = viewModel.validateName(binding.recipeNameField.text)
         if (nameValid != 0) {
             binding.recipeNameField.error = requireContext().resources.getString(nameValid)
         }
 
-        val servingsValid = viewModel.validateServings(binding.recipeServingsField.text.toString())
+        val servingsValid = viewModel.validateServings(binding.recipeServingsField.text)
         if (servingsValid != 0) {
             binding.recipeServingsField.error = requireContext().resources.getString(servingsValid)
         }

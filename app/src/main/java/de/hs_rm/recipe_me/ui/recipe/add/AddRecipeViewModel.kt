@@ -1,5 +1,6 @@
 package de.hs_rm.recipe_me.ui.recipe.add
 
+import android.text.Editable
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,7 +11,6 @@ import de.hs_rm.recipe_me.declaration.notifyObserver
 import de.hs_rm.recipe_me.model.SaveAction
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.service.RecipeRepository
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 /**
@@ -81,14 +81,14 @@ class AddRecipeViewModel @ViewModelInject constructor(
      * @param unit IngredientUnit
      * @return true if ingredient could be added
      */
-    fun addIngredient(name: String, quantity: String, unit: IngredientUnit): Boolean {
+    fun addIngredient(name: Editable, quantity: Editable, unit: IngredientUnit): Boolean {
         var quantityDouble = Ingredient.DEFAULT_QUANTITY
 
-        if (name != "") {
-            if (quantity != "") {
-                quantityDouble = quantity.replace(",", ".").toDouble()
+        if (name.isNotBlank()) {
+            if (quantity.isNotBlank()) {
+                quantityDouble = quantity.toString().replace(",", ".").toDouble()
             }
-            _ingredients.value?.add(Ingredient(name, quantityDouble, unit))
+            _ingredients.value?.add(Ingredient(name.toString().trim(), quantityDouble, unit))
             _ingredients.notifyObserver()
             return true
         }
@@ -150,7 +150,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
      * @param timeUnit TimeUnit
      * @return true if cooking step could be added
      */
-    fun addCookingStep(text: String, time: String, timeUnit: TimeUnit): Boolean {
+    fun addCookingStep(text: Editable, time: Editable, timeUnit: TimeUnit): Boolean {
         val cookingStep = getCookingStep(text, time, timeUnit)
         if (cookingStep != null) {
             _cookingSteps.value?.add(cookingStep)
@@ -167,7 +167,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
      * @param timeUnit TimeUnit
      * @return true if cooking step could be updated
      */
-    fun updateCookingStep(text: String, time: String, timeUnit: TimeUnit): Boolean {
+    fun updateCookingStep(text: Editable, time: Editable, timeUnit: TimeUnit): Boolean {
         val cookingStep = getCookingStep(text, time, timeUnit)
         if (cookingStep != null) {
             _cookingSteps.value?.set(this.updatingCookingStepIndex, cookingStep)
@@ -185,13 +185,13 @@ class AddRecipeViewModel @ViewModelInject constructor(
      * @param timeUnit TimeUnit
      * @return true if cooking step could be created
      */
-    private fun getCookingStep(text: String, time: String, timeUnit: TimeUnit): CookingStep? {
+    private fun getCookingStep(text: Editable, time: Editable, timeUnit: TimeUnit): CookingStep? {
         var timeInt = CookingStep.DEFAULT_TIME
-        if (text != "") {
-            if (time != "") {
-                timeInt = time.toInt()
+        if (text.isNotBlank()) {
+            if (time.isNotBlank()) {
+                timeInt = time.toString().toInt()
             }
-            return CookingStep(text, timeInt, timeUnit)
+            return CookingStep(text.toString().trim(), timeInt, timeUnit)
         }
         return null
     }
@@ -234,8 +234,8 @@ class AddRecipeViewModel @ViewModelInject constructor(
      * Validate recipe name (not empty)
      * @return 0 if valid, otherwise string id for error message
      */
-    fun validateName(name: String): Int {
-        if (name == "") {
+    fun validateName(name: Editable): Int {
+        if (name.isBlank()) {
             return R.string.err_enter_name
         }
         return 0
@@ -245,11 +245,11 @@ class AddRecipeViewModel @ViewModelInject constructor(
      * Validate recipe servings (not empty and greater than 0)
      * @return 0 if valid, otherwise string id for error message
      */
-    fun validateServings(servings: String): Int {
-        if (servings == "") {
+    fun validateServings(servings: Editable): Int {
+        if (servings.isBlank()) {
             return R.string.err_enter_servings
         }
-        if (servings.toInt() < 1) {
+        if (servings.toString().toInt() < 1) {
             return R.string.err_servings_greater_than_zero
         }
         return 0

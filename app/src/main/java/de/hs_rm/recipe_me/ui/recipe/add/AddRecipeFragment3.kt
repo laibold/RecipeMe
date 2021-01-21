@@ -114,8 +114,8 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
      */
     private fun addCookingStep() {
         val success = viewModel.addCookingStep(
-            binding.cookingStepField.text.toString(),
-            binding.cookingStepTimeField.text.toString(),
+            binding.cookingStepField.text,
+            binding.cookingStepTimeField.text,
             TimeUnit.values()[binding.cookingStepTimeSpinner.selectedItemPosition]
         )
 
@@ -132,8 +132,8 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
      */
     private fun updateCookingStep() {
         val success = viewModel.updateCookingStep(
-            binding.cookingStepField.text.toString(),
-            binding.cookingStepTimeField.text.toString(),
+            binding.cookingStepField.text,
+            binding.cookingStepTimeField.text,
             TimeUnit.values()[binding.cookingStepTimeSpinner.selectedItemPosition]
         )
 

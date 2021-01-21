@@ -146,8 +146,8 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
      */
     private fun addIngredient() {
         val success = viewModel.addIngredient(
-            binding.ingredientNameField.text.toString(),
-            binding.ingredientQuantityField.text.toString(),
+            binding.ingredientNameField.text,
+            binding.ingredientQuantityField.text,
             IngredientUnit.values()[binding.ingredientUnitSpinner.selectedItemPosition]
         )
 
