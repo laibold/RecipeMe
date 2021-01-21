@@ -88,4 +88,6 @@
     <string name="err_enter_text">Text eingeben</string>
     <string name="shopping_list_export_headline">Sieh, was auf meiner RecipeMe-Einkaufsliste steht:</string>
     <string name="store_link">http://play.google.com/store/apps/details?id=de.hs_rm.recipe_me</string>
+    <string name="timer">Timer</string>
+    <string name="start_timer">Timer starten</string>
 </resources>

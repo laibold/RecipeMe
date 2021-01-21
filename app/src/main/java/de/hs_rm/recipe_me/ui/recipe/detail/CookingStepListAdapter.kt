@@ -59,6 +59,9 @@ class CookingStepListAdapter(
                     cookingStep.time
                 )
             }"
+        } else {
+            // visibility gone is already defined in the layout, but there seems to be a bug, so set it here again
+            holder.binding.timerElement.visibility = View.GONE
         }
 
         holder.binding.timerElement.setOnClickListener {
@@ -67,7 +70,6 @@ class CookingStepListAdapter(
 
         return holder.view
     }
-
 
     // https://www.spreys.com/view-holder-design-pattern-for-android/
     // https://stackoverflow.com/questions/43973490/how-to-do-android-data-binding-a-customadapter-inherited-from-baseadapter-for-sp
