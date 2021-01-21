@@ -29,7 +29,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="2dp"
-            tools:text="400g  Kichererbsen" />
+            tools:maxLength="@dimen/shopping_list_item_name_max_length"
+            tools:text="@tools:sample/lorem/random" />
 
     </LinearLayout>
 

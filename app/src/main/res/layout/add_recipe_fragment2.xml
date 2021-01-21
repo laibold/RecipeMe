@@ -37,7 +37,7 @@
                 style="@style/edit_text"
                 android:layout_width="match_parent"
                 android:hint="@string/hint_ingredient_name"
-                android:maxLength="30"
+                android:maxLength="@dimen/ingredient_name_max_length"
                 android:importantForAutofill="no"
                 android:inputType="textCapSentences"
                 app:layout_constraintStart_toStartOf="parent"

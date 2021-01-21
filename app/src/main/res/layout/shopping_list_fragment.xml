@@ -41,10 +41,13 @@
                     android:hint="@string/new_ingredient"
                     android:importantForAutofill="no"
                     android:inputType="textCapSentences"
+                    android:maxLength="@dimen/shopping_list_item_name_max_length"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.7"
-                    tools:ignore="LabelFor" />
+                    tools:ignore="LabelFor"
+                    tools:maxLength="@dimen/shopping_list_item_name_max_length"
+                    tools:text="@tools:sample/lorem/random" />
 
                 <ImageButton
                     android:id="@+id/add_item_button"
@@ -54,8 +57,8 @@
                     android:layout_marginBottom="12dp"
                     android:background="@null"
                     android:contentDescription="@string/add_to_shopping_list"
-                    android:tooltipText="@string/add_to_shopping_list"
                     android:src="@drawable/ic_baseline_add_circle_outline_24"
+                    android:tooltipText="@string/add_to_shopping_list"
                     app:layout_constraintBottom_toBottomOf="@id/add_item_edit_text"
                     app:layout_constraintStart_toEndOf="@id/add_item_edit_text" />
 
