@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/recipe_detail_layout"
@@ -21,11 +22,11 @@
             android:background="@android:color/white"
             android:contentDescription="@string/recipe_image"
             android:scaleType="centerCrop"
-            android:src="@drawable/hummus_default"
             app:layout_constraintBottom_toTopOf="@+id/guideline_imageview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/hummus_default" />
 
         <View
             android:layout_width="match_parent"
