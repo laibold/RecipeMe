@@ -1,5 +1,6 @@
 package de.hs_rm.recipe_me.ui.profile
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -52,22 +53,28 @@ class ProfileFragment : Fragment() {
 
         val versionNumber = BuildConfig.VERSION_NAME
 
-        binding.versionText.text = requireContext().resources.getString(R.string.version) + ": " + versionNumber
+        binding.versionText.text =
+            "${requireContext().resources.getString(R.string.version)}: $versionNumber"
 
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setRecipeTotalText(total: Int) {
         val firstPart = requireContext().resources.getString(R.string.recipe_total_text_1)
-        if (total == 1) {
-            binding.profileQuantityRecipesText.text = firstPart + " " + total.toString() + " " +
-                    requireContext().resources.getString(R.string.recipe_total_text_3_one)
-        } else if (total <= 10) {
-            binding.profileQuantityRecipesText.text = firstPart + " " + total.toString() + " " +
-                    requireContext().resources.getString(R.string.recipe_total_text_3_zero_to_ten)
-        } else {
-            binding.profileQuantityRecipesText.text = firstPart + " " + total.toString() + " " +
-                    requireContext().resources.getString(R.string.recipe_total_text_3_more_than_ten)
+        when {
+            total == 1 -> {
+                binding.profileQuantityRecipesText.text =
+                    "$firstPart $total ${requireContext().resources.getString(R.string.recipe_total_text_3_one)}"
+            }
+            total <= 10 -> {
+                binding.profileQuantityRecipesText.text =
+                    "$firstPart $total ${requireContext().resources.getString(R.string.recipe_total_text_3_zero_to_ten)}"
+            }
+            else -> {
+                binding.profileQuantityRecipesText.text =
+                    "$firstPart $total ${requireContext().resources.getString(R.string.recipe_total_text_3_more_than_ten)}"
+            }
         }
     }
 }
