@@ -181,8 +181,7 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
      * Navigation on back button
      */
     private fun onBack() {
-        val direction = AddRecipeFragment2Directions.toAddRecipeFragment1()
-        findNavController().navigate(direction)
+        requireActivity().onBackPressed()
     }
 
     /**

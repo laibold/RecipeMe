@@ -161,8 +161,7 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
      * Navigation on back button
      */
     private fun onBack() {
-        val direction = AddRecipeFragment3Directions.toAddRecipeFragment2()
-        findNavController().navigate(direction)
+        requireActivity().onBackPressed()
     }
 
     /**

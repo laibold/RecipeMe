@@ -76,9 +76,6 @@
             tools:layout="@layout/add_recipe_fragment2">
 
             <action
-                android:id="@+id/to_add_recipe_fragment1"
-                app:destination="@+id/add_recipe_fragment1" />
-            <action
                 android:id="@+id/to_add_recipe_fragment3"
                 app:destination="@+id/add_recipe_fragment3" />
         </fragment>
@@ -89,12 +86,6 @@
             android:label="Add Recipe Fragment 3"
             tools:layout="@layout/add_recipe_fragment3">
 
-            <action
-                android:id="@+id/to_add_recipe_fragment2"
-                app:destination="@+id/add_recipe_fragment2" />
-            <action
-                android:id="@+id/to_recipe_category_fragment"
-                app:destination="@+id/recipe_category_fragment" />
             <action
                 android:id="@+id/to_recipe_detail_fragment"
                 app:destination="@+id/recipe_detail_fragment" />
