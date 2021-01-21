@@ -23,7 +23,8 @@ class ShoppingListRepository @Inject constructor(
      * the quantity of the item will be increased. If not, the item will be added to the list.
      * @param ingredient Ingredient to be added to the repository
      */
-    suspend fun addOrUpdateFromIngredient(ingredient: Ingredient) {
+    suspend fun addOrUpdateFromIngredient(ingredient: Ingredient, multiplier: Double = 1.0) {
+        ingredient.quantity *= multiplier
         val item = findExistingItem(ingredient)
         if (item != null) {
             item.addIngredient(ingredient)
