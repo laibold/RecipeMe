@@ -87,12 +87,17 @@
     <string name="change_profile_picture">Profilbild ändern</string>
     <string name="site_notice">Impressum</string>
     <string name="recipe_total_text_1">Du hast bisher</string>
-    <string name="recipe_total_text_3_one">Rezept erstellt - da geht noch mehr!</string>
-    <string name="recipe_total_text_3_zero_to_ten">Rezepte erstellt - da geht noch mehr!</string>
-    <string name="recipe_total_text_3_more_than_ten">Rezepte erstellt - toll!</string>
+    <string name="recipe_total_text_2_one">Rezept erstellt - da geht noch mehr!</string>
+    <string name="recipe_total_text_2_zero_to_ten">Rezepte erstellt - da geht noch mehr!</string>
     <string name="photo_credits">Bildnachweis</string>
     <string name="beckbold">Beckbold Development</string>
     <string name="site_notice_text">Christina Becker, Marvin Laibold\n\beckbold.development@gmail.com</string>
     <string name="photo_credits_text">App icon uses icon made by monkik from www.flaticon.com\n\Clipboard icon made by Freepik from www.flaticon.com\n\Main dishes photo by Natalia Y on Unsplash\n\Snacks photo by Kyle Brinker on Unsplash\n\Soups photo by Cayla1 on Unsplash\n\Beverages photo by Kim Daniels on Unsplash\n\Baked goods photo by Rebecca Matthews on Unsplash\n\Breakfast photo by Dani Rendina on Unsplash\n\Desserts photo by Jennifer Schmidt on Unsplash\n\Salad photo by Taylor Kiser on Unsplash</string>
     <string name="version">Version</string>
+    <string name="recipe_total_text_2_11_to_20">Rezepte erstellt - du bist auf einem guten Weg.</string>
+    <string name="recipe_total_text_2_21_to_30">Rezepte erstellt - du kannst schon fast ein Restaurant aufmachen.</string>
+    <string name="recipe_total_text_2_31_to_40">Rezepte erstellt - boah, Respekt!</string>
+    <string name="recipe_total_text_2_41_to_50">Rezepte erstellt - deine Waage wollt\' ich nicht sein.</string>
+    <string name="recipe_total_text_2_51_to_60">Rezepte erstellt - wer soll das alles essen? Sag mal!</string>
+    <string name="recipe_total_text_2_61_and_over">Rezepte erstellt - du bist ein wahrer Meisterkoch!</string>
 </resources>

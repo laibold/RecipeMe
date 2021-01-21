@@ -65,16 +65,34 @@ class ProfileFragment : Fragment() {
         when {
             total == 1 -> {
                 binding.profileQuantityRecipesText.text =
-                    "$firstPart $total ${requireContext().resources.getString(R.string.recipe_total_text_3_one)}"
+                    "$firstPart $total ${requireContext().resources.getString(R.string.recipe_total_text_2_one)}"
             }
             total <= 10 -> {
                 binding.profileQuantityRecipesText.text =
-                    "$firstPart $total ${requireContext().resources.getString(R.string.recipe_total_text_3_zero_to_ten)}"
+                    "$firstPart $total ${requireContext().resources.getString(R.string.recipe_total_text_2_zero_to_ten)}"
             }
-            else -> {
+            total <= 20 -> {
                 binding.profileQuantityRecipesText.text =
-                    "$firstPart $total ${requireContext().resources.getString(R.string.recipe_total_text_3_more_than_ten)}"
+                    "$firstPart $total ${getString(R.string.recipe_total_text_2_11_to_20)}"
             }
+            total <= 30 -> {
+                binding.profileQuantityRecipesText.text =
+                    "$firstPart $total ${getString(R.string.recipe_total_text_2_21_to_30)}"
+            }
+            total <= 40 -> {
+                binding.profileQuantityRecipesText.text =
+                    "$firstPart $total ${getString(R.string.recipe_total_text_2_31_to_40)}"
+            }
+            total <= 50 -> {
+                binding.profileQuantityRecipesText.text =
+                    "$firstPart $total ${getString(R.string.recipe_total_text_2_41_to_50)}"
+            }
+            total <= 60 -> {
+                binding.profileQuantityRecipesText.text =
+                    "$firstPart $total ${getString(R.string.recipe_total_text_2_51_to_60)}"
+            }
+            else -> binding.profileQuantityRecipesText.text =
+                "$firstPart $total ${getString(R.string.recipe_total_text_2_61_and_over)}"
         }
     }
 }
