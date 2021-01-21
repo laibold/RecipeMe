@@ -29,10 +29,4 @@
     <dimen name="divider_big">35dp</dimen>
     <dimen name="divider_small">10dp</dimen>
 
-    <!--string values-->
-    <dimen name="recipe_name_max_length">50</dimen>
-    <dimen name="ingredient_name_max_length">30</dimen>
-    <dimen name="cooking_step_text_max_length">500</dimen>
-    <dimen name="shopping_list_item_name_max_length">40</dimen>
-
 </resources>

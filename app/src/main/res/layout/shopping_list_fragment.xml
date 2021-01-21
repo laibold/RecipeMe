@@ -41,12 +41,12 @@
                     android:hint="@string/new_ingredient"
                     android:importantForAutofill="no"
                     android:inputType="textCapSentences"
-                    android:maxLength="@dimen/shopping_list_item_name_max_length"
+                    android:maxLength="@integer/shopping_list_item_name_max_length"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.7"
                     tools:ignore="LabelFor"
-                    tools:maxLength="@dimen/shopping_list_item_name_max_length"
+                    tools:maxLength="@integer/shopping_list_item_name_max_length"
                     tools:text="@tools:sample/lorem/random" />
 
                 <ImageButton

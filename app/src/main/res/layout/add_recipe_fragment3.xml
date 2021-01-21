@@ -40,7 +40,7 @@
                 android:hint="@string/hint_cooking_step"
                 android:importantForAutofill="no"
                 android:inputType="textMultiLine|textCapSentences"
-                android:maxLength="@dimen/cooking_step_text_max_length"
+                android:maxLength="@integer/cooking_step_text_max_length"
                 android:maxLines="5"
                 android:minHeight="46dp"
                 app:layout_constraintStart_toStartOf="parent"

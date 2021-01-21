@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--string length values-->
+    <integer name="recipe_name_max_length">50</integer>
+    <integer name="ingredient_name_max_length">30</integer>
+    <integer name="cooking_step_text_max_length">500</integer>
+    <integer name="shopping_list_item_name_max_length">40</integer>
+
+</resources>
