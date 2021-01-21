@@ -118,10 +118,18 @@ class RecipeDetailFragment : Fragment() {
      */
     private fun onRecipeChanged(recipeWithRelations: RecipeWithRelations) {
         binding.recipeDetailName.text = recipeWithRelations.recipe.name
-        binding.recipeInfo.wrapper.visibility = View.VISIBLE
         onServingsChanged(recipeWithRelations.recipe.servings)
         setIngredientAdapter(recipeWithRelations)
         setCookingSteps(recipeWithRelations)
+        setImage(recipeWithRelations)
+        binding.recipeInfo.wrapper.visibility = View.VISIBLE
+    }
+
+    /**
+     * Set background image
+     */
+    private fun setImage(recipeWithRelations: RecipeWithRelations) {
+        binding.recipeDetailImage.setImageResource(recipeWithRelations.recipe.category.drawableResId)
     }
 
     /**
