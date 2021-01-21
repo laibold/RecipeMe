@@ -127,12 +127,15 @@
         <action
             android:id="@+id/to_cooking_step_fragment"
             app:destination="@+id/cooking_step_fragment" />
+        <action
+            android:id="@+id/to_recipe_category_fragment"
+            app:destination="@+id/recipe_category_fragment" />
     </fragment>
 
     <fragment
         android:id="@+id/cooking_step_fragment"
         android:name="de.hs_rm.recipe_me.ui.recipe.detail.CookingStepFragment"
         android:label="Cooking Step Fragment"
-        tools:layout="@layout/cooking_step_fragment"/>
+        tools:layout="@layout/cooking_step_fragment" />
 
 </navigation>

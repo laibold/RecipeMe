@@ -207,8 +207,10 @@ class AddRecipeViewModel @ViewModelInject constructor(
 
     /**
      * Persist entities to repository. Clears ViewModel content afterwards
+     * @return LiveData that contains the id of the generated recipe
      */
-    fun persistEntities() {
+    fun persistEntities(): LiveData<Long> {
+        val recipeId = MutableLiveData<Long>()
         viewModelScope.launch {
             _recipe.value?.let { r ->
                 val id = repository.insert(r)
@@ -226,8 +228,10 @@ class AddRecipeViewModel @ViewModelInject constructor(
                 _ingredients.value = mutableListOf()
                 _cookingSteps.value = mutableListOf()
                 _recipe.value = Recipe(RecipeCategory.values()[0])
+                recipeId.postValue(id)
             }
         }
+        return recipeId
     }
 
     /**

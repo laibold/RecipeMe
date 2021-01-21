@@ -172,12 +172,12 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
         val validationOk = validate()
 
         if (validationOk) {
-            viewModel.persistEntities()
+            val id = viewModel.persistEntities()
 
-             viewModel.recipe.value?.let {
-                val direction = AddRecipeFragment3Directions.toRecipeCategoryFragment(it.category)
+            id.observe(viewLifecycleOwner, {
+                val direction = AddRecipeFragment3Directions.toRecipeDetailFragment(it)
                 findNavController().navigate(direction)
-            }
+            })
         }
     }
 
