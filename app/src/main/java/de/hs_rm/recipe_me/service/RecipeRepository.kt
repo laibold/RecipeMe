@@ -89,6 +89,13 @@ class RecipeRepository @Inject constructor(
     }
 
     /**
+     * Get total of recipes
+     */
+    fun getRecipeTotal(): LiveData<Int> {
+        return recipeDao.getRecipeCount()
+    }
+
+    /**
      * Delete recipe and it's belonging Ingredients and CookingSteps
      */
     suspend fun deleteRecipeAndRelations(recipe: Recipe) {
