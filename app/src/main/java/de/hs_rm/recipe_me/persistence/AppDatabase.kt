@@ -50,9 +50,9 @@ abstract class AppDatabase : RoomDatabase() {
                     "CREATE TABLE IF NOT EXISTS `ShoppingListItem`" +
                             " (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                             " `checked` INTEGER NOT NULL," +
-                            " `name` TEXT NOT NULL)" +
-                            "`quantity` REAL NOT NULL" +
-                            "`unit` INTEGER NOT NULL)"
+                            " `name` TEXT NOT NULL," +
+                            " `quantity` REAL NOT NULL," +
+                            " `unit` INTEGER NOT NULL)"
                 )
             }
         }
