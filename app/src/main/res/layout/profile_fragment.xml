@@ -7,11 +7,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            style="@style/headline_1"
-            android:text="@string/profile"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <include
+            android:id="@+id/header"
+            layout="@layout/material_header"
+            app:headlineText="@{@string/profile}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

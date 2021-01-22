@@ -39,7 +39,7 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
 
         viewModel.category = args.recipeCategory
         val name = context?.resources?.getString(viewModel.category.nameResId)
-        binding.categoryHeadline.text = name
+        binding.header.headlineText = name
 
         binding.addButton.setOnClickListener {
             val direction = RecipeCategoryFragmentDirections.toAddRecipeNavGraph(viewModel.category)

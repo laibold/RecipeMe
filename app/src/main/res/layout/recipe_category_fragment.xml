@@ -9,24 +9,20 @@
         android:layout_height="match_parent"
         tools:context=".ui.recipe.category.RecipeCategoryFragment">
 
-        <TextView
-            android:id="@+id/category_headline"
-            style="@style/headline_1"
-            android:text="@string/category"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <include
+            android:id="@+id/header"
+            layout="@layout/material_header" />
 
         <ListView
             android:id="@+id/recipeList"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/default_margin"
             android:divider="@android:color/transparent"
             android:dividerHeight="@dimen/divider_big"
             android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/category_headline"
+            app:layout_constraintTop_toBottomOf="@id/header"
             tools:listitem="@layout/recipe_listitem" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

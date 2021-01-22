@@ -10,7 +10,7 @@
     <dimen name="default_margin">30dp</dimen>
 
     <!--button size-->
-    <dimen name="button_width_big">150sp</dimen>
+    <dimen name="button_width_big">0dp</dimen>
     <dimen name="button_height_big">55dp</dimen>
     <dimen name="button_big_width_percentage">0.40</dimen>
     <dimen name="button_width_small">@dimen/wrap_content</dimen>
@@ -20,6 +20,7 @@
     <!--text size-->
     <dimen name="font_size_headline_1">35dp</dimen>
     <dimen name="font_size_headline_2">23dp</dimen>
+    <dimen name="font_size_headline_3">18dp</dimen>
     <dimen name="font_size_text">16sp</dimen>
     <dimen name="font_size_tertiary">13sp</dimen>
     <dimen name="design_bottom_navigation_text_size" tools:override="true">30sp</dimen>

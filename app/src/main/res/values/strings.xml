@@ -90,4 +90,7 @@
     <string name="store_link">http://play.google.com/store/apps/details?id=de.hs_rm.recipe_me</string>
     <string name="timer">Timer</string>
     <string name="start_timer">Timer starten</string>
+    <string name="cooking_steps">Koch-Schritte</string>
+    <string name="add_cooking_steps_text">Füge über den Button neue Koch-Schritte hinzu.</string>
+    <string name="add_ingredients_text">Füge über den Button neue Zutaten hinzu.</string>
 </resources>
