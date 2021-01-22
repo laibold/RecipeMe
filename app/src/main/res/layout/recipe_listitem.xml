@@ -23,11 +23,15 @@
         <TextView
             android:id="@+id/recipeName"
             style="@style/headline_image_2"
-            android:layout_marginHorizontal="15dp"
             android:layout_marginBottom="10dp"
-            android:text="@string/recipe"
+            android:paddingHorizontal="15dp"
+            tools:text="@tools:sample/lorem/random"
+            tools:maxLength="100"
+            android:maxLines="4"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"/>
 
         <include
             android:id="@+id/edit_overlay"

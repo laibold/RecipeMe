@@ -18,8 +18,8 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment2Binding
-import de.hs_rm.recipe_me.declaration.EditIngredientAdapter
-import de.hs_rm.recipe_me.declaration.closeKeyboard
+import de.hs_rm.recipe_me.declaration.ui.fragments.EditIngredientAdapter
+import de.hs_rm.recipe_me.declaration.ui.closeKeyboard
 import de.hs_rm.recipe_me.model.SaveAction
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
@@ -146,8 +146,8 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
      */
     private fun addIngredient() {
         val success = viewModel.addIngredient(
-            binding.ingredientNameField.text.toString(),
-            binding.ingredientQuantityField.text.toString(),
+            binding.ingredientNameField.text,
+            binding.ingredientQuantityField.text,
             IngredientUnit.values()[binding.ingredientUnitSpinner.selectedItemPosition]
         )
 
@@ -181,8 +181,7 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
      * Navigation on back button
      */
     private fun onBack() {
-        val direction = AddRecipeFragment2Directions.toAddRecipeFragment1()
-        findNavController().navigate(direction)
+        requireActivity().onBackPressed()
     }
 
     /**

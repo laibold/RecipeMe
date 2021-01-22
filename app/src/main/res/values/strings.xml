@@ -83,4 +83,21 @@
     <string name="can_pl">Dosen</string>
     <string name="glas_sg">Glas</string>
     <string name="glas_pl">Gläser</string>
+    <string name="new_ingredient">Neue Zutat</string>
+    <string name="remove_checked_items">Markierte Elemente entfernen</string>
+    <string name="err_enter_text">Text eingeben</string>
+    <string name="shopping_list_export_headline">Sieh, was auf meiner RecipeMe-Einkaufsliste steht:</string>
+    <string name="store_link">http://play.google.com/store/apps/details?id=de.hs_rm.recipe_me</string>
+    <string name="timer">Timer</string>
+    <string name="start_timer">Timer starten</string>
+    <string name="profile_greeting">Hallo, Chefkoch!</string>
+    <string name="change_profile_picture">Profilbild ändern</string>
+    <string name="site_notice">Impressum</string>
+    <string name="recipe_total_text_1">Du hast bisher</string>
+    <string name="photo_credits">Bildnachweis</string>
+    <string name="beckbold">Beckbold Development</string>
+    <string name="site_notice_text">Christina Becker, Marvin Laibold\n\beckbold.development@gmail.com</string>
+    <string name="photo_credits_text">App icon uses icon made by monkik from www.flaticon.com\n\Clipboard icon made by Freepik from www.flaticon.com\n\Main dishes photo by Natalia Y on Unsplash\n\Snacks photo by Kyle Brinker on Unsplash\n\Soups photo by Cayla1 on Unsplash\n\Beverages photo by Kim Daniels on Unsplash\n\Baked goods photo by Rebecca Matthews on Unsplash\n\Breakfast photo by Dani Rendina on Unsplash\n\Desserts photo by Jennifer Schmidt on Unsplash\n\Salad photo by Hermes Rivera on Unsplash</string>
+    <string name="version">Version</string>
+    <string name="recipe_total_text_map">{\"1\":\"Rezept erstellt - da geht noch mehr!\",\"10\":\"Rezepte erstellt - da geht noch mehr!\",\"20\":\"Rezepte erstellt - du bist auf einem guten Weg.\",\"30\":\"Rezepte erstellt - du kannst schon fast ein Restaurant aufmachen.\",\"40\":\"Rezepte erstellt - boah, Respekt!\",\"50\":\"Rezepte erstellt - deine Waage wollt\' ich nicht sein.\",\"60\":\"Rezepte erstellt - wer soll das alles essen? Sag mal!\",\"61\":\"Rezepte erstellt - du bist ein wahrer Meisterkoch!\"}</string>
 </resources>

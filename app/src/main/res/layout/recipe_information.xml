@@ -5,7 +5,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:minHeight="300dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="0dp"
         android:background="@drawable/layout_rounded_top"
         android:elevation="4dp"
@@ -21,73 +22,119 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/recipe_info_headline"
-            style="@style/headline_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_top"
-            android:gravity="center_vertical"
-            android:text="@string/ingredients"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <include
-            android:id="@+id/servings_element"
-            layout="@layout/servings"
-            android:layout_width="160sp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_top"
-            android:layout_marginEnd="@dimen/outline_horizontal"
-            app:layout_constraintBottom_toBottomOf="@id/recipe_info_headline"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <de.hs_rm.recipe_me.ui.component.UnscrollableListView
-            android:id="@+id/ingredients_list_view"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/wrapper"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_top"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="0dp"
-            android:listSelector="@android:color/transparent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recipe_info_headline"
-            tools:listitem="@layout/ingredient_listitem" />
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:visibility="visible">
 
-        <ImageButton
-            android:id="@+id/add_to_shopping_list_button"
-            android:layout_width="@dimen/small_circle_button"
-            android:layout_height="@dimen/small_circle_button"
-            android:layout_marginVertical="@dimen/margin_top"
-            android:background="@drawable/round_button_filled"
-            android:contentDescription="@string/add_to_shopping_list"
-            android:paddingBottom="2dp"
-            android:src="@drawable/ic_clipboards"
-            android:tint="@color/white"
-            android:tooltipText="@string/add_to_shopping_list"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ingredients_list_view" />
+            <TextView
+                android:id="@+id/recipe_info_headline"
+                style="@style/headline_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top"
+                android:gravity="center_vertical"
+                android:text="@string/ingredients"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/cooking_steps_headline"
-            style="@style/headline_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_below_headline_1"
-            android:gravity="center_vertical"
-            android:text="@string/steps"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_to_shopping_list_button" />
+            <include
+                android:id="@+id/servings_element"
+                layout="@layout/servings"
+                android:layout_width="160sp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top"
+                android:layout_marginEnd="@dimen/outline_horizontal"
+                app:layout_constraintBottom_toBottomOf="@id/recipe_info_headline"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-        <TextView
-            android:id="@+id/steps"
-            style="@style/text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_top"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cooking_steps_headline"
-            tools:text="Hier stehen die Steps." />
+            <de.hs_rm.recipe_me.ui.component.UnscrollableListView
+                android:id="@+id/ingredients_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="0dp"
+                android:listSelector="@android:color/transparent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recipe_info_headline"
+                tools:listitem="@layout/ingredient_listitem" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/shopping_list_button_wrapper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ingredients_list_view">
+
+                <ImageButton
+                    android:id="@+id/add_to_shopping_list_button"
+                    style="@style/small_circle_button"
+                    android:layout_marginVertical="@dimen/margin_top"
+                    android:contentDescription="@string/add_to_shopping_list"
+                    android:paddingBottom="2dp"
+                    android:src="@drawable/ic_clipboards"
+                    android:tooltipText="@string/add_to_shopping_list"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="gone" />
+
+                <ImageButton
+                    android:id="@+id/to_shopping_list_cancel_button"
+                    style="@style/small_circle_button"
+                    android:layout_marginVertical="@dimen/margin_top"
+                    android:background="@drawable/round_button_2dp"
+                    android:contentDescription="@string/cancel"
+                    android:src="@drawable/ic_baseline_clear_24"
+                    android:tint="?attr/colorPrimaryVariant"
+                    android:tooltipText="@string/cancel"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible" />
+
+                <ImageButton
+                    android:id="@+id/to_shopping_list_accept_button"
+                    style="@style/small_circle_button"
+                    android:layout_marginVertical="@dimen/margin_top"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:contentDescription="@string/add_to_shopping_list"
+                    android:src="@drawable/ic_baseline_check_24"
+                    android:tooltipText="@string/add_to_shopping_list"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@id/to_shopping_list_cancel_button"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/cooking_steps_headline"
+                style="@style/headline_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_below_headline_1"
+                android:gravity="center_vertical"
+                android:text="@string/steps"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/shopping_list_button_wrapper" />
+            <!--TODO why center_vertical?-->
+
+            <TextView
+                android:id="@+id/steps"
+                style="@style/text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cooking_steps_headline"
+                tools:text="@tools:sample/lorem/random"
+                tools:lines="10"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

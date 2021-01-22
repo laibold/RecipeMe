@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
+import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
@@ -21,8 +23,23 @@ class RecipeDetailFragment : Fragment() {
 
     private lateinit var binding: RecipeDetailFragmentBinding
     private val args: RecipeDetailFragmentArgs by navArgs()
-    private val viewModel: RecipeDetailViewModel by viewModels()
-    private lateinit var adapter: IngredientListAdapter
+    private val viewModel: RecipeDetailViewModel by activityViewModels()
+    private var adapter: IngredientListAdapter? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Set action to back button: always navigate to CategoryFragment
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val direction =
+                        RecipeDetailFragmentDirections.toRecipeCategoryFragment(viewModel.recipe.value!!.recipe.category)
+                    findNavController().navigate(direction)
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +57,7 @@ class RecipeDetailFragment : Fragment() {
 
         viewModel.recipe.observe(viewLifecycleOwner, { recipeWithRelations ->
             onRecipeChanged(recipeWithRelations)
+            viewModel.servings.set(recipeWithRelations.recipe.servings)
         })
 
         viewModel.servings.addOnPropertyChangedCallback(object :
@@ -63,21 +81,35 @@ class RecipeDetailFragment : Fragment() {
         }
 
         binding.recipeInfo.addToShoppingListButton.setOnClickListener {
-            Toast.makeText(
-                context,
-                "Hier kannst du bald Zutaten zur Einkaufsliste hinzufügen",
-                Toast.LENGTH_LONG
-            ).show()
+            viewModel.ingredientSelectionActive.set(true)
         }
 
-        binding.forwardButton.setOnClickListener {
-            Toast.makeText(
-                context,
-                "Hier kannst du bald dein Rezept Schritt für Schritt kochen",
-                Toast.LENGTH_LONG
-            ).show()
+        binding.recipeInfo.toShoppingListAcceptButton.setOnClickListener {
+            viewModel.addSelectedIngredientsToShoppingList()
+            closeIngredientSelection()
         }
-        
+
+        binding.recipeInfo.toShoppingListCancelButton.setOnClickListener {
+            closeIngredientSelection()
+        }
+
+        viewModel.ingredientSelectionActive.addOnPropertyChangedCallback(object :
+            Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(observable: Observable, i: Int) {
+                val active = observable as ObservableBoolean
+                if (active.get()) {
+                    setIngredientSelectionActive()
+                } else {
+                    setIngredientSelectionInactive()
+                }
+            }
+        })
+
+        binding.forwardButton.setOnClickListener {
+            val direction = RecipeDetailFragmentDirections.toCookingStepFragment()
+            findNavController().navigate(direction)
+        }
+
         return binding.root
     }
 
@@ -86,9 +118,18 @@ class RecipeDetailFragment : Fragment() {
      */
     private fun onRecipeChanged(recipeWithRelations: RecipeWithRelations) {
         binding.recipeDetailName.text = recipeWithRelations.recipe.name
-        viewModel.servings.set(recipeWithRelations.recipe.servings)
+        onServingsChanged(recipeWithRelations.recipe.servings)
         setIngredientAdapter(recipeWithRelations)
         setCookingSteps(recipeWithRelations)
+        setImage(recipeWithRelations)
+        binding.recipeInfo.wrapper.visibility = View.VISIBLE
+    }
+
+    /**
+     * Set background image
+     */
+    private fun setImage(recipeWithRelations: RecipeWithRelations) {
+        binding.recipeDetailImage.setImageResource(recipeWithRelations.recipe.category.drawableResId)
     }
 
     /**
@@ -99,9 +140,18 @@ class RecipeDetailFragment : Fragment() {
         adapter = IngredientListAdapter(
             requireContext(),
             R.layout.ingredient_listitem,
-            recipeWithRelations.ingredients
+            recipeWithRelations.ingredients,
+            viewModel.ingredientSelectionActive
         )
         list.adapter = adapter
+
+        list.setOnItemClickListener { _, _, _, id ->
+            if (viewModel.ingredientSelectionActive.get()) {
+                val recipe = viewModel.recipe.value!!.ingredients[id.toInt()]
+                recipe.checked = !recipe.checked
+                adapter!!.notifyDataSetChanged()
+            }
+        }
     }
 
     /**
@@ -127,9 +177,9 @@ class RecipeDetailFragment : Fragment() {
             binding.recipeInfo.servingsElement.servingsText.text =
                 requireContext().resources.getString(R.string.serving)
 
-        if (::adapter.isInitialized) {
-            adapter.multiplier = viewModel.getServingsMultiplier()
-            adapter.notifyDataSetChanged()
+        if (adapter != null) {
+            adapter!!.multiplier = viewModel.getServingsMultiplier()
+            adapter!!.notifyDataSetChanged()
         }
     }
 
@@ -142,6 +192,33 @@ class RecipeDetailFragment : Fragment() {
             binding.recipeDetailImage.scaleX = scaleVal
             binding.recipeDetailImage.scaleY = scaleVal
         }
+    }
+
+    /**
+     * Hide all selection elements and re-show the add-to-recipe button
+     */
+    private fun closeIngredientSelection() {
+        viewModel.ingredientSelectionActive.set(false)
+        viewModel.clearSelections()
+        adapter?.notifyDataSetChanged()
+    }
+
+    /**
+     * Hide add-to-recipe button and show accept and cancel buttons
+     */
+    private fun setIngredientSelectionActive() {
+        binding.recipeInfo.addToShoppingListButton.visibility = View.GONE
+        binding.recipeInfo.toShoppingListAcceptButton.visibility = View.VISIBLE
+        binding.recipeInfo.toShoppingListCancelButton.visibility = View.VISIBLE
+    }
+
+    /**
+     * Show add-to-recipe button and hide accept and cancel buttons
+     */
+    private fun setIngredientSelectionInactive() {
+        binding.recipeInfo.addToShoppingListButton.visibility = View.VISIBLE
+        binding.recipeInfo.toShoppingListAcceptButton.visibility = View.GONE
+        binding.recipeInfo.toShoppingListCancelButton.visibility = View.GONE
     }
 
 }

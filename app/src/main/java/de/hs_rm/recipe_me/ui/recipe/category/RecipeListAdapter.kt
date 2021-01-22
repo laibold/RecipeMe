@@ -11,9 +11,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
 import androidx.databinding.ObservableBoolean
 import androidx.navigation.findNavController
-import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeListitemBinding
-import de.hs_rm.recipe_me.declaration.DeleteRecipeCallbackAdapter
+import de.hs_rm.recipe_me.declaration.ui.fragments.DeleteRecipeCallbackAdapter
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import java.util.*
 
@@ -22,7 +21,7 @@ import java.util.*
  */
 class RecipeListAdapter(
     context: Context,
-    resource: Int,
+    private val resource: Int,
     private val objects: List<Recipe>,
     private val callbackListener: DeleteRecipeCallbackAdapter
 ) :
@@ -42,7 +41,7 @@ class RecipeListAdapter(
         if (convertView == null) {
             val viewBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.recipe_listitem,
+                resource,
                 parent,
                 false
             ) as RecipeListitemBinding
@@ -55,6 +54,7 @@ class RecipeListAdapter(
 
         val recipe = objects[position]
         holder.binding.recipeName.text = recipe.name
+        holder.binding.recipeImageView.setImageResource(recipe.category.drawableResId)
 
         // on long click remove other selection by setting itemSelected and set selection to this item
         holder.binding.itemWrapper.setOnLongClickListener {

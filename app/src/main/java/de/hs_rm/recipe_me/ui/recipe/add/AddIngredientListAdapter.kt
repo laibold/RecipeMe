@@ -9,9 +9,8 @@ import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddIngredientListitemBinding
-import de.hs_rm.recipe_me.declaration.EditIngredientAdapter
+import de.hs_rm.recipe_me.declaration.ui.fragments.EditIngredientAdapter
 import de.hs_rm.recipe_me.model.recipe.Ingredient
-import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.service.Formatter
 
 class AddIngredientListAdapter(
@@ -19,8 +18,7 @@ class AddIngredientListAdapter(
     private val resource: Int,
     private val objects: MutableList<Ingredient>,
     private val callbackListener: EditIngredientAdapter
-) :
-    ArrayAdapter<Ingredient>(context, resource, objects) {
+) : ArrayAdapter<Ingredient>(context, resource, objects) {
 
     var editingEnabled = true
 
@@ -58,21 +56,7 @@ class AddIngredientListAdapter(
      * Create text for ingredient in form of "(quantity (unit)) name"
      */
     private fun getIngredientText(ingredient: Ingredient): CharSequence {
-        var unitText = ""
-
-        if (ingredient.quantity > 0.0) {
-            val quantityString = Formatter.formatIngredientQuantity(ingredient.quantity)
-
-            var numberString = ""
-            if (ingredient.unit != IngredientUnit.NONE) {
-                numberString =
-                    ingredient.unit.getNumberString(context.resources, ingredient.quantity)
-            }
-
-            unitText = "$quantityString $numberString "
-        }
-
-        return unitText + ingredient.name
+        return Formatter.formatIngredient(context, ingredient)
     }
 
     /**

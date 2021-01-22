@@ -31,4 +31,15 @@ data class CookingStep(
         const val DEFAULT_TIME = 0
     }
 
+    /**
+     * Returns a given time in seconds
+     */
+    fun getTimeInSeconds(): Int {
+        return when (timeUnit) {
+            TimeUnit.SECOND -> time;
+            TimeUnit.MINUTE -> time * 60;
+            TimeUnit.HOUR -> time * 360;
+        }
+    }
+
 }

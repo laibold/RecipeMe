@@ -21,7 +21,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/round_button"
+            android:background="@drawable/round_button_3dp"
             android:contentDescription="@string/delete"
             android:src="@drawable/ic_baseline_delete_24" />
 

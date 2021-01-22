@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/profile_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/site_notice_headline"
+            style="@style/headline_1"
+            android:text="@string/site_notice"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/site_notice_beckbold"
+            style="@style/bold_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/outline_horizontal"
+            android:layout_marginTop="@dimen/space_below_headline_1"
+            android:text="@string/beckbold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/site_notice_headline" />
+
+        <TextView
+            android:id="@+id/site_notice_text"
+            style="@style/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/outline_horizontal"
+            android:text="@string/site_notice_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/site_notice_beckbold" />
+
+        <TextView
+            android:id="@+id/photo_credits_headline"
+            style="@style/headline_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/outline_horizontal"
+            android:layout_marginTop="@dimen/margin_top"
+            android:text="@string/photo_credits"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/site_notice_text" />
+
+        <TextView
+            android:id="@+id/photo_credits_text"
+            style="@style/small_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/outline_horizontal"
+            android:layout_marginTop="@dimen/space_below_headline_2"
+            android:text="@string/photo_credits_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/photo_credits_headline" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -16,7 +16,7 @@ enum class IngredientUnit(private val singularResId: Int, private val pluralResI
     CENTIMETER(R.string.centimeter, R.string.centimeter),
     PACKAGE(R.string.package_sg, R.string.package_pl),
     PACK(R.string.pack_sg, R.string.pack_pl),
-    DOSE(R.string.can_sg, R.string.can_pl),
+    CAN(R.string.can_sg, R.string.can_pl),
     GLASS(R.string.glas_sg, R.string.glas_pl),
     PINCH(R.string.pinch_sg, R.string.pinch_pl),
     SLICE(R.string.slice_sg, R.string.slice_pl),
