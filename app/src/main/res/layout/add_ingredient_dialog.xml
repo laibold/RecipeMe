@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ingredient_form_wrapper"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.85">
+
+            <TextView
+                android:id="@+id/ingredient_name_label"
+                style="@style/label"
+                android:text="@string/label_ingredient_name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/ingredient_name_field"
+                style="@style/edit_text"
+                android:layout_width="match_parent"
+                android:hint="@string/hint_ingredient_name"
+                android:importantForAutofill="no"
+                android:inputType="textCapSentences"
+                android:maxLength="@integer/ingredient_name_max_length"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ingredient_name_label" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/second_row_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ingredient_name_field">
+
+                <TextView
+                    android:id="@+id/ingredient_quantity_label"
+                    style="@style/label"
+                    android:text="@string/label_ingredient_quantity"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/ingredient_quantity_field"
+                    style="@style/edit_text"
+                    android:layout_width="100dp"
+                    android:digits="0123456789.,"
+                    android:hint="@string/hint_ingredient_quantity"
+                    android:importantForAutofill="no"
+                    android:inputType="numberDecimal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ingredient_quantity_label" />
+
+                <TextView
+                    android:id="@+id/ingredient_unit_label"
+                    style="@style/label"
+                    android:text="@string/label_ingredient_unit"
+                    app:layout_constraintBottom_toTopOf="@id/ingredient_unit_spinner"
+                    app:layout_constraintStart_toStartOf="@id/ingredient_unit_spinner" />
+
+                <Spinner
+                    android:id="@+id/ingredient_unit_spinner"
+                    style="@style/spinner"
+                    android:layout_width="0dp"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:spinnerMode="dropdown"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ingredient_quantity_field"
+                    app:layout_constraintTop_toBottomOf="@id/ingredient_unit_label" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ingredient_form_wrapper">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/alert_button_negative"
+                style="@style/secondary_button"
+                android:layout_marginStart="@dimen/outline_horizontal"
+                android:layout_marginTop="@dimen/default_margin"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintEnd_toStartOf="@id/alert_button_positive"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Abbrechen" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/alert_button_positive"
+                style="@style/primary_button"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/outline_horizontal"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/alert_button_negative"
+                app:layout_constraintTop_toTopOf="parent"
+
+                tools:text="Hinzufügen" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

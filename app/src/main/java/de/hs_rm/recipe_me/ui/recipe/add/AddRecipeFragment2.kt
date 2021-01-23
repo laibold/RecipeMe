@@ -23,7 +23,9 @@ import de.hs_rm.recipe_me.declaration.ui.closeKeyboard
 import de.hs_rm.recipe_me.model.SaveAction
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
+import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.service.Formatter
+import de.hs_rm.recipe_me.ui.component.CustomAlertDialog
 
 @AndroidEntryPoint
 class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
@@ -79,6 +81,24 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
 
         return binding.root
     }
+
+    /**
+     * Create delete dialog to let the user confirm the deletion of a recipe
+     */
+    private fun deleteDialog(recipe: Recipe): CustomAlertDialog {
+        return CustomAlertDialog.Builder(requireActivity())
+            .title("Hinzufügen")
+            .positiveButton(R.string.delete) {
+
+            }
+            .negativeButton(
+                R.string.cancel
+            ) {
+
+            }
+            .create()
+    }
+
 //
 //    /**
 //     * @return IngredientListAdapter for IngredientListView
