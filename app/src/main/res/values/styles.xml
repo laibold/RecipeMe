@@ -109,6 +109,13 @@
         <item name="android:gravity">center_vertical</item>
     </style>
 
+    <style name="invisible_button" parent="styled_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">?attr/colorPrimaryVariant</item>
+        <item name="android:layout_height">@dimen/invisible_button_height</item>
+    </style>
+
     <style name="edit_text">
         <item name="android:backgroundTint">?attr/colorAccent</item>
         <item name="android:layout_height">46dp</item>

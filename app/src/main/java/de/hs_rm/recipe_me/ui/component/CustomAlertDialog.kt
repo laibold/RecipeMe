@@ -19,8 +19,6 @@ import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.button.MaterialButton
 import de.hs_rm.recipe_me.R
 
-private const val DEFAULT_ICON_VALUE = -1
-
 /**
  * Alert Dialog with custom design. Use [CustomAlertDialog.Builder] to create an instance
  * and use show() to open it
@@ -48,7 +46,7 @@ class CustomAlertDialog private constructor(
         val width = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
         window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
 
-        if (customIcon != DEFAULT_ICON_VALUE) {
+        if (customIcon != Companion.DEFAULT_ICON_VALUE) {
             val iconView = findViewById<ImageButton>(R.id.delete_icon)
             iconView.background = ResourcesCompat.getDrawable(activity.resources, customIcon, null)
         }
@@ -147,6 +145,10 @@ class CustomAlertDialog private constructor(
             negativeButtonText,
             negativeButtonListener!!
         )
+    }
+
+    companion object {
+        private const val DEFAULT_ICON_VALUE = -1
     }
 
 }

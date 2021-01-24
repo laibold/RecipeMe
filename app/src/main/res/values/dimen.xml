@@ -16,6 +16,7 @@
     <dimen name="button_width_small">@dimen/wrap_content</dimen>
     <dimen name="button_height_small">40dp</dimen>
     <dimen name="small_circle_button">40dp</dimen>
+    <dimen name="invisible_button_height">35sp</dimen>
 
     <!--text size-->
     <dimen name="font_size_headline_1">35dp</dimen>

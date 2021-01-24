@@ -6,35 +6,29 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.MotionEvent
-import android.view.View
-import android.view.View.*
+import android.text.Editable
+import android.text.TextUtils
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.Window
 import android.view.WindowManager
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.res.ResourcesCompat
-import com.google.android.material.button.MaterialButton
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import androidx.appcompat.widget.ListPopupWindow
+import androidx.core.widget.doAfterTextChanged
+import androidx.databinding.DataBindingUtil
 import de.hs_rm.recipe_me.R
+import de.hs_rm.recipe_me.databinding.AddIngredientDialogBinding
+import de.hs_rm.recipe_me.declaration.ui.focusAndOpenKeyboard
+import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 
-private const val DEFAULT_ICON_VALUE = -1
-
-/**
- * Alert Dialog with custom design. Use [CustomAlertDialog.Builder] to create an instance
- * and use show() to open it
- */
-class CustomAlertDialog constructor(
+class AddIngredientDialog constructor(
     private val activity: Activity,
-    private var title: String,
-    private var message: String,
-    private var customIcon: Int,
-    private var positiveButtonText: CharSequence,
-    private var positiveButtonListener: OnClickListener,
-    private var negativeButtonText: CharSequence,
-    private var negativeButtonListener: OnClickListener
+    private var viewModel: AddRecipeViewModel
 ) : Dialog(activity) {
+
+    lateinit var binding: AddIngredientDialogBinding
+    private val spinnerHeight = 1000
 
     @SuppressLint("ClickableViewAccessibility") // is handled in dismissOnMotionUp()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,102 +37,110 @@ class CustomAlertDialog constructor(
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        setContentView(R.layout.delete_alert_dialog)
+        binding = DataBindingUtil.inflate(
+            LayoutInflater.from(context), R.layout.add_ingredient_dialog, null, false
+        )
+        setContentView(binding.root)
 
         val width = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
         window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
 
-        // to reach in one action and to dismiss the dialog after clicking
-        // we set two different listeners here, found no better solution
-        val positiveButton = findViewById<MaterialButton>(R.id.alert_button_positive)
-        positiveButton.text = positiveButtonText
+        setUnitAdapter(null)
+        setUnitSpinnerPopupHeight(binding.ingredientUnitSpinner) //FIXME restrict size
 
-        positiveButton.setOnClickListener(positiveButtonListener)
-        positiveButton.setOnTouchListener { view, motionEvent ->
-            dismissOnMotionUp(view, motionEvent)
-            return@setOnTouchListener true
+        binding.ingredientQuantityField.doAfterTextChanged { editable ->
+            afterAmountTextChanged(editable)
         }
 
-        val negativeButton = findViewById<MaterialButton>(R.id.alert_button_negative)
-        negativeButton.text = negativeButtonText
-        negativeButton.setOnClickListener { dismiss() }
+//        viewModel.ingredientSaveAction.observe(viewLifecycleOwner, {
+//            if (it == SaveAction.ADD) {
+//                binding.addIngredientButton.setOnClickListener { addIngredient() }
+//                binding.addIngredientButton.text = resources.getString(R.string.add)
+//                adapter?.editingEnabled = true
+//                adapter?.notifyDataSetChanged()
+//            } else if (it == SaveAction.UPDATE) {
+//                binding.addIngredientButton.setOnClickListener { updateIngredient() }
+//                binding.addIngredientButton.text = resources.getString(R.string.update)
+//                adapter?.editingEnabled = false
+//                adapter?.notifyDataSetChanged()
+//            }
+//        })
 
-        val titleView = findViewById<TextView>(R.id.alert_headline)
-        titleView.text = title
+        binding.cancelButton.setOnClickListener {
+            dismiss()
 
-        val messageView = findViewById<TextView>(R.id.alert_text)
-        messageView.text = message
+        }
+        binding.addButton.setOnClickListener {
+            addIngredientAndClose()
+        }
+
+        binding.ingredientQuantityField.focusAndOpenKeyboard()
     }
 
     /**
-     * Dismiss dialog after touch event action up on selected elements
+     * Refill adapter for unit spinner with units in singular or plural depending on amount
      */
-    private fun dismissOnMotionUp(view: View, motionEvent: MotionEvent) {
-        if (motionEvent.action == MotionEvent.ACTION_UP) {
-            dismiss()
-        } else {
-            view.performClick()
+    private fun setUnitAdapter(amount: Double?) {
+        val names = IngredientUnit.getNumberStringList(context.resources, amount)
+
+        val adapter = ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, names)
+        binding.ingredientUnitSpinner.adapter = adapter
+    }
+
+    /**
+     * Set height of spinner to given pixels
+     * https://readyandroid.wordpress.com/2020/04/13/limit-the-height-of-spinner-drop-down-view-android
+     */
+    private fun setUnitSpinnerPopupHeight(spinner: Spinner) {
+        try {
+            val popup = Spinner::class.java.getDeclaredField("mPopup")
+            popup.isAccessible = true
+            val popupWindow: ListPopupWindow = popup.get(spinner) as ListPopupWindow
+            popupWindow.height = spinnerHeight
+        } catch (ex: Exception) {
+            Log.e("AddRecipeFragment2", "Error at resizing spinner popupWindow")
         }
     }
 
-//    /**
-//     * Builder for [CustomAlertDialog]
-//     */
-//    data class Builder(
-//        val activity: Activity,
-//        var title: String = "",
-//        var message: String = "",
-//        var icon: Int = DEFAULT_ICON_VALUE,
-//        var positiveButtonText: CharSequence = "",
-//        var positiveButtonListener: OnClickListener = OnClickListener {},
-//        var negativeButtonText: CharSequence = "",
-//        var negativeButtonListener: OnClickListener? = OnClickListener {},
-//    ) {
-//        /**
-//         * Headline of the dialog
-//         */
-//        fun title(id: Int) = apply { this.title = activity.resources.getString(id) }
-//
-//        /**
-//         * Message of the dialog
-//         */
-//        fun message(id: Int) = apply { this.message = activity.resources.getString(id) }
-//
-//        /**
-//         * Icon of the dialog
-//         */
-//        fun icon(id: Int) = apply { this.icon = id }
-//
-//        /**
-//         * Button Text and Listener for the positive button (action button)
-//         */
-//        fun positiveButton(textId: Int, listener: OnClickListener) = apply {
-//            this.positiveButtonText = activity.resources.getString(textId)
-//            this.positiveButtonListener = listener
-//        }
-//
-//        /**
-//         * Button Text and Listener for the negative button (cancel button)
-//         */
-//        fun negativeButton(textId: Int, listener: OnClickListener) = apply {
-//            this.negativeButtonText = activity.resources.getString(textId)
-//            this.negativeButtonListener = listener
-//        }
-//
-//        /**
-//         * Create and return the dialog
-//         * @return CustomAlertDialog
-//         */
-//        fun create() = CustomAlertDialog(
-//            activity,
-//            title,
-//            message,
-//            icon,
-//            positiveButtonText,
-//            positiveButtonListener,
-//            negativeButtonText,
-//            negativeButtonListener!!
-//        )
-//    }
+    /**
+     * Format content of amount field and check for invalid input,
+     * fill unit spinner (singular/plural) if input is valid
+     */
+    private fun afterAmountTextChanged(editable: Editable?) {
+        // spinner will be reset by refill, so save and set selected item here
+        val selectedSpinnerItemId = binding.ingredientUnitSpinner.selectedItemId
+
+        if (editable != null && !TextUtils.isEmpty(editable)) {
+            try {
+                // allow comma as separator
+                val amount = editable.toString().replace(',', '.').toDouble()
+                setUnitAdapter(amount)
+            } catch (e: NumberFormatException) {
+                // clear if editable cannot be parsed to double
+                editable.clear()
+            }
+        }
+
+        binding.ingredientUnitSpinner.setSelection(selectedSpinnerItemId.toInt())
+    }
+
+    /**
+     * Get values from form fields and send them to viewModel to add an Ingredient,
+     * clear fields afterwards
+     */
+    private fun addIngredientAndClose() {
+        val success = viewModel.addIngredient(
+            binding.ingredientNameField.text,
+            binding.ingredientQuantityField.text,
+            IngredientUnit.values()[binding.ingredientUnitSpinner.selectedItemPosition]
+        )
+
+        if (success) {
+            binding.ingredientNameField.text.clear()
+            binding.ingredientQuantityField.text.clear()
+            binding.ingredientUnitSpinner.setSelection(0)
+            dismiss()
+        }
+    }
 
 }

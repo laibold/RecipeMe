@@ -20,8 +20,6 @@ class AddIngredientListAdapter(
     private val callbackListener: EditIngredientAdapter
 ) : ArrayAdapter<Ingredient>(context, resource, objects) {
 
-    var editingEnabled = true
-
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val holder: IngredientViewHolder
 
@@ -43,30 +41,7 @@ class AddIngredientListAdapter(
 
         holder.binding.ingredientTextView.text = getIngredientText(ingredient)
 
-        if (editingEnabled) {
-            enableButtons(holder, position)
-        } else {
-            disableButtons(holder)
-        }
-
-        return holder.view
-    }
-
-    /**
-     * Create text for ingredient in form of "(quantity (unit)) name"
-     */
-    private fun getIngredientText(ingredient: Ingredient): CharSequence {
-        return Formatter.formatIngredient(context, ingredient)
-    }
-
-    /**
-     * Enable remove and edit buttons in each element and set listener
-     */
-    private fun enableButtons(holder: IngredientViewHolder, position: Int) {
-        holder.binding.removeButton.visibility = View.VISIBLE
         holder.binding.removeButton.setOnClickListener { removeObject(position) }
-
-        holder.binding.editButton.visibility = View.VISIBLE
         holder.binding.editButton.setOnClickListener {
             callbackListener.onCallback(objects[position], position)
 
@@ -79,14 +54,15 @@ class AddIngredientListAdapter(
             )
             holder.binding.ingredientTextView.setTypeface(null, Typeface.BOLD)
         }
+
+        return holder.view
     }
 
     /**
-     * Disable remove and edit buttons in each element
+     * Create text for ingredient in form of "(quantity (unit)) name"
      */
-    private fun disableButtons(holder: IngredientViewHolder) {
-        holder.binding.removeButton.visibility = View.GONE
-        holder.binding.editButton.visibility = View.GONE
+    private fun getIngredientText(ingredient: Ingredient): CharSequence {
+        return Formatter.formatIngredient(context, ingredient)
     }
 
     /**
