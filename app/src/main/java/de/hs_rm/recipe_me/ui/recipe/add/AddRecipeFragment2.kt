@@ -13,7 +13,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment2Binding
 import de.hs_rm.recipe_me.declaration.ui.fragments.EditIngredientAdapter
-import de.hs_rm.recipe_me.model.SaveAction
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 
 @AndroidEntryPoint
@@ -38,7 +37,6 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
             addIngredientDialog().show()
         }
 
-        viewModel.ingredientSaveAction.value = SaveAction.ADD
         viewModel.ingredients.observe(viewLifecycleOwner, {
             adapter = viewModel.ingredients.value?.let { list -> ingredientListAdapter(list) }
             binding.ingredientsListView.adapter = adapter
@@ -47,26 +45,6 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
 
         binding.ingredientsListView.emptyView = binding.addHintText
 
-//        binding.ingredientQuantityField.doAfterTextChanged { editable ->
-//            afterAmountTextChanged(editable)
-//        }
-//
-//        binding.addIngredientButton.setOnClickListener { addIngredient() }
-//
-//        viewModel.ingredientSaveAction.observe(viewLifecycleOwner, {
-//            if (it == SaveAction.ADD) {
-//                binding.addIngredientButton.setOnClickListener { addIngredient() }
-//                binding.addIngredientButton.text = resources.getString(R.string.add)
-//                adapter?.editingEnabled = true
-//                adapter?.notifyDataSetChanged()
-//            } else if (it == SaveAction.UPDATE) {
-//                binding.addIngredientButton.setOnClickListener { updateIngredient() }
-//                binding.addIngredientButton.text = resources.getString(R.string.update)
-//                adapter?.editingEnabled = false
-//                adapter?.notifyDataSetChanged()
-//            }
-//        })
-//
         binding.backButton.setOnClickListener { onBack() }
         binding.nextButton.setOnClickListener { onNext() }
 
@@ -74,12 +52,11 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
     }
 
     /**
-     * Create delete dialog to let the user confirm the deletion of a recipe
+     * Create add dialog
      */
-    private fun addIngredientDialog(): AddIngredientDialog {
-        return AddIngredientDialog(requireActivity(), viewModel)
+    private fun addIngredientDialog(ingredient: Ingredient? = null): AddIngredientDialog {
+        return AddIngredientDialog(requireActivity(), viewModel, ingredient)
     }
-
 
     /**
      * @return IngredientListAdapter for IngredientListView
@@ -92,25 +69,6 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
             this
         )
     }
-
-//
-//    /**
-//     * Update ingredient that is already in ViewModel. Clear form if updating succeeds
-//     */
-//    private fun updateIngredient() {
-//        val success = viewModel.updateIngredient(
-//            binding.ingredientNameField.text.toString(),
-//            binding.ingredientQuantityField.text.toString(),
-//            IngredientUnit.values()[binding.ingredientUnitSpinner.selectedItemPosition]
-//        )
-//
-//        if (success) {
-//            binding.ingredientNameField.text.clear()
-//            binding.ingredientQuantityField.text.clear()
-//            binding.ingredientUnitSpinner.setSelection(0)
-//            activity.closeKeyboard()
-//        }
-//    }
 
     /**
      * Navigation on back button
@@ -151,12 +109,8 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
      * Gets called from Adapter when edit was pressed for an Ingredient item
      */
     override fun onCallback(ingredient: Ingredient, position: Int) {
-//        binding.ingredientNameField.setText(ingredient.name)
-//        if (ingredient.quantity != Ingredient.DEFAULT_QUANTITY) {
-//            binding.ingredientQuantityField.setText(Formatter.formatIngredientQuantity(ingredient.quantity))
-//            binding.ingredientUnitSpinner.setSelection(ingredient.unit.ordinal)
-//        }
-//        viewModel.prepareIngredientUpdate(position)
+        addIngredientDialog(ingredient).show()
+        viewModel.prepareIngredientUpdate(position)
     }
 
 }

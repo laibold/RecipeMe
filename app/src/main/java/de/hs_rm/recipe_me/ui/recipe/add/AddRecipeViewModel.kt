@@ -26,7 +26,6 @@ class AddRecipeViewModel @ViewModelInject constructor(
     private var updatingIngredientIndex = -1
 
     val cookingStepSaveAction = MutableLiveData(SaveAction.ADD)
-    val ingredientSaveAction = MutableLiveData(SaveAction.ADD)
 
     private val _recipe = MutableLiveData<Recipe>()
     val recipe: LiveData<Recipe>
@@ -50,7 +49,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
      */
     fun initRecipe() {
         if (_recipe.value == null) {
-            _recipe.value = Recipe(recipeCategory)
+            _recipe.value = Recipe("name", 1, recipeCategory, "") // NICHT PUSHEN!!!!!
         }
     }
 
@@ -82,13 +81,10 @@ class AddRecipeViewModel @ViewModelInject constructor(
      * @return true if ingredient could be added
      */
     fun addIngredient(name: Editable, quantity: Editable, unit: IngredientUnit): Boolean {
-        var quantityDouble = Ingredient.DEFAULT_QUANTITY
+        val ingredient = getIngredient(name, quantity, unit)
 
-        if (name.isNotBlank()) {
-            if (quantity.isNotBlank()) {
-                quantityDouble = quantity.toString().replace(",", ".").toDouble()
-            }
-            _ingredients.value?.add(Ingredient(name.toString().trim(), quantityDouble, unit))
+        if (ingredient != null) {
+            _ingredients.value?.add(ingredient)
             _ingredients.notifyObserver()
             return true
         }
@@ -96,18 +92,21 @@ class AddRecipeViewModel @ViewModelInject constructor(
     }
 
     /**
-     * Update cooking step to ViewModel scope
-     * @param name Name of ingredient (won't get updated without it)
-     * @param quantity Quantity as String
+     * Update ingredient to ViewModel scope
+     * @param name Editable with name of ingredient (won't get updated if it's blank)
+     * @param quantity Quantity as Editable
      * @param ingredientUnit IngredientUnit
      * @return true if cooking step could be updated
      */
-    fun updateIngredient(name: String, quantity: String, ingredientUnit: IngredientUnit): Boolean {
+    fun updateIngredient(
+        name: Editable,
+        quantity: Editable,
+        ingredientUnit: IngredientUnit
+    ): Boolean {
         val ingredient = getIngredient(name, quantity, ingredientUnit)
         if (ingredient != null) {
             _ingredients.value?.set(this.updatingIngredientIndex, ingredient)
             _ingredients.notifyObserver()
-            ingredientSaveAction.value = SaveAction.ADD
             return true
         }
         return false
@@ -121,15 +120,15 @@ class AddRecipeViewModel @ViewModelInject constructor(
      * @return true if cooking step could be created
      */
     private fun getIngredient(
-        name: String, quantity: String, ingredientUnit: IngredientUnit
+        name: Editable, quantity: Editable, ingredientUnit: IngredientUnit
     ): Ingredient? {
         var quantityDouble = Ingredient.DEFAULT_QUANTITY
 
-        if (name != "") {
-            if (quantity != "") {
-                quantityDouble = quantity.toDouble()
+        if (name.isNotBlank()) {
+            if (quantity.isNotBlank()) {
+                quantityDouble = quantity.toString().toDouble()
             }
-            return Ingredient(name, quantityDouble, ingredientUnit)
+            return Ingredient(name.toString().trim(), quantityDouble, ingredientUnit)
         }
         return null
     }
@@ -140,7 +139,6 @@ class AddRecipeViewModel @ViewModelInject constructor(
      */
     fun prepareIngredientUpdate(position: Int) {
         updatingIngredientIndex = position
-        ingredientSaveAction.value = SaveAction.UPDATE
     }
 
     /**

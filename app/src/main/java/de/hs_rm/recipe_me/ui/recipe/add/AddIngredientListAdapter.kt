@@ -1,13 +1,11 @@
 package de.hs_rm.recipe_me.ui.recipe.add
 
 import android.content.Context
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
-import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddIngredientListitemBinding
 import de.hs_rm.recipe_me.declaration.ui.fragments.EditIngredientAdapter
 import de.hs_rm.recipe_me.model.recipe.Ingredient
@@ -41,18 +39,12 @@ class AddIngredientListAdapter(
 
         holder.binding.ingredientTextView.text = getIngredientText(ingredient)
 
-        holder.binding.removeButton.setOnClickListener { removeObject(position) }
+        holder.binding.removeButton.setOnClickListener {
+            removeObject(position)
+        }
+
         holder.binding.editButton.setOnClickListener {
             callbackListener.onCallback(objects[position], position)
-
-            // highlight element
-            holder.binding.ingredientTextView.setTextColor(
-                context.resources.getColor(
-                    R.color.dark_red,
-                    null
-                )
-            )
-            holder.binding.ingredientTextView.setTypeface(null, Typeface.BOLD)
         }
 
         return holder.view

@@ -1,6 +1,5 @@
 package de.hs_rm.recipe_me.ui.recipe.add
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.graphics.Color
@@ -8,29 +7,27 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ArrayAdapter
-import android.widget.Spinner
-import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddIngredientDialogBinding
 import de.hs_rm.recipe_me.declaration.ui.focusAndOpenKeyboard
+import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
+import de.hs_rm.recipe_me.service.Formatter
 
 class AddIngredientDialog constructor(
     private val activity: Activity,
-    private var viewModel: AddRecipeViewModel
+    private var viewModel: AddRecipeViewModel,
+    private val ingredient: Ingredient? = null
 ) : Dialog(activity) {
 
     lateinit var binding: AddIngredientDialogBinding
-    private val spinnerHeight = 1000
 
-    @SuppressLint("ClickableViewAccessibility") // is handled in dismissOnMotionUp()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,36 +39,42 @@ class AddIngredientDialog constructor(
         )
         setContentView(binding.root)
 
+        // Set width to 90% of screen
         val width = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
         window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
 
         setUnitAdapter(null)
-        setUnitSpinnerPopupHeight(binding.ingredientUnitSpinner) //FIXME restrict size
 
+        // Format quantity text
         binding.ingredientQuantityField.doAfterTextChanged { editable ->
-            afterAmountTextChanged(editable)
+            afterQuantityTextChanged(editable)
         }
 
-//        viewModel.ingredientSaveAction.observe(viewLifecycleOwner, {
-//            if (it == SaveAction.ADD) {
-//                binding.addIngredientButton.setOnClickListener { addIngredient() }
-//                binding.addIngredientButton.text = resources.getString(R.string.add)
-//                adapter?.editingEnabled = true
-//                adapter?.notifyDataSetChanged()
-//            } else if (it == SaveAction.UPDATE) {
-//                binding.addIngredientButton.setOnClickListener { updateIngredient() }
-//                binding.addIngredientButton.text = resources.getString(R.string.update)
-//                adapter?.editingEnabled = false
-//                adapter?.notifyDataSetChanged()
-//            }
-//        })
+        if (ingredient != null) {
+            // Update
+            binding.ingredientNameField.setText(ingredient.name)
+
+            if (ingredient.quantity != Ingredient.DEFAULT_QUANTITY) {
+                binding.ingredientQuantityField.setText(
+                    Formatter.formatIngredientQuantity(ingredient.quantity)
+                )
+                binding.ingredientUnitSpinner.setSelection(ingredient.unit.ordinal)
+            }
+
+            binding.addButton.text = activity.resources.getString(R.string.update)
+            binding.addButton.setOnClickListener {
+                updateIngredientAndClose()
+            }
+        } else {
+            // Add
+            binding.addButton.text = activity.resources.getString(R.string.add)
+            binding.addButton.setOnClickListener {
+                addIngredientAndClose()
+            }
+        }
 
         binding.cancelButton.setOnClickListener {
             dismiss()
-
-        }
-        binding.addButton.setOnClickListener {
-            addIngredientAndClose()
         }
 
         binding.ingredientQuantityField.focusAndOpenKeyboard()
@@ -88,25 +91,10 @@ class AddIngredientDialog constructor(
     }
 
     /**
-     * Set height of spinner to given pixels
-     * https://readyandroid.wordpress.com/2020/04/13/limit-the-height-of-spinner-drop-down-view-android
-     */
-    private fun setUnitSpinnerPopupHeight(spinner: Spinner) {
-        try {
-            val popup = Spinner::class.java.getDeclaredField("mPopup")
-            popup.isAccessible = true
-            val popupWindow: ListPopupWindow = popup.get(spinner) as ListPopupWindow
-            popupWindow.height = spinnerHeight
-        } catch (ex: Exception) {
-            Log.e("AddRecipeFragment2", "Error at resizing spinner popupWindow")
-        }
-    }
-
-    /**
      * Format content of amount field and check for invalid input,
      * fill unit spinner (singular/plural) if input is valid
      */
-    private fun afterAmountTextChanged(editable: Editable?) {
+    private fun afterQuantityTextChanged(editable: Editable?) {
         // spinner will be reset by refill, so save and set selected item here
         val selectedSpinnerItemId = binding.ingredientUnitSpinner.selectedItemId
 
@@ -126,7 +114,7 @@ class AddIngredientDialog constructor(
 
     /**
      * Get values from form fields and send them to viewModel to add an Ingredient,
-     * clear fields afterwards
+     * dismiss on success
      */
     private fun addIngredientAndClose() {
         val success = viewModel.addIngredient(
@@ -136,10 +124,31 @@ class AddIngredientDialog constructor(
         )
 
         if (success) {
-            binding.ingredientNameField.text.clear()
-            binding.ingredientQuantityField.text.clear()
-            binding.ingredientUnitSpinner.setSelection(0)
+            binding.ingredientNameField.error = null
             dismiss()
+        } else {
+            binding.ingredientNameField.error =
+                activity.resources.getString(R.string.err_enter_name)
+        }
+    }
+
+    /**
+     * Get values from form fields and send them to viewModel to update an Ingredient,
+     * dismiss on success
+     */
+    private fun updateIngredientAndClose() {
+        val success = viewModel.updateIngredient(
+            binding.ingredientNameField.text,
+            binding.ingredientQuantityField.text,
+            IngredientUnit.values()[binding.ingredientUnitSpinner.selectedItemPosition]
+        )
+
+        if (success) {
+            binding.ingredientNameField.error = null
+            dismiss()
+        } else {
+            binding.ingredientNameField.error =
+                activity.resources.getString(R.string.err_enter_name)
         }
     }
 
