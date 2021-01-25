@@ -81,28 +81,18 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
      * Navigation on next button
      */
     private fun onNext() {
-        val validationOk = validate()
+        val validationOk = viewModel.validateIngredients()
 
         if (validationOk) {
             val direction = AddRecipeFragment2Directions.toAddRecipeFragment3()
             findNavController().navigate(direction)
-        }
-    }
-
-    /**
-     * Validate ingredients
-     * @return true if all fields are valid
-     */
-    private fun validate(): Boolean {
-        val ingredientsValid = viewModel.validateIngredients()
-        if (ingredientsValid != 0) {
+        } else {
             AnimatorInflater.loadAnimator(context, R.animator.jump)
                 .apply {
                     setTarget(binding.addIngredientFab)
                     start()
                 }
         }
-        return ingredientsValid == 0
     }
 
     /**

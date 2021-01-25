@@ -62,20 +62,14 @@ class AddIngredientDialog constructor(
             }
 
             binding.addButton.text = activity.resources.getString(R.string.update)
-            binding.addButton.setOnClickListener {
-                updateIngredientAndClose()
-            }
+            binding.addButton.setOnClickListener { updateIngredientAndClose() }
         } else {
             // Add
             binding.addButton.text = activity.resources.getString(R.string.add)
-            binding.addButton.setOnClickListener {
-                addIngredientAndClose()
-            }
+            binding.addButton.setOnClickListener { addIngredientAndClose() }
         }
 
-        binding.cancelButton.setOnClickListener {
-            dismiss()
-        }
+        binding.cancelButton.setOnClickListener { dismiss() }
 
         binding.ingredientQuantityField.focusAndOpenKeyboard()
     }
@@ -124,7 +118,6 @@ class AddIngredientDialog constructor(
         )
 
         if (success) {
-            binding.ingredientNameField.error = null
             dismiss()
         } else {
             binding.ingredientNameField.error =
@@ -144,7 +137,6 @@ class AddIngredientDialog constructor(
         )
 
         if (success) {
-            binding.ingredientNameField.error = null
             dismiss()
         } else {
             binding.ingredientNameField.error =

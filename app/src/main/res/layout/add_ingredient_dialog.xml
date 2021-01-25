@@ -58,10 +58,9 @@
                     android:layout_width="0dp"
                     android:layout_marginStart="@dimen/default_margin"
                     android:spinnerMode="dropdown"
-                    android:dropDownHeight="100dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/ingredient_quantity_field"
-                    app:layout_constraintTop_toBottomOf="@id/ingredient_unit_label" />
+                    app:layout_constraintBottom_toBottomOf="@id/ingredient_quantity_field" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

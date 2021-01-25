@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.declaration.notifyObserver
-import de.hs_rm.recipe_me.model.SaveAction
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.service.RecipeRepository
 import kotlinx.coroutines.launch
@@ -24,8 +23,6 @@ class AddRecipeViewModel @ViewModelInject constructor(
     lateinit var recipeCategory: RecipeCategory
     private var updatingCookingStepIndex = -1
     private var updatingIngredientIndex = -1
-
-    val cookingStepSaveAction = MutableLiveData(SaveAction.ADD)
 
     private val _recipe = MutableLiveData<Recipe>()
     val recipe: LiveData<Recipe>
@@ -49,7 +46,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
      */
     fun initRecipe() {
         if (_recipe.value == null) {
-            _recipe.value = Recipe("name", 1, recipeCategory, "") // NICHT PUSHEN!!!!!
+            _recipe.value = Recipe(recipeCategory)
         }
     }
 
@@ -170,7 +167,6 @@ class AddRecipeViewModel @ViewModelInject constructor(
         if (cookingStep != null) {
             _cookingSteps.value?.set(this.updatingCookingStepIndex, cookingStep)
             _cookingSteps.notifyObserver()
-            cookingStepSaveAction.value = SaveAction.ADD
             return true
         }
         return false
@@ -200,7 +196,6 @@ class AddRecipeViewModel @ViewModelInject constructor(
      */
     fun prepareCookingStepUpdate(position: Int) {
         updatingCookingStepIndex = position
-        cookingStepSaveAction.value = SaveAction.UPDATE
     }
 
     /**
@@ -259,24 +254,18 @@ class AddRecipeViewModel @ViewModelInject constructor(
 
     /**
      * Validate ingredients (at least one)
-     * @return 0 if valid, otherwise string id for error message
+     * @return true if valid
      */
-    fun validateIngredients(): Int {
-        if (_ingredients.value?.size == 0) {
-            return R.string.err_at_least_one_ingredient
-        }
-        return 0
+    fun validateIngredients(): Boolean {
+        return _ingredients.value!!.isNotEmpty()
     }
 
     /**
      * Validate cooking steps (at least one)
-     * @return 0 if valid, otherwise string id for error message
+     * @return true if valid
      */
-    fun validateCookingSteps(): Int {
-        if (_cookingSteps.value?.size == 0) {
-            return R.string.err_at_least_one_cooking_step
-        }
-        return 0
+    fun validateCookingSteps(): Boolean {
+        return _cookingSteps.value!!.isNotEmpty()
     }
 
 }
