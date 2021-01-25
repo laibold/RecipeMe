@@ -35,7 +35,7 @@
                     style="@style/edit_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/default_margin"
+                    android:layout_marginTop="@dimen/default_space"
                     android:hint="@string/new_ingredient"
                     android:importantForAutofill="no"
                     android:inputType="textCapSentences"

@@ -6,9 +6,8 @@
     <dimen name="space_below_headline_1">35dp</dimen>
     <dimen name="space_button_text">10dp</dimen>
     <item name="wrap_content" format="integer" type="dimen">-2</item>
-    <dimen name="form_long">270dp</dimen>
-    <dimen name="default_margin">30dp</dimen>
-    <dimen name="small_margin">20dp</dimen>
+    <dimen name="default_space">30dp</dimen>
+    <dimen name="small_space">20dp</dimen>
 
     <!--button size-->
     <dimen name="button_width_big">0dp</dimen>

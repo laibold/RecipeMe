@@ -44,7 +44,7 @@
                 android:id="@+id/second_row_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_margin"
+                android:layout_marginTop="@dimen/default_space"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cooking_step_field">
@@ -72,7 +72,7 @@
                     android:id="@+id/cooking_step_time_spinner"
                     style="@style/spinner"
                     android:layout_width="0dp"
-                    android:layout_marginStart="@dimen/default_margin"
+                    android:layout_marginStart="@dimen/default_space"
                     android:spinnerMode="dropdown"
                     app:layout_constraintBottom_toBottomOf="@id/cooking_step_time_field"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -85,7 +85,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/add_button"
             style="@style/primary_button"
-            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_space"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cooking_step_form_wrapper"

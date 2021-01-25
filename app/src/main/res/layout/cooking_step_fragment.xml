@@ -20,7 +20,7 @@
             android:divider="@android:color/transparent"
             android:dividerHeight="30dp"
             android:listSelector="@android:color/transparent"
-            android:paddingTop="@dimen/small_margin"
+            android:paddingTop="@dimen/small_space"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
