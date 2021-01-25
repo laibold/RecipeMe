@@ -13,14 +13,18 @@
         android:id="@+id/headline"
         style="@style/headline_1"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:background="@color/white"
         android:elevation="3dp"
         android:gravity="center_vertical"
+        android:minHeight="110dp"
         android:paddingHorizontal="@dimen/outline_horizontal"
+        android:paddingTop="@dimen/space_top"
+        android:paddingBottom="@dimen/space_top"
         android:text="@{headlineText}"
-        tools:text="Koch-Schritte" />
+        tools:maxLength="14"
+        tools:text="@tools:sample/lorem/random" />
 
 </layout>

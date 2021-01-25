@@ -25,7 +25,7 @@
             style="@style/headline_image_2"
             android:layout_marginHorizontal="15dp"
             android:layout_marginBottom="10dp"
-            android:text="@string/recipe"
+            tools:text="@string/recipe_example"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

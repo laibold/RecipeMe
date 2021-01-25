@@ -60,9 +60,9 @@
             android:id="@+id/timer_element"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:tooltipText="@string/start_timer"
             android:layout_marginStart="@dimen/outline_horizontal"
             android:layout_marginTop="@dimen/space_button_text"
+            android:tooltipText="@string/start_timer"
             android:visibility="gone"
             tools:visibility="visible">
 
@@ -88,7 +88,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/timer_icon"
                 app:layout_constraintStart_toEndOf="@id/timer_icon"
                 app:layout_constraintTop_toTopOf="@id/timer_icon"
-                tools:text="@tools:sample/lorem" />
+                tools:text="10 Minuten" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

@@ -41,10 +41,12 @@
             android:id="@+id/recipe_detail_name"
             style="@style/headline_image_1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/outline_horizontal"
-            android:layout_marginTop="@dimen/margin_top"
-            android:text="@string/recipe"
+            android:gravity="center_vertical"
+            android:minHeight="110dp"
+            android:paddingHorizontal="@dimen/outline_horizontal"
+            android:paddingTop="@dimen/space_top"
+            android:paddingBottom="@dimen/space_top"
+            tools:text="@string/recipe_example"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

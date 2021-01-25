@@ -40,7 +40,7 @@
     <string name="label_recipe_name">Name des Rezepts</string>
     <string name="hint_recipe_name">z.B. Leckerer Hummus</string>
     <string name="category">Kategorie</string>
-    <string name="recipe">Rezept</string>
+    <string name="recipe_example">Hummus mit Tahin</string>
     <string name="new_recipe">Neues Rezept</string>
     <string name="desc_add_recipe">Rezept hinzufügen</string>
     <string name="delete">Löschen</string>
