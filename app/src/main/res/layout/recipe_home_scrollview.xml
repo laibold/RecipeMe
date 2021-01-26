@@ -28,7 +28,6 @@
             android:dividerHeight="@dimen/divider_big"
             android:scrollbars="none"
             android:layout_marginTop="@dimen/margin_top"
-            android:layout_marginBottom="@dimen/divider_big"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
