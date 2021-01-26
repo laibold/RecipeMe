@@ -21,6 +21,18 @@
                 android:layout_height="match_parent"
                 android:paddingBottom="30dp">
 
+                <TextView
+                    android:id="@+id/add_hint_text"
+                    style="@style/headline_3"
+                    android:layout_marginTop="@dimen/default_space"
+                    android:paddingEnd="50dp"
+                    android:text="@string/add_items_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="RtlSymmetry"
+                    tools:visibility="gone" />
+
                 <de.hs_rm.recipe_me.ui.component.UnscrollableListView
                     android:id="@+id/list_view"
                     android:layout_width="match_parent"

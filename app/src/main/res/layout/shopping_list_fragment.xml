@@ -78,10 +78,13 @@
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/share_button"
             style="@style/custom_floating_action_button"
-            android:contentDescription="@string/desc_add_recipe"
+            android:contentDescription="@string/share"
+            android:tooltipText="@string/share"
             android:src="@drawable/ic_baseline_share_24"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

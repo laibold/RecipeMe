@@ -92,4 +92,7 @@
     <string name="cooking_steps">Koch-Schritte</string>
     <string name="add_cooking_steps_text">Füge über den Button neue Koch-Schritte hinzu.</string>
     <string name="add_ingredients_text">Füge über den Button neue Zutaten hinzu.</string>
+    <string name="add_items_text">Noch nicht alle Zutaten zu Hause?\n\Füge hier oder aus der Rezept-Ansicht hinzu, was noch fehlt.</string>
+    <string name="share">Teilen</string>
+    <string name="add_recipe_text">Noch ziemlich leer hier.\n\Füge über den Button leckere Rezepte hinzu.</string>
 </resources>

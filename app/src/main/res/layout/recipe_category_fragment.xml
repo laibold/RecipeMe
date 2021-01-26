@@ -23,7 +23,20 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header"
-            tools:listitem="@layout/recipe_listitem" />
+            tools:listitem="@layout/recipe_listitem"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/add_hint_text"
+            style="@style/headline_3"
+            android:layout_marginTop="50dp"
+            android:paddingStart="@dimen/outline_horizontal"
+            android:paddingEnd="100dp"
+            android:text="@string/add_recipe_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/header"
+            tools:visibility="visible" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_button"

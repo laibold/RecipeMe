@@ -47,6 +47,7 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
         }
 
         setAdapter()
+        binding.recipeList.emptyView = binding.addHintText
 
         return binding.root
     }

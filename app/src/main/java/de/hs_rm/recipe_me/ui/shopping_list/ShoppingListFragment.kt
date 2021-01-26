@@ -1,6 +1,5 @@
 package de.hs_rm.recipe_me.ui.shopping_list
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -38,13 +37,15 @@ class ShoppingListFragment : Fragment() {
 
         viewModel.shoppingListItems.observe(viewLifecycleOwner, {
             setAdapter(it)
-            toggleClearButtonVisibility(it.isNotEmpty())
+            toggleButtonVisibility(it.isNotEmpty())
         })
+
+        binding.shoppingListListLayout.listView.emptyView =
+            binding.shoppingListListLayout.addHintText
 
         binding.addItemButton.setOnClickListener {
             onAddButtonClicked()
         }
-
 
         binding.shoppingListListLayout.clearListButton.setOnClickListener {
             viewModel.clearCheckedItems()
@@ -79,11 +80,13 @@ class ShoppingListFragment : Fragment() {
      * Toggle visibility of clear list button. Button should be displayed if list is not empty
      * @param listNotEmpty true if list is not empty
      */
-    private fun toggleClearButtonVisibility(listNotEmpty: Boolean) {
+    private fun toggleButtonVisibility(listNotEmpty: Boolean) {
         if (listNotEmpty) {
             binding.shoppingListListLayout.clearListButton.visibility = View.VISIBLE
+            binding.shareButton.visibility = View.VISIBLE
         } else {
             binding.shoppingListListLayout.clearListButton.visibility = View.GONE
+            binding.shareButton.visibility = View.GONE
         }
     }
 
