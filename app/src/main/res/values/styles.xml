@@ -93,6 +93,18 @@
         <item name="strokeColor">?attr/colorOnSecondary</item>
     </style>
 
+    <style name="tertiary_button_white" parent="styled_button">
+        <item name="android:layout_width">@dimen/button_width_small</item>
+        <item name="android:layout_height">@dimen/button_height_small</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textSize">@dimen/font_size_tertiary</item>
+        <item name="android:backgroundTint">@android:color/transparent</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="strokeColor">?attr/colorOnPrimary</item>
+        <item name="android:shadowColor">#3C3131</item>
+        <item name="android:shadowRadius">8</item>
+    </style>
+
     <style name="small_circle_button">
         <item name="android:layout_width">@dimen/small_circle_button</item>
         <item name="android:layout_height">@dimen/small_circle_button</item>

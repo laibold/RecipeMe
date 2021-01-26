@@ -9,25 +9,65 @@
         android:layout_height="match_parent"
         tools:context=".ui.recipe.RecipeHomeFragment">
 
-        <TextView
-            android:id="@+id/recipe_headline"
-            style="@style/headline_1"
-            android:text="@string/recipes"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_imageview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="300dp" />
+
+        <ImageView
+            android:id="@+id/recipe_detail_image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@android:color/white"
+            android:contentDescription="@string/recipe_image"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_imageview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/hummus_default" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/gradient_overlay"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_imageview"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ListView
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="30dp"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="@dimen/divider_big"
-            android:scrollbars="none"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <TextView
+            android:id="@+id/recipe_of_the_day_headline"
+            style="@style/headline_image_1"
+            android:layout_marginStart="@dimen/outline_horizontal"
+            android:layout_marginTop="@dimen/margin_top"
+            android:text="@string/recipe_of_the_day"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recipe_headline"
-            tools:listitem="@layout/category_listitem" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/recipe_of_the_day_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@tools:sample/lorem"
+            style="@style/headline_image_2"
+            android:layout_marginStart="@dimen/outline_horizontal"
+            android:layout_marginTop="15dp"
+            android:paddingEnd="@dimen/outline_horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recipe_of_the_day_headline"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/recipe_of_the_day_button"
+            style="@style/tertiary_button_white"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="@dimen/outline_horizontal"
+            android:text="@string/open"
+            app:layout_constraintStart_toStartOf="parent"
+            android:elevation="0dp"
+            app:layout_constraintTop_toBottomOf="@id/recipe_of_the_day_name" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_button"
@@ -41,6 +81,35 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:useCompatPadding="true" />
+
+        <ScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!--Dummy to let proper view start at 350dp-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="260dp" />
+
+                <include
+                    android:id="@+id/home_scrollview"
+                    layout="@layout/recipe_home_scrollview" />
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -36,7 +36,7 @@ class RecipeHomeFragment : Fragment() {
             findNavController().navigate(direction)
         }
 
-        val list = binding.list
+        val list = binding.homeScrollview.list
         val categories = RecipeCategory.values()
         list.adapter = CategoryListAdapter(requireContext(), R.layout.category_listitem, categories)
 
