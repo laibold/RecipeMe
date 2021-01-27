@@ -8,6 +8,7 @@
     <item name="wrap_content" format="integer" type="dimen">-2</item>
     <dimen name="default_space">30dp</dimen>
     <dimen name="small_space">20dp</dimen>
+    <dimen name="header_min_height">100dp</dimen>
 
     <!--button size-->
     <dimen name="button_width_big">0dp</dimen>

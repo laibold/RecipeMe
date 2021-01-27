@@ -42,12 +42,13 @@
             style="@style/headline_image_1"
             android:layout_width="match_parent"
             android:gravity="center_vertical"
-            android:minHeight="110dp"
+            android:includeFontPadding="false"
+            android:minHeight="@dimen/header_min_height"
             android:paddingHorizontal="@dimen/outline_horizontal"
             android:paddingTop="@dimen/space_top"
             android:paddingBottom="@dimen/space_top"
-            tools:text="@string/recipe_example"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/recipe_example" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/forward_button"
