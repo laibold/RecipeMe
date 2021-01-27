@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.ShoppingListFragmentBinding
-import de.hs_rm.recipe_me.declaration.ui.closeKeyboard
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 import de.hs_rm.recipe_me.service.Formatter
 import de.hs_rm.recipe_me.service.TextSharer
@@ -44,7 +44,15 @@ class ShoppingListFragment : Fragment() {
             binding.shoppingListListLayout.addHintText
 
         binding.addItemButton.setOnClickListener {
-            onAddButtonClicked()
+            onAddItem()
+        }
+
+        binding.addItemEditText.setOnEditorActionListener { _, actionId: Int, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                onAddItem()
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
         }
 
         binding.shoppingListListLayout.clearListButton.setOnClickListener {
@@ -93,7 +101,7 @@ class ShoppingListFragment : Fragment() {
     /**
      * Validate text content. If valid, add new item to list and scroll to top to make it visible
      */
-    private fun onAddButtonClicked() {
+    private fun onAddItem() {
         if (binding.addItemEditText.text.isBlank()) {
             binding.addItemEditText.text.clear()
             binding.addItemEditText.error =
@@ -103,7 +111,6 @@ class ShoppingListFragment : Fragment() {
             binding.shoppingListListLayout.scrollView.smoothScrollTo(0, 0)
             binding.addItemEditText.text.clear()
         }
-        activity.closeKeyboard()
     }
 
     /**

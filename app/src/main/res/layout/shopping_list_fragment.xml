@@ -45,6 +45,7 @@
                     app:layout_constraintWidth_percent="0.7"
                     tools:ignore="LabelFor"
                     tools:maxLength="@integer/shopping_list_item_name_max_length"
+                    android:imeOptions="actionDone"
                     tools:text="@tools:sample/lorem/random" />
 
                 <ImageButton
