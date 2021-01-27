@@ -46,9 +46,9 @@ object Formatter {
             // quantity existing, there will be no ingredient with 0.0 (Unit)
             val quantityStr = formatIngredientQuantity(calculatedQuantity)
 
-            var unitStr = " "
+            var unitStr = ""
             if (unit != IngredientUnit.NONE) {
-                unitStr = unit.getNumberString(context.resources, calculatedQuantity) + "  "
+                unitStr = unit.getNumberString(context.resources, calculatedQuantity) + " "
             }
 
             unitText = "$quantityStr $unitStr"
