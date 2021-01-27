@@ -21,6 +21,7 @@ class ShoppingListFragment : Fragment() {
     private lateinit var binding: ShoppingListFragmentBinding
     private val viewModel: ShoppingListViewModel by viewModels()
     private lateinit var adapter: ShoppingListListViewAdapter
+    private var isInitialized = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,8 +37,7 @@ class ShoppingListFragment : Fragment() {
         viewModel.loadShoppingListItems()
 
         viewModel.shoppingListItems.observe(viewLifecycleOwner, {
-            setAdapter(it)
-            toggleButtonVisibility(it.isNotEmpty())
+            onShoppingListItemsChanged(it)
         })
 
         binding.shoppingListListLayout.listView.emptyView =
@@ -64,6 +64,20 @@ class ShoppingListFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    /**
+     * When shoppingListItems change:
+     * - show content (just important for initial loading)
+     * - (re-)set adapter
+     * - show clear and share button if list is not empty
+     */
+    private fun onShoppingListItemsChanged(list: List<ShoppingListItem>) {
+        if (!isInitialized) {
+            binding.contentWrapper.visibility = View.VISIBLE
+        }
+        setAdapter(list)
+        toggleButtonVisibility(list.isNotEmpty())
     }
 
     /**

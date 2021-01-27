@@ -13,14 +13,17 @@
             app:headlineText="@{@string/shopping_list}" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content_wrapper"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:paddingStart="@dimen/outline_horizontal"
             android:paddingEnd="@dimen/outline_horizontal"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/header">
+            app:layout_constraintTop_toBottomOf="@id/header"
+            tools:visibility="visible">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/add_item_wrapper"
@@ -37,6 +40,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_space"
                     android:hint="@string/new_ingredient"
+                    android:imeOptions="actionDone"
                     android:importantForAutofill="no"
                     android:inputType="textCapSentences"
                     android:maxLength="@integer/shopping_list_item_name_max_length"
@@ -45,7 +49,6 @@
                     app:layout_constraintWidth_percent="0.7"
                     tools:ignore="LabelFor"
                     tools:maxLength="@integer/shopping_list_item_name_max_length"
-                    android:imeOptions="actionDone"
                     tools:text="@tools:sample/lorem/random" />
 
                 <ImageButton
@@ -80,8 +83,8 @@
             android:id="@+id/share_button"
             style="@style/custom_floating_action_button"
             android:contentDescription="@string/share"
-            android:tooltipText="@string/share"
             android:src="@drawable/ic_baseline_share_24"
+            android:tooltipText="@string/share"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
