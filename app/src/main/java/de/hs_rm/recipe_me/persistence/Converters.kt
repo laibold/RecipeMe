@@ -7,6 +7,7 @@ import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.model.recipe.TimeUnit
+import java.time.LocalDate
 import java.util.*
 
 /**
@@ -79,19 +80,19 @@ class Converters {
     }
 
     /**
-     * [Date] -> [Long]
+     * [LocalDate] -> [String]
      */
     @TypeConverter
-    fun dateToLong(date: Date): Long {
-        return date.time
+    fun localDateToString(date: LocalDate): String {
+        return date.toString()
     }
 
     /**
-     * [Long] -> [Date]
+     * [String] -> [Date]
      */
     @TypeConverter
-    fun longToDate(timestamp: Long): Date {
-        return Date(timestamp)
+    fun stringToDate(dateStr: String): LocalDate {
+        return LocalDate.parse(dateStr)
     }
 
 }

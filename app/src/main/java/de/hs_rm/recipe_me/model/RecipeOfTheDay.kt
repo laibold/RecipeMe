@@ -1,10 +1,12 @@
 package de.hs_rm.recipe_me.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
 import de.hs_rm.recipe_me.model.recipe.Recipe
+import java.time.LocalDate
 import java.util.*
 
 /**
@@ -15,11 +17,12 @@ import java.util.*
         entity = Recipe::class,
         parentColumns = ["id"],
         childColumns = ["recipeId"],
-        onDelete = CASCADE
+        onDelete = CASCADE,
     )]
 )
 class RecipeOfTheDay(
-    var date: Date,
+    var date: LocalDate,
+    @ColumnInfo(index = true)
     var recipeId: Long
 ) {
     @PrimaryKey(autoGenerate = true)

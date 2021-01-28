@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "dab3751a69d3e6dfb8819f07e1ed21c7",
+    "identityHash": "0b331ff8f238e3ea5c094ca0fe072145",
     "entities": [
       {
         "tableName": "Recipe",
@@ -188,7 +188,7 @@
       },
       {
         "tableName": "RecipeOfTheDay",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `recipeId` INTEGER NOT NULL, FOREIGN KEY(`recipeId`) REFERENCES `Recipe`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT NOT NULL, `recipeId` INTEGER NOT NULL, FOREIGN KEY(`recipeId`) REFERENCES `Recipe`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -199,7 +199,7 @@
           {
             "fieldPath": "date",
             "columnName": "date",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -215,7 +215,16 @@
           ],
           "autoGenerate": true
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_RecipeOfTheDay_recipeId",
+            "unique": false,
+            "columnNames": [
+              "recipeId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_RecipeOfTheDay_recipeId` ON `${TABLE_NAME}` (`recipeId`)"
+          }
+        ],
         "foreignKeys": [
           {
             "table": "Recipe",
@@ -234,7 +243,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dab3751a69d3e6dfb8819f07e1ed21c7')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0b331ff8f238e3ea5c094ca0fe072145')"
     ]
   }
 }

@@ -67,7 +67,7 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL(
                     "CREATE TABLE IF NOT EXISTS `RecipeOfTheDay`" +
                             " (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                            " `date` INTEGER NOT NULL," +
+                            " `date` TEXT NOT NULL," +
                             " `recipeId` INTEGER NOT NULL," +
                             " FOREIGN KEY(`recipeId`) REFERENCES `Recipe`(`id`)" +
                             " ON UPDATE NO ACTION" +
