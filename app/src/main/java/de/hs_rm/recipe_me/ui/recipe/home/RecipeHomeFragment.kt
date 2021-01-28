@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.ui.recipe
+package de.hs_rm.recipe_me.ui.recipe.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

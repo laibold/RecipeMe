@@ -6,8 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/recipe_home_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.recipe.RecipeHomeFragment">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_imageview"
@@ -17,7 +16,7 @@
             app:layout_constraintGuide_begin="300dp" />
 
         <ImageView
-            android:id="@+id/recipe_detail_image"
+            android:id="@+id/recipe_otd_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@android:color/white"
@@ -49,22 +48,24 @@
 
         <TextView
             android:id="@+id/recipe_of_the_day_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="@tools:sample/lorem"
             style="@style/headline_image_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/outline_horizontal"
             android:layout_marginTop="15dp"
             android:paddingEnd="@dimen/outline_horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recipe_of_the_day_headline"/>
+            app:layout_constraintTop_toBottomOf="@id/recipe_of_the_day_headline"
+            tools:ignore="RtlSymmetry"
+            tools:maxLength="@integer/recipe_name_max_length"
+            tools:text="@tools:sample/lorem/random" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/recipe_of_the_day_button"
             style="@style/tertiary_button_white"
-            android:stateListAnimator="@null"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="@dimen/outline_horizontal"
+            android:layout_marginTop="10dp"
+            android:stateListAnimator="@null"
             android:text="@string/open"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/recipe_of_the_day_name" />
@@ -75,8 +76,8 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
             android:contentDescription="@string/desc_add_recipe"
-            android:tooltipText="@string/desc_add_recipe"
             android:src="@drawable/ic_baseline_add_24"
+            android:tooltipText="@string/desc_add_recipe"
             app:borderWidth="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

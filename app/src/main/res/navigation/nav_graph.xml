@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/recipe_home_fragment"
-        android:name="de.hs_rm.recipe_me.ui.recipe.RecipeHomeFragment"
+        android:name="de.hs_rm.recipe_me.ui.recipe.home.RecipeHomeFragment"
         android:label="Recipe Home Fragment"
         tools:layout="@layout/recipe_home_fragment">
 
