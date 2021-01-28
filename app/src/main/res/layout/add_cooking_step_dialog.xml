@@ -22,6 +22,7 @@
             <TextView
                 android:id="@+id/cooking_step_label"
                 style="@style/label"
+                android:labelFor="@id/cooking_step_field"
                 android:text="@string/label_cooking_step"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -52,6 +53,7 @@
                 <TextView
                     android:id="@+id/cooking_step_time_label"
                     style="@style/label"
+                    android:labelFor="@id/cooking_step_time_field"
                     android:text="@string/label_cooking_step_time"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -63,8 +65,8 @@
                     android:digits="0123456789.,"
                     android:hint="@string/hint_cooking_step_time"
                     android:importantForAutofill="no"
-                    android:maxLength="3"
                     android:inputType="numberDecimal"
+                    android:maxLength="3"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/cooking_step_time_label" />
 

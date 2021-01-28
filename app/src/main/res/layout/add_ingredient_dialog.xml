@@ -30,6 +30,7 @@
                 <TextView
                     android:id="@+id/ingredient_quantity_label"
                     style="@style/label"
+                    android:labelFor="@id/ingredient_quantity_field"
                     android:text="@string/label_ingredient_quantity"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -48,6 +49,7 @@
                 <TextView
                     android:id="@+id/ingredient_unit_label"
                     style="@style/label"
+                    android:labelFor="@id/ingredient_unit_spinner"
                     android:text="@string/label_ingredient_unit"
                     app:layout_constraintBottom_toTopOf="@id/ingredient_unit_spinner"
                     app:layout_constraintStart_toStartOf="@id/ingredient_unit_spinner" />
@@ -58,9 +60,9 @@
                     android:layout_width="0dp"
                     android:layout_marginStart="@dimen/default_space"
                     android:spinnerMode="dropdown"
+                    app:layout_constraintBottom_toBottomOf="@id/ingredient_quantity_field"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/ingredient_quantity_field"
-                    app:layout_constraintBottom_toBottomOf="@id/ingredient_quantity_field" />
+                    app:layout_constraintStart_toEndOf="@id/ingredient_quantity_field" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -68,6 +70,7 @@
                 android:id="@+id/ingredient_name_label"
                 style="@style/label"
                 android:layout_marginTop="@dimen/default_space"
+                android:labelFor="@id/ingredient_name_field"
                 android:text="@string/label_ingredient_name"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/first_row_wrapper" />
