@@ -1,7 +1,6 @@
 package de.hs_rm.recipe_me.service
 
 import androidx.lifecycle.LiveData
-import androidx.room.Room
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.model.recipe.*
@@ -85,14 +84,14 @@ class RecipeRepository @Inject constructor(
      * Get a recipe by its id
      */
     fun getRecipeById(id: Long): LiveData<RecipeWithRelations> {
-        return recipeDao.getRecipeById(id)
+        return recipeDao.getRecipeWithRelationsById(id)
     }
 
     /**
      * Get total of recipes
      */
     fun getRecipeTotal(): LiveData<Int> {
-        return recipeDao.getRecipeCount()
+        return recipeDao.getRecipeCountAsLiveData()
     }
 
     /**
