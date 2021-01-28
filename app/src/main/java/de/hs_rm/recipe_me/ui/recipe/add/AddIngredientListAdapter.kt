@@ -1,13 +1,11 @@
 package de.hs_rm.recipe_me.ui.recipe.add
 
 import android.content.Context
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
-import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddIngredientListitemBinding
 import de.hs_rm.recipe_me.declaration.ui.fragments.EditIngredientAdapter
 import de.hs_rm.recipe_me.model.recipe.Ingredient
@@ -19,8 +17,6 @@ class AddIngredientListAdapter(
     private val objects: MutableList<Ingredient>,
     private val callbackListener: EditIngredientAdapter
 ) : ArrayAdapter<Ingredient>(context, resource, objects) {
-
-    var editingEnabled = true
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val holder: IngredientViewHolder
@@ -43,10 +39,12 @@ class AddIngredientListAdapter(
 
         holder.binding.ingredientTextView.text = getIngredientText(ingredient)
 
-        if (editingEnabled) {
-            enableButtons(holder, position)
-        } else {
-            disableButtons(holder)
+        holder.binding.removeButton.setOnClickListener {
+            removeObject(position)
+        }
+
+        holder.binding.editButton.setOnClickListener {
+            callbackListener.onCallback(objects[position], position)
         }
 
         return holder.view
@@ -57,36 +55,6 @@ class AddIngredientListAdapter(
      */
     private fun getIngredientText(ingredient: Ingredient): CharSequence {
         return Formatter.formatIngredient(context, ingredient)
-    }
-
-    /**
-     * Enable remove and edit buttons in each element and set listener
-     */
-    private fun enableButtons(holder: IngredientViewHolder, position: Int) {
-        holder.binding.removeButton.visibility = View.VISIBLE
-        holder.binding.removeButton.setOnClickListener { removeObject(position) }
-
-        holder.binding.editButton.visibility = View.VISIBLE
-        holder.binding.editButton.setOnClickListener {
-            callbackListener.onCallback(objects[position], position)
-
-            // highlight element
-            holder.binding.ingredientTextView.setTextColor(
-                context.resources.getColor(
-                    R.color.dark_red,
-                    null
-                )
-            )
-            holder.binding.ingredientTextView.setTypeface(null, Typeface.BOLD)
-        }
-    }
-
-    /**
-     * Disable remove and edit buttons in each element
-     */
-    private fun disableButtons(holder: IngredientViewHolder) {
-        holder.binding.removeButton.visibility = View.GONE
-        holder.binding.editButton.visibility = View.GONE
     }
 
     /**

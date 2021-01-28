@@ -24,6 +24,7 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
     private val args: RecipeCategoryFragmentArgs by navArgs()
     private lateinit var binding: RecipeCategoryFragmentBinding
     private lateinit var adapter: RecipeListAdapter
+    private var isInitialized = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,7 +40,12 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
 
         viewModel.category = args.recipeCategory
         val name = context?.resources?.getString(viewModel.category.nameResId)
-        binding.categoryHeadline.text = name
+        binding.header.headlineText = name
+        binding.categoryImage.setImageResource(viewModel.category.drawableResId)
+
+        binding.scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+            onScroll(scrollY)
+        }
 
         binding.addButton.setOnClickListener {
             val direction = RecipeCategoryFragmentDirections.toAddRecipeNavGraph(viewModel.category)
@@ -47,6 +53,7 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
         }
 
         setAdapter()
+        binding.recipeScrollview.recipeList.emptyView = binding.recipeScrollview.addHintText
 
         return binding.root
     }
@@ -71,11 +78,26 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
     }
 
     /**
+     * Zooms into image when ScrollView gets moved upwards and the other way round
+     */
+    private fun onScroll(scrollY: Int) {
+        if (scrollY < 800) { // TODO check on tablet
+            val scaleVal = (1 + (scrollY.toFloat() / 9000))
+            binding.categoryImage.scaleX = scaleVal
+            binding.categoryImage.scaleY = scaleVal
+        }
+    }
+
+    /**
      * Set Adapter with recipes of selected category to ListView
+     * On initial loading set content visible
      */
     private fun setAdapter() {
-        val list = binding.recipeList
+        val list = binding.recipeScrollview.recipeList
         viewModel.getRecipesByCategory(viewModel.category).observe(this.viewLifecycleOwner, {
+            if (!isInitialized) {
+                binding.recipeScrollview.contentWrapper.visibility = View.VISIBLE
+            }
             adapter = RecipeListAdapter(requireContext(), R.layout.recipe_listitem, it, this)
             list.adapter = adapter
             adapter.notifyDataSetChanged()

@@ -21,6 +21,18 @@
                 android:layout_height="match_parent"
                 android:paddingBottom="30dp">
 
+                <TextView
+                    android:id="@+id/add_hint_text"
+                    style="@style/headline_3"
+                    android:layout_marginTop="@dimen/default_space"
+                    android:paddingEnd="50dp"
+                    android:text="@string/add_items_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="RtlSymmetry"
+                    tools:visibility="gone" />
+
                 <de.hs_rm.recipe_me.ui.component.UnscrollableListView
                     android:id="@+id/list_view"
                     android:layout_width="match_parent"
@@ -39,7 +51,7 @@
                     android:id="@+id/clear_list_button"
                     style="@style/small_circle_button"
                     android:layout_marginStart="0dp"
-                    android:layout_marginTop="@dimen/default_margin"
+                    android:layout_marginTop="@dimen/default_space"
                     android:contentDescription="@string/remove_checked_items"
                     android:paddingBottom="2dp"
                     android:src="@drawable/ic_baseline_clear_all_24"

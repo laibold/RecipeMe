@@ -31,21 +31,21 @@ class FormatterTest {
     fun formatIngredientWithoutUnit() {
         val ingredient = Ingredient("Bananas", 3.0, IngredientUnit.NONE)
         val str = Formatter.formatIngredient(context, ingredient)
-        assertEquals(str, "3  Bananas")
+        assertEquals(str, "3 Bananas")
     }
 
     @Test
     fun formatIngredientWithQuantityAndUnit() {
         val ingredient = Ingredient("Chickpeas", 1.0, IngredientUnit.CAN)
         val str = Formatter.formatIngredient(context, ingredient)
-        assertEquals(str, "1 Dose  Chickpeas")
+        assertEquals(str, "1 Dose Chickpeas")
     }
 
     @Test
     fun formatIngredientWithQuantityAndUnitAndMultiplier() {
         val ingredient = Ingredient("Chickpeas", 1.5, IngredientUnit.CAN)
         val str = Formatter.formatIngredient(context, ingredient, 3.0)
-        assertEquals(str, "4,5 Dosen  Chickpeas")
+        assertEquals(str, "4,5 Dosen Chickpeas")
     }
 
 }

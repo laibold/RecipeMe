@@ -117,7 +117,7 @@ class RecipeDetailFragment : Fragment() {
      * Set recipe name, servings, ingredients and cooking steps to view
      */
     private fun onRecipeChanged(recipeWithRelations: RecipeWithRelations) {
-        binding.recipeDetailName.text = recipeWithRelations.recipe.name
+        binding.recipeDetailName.headlineText = recipeWithRelations.recipe.name
         onServingsChanged(recipeWithRelations.recipe.servings)
         setIngredientAdapter(recipeWithRelations)
         setCookingSteps(recipeWithRelations)

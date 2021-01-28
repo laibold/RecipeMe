@@ -34,7 +34,7 @@ class CookingStepFragment : Fragment(), CookingStepCallbackAdapter {
             false
         )
 
-        binding.recipeNameHeadline.text = viewModel.recipe.value!!.recipe.name
+        binding.header.headlineText = viewModel.recipe.value!!.recipe.name
 
         setAdapter()
 
