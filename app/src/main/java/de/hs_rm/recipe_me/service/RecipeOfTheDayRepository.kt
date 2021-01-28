@@ -1,11 +1,11 @@
 package de.hs_rm.recipe_me.service
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import de.hs_rm.recipe_me.model.RecipeOfTheDay
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.persistence.RecipeDao
 import de.hs_rm.recipe_me.persistence.RecipeOfTheDayDao
+import java.time.LocalDate
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -17,32 +17,46 @@ class RecipeOfTheDayRepository @Inject constructor(
     private val recipeDao: RecipeDao
 ) {
 
+    /**
+     * TODO
+     */
     suspend fun getRecipeOfTheDay(): LiveData<Recipe> {
-        val rotd = rotdDao.getRecipeOfTheDay()
-
+        var currentRotd = rotdDao.getRecipeOfTheDay()
         val numberOfRecipes = recipeDao.getRecipeCount()
 
         when {
-            rotd == null -> {
-                // no rotd existing
-                return MutableLiveData(generateRecipeOfTheDay())
+            currentRotd == null -> {
+                // no rotd existing, insert it
+                val recipe = generateRecipeOfTheDay()
+                currentRotd = RecipeOfTheDay(LocalDate.now(), recipe.id)
+                rotdDao.insert(currentRotd)
             }
-            numberOfRecipes == 1 -> {
-                // rotd existing, but only one recipe available
-                return recipeDao.getRecipeById(rotd.recipeId)
-            }
-            else -> {
-                // rotd existing and more recipes available -> rotd should change
+            rotdInvalid(currentRotd) and (numberOfRecipes > 1) -> {
+                // rotd existing, not valid anymore and more than 1 recipes available -> rotd should change
                 var newRotd = generateRecipeOfTheDay()
-                while (rotd.recipeId == newRotd.id) {
+                while (currentRotd.recipeId == newRotd.id) {
                     newRotd = generateRecipeOfTheDay()
                 }
-                return MutableLiveData(newRotd)
+                currentRotd.date = LocalDate.now()
+                currentRotd.recipeId = newRotd.id
+                rotdDao.update(currentRotd)
             }
+            // else rotd existing and still valid or just one recipe available -> no change
         }
 
+        return recipeDao.getRecipeById(currentRotd!!.recipeId)
     }
 
+    /**
+     * @return True if date of given [RecipeOfTheDay] if from the day before today or earlier
+     */
+    fun rotdInvalid(rotd: RecipeOfTheDay): Boolean {
+        return rotd.date.isBefore(LocalDate.now())
+    }
+
+    /**
+     * Gets random Recipe from RecipeDao
+     */
     private fun generateRecipeOfTheDay(): Recipe {
         val numberOfRecipes = recipeDao.getRecipeCount()
 
