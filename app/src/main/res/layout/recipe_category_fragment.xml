@@ -8,58 +8,80 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/header"
-            layout="@layout/material_header" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_imageview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="300dp" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/content_wrapper"
+        <ImageView
+            android:id="@+id/category_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:visibility="gone"
+            android:background="@android:color/white"
+            android:contentDescription="@string/recipe_image"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_imageview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/category_salads" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/gradient_overlay"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_imageview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/header"
+            layout="@layout/image_header"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:overScrollMode="never"
+            android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/header"
-            tools:visibility="visible">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <ListView
-                android:id="@+id/recipeList"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="@dimen/divider_big"
-                android:scrollbars="none"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/recipe_listitem"
-                tools:visibility="visible" />
-
-            <TextView
-                android:id="@+id/add_hint_text"
-                style="@style/headline_3"
-                android:layout_marginTop="50dp"
-                android:paddingStart="@dimen/outline_horizontal"
-                android:paddingEnd="100dp"
-                android:text="@string/add_recipe_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/add_button"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                android:contentDescription="@string/desc_add_recipe"
-                android:src="@drawable/ic_baseline_add_24"
-                app:borderWidth="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:useCompatPadding="true" />
+                android:orientation="vertical">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <!--Dummy to let proper view start at 260dp-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="260dp" />
+
+                <include
+                    android:id="@+id/recipe_scrollview"
+                    layout="@layout/recipe_category_scrollview" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:contentDescription="@string/desc_add_recipe"
+            android:src="@drawable/ic_baseline_add_24"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:useCompatPadding="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
