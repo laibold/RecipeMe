@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="300dp" />
+            app:layout_constraintGuide_begin="280dp" />
 
         <ImageView
             android:id="@+id/recipe_otd_image"
@@ -29,9 +29,10 @@
             tools:src="@drawable/hummus_default" />
 
         <View
+            android:id="@+id/gradient_overlay"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@drawable/gradient_overlay"
+            android:background="@drawable/gradient_overlay_dark"
             app:layout_constraintBottom_toTopOf="@+id/guideline_imageview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -100,8 +101,9 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!--Dummy to let proper view start at 350dp-->
+                <!--Dummy to let proper view start at 260dp-->
                 <View
+                    android:id="@+id/dummy_view"
                     android:layout_width="match_parent"
                     android:layout_height="260dp" />
 

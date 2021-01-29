@@ -1,24 +1,24 @@
 package de.hs_rm.recipe_me.ui.recipe.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeHomeFragmentBinding
+import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
-import de.hs_rm.recipe_me.ui.recipe.category.RecipeCategoryViewModel
 
 @AndroidEntryPoint
 class RecipeHomeFragment : Fragment() {
 
-    private val viewModel: RecipeCategoryViewModel by viewModels()
     private lateinit var binding: RecipeHomeFragmentBinding
+    private val viewModel: RecipeHomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,16 +31,65 @@ class RecipeHomeFragment : Fragment() {
             false
         )
 
+        setAdapter()
+
+        viewModel.loadRecipeOfTheDay()
+
+        viewModel.recipeOfTheDay.observe(viewLifecycleOwner, { recipe ->
+            onRecipeOtdChanged(recipe)
+        })
+
+        binding.scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+            onScroll(scrollY)
+        }
+
         binding.addButton.setOnClickListener {
             val direction = RecipeHomeFragmentDirections.toAddRecipeNavGraph()
             findNavController().navigate(direction)
         }
 
+        return binding.root
+    }
+
+    /**
+     * When recipe of the day changes, set text, image and clicklistener for navigation.
+     * If there's no recipe available, set default image and text.
+     */
+    private fun onRecipeOtdChanged(recipe: Recipe?) {
+        if (recipe == null) {
+            binding.recipeOfTheDayName.text = resources.getString(R.string.no_recipe_otd)
+            binding.recipeOfTheDayButton.visibility = View.GONE
+            binding.recipeOtdImage.setImageResource(R.drawable.cooking_default)
+            binding.gradientOverlay.setBackgroundResource(R.drawable.gradient_overlay)
+        } else {
+            binding.recipeOfTheDayName.text = recipe.name
+            binding.recipeOtdImage.setImageResource(recipe.category.drawableResId)
+
+            binding.dummyView.setOnClickListener {
+                val direction = RecipeHomeFragmentDirections.toRecipeDetailFragment(recipe.id, true)
+                findNavController().navigate(direction)
+            }
+        }
+    }
+
+    /**
+     * Set categories to CategoryListAdapter
+     */
+    private fun setAdapter() {
         val list = binding.homeScrollview.list
         val categories = RecipeCategory.values()
         list.adapter = CategoryListAdapter(requireContext(), R.layout.category_listitem, categories)
+    }
 
-        return binding.root
+    /**
+     * Zooms into image when ScrollView gets moved upwards and the other way round
+     */
+    private fun onScroll(scrollY: Int) {
+        if (scrollY < 800) { // TODO check on tablet
+            val scaleVal = (1 + (scrollY.toFloat() / 9000))
+            binding.recipeOtdImage.scaleX = scaleVal
+            binding.recipeOtdImage.scaleY = scaleVal
+        }
     }
 
 }

@@ -33,8 +33,11 @@ class RecipeDetailFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    val direction =
+                    val direction = if (args.navigateBackToHome) {
+                        RecipeDetailFragmentDirections.toRecipeHomeFragment()
+                    } else {
                         RecipeDetailFragmentDirections.toRecipeCategoryFragment(viewModel.recipe.value!!.recipe.category)
+                    }
                     findNavController().navigate(direction)
                 }
             }

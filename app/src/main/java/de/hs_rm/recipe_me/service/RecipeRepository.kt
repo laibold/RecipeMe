@@ -81,10 +81,17 @@ class RecipeRepository @Inject constructor(
     }
 
     /**
-     * Get a recipe by its id
+     * Get a RecipeWithRelations by its id
      */
-    fun getRecipeById(id: Long): LiveData<RecipeWithRelations> {
+    fun getRecipeWithRelationsById(id: Long): LiveData<RecipeWithRelations> {
         return recipeDao.getRecipeWithRelationsById(id)
+    }
+
+    /**
+     * Get a Recipe by its id
+     */
+    suspend fun getRecipeById(id: Long): Recipe {
+        return recipeDao.getRecipeById(id)
     }
 
     /**

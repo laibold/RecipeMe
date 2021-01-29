@@ -1,6 +1,5 @@
 package de.hs_rm.recipe_me.service
 
-import androidx.lifecycle.LiveData
 import de.hs_rm.recipe_me.model.RecipeOfTheDay
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.persistence.RecipeDao
@@ -18,7 +17,7 @@ class RecipeOfTheDayRepository @Inject constructor(
 ) {
 
     /**
-     * Returns LiveDate with [RecipeOfTheDay]. Change of the recipe is depending on following scenarios:
+     * Generates Recipe of the day. Change of this is depending on following scenarios:
      * - there is no recipe of the day -> create one, except there is no recipe in database
      * - the current rotd is at least from yesterday and multiple recipes in database -> switch it
      * - the current rotd is at least from yesterday, but the only one in database -> don't switch
@@ -26,16 +25,15 @@ class RecipeOfTheDayRepository @Inject constructor(
      *
      * if there's no change in the rotd, the date of the database object won't get updated.
      */
-    suspend fun getRecipeOfTheDay(): LiveData<Recipe> {
-        var currentRotd = rotdDao.getRecipeOfTheDay()
+    suspend fun updateRecipeOfTheDay() {
+        val currentRotd = rotdDao.getRecipeOfTheDay()
         val numberOfRecipes = recipeDao.getRecipeCount()
 
         when {
             currentRotd == null -> {
                 // no rotd existing, insert it
                 val recipe = generateRecipeOfTheDay()
-                currentRotd = RecipeOfTheDay(LocalDate.now(), recipe.id)
-                rotdDao.insert(currentRotd)
+                rotdDao.insert(RecipeOfTheDay(LocalDate.now(), recipe.id))
             }
             rotdInvalid(currentRotd) and (numberOfRecipes > 1) -> {
                 // rotd existing, not valid anymore and more than 1 recipes available -> rotd should change
@@ -49,9 +47,16 @@ class RecipeOfTheDayRepository @Inject constructor(
             }
             // else rotd existing and still valid or just one recipe available -> no change
         }
-
-        return recipeDao.getRecipeById(currentRotd!!.recipeId)
     }
+
+    /**
+     * @return id of the [Recipe] which is currently recipe of the day, -1 when there's none
+     */
+    suspend fun getRecipeOfTheDayId(): Long {
+        val rotd = rotdDao.getRecipeOfTheDay()
+        return rotd?.recipeId ?: -1
+    }
+
     /**
      * @return True if date of given [RecipeOfTheDay] if from the day before today or earlier
      */
@@ -62,7 +67,7 @@ class RecipeOfTheDayRepository @Inject constructor(
     /**
      * Gets random Recipe from RecipeDao
      */
-    private fun generateRecipeOfTheDay(): Recipe {
+    private suspend fun generateRecipeOfTheDay(): Recipe {
         val numberOfRecipes = recipeDao.getRecipeCount()
 
         if (numberOfRecipes == 0) {

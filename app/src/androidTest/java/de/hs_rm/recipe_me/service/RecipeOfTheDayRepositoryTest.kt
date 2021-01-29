@@ -8,7 +8,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.TestDataProvider
-import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.model.RecipeOfTheDay
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.persistence.AppDatabase
@@ -100,7 +99,7 @@ class RecipeOfTheDayRepositoryTest {
         insertTestData(1)
         var rotd: Recipe? = null
 
-        runBlocking { rotd = rotdRepository.getRecipeOfTheDay().getOrAwaitValue() }
+        runBlocking { rotd = rotdRepository.updateRecipeOfTheDay().getOrAwaitValue() }
 
         assertNotNull(rotd)
         assertNotEquals(rotd!!.name, "")
@@ -121,13 +120,13 @@ class RecipeOfTheDayRepositoryTest {
 
         runBlocking {
             // Set current rotd's date to yesterday
-            oldRotd = rotdRepository.getRecipeOfTheDay().getOrAwaitValue()
+            oldRotd = rotdRepository.updateRecipeOfTheDay().getOrAwaitValue()
             val oldRotdObject = rotdDao.getRecipeOfTheDay()
             oldRotdObject!!.date = LocalDate.now().minusDays(1)
             rotdDao.update(oldRotdObject)
         }
         runBlocking {
-            newRotd = rotdRepository.getRecipeOfTheDay().getOrAwaitValue()
+            newRotd = rotdRepository.updateRecipeOfTheDay().getOrAwaitValue()
             assertEquals(1, rotdDao.getCount())
         }
 
@@ -149,14 +148,14 @@ class RecipeOfTheDayRepositoryTest {
         for (i in 0..100) {
             // Set current rotd's date to yesterday
             runBlocking {
-                oldRotd = rotdRepository.getRecipeOfTheDay().getOrAwaitValue()
+                oldRotd = rotdRepository.updateRecipeOfTheDay().getOrAwaitValue()
 
                 val oldRotdObject = rotdDao.getRecipeOfTheDay()
                 oldRotdObject!!.date = LocalDate.now().minusDays(1)
                 rotdDao.update(oldRotdObject)
             }
 
-            runBlocking { newRotd = rotdRepository.getRecipeOfTheDay().getOrAwaitValue() }
+            runBlocking { newRotd = rotdRepository.updateRecipeOfTheDay().getOrAwaitValue() }
 
             assertNotNull(newRotd)
             assertNotEquals(oldRotd.id, newRotd.id)
@@ -178,7 +177,7 @@ class RecipeOfTheDayRepositoryTest {
         lateinit var newRotd: Recipe
 
         runBlocking {
-            oldRotd = rotdRepository.getRecipeOfTheDay().getOrAwaitValue()
+            oldRotd = rotdRepository.updateRecipeOfTheDay().getOrAwaitValue()
 
             val oldRotdObject = rotdDao.getRecipeOfTheDay()
             oldRotdObject!!.date = LocalDate.now().minusDays(1)
@@ -186,7 +185,7 @@ class RecipeOfTheDayRepositoryTest {
         }
 
         runBlocking {
-            newRotd = rotdRepository.getRecipeOfTheDay().getOrAwaitValue()
+            newRotd = rotdRepository.updateRecipeOfTheDay().getOrAwaitValue()
             assertEquals(1, rotdDao.getCount())
         }
 

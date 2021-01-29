@@ -48,14 +48,14 @@ interface RecipeDao {
     fun getRecipeWithRelationsById(id: Long): LiveData<RecipeWithRelations>
 
     @Query("SELECT * FROM Recipe WHERE id = :id")
-    fun getRecipeById(id: Long): LiveData<Recipe>
+    suspend fun getRecipeById(id: Long): Recipe
 
     @Query("SELECT COUNT(*) FROM Recipe")
     fun getRecipeCountAsLiveData(): LiveData<Int>
 
     @Query("SELECT COUNT(*) FROM Recipe")
-    fun getRecipeCount(): Int
+    suspend fun getRecipeCount(): Int
 
     @Query("SELECT * FROM Recipe LIMIT 1 OFFSET :offset")
-    fun getRecipeByOffset(offset: Int): Recipe
+    suspend fun getRecipeByOffset(offset: Int): Recipe
 }

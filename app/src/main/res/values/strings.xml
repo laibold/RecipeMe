@@ -107,4 +107,5 @@
     <string name="recipe_total_text_map">{\"1\":\"Rezept erstellt - da geht noch mehr!\",\"10\":\"Rezepte erstellt - da geht noch mehr!\",\"20\":\"Rezepte erstellt - du bist auf einem guten Weg.\",\"30\":\"Rezepte erstellt - du kannst schon fast ein Restaurant aufmachen.\",\"40\":\"Rezepte erstellt - boah, Respekt!\",\"50\":\"Rezepte erstellt - deine Waage wollt\' ich nicht sein.\",\"60\":\"Rezepte erstellt - wer soll das alles essen? Sag mal!\",\"61\":\"Rezepte erstellt - du bist ein wahrer Meisterkoch!\"}</string>
     <string name="recipe_of_the_day">Rezept des Tages</string>
     <string name="open">Öffnen</string>
+    <string name="no_recipe_otd">Füge Rezepte hinzu, um dich hier täglich neu inspirieren zu lassen.</string>
 </resources>

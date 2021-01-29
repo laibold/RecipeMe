@@ -109,8 +109,6 @@
         <item name="android:backgroundTint">@android:color/transparent</item>
         <item name="strokeWidth">2dp</item>
         <item name="strokeColor">?attr/colorOnPrimary</item>
-        <item name="android:shadowColor">#3C3131</item>
-        <item name="android:shadowRadius">8</item>
     </style>
 
     <style name="small_circle_button">
