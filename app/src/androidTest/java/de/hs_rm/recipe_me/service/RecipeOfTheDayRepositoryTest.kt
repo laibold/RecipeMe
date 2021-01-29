@@ -48,6 +48,9 @@ class RecipeOfTheDayRepositoryTest {
     private lateinit var appContext: Context
     private lateinit var db: AppDatabase
 
+    /**
+     * Inject dependencies, build inMemory database and create repositories with DAOs from database
+     */
     @Before
     fun init() {
         hiltRule.inject()
@@ -60,6 +63,10 @@ class RecipeOfTheDayRepositoryTest {
         recipeRepository = RecipeRepository(recipeDao)
     }
 
+    /**
+     * Test date comparison in rotdRepository.
+     * Rots with date from yesterday are principally not valid anymore.
+     */
     @Test
     fun compareDatesSuccessful() {
         val yesterdayDate = LocalDate.now().minusDays(1)
@@ -75,6 +82,9 @@ class RecipeOfTheDayRepositoryTest {
         assertFalse(result)
     }
 
+    /**
+     * Test if rotd gets created when no rotd is existing.
+     */
     @Test
     fun createRotdFromNullSuccessful() {
         runBlocking { recipeDao.clear() }
@@ -86,12 +96,13 @@ class RecipeOfTheDayRepositoryTest {
         assertNotNull(rotd)
         assertNotEquals(rotd!!.name, "")
 
-        runBlocking {
-            val currentRotdObject = rotdDao.getRecipeOfTheDay()
-            assertEquals(LocalDate.now(), currentRotdObject!!.date)
-        }
+        assertCurrentRotdDateAndCount()
     }
 
+    /**
+     * Test if rotd stays exactly the same when there is only 1 recipe in the database
+     * even if the date of the recipe is invalid.
+     */
     @Test
     fun createRotdWithOneRecipeSuccessful() {
         runBlocking { recipeDao.clear() }
@@ -99,18 +110,26 @@ class RecipeOfTheDayRepositoryTest {
         lateinit var oldRotd: Recipe
         lateinit var newRotd: Recipe
 
-        runBlocking { oldRotd = rotdRepository.getRecipeOfTheDay().getOrAwaitValue() }
-        runBlocking { newRotd = rotdRepository.getRecipeOfTheDay().getOrAwaitValue() }
+        runBlocking {
+            // Set current rotd's date to yesterday
+            oldRotd = rotdRepository.getRecipeOfTheDay().getOrAwaitValue()
+            val oldRotdObject = rotdDao.getRecipeOfTheDay()
+            oldRotdObject!!.date = LocalDate.now().minusDays(1)
+            rotdDao.update(oldRotdObject)
+        }
+        runBlocking {
+            newRotd = rotdRepository.getRecipeOfTheDay().getOrAwaitValue()
+            assertEquals(1, rotdDao.getCount())
+        }
 
         assertNotNull(newRotd)
         assertEquals(oldRotd, newRotd)
-
-        runBlocking {
-            val currentRotdObject = rotdDao.getRecipeOfTheDay()
-            assertEquals(LocalDate.now(), currentRotdObject!!.date)
-        }
     }
 
+    /**
+     * Test that when there are 2 recipes in the database, the rotd get's switched every time
+     * the current rotd gets invalid (when it's date doesn't match today's one).
+     */
     @Test
     fun switchRotdSuccessful() {
         runBlocking { recipeDao.clear() }
@@ -135,14 +154,53 @@ class RecipeOfTheDayRepositoryTest {
             assertNotEquals(oldRotd, newRotd)
         }
 
+        assertCurrentRotdDateAndCount()
+    }
+
+    /**
+     * Test that rotd doesn't change when date is invalid (doesn't match today's one),
+     * but there is no other recipe in the database.
+     */
+    @Test
+    fun rotdWithOneRecipeSuccessful() {
+        runBlocking { recipeDao.clear() }
+        insertTestData(1)
+        lateinit var oldRotd: Recipe
+        lateinit var newRotd: Recipe
+
+        runBlocking {
+            oldRotd = rotdRepository.getRecipeOfTheDay().getOrAwaitValue()
+
+            val oldRotdObject = rotdDao.getRecipeOfTheDay()
+            oldRotdObject!!.date = LocalDate.now().minusDays(1)
+            rotdDao.update(oldRotdObject)
+        }
+
+        runBlocking {
+            newRotd = rotdRepository.getRecipeOfTheDay().getOrAwaitValue()
+            assertEquals(1, rotdDao.getCount())
+        }
+
+        assertNotNull(newRotd)
+        assertEquals(oldRotd, newRotd)
+    }
+
+    /**
+     * Assert that current rotd's date match today's date and that there is only 1 rotd in the database
+     */
+    private fun assertCurrentRotdDateAndCount() {
         runBlocking {
             val currentRotdObject = rotdDao.getRecipeOfTheDay()
             assertEquals(LocalDate.now(), currentRotdObject!!.date)
+
+            assertEquals(1, rotdDao.getCount())
         }
     }
 
-    // TODO test no change when still valid
-
+    /**
+     * Insert as many random recipes as wanted. every recipe will have 2 ingredients and 2 cooking steps
+     * @param amount amount of recipes to be inserted
+     */
     private fun insertTestData(amount: Int) {
         for (i in 1..amount) {
             runBlocking {

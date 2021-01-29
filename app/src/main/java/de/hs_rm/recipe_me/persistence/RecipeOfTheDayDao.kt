@@ -1,6 +1,9 @@
 package de.hs_rm.recipe_me.persistence
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 import de.hs_rm.recipe_me.model.RecipeOfTheDay
 
 /**
@@ -21,4 +24,6 @@ interface RecipeOfTheDayDao {
     @Query("SELECT * FROM RecipeOfTheDay LIMIT 1")
     suspend fun getRecipeOfTheDay(): RecipeOfTheDay?
 
+    @Query("SELECT COUNT(*) FROM RecipeOfTheDay")
+    suspend fun getCount(): Int
 }

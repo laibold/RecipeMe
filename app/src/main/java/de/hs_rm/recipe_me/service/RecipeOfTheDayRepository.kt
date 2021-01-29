@@ -18,7 +18,13 @@ class RecipeOfTheDayRepository @Inject constructor(
 ) {
 
     /**
-     * TODO
+     * Returns LiveDate with [RecipeOfTheDay]. Change of the recipe is depending on following scenarios:
+     * - there is no recipe of the day -> create one
+     * - the current rotd is at least from yesterday and multiple recipes in database -> switch it
+     * - the current rotd is at least from yesterday, but the only one in database -> don't switch
+     * - the current rotd is from today -> don't switch
+     *
+     * if there's no change in the rotd, the date of the database object won't get updated.
      */
     suspend fun getRecipeOfTheDay(): LiveData<Recipe> {
         var currentRotd = rotdDao.getRecipeOfTheDay()
