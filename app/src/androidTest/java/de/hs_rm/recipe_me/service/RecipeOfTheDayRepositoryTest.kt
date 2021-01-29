@@ -15,6 +15,7 @@ import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.persistence.RecipeDao
 import de.hs_rm.recipe_me.persistence.RecipeOfTheDayDao
 import kotlinx.coroutines.runBlocking
+import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -61,6 +62,14 @@ class RecipeOfTheDayRepositoryTest {
 
         rotdRepository = RecipeOfTheDayRepository(rotdDao, recipeDao)
         recipeRepository = RecipeRepository(recipeDao)
+    }
+
+    /**
+     * Clear db after tests
+     */
+    @After
+    fun cleanup() {
+        db.clearAllTables()
     }
 
     /**
