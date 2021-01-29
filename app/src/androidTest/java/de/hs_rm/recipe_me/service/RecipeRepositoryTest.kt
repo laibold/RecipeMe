@@ -8,8 +8,9 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.model.recipe.*
-import kotlinx.coroutines.*
-import org.junit.Assert.*
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -45,13 +46,63 @@ class RecipeRepositoryTest {
     fun testInjection() {
         assertNotNull(repository)
     }
-    
+
+    /**
+     * Tests if added [Ingredient] has expected name, quantity and unit
+     */
+    @Test
     fun addIngredient() {
-        // TODO
+        val recipeName = "TestRecipe"
+        val servings = 2
+        val category = RecipeCategory.SNACKS
+        val imageUri = "uri"
+        var id = -1L
+
+        runBlocking {
+            id = repository.insert(Recipe(recipeName, servings, category, imageUri))
+            repository.insert(Ingredient(id, "Ingredient1", 2.0, IngredientUnit.GRAM))
+        }
+
+        val recipe = repository.getRecipeById(id).getOrAwaitValue(2)
+
+        assertEquals(recipe.ingredients.size, 1)
+        assertEquals(
+            recipe.ingredients[0].name,
+            "Ingredient1"
+        )
+        assertEquals(
+            recipe.ingredients[0].quantity,
+            2.0, 0.0
+        )
+        assertEquals(
+            recipe.ingredients[0].unit,
+            IngredientUnit.GRAM
+        )
+
     }
 
+    /**
+     * Tests if added [CookingStep] has expected  text, time and time unit
+     */
+    @Test
     fun addCookingStep() {
-        // TODO
+        val recipeName = "TestRecipe"
+        val servings = 2
+        val category = RecipeCategory.SNACKS
+        val imageUri = "uri"
+        var id = -1L
+
+        runBlocking {
+            id = repository.insert(Recipe(recipeName, servings, category, imageUri))
+            repository.insert(CookingStep(id, "uri", "cook", 20, TimeUnit.SECOND))
+        }
+
+        val recipe = repository.getRecipeById(id).getOrAwaitValue(2)
+
+        assertEquals(recipe.cookingSteps.size, 1)
+        assertEquals(recipe.cookingSteps[0].text, "cook")
+        assertEquals(recipe.cookingSteps[0].time, 20)
+        assertEquals(recipe.cookingSteps[0].timeUnit, TimeUnit.SECOND)
     }
 
     @Test

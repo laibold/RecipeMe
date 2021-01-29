@@ -33,9 +33,7 @@ class RecipeDetailFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    val direction =
-                        RecipeDetailFragmentDirections.toRecipeCategoryFragment(viewModel.recipe.value!!.recipe.category)
-                    findNavController().navigate(direction)
+                    onBackPressed()
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
@@ -110,6 +108,11 @@ class RecipeDetailFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.servings.set(RecipeDetailViewModel.NOT_INITIALIZED)
     }
 
     /**
@@ -222,6 +225,15 @@ class RecipeDetailFragment : Fragment() {
         binding.recipeInfo.addToShoppingListButton.visibility = View.VISIBLE
         binding.recipeInfo.toShoppingListAcceptButton.visibility = View.GONE
         binding.recipeInfo.toShoppingListCancelButton.visibility = View.GONE
+    }
+
+    private fun onBackPressed() {
+        // to prevent servingsElement from showing -1
+        binding.recipeInfo.wrapper.visibility = View.GONE
+        viewModel.servings.set(RecipeDetailViewModel.NOT_INITIALIZED)
+        val direction =
+            RecipeDetailFragmentDirections.toRecipeCategoryFragment(viewModel.recipe.value!!.recipe.category)
+        findNavController().navigate(direction)
     }
 
 }
