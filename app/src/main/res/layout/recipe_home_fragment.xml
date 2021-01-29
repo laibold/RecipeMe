@@ -40,8 +40,9 @@
         <TextView
             android:id="@+id/recipe_of_the_day_headline"
             style="@style/headline_image_1"
-            android:layout_marginStart="@dimen/outline_horizontal"
-            android:layout_marginTop="@dimen/margin_top"
+            android:layout_marginTop="@dimen/space_top"
+            android:paddingStart="@dimen/outline_horizontal"
+            android:paddingEnd="@dimen/outline_horizontal"
             android:text="@string/recipe_of_the_day"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

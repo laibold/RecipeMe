@@ -40,7 +40,7 @@
     <string name="label_recipe_name">Name des Rezepts</string>
     <string name="hint_recipe_name">z.B. Leckerer Hummus</string>
     <string name="category">Kategorie</string>
-    <string name="recipe">Rezept</string>
+    <string name="recipe_example">Hummus mit Tahin</string>
     <string name="new_recipe">Neues Rezept</string>
     <string name="desc_add_recipe">Rezept hinzufügen</string>
     <string name="delete">Löschen</string>
@@ -77,8 +77,7 @@
     <string name="err_enter_name">Namen eingeben</string>
     <string name="err_enter_servings">Portionen angeben</string>
     <string name="err_servings_greater_than_zero">Wert größer als 0 angeben</string>
-    <string name="err_at_least_one_ingredient">Mindestens eine Zutat angeben</string>
-    <string name="err_at_least_one_cooking_step">Mindestens einen Schritt angeben</string>
+    <string name="err_enter_description">Beschreibung angeben</string>
     <string name="can_sg">Dose</string>
     <string name="can_pl">Dosen</string>
     <string name="glas_sg">Glas</string>
@@ -90,6 +89,12 @@
     <string name="store_link">http://play.google.com/store/apps/details?id=de.hs_rm.recipe_me</string>
     <string name="timer">Timer</string>
     <string name="start_timer">Timer starten</string>
+    <string name="cooking_steps">Koch-Schritte</string>
+    <string name="add_cooking_steps_text">Füge über den Button neue Koch-Schritte hinzu.</string>
+    <string name="add_ingredients_text">Füge über den Button neue Zutaten hinzu.</string>
+    <string name="add_items_text">Noch nicht alle Zutaten zu Hause?\n\Füge hier oder aus der Rezept-Ansicht hinzu, was noch fehlt.</string>
+    <string name="share">Teilen</string>
+    <string name="add_recipe_text">Noch ziemlich leer hier.\n\Füge über den Button leckere Rezepte hinzu.</string>
     <string name="profile_greeting">Hallo, Chefkoch!</string>
     <string name="change_profile_picture">Profilbild ändern</string>
     <string name="site_notice">Impressum</string>

@@ -6,28 +6,70 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/recipe_category_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.recipe.category.RecipeCategoryFragment">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/category_headline"
-            style="@style/headline_1"
-            android:text="@string/category"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_imageview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="300dp" />
+
+        <ImageView
+            android:id="@+id/category_image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@android:color/white"
+            android:contentDescription="@string/recipe_image"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_imageview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/category_salads" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/gradient_overlay"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_imageview"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ListView
-            android:id="@+id/recipeList"
+        <include
+            android:id="@+id/header"
+            layout="@layout/image_header"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/default_margin"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="@dimen/divider_big"
+            android:overScrollMode="never"
             android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/category_headline"
-            tools:listitem="@layout/recipe_listitem" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!--Dummy to let proper view start at 260dp-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="260dp" />
+
+                <include
+                    android:id="@+id/recipe_scrollview"
+                    layout="@layout/recipe_category_scrollview" />
+
+            </LinearLayout>
+
+        </ScrollView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_button"
@@ -42,4 +84,5 @@
             app:useCompatPadding="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

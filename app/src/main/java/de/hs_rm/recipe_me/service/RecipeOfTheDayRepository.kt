@@ -19,7 +19,7 @@ class RecipeOfTheDayRepository @Inject constructor(
 
     /**
      * Returns LiveDate with [RecipeOfTheDay]. Change of the recipe is depending on following scenarios:
-     * - there is no recipe of the day -> create one
+     * - there is no recipe of the day -> create one, except there is no recipe in database
      * - the current rotd is at least from yesterday and multiple recipes in database -> switch it
      * - the current rotd is at least from yesterday, but the only one in database -> don't switch
      * - the current rotd is from today -> don't switch
@@ -52,7 +52,6 @@ class RecipeOfTheDayRepository @Inject constructor(
 
         return recipeDao.getRecipeById(currentRotd!!.recipeId)
     }
-
     /**
      * @return True if date of given [RecipeOfTheDay] if from the day before today or earlier
      */
