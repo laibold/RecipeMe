@@ -26,24 +26,24 @@ class RecipeOfTheDayRepository @Inject constructor(
      * if there's no change in the rotd, the date of the database object won't get updated.
      */
     suspend fun updateRecipeOfTheDay() {
-        val currentRotd = rotdDao.getRecipeOfTheDay()
+        val currentRecipeOtD = rotdDao.getRecipeOfTheDay()
         val numberOfRecipes = recipeDao.getRecipeCount()
 
         when {
-            currentRotd == null -> {
+            currentRecipeOtD == null -> {
                 // no rotd existing, insert it
                 val recipe = generateRecipeOfTheDay()
                 rotdDao.insert(RecipeOfTheDay(LocalDate.now(), recipe.id))
             }
-            rotdInvalid(currentRotd) and (numberOfRecipes > 1) -> {
+            rotdInvalid(currentRecipeOtD) and (numberOfRecipes > 1) -> {
                 // rotd existing, not valid anymore and more than 1 recipes available -> rotd should change
                 var newRotd = generateRecipeOfTheDay()
-                while (currentRotd.recipeId == newRotd.id) {
+                while (currentRecipeOtD.recipeId == newRotd.id) {
                     newRotd = generateRecipeOfTheDay()
                 }
-                currentRotd.date = LocalDate.now()
-                currentRotd.recipeId = newRotd.id
-                rotdDao.update(currentRotd)
+                currentRecipeOtD.date = LocalDate.now()
+                currentRecipeOtD.recipeId = newRotd.id
+                rotdDao.update(currentRecipeOtD)
             }
             // else rotd existing and still valid or just one recipe available -> no change
         }

@@ -36,7 +36,7 @@ class RecipeHomeFragment : Fragment() {
         viewModel.loadRecipeOfTheDay()
 
         viewModel.recipeOfTheDay.observe(viewLifecycleOwner, { recipe ->
-            onRecipeOtdChanged(recipe)
+            onRecipeOfTheDayChanged(recipe)
         })
 
         binding.scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
@@ -55,15 +55,15 @@ class RecipeHomeFragment : Fragment() {
      * When recipe of the day changes, set text, image and clicklistener for navigation.
      * If there's no recipe available, set default image and text.
      */
-    private fun onRecipeOtdChanged(recipe: Recipe?) {
+    private fun onRecipeOfTheDayChanged(recipe: Recipe?) {
         if (recipe == null) {
             binding.recipeOfTheDayName.text = resources.getString(R.string.no_recipe_otd)
             binding.recipeOfTheDayButton.visibility = View.GONE
-            binding.recipeOtdImage.setImageResource(R.drawable.cooking_default)
+            binding.recipeOfTheDayImage.setImageResource(R.drawable.cooking_default)
             binding.gradientOverlay.setBackgroundResource(R.drawable.gradient_overlay)
         } else {
             binding.recipeOfTheDayName.text = recipe.name
-            binding.recipeOtdImage.setImageResource(recipe.category.drawableResId)
+            binding.recipeOfTheDayImage.setImageResource(recipe.category.drawableResId)
 
             binding.dummyView.setOnClickListener {
                 val direction = RecipeHomeFragmentDirections.toRecipeDetailFragment(recipe.id, true)
@@ -87,8 +87,8 @@ class RecipeHomeFragment : Fragment() {
     private fun onScroll(scrollY: Int) {
         if (scrollY < 800) { // TODO check on tablet
             val scaleVal = (1 + (scrollY.toFloat() / 9000))
-            binding.recipeOtdImage.scaleX = scaleVal
-            binding.recipeOtdImage.scaleY = scaleVal
+            binding.recipeOfTheDayImage.scaleX = scaleVal
+            binding.recipeOfTheDayImage.scaleY = scaleVal
         }
     }
 
