@@ -8,6 +8,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.TestDataProvider
+import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.model.RecipeOfTheDay
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.persistence.AppDatabase
@@ -165,6 +166,29 @@ class RecipeOfTheDayRepositoryTest {
     }
 
     /**
+     * Tests that if the Recipe that is rotd gets deleted, the rotd object will also be deleted
+     * and a new rotd will be created
+     */
+    @Test
+    fun newRotdOnRecipeDeleted() {
+        runBlocking { recipeDao.clear() }
+        insertTestData(2)
+        val oldRotd = updateAndGetRotd()
+
+        runBlocking {
+            recipeRepository.deleteRecipeAndRelations(oldRotd!!)
+
+            assertEquals(1, recipeRepository.getRecipeTotal().getOrAwaitValue())
+            assertEquals(0, rotdDao.getCount())
+        }
+
+        val newRotd = updateAndGetRotd()
+
+        assertNotEquals(newRotd, oldRotd)
+        assertCurrentRotdDateAndCount()
+    }
+
+    /**
      * Test that rotd doesn't change when date is invalid (doesn't match today's one),
      * but there is no other recipe in the database.
      */
@@ -192,6 +216,9 @@ class RecipeOfTheDayRepositoryTest {
         assertEquals(oldRotd, newRotd)
     }
 
+    /**
+     * Updates recipe of the day and returns the new [Recipe]
+     */
     private fun updateAndGetRotd(): Recipe? {
         var recipe: Recipe? = null
         runBlocking {
