@@ -6,7 +6,6 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
 import de.hs_rm.recipe_me.service.RecipeRepository
 import de.hs_rm.recipe_me.service.ShoppingListRepository
@@ -21,7 +20,7 @@ class RecipeDetailViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     lateinit var recipe: LiveData<RecipeWithRelations>
-    var servings = ObservableInt()
+    var servings = ObservableInt(NOT_INITIALIZED)
     var ingredientSelectionActive = ObservableBoolean(false)
 
     /**
@@ -55,7 +54,7 @@ class RecipeDetailViewModel @ViewModelInject constructor(
     }
 
     /**
-     * Add selected ingredients to shopping lits
+     * Add selected ingredients to shopping list
      */
     fun addSelectedIngredientsToShoppingList() {
         recipe.value?.let {
@@ -81,6 +80,10 @@ class RecipeDetailViewModel @ViewModelInject constructor(
                 ingredient.checked = false
             }
         }
+    }
+
+    companion object {
+        const val NOT_INITIALIZED = -1
     }
 
 }

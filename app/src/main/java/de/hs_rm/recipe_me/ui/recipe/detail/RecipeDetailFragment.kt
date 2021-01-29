@@ -57,7 +57,6 @@ class RecipeDetailFragment : Fragment() {
 
         viewModel.recipe.observe(viewLifecycleOwner, { recipeWithRelations ->
             onRecipeChanged(recipeWithRelations)
-            viewModel.servings.set(recipeWithRelations.recipe.servings)
         })
 
         viewModel.servings.addOnPropertyChangedCallback(object :
@@ -118,8 +117,12 @@ class RecipeDetailFragment : Fragment() {
      */
     private fun onRecipeChanged(recipeWithRelations: RecipeWithRelations) {
         binding.recipeDetailName.headlineText = recipeWithRelations.recipe.name
-        onServingsChanged(recipeWithRelations.recipe.servings)
         setIngredientAdapter(recipeWithRelations)
+        if (viewModel.servings.get() == RecipeDetailViewModel.NOT_INITIALIZED) {
+            viewModel.servings.set(recipeWithRelations.recipe.servings)
+        } else {
+            onServingsChanged(viewModel.servings.get())
+        }
         setCookingSteps(recipeWithRelations)
         setImage(recipeWithRelations)
         binding.recipeInfo.wrapper.visibility = View.VISIBLE
