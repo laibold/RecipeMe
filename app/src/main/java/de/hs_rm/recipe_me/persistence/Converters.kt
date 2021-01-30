@@ -7,6 +7,8 @@ import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.model.recipe.TimeUnit
+import java.time.LocalDate
+import java.util.*
 
 /**
  * Converters for [AppDatabase]
@@ -75,6 +77,22 @@ class Converters {
     @TypeConverter
     fun stringToIngredient(str: String): MutableList<Ingredient> {
         return Gson().fromJson(str, object : TypeToken<List<Ingredient>>() {}.type)
+    }
+
+    /**
+     * [LocalDate] -> [String]
+     */
+    @TypeConverter
+    fun localDateToString(date: LocalDate): String {
+        return date.toString()
+    }
+
+    /**
+     * [String] -> [Date]
+     */
+    @TypeConverter
+    fun stringToDate(dateStr: String): LocalDate {
+        return LocalDate.parse(dateStr)
     }
 
 }

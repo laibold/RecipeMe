@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/recipe_home_fragment"
-        android:name="de.hs_rm.recipe_me.ui.recipe.RecipeHomeFragment"
+        android:name="de.hs_rm.recipe_me.ui.recipe.home.RecipeHomeFragment"
         android:label="Recipe Home Fragment"
         tools:layout="@layout/recipe_home_fragment">
 
@@ -19,6 +19,9 @@
         <action
             android:id="@+id/to_add_recipe_nav_graph"
             app:destination="@id/add_recipe_nav_graph" />
+        <action
+            android:id="@+id/to_recipe_detail_fragment"
+            app:destination="@id/recipe_detail_fragment" />
     </fragment>
 
     <fragment
@@ -121,12 +124,20 @@
             android:name="recipeId"
             app:argType="long" />
 
+        <argument
+            android:name="navigate_back_to_home"
+            app:argType="boolean"
+            android:defaultValue="false"/>
+
         <action
             android:id="@+id/to_cooking_step_fragment"
             app:destination="@+id/cooking_step_fragment" />
         <action
             android:id="@+id/to_recipe_category_fragment"
             app:destination="@+id/recipe_category_fragment" />
+        <action
+            android:id="@+id/to_recipe_home_fragment"
+            app:destination="@+id/recipe_home_fragment" />
     </fragment>
 
     <fragment

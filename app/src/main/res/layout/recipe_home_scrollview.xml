@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/layout_rounded_top"
+        android:elevation="4dp"
+        android:minHeight="300dp"
+        android:paddingTop="15dp">
+
+        <include layout="@layout/grabber_view" />
+
+        <de.hs_rm.recipe_me.ui.component.UnscrollableListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="@dimen/divider_big"
+            android:paddingTop="@dimen/divider_big"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/category_listitem" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -1,9 +1,13 @@
 package de.hs_rm.recipe_me.persistence
 
 import android.content.Context
-import androidx.room.*
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import de.hs_rm.recipe_me.model.RecipeOfTheDay
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.Recipe
@@ -13,13 +17,14 @@ import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
  * Room Database for this app. Use Daos with Dependency Injection
  */
 @Database(
-    entities = [Recipe::class, Ingredient::class, CookingStep::class, ShoppingListItem::class],
-    version = 5
+    entities = [Recipe::class, Ingredient::class, CookingStep::class, ShoppingListItem::class, RecipeOfTheDay::class],
+    version = 6
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun recipeDao(): RecipeDao
     abstract fun shoppingListDao(): ShoppingListDao
+    abstract fun recipeOfTheDayDao(): RecipeOfTheDayDao
 
     companion object {
         private const val DATABASE_NAME = "test_db"
@@ -40,7 +45,7 @@ abstract class AppDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
 //                .createFromAsset(ASSET_NAME).fallbackToDestructiveMigration()
-                .addMigrations(MIGRATION_4_5)
+                .addMigrations(MIGRATION_4_5, MIGRATION_5_6)
                 .build()
         }
 
@@ -53,6 +58,20 @@ abstract class AppDatabase : RoomDatabase() {
                             " `name` TEXT NOT NULL," +
                             " `quantity` REAL NOT NULL," +
                             " `unit` INTEGER NOT NULL)"
+                )
+            }
+        }
+
+        private val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `RecipeOfTheDay`" +
+                            " (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                            " `date` TEXT NOT NULL," +
+                            " `recipeId` INTEGER NOT NULL," +
+                            " FOREIGN KEY(`recipeId`) REFERENCES `Recipe`(`id`)" +
+                            " ON UPDATE NO ACTION" +
+                            " ON DELETE CASCADE )"
                 )
             }
         }

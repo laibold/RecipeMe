@@ -75,7 +75,7 @@ class RecipeRepositoryTest {
             repository.insert(CookingStep(id, "uri", "put to dishwasher", 1, TimeUnit.HOUR))
         }
 
-        val recipe = repository.getRecipeById(id).getOrAwaitValue(2)
+        val recipe = repository.getRecipeWithRelationsById(id).getOrAwaitValue(2)
 
         recipes = repository.getRecipes().getOrAwaitValue()
         val sizeAfter = recipes.size

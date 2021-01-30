@@ -7,12 +7,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/site_notice_headline"
-            style="@style/headline_1"
-            android:text="@string/site_notice"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <include
+            android:id="@+id/header"
+            layout="@layout/material_header"
+            app:headlineText="@{@string/site_notice}"/>
+
 
         <TextView
             android:id="@+id/site_notice_beckbold"
@@ -23,7 +22,7 @@
             android:layout_marginTop="@dimen/space_below_headline_1"
             android:text="@string/beckbold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/site_notice_headline" />
+            app:layout_constraintTop_toBottomOf="@+id/header" />
 
         <TextView
             android:id="@+id/site_notice_text"

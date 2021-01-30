@@ -6,7 +6,6 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
 import de.hs_rm.recipe_me.service.RecipeRepository
 import de.hs_rm.recipe_me.service.ShoppingListRepository
@@ -28,7 +27,7 @@ class RecipeDetailViewModel @ViewModelInject constructor(
      * Get [RecipeWithRelations] from repository and save it to ViewModel
      */
     fun loadRecipe(id: Long) {
-        recipe = recipeRepository.getRecipeById(id)
+        recipe = recipeRepository.getRecipeWithRelationsById(id)
     }
 
     /**
