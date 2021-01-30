@@ -27,19 +27,21 @@ class RecipeOfTheDayRepository @Inject constructor(
      */
     suspend fun updateRecipeOfTheDay() {
         val currentRecipeOtD = rotdDao.getRecipeOfTheDay()
-        val numberOfRecipes = recipeDao.getRecipeCount()
+        val numberOfRecipes = recipeDao.getRecipeCount() //TODO check
 
         when {
             currentRecipeOtD == null -> {
                 // no rotd existing, insert it
-                val recipe = generateRecipeOfTheDay()
-                rotdDao.insert(RecipeOfTheDay(LocalDate.now(), recipe.id))
+                if (numberOfRecipes > 0) {
+                    val recipe = generateRecipeOfTheDay(numberOfRecipes)
+                    rotdDao.insert(RecipeOfTheDay(LocalDate.now(), recipe.id))
+                }
             }
             rotdInvalid(currentRecipeOtD) and (numberOfRecipes > 1) -> {
                 // rotd existing, not valid anymore and more than 1 recipes available -> rotd should change
-                var newRotd = generateRecipeOfTheDay()
+                var newRotd = generateRecipeOfTheDay(numberOfRecipes)
                 while (currentRecipeOtD.recipeId == newRotd.id) {
-                    newRotd = generateRecipeOfTheDay()
+                    newRotd = generateRecipeOfTheDay(numberOfRecipes)
                 }
                 currentRecipeOtD.date = LocalDate.now()
                 currentRecipeOtD.recipeId = newRotd.id
@@ -66,14 +68,9 @@ class RecipeOfTheDayRepository @Inject constructor(
 
     /**
      * Gets random Recipe from RecipeDao
+     * @return random recipe if available, otherwise null
      */
-    private suspend fun generateRecipeOfTheDay(): Recipe {
-        val numberOfRecipes = recipeDao.getRecipeCount()
-
-        if (numberOfRecipes == 0) {
-            return Recipe()
-        }
-
+    private suspend fun generateRecipeOfTheDay(numberOfRecipes: Int): Recipe {
         val offset = Random.nextInt(0, numberOfRecipes)
         return recipeDao.getRecipeByOffset(offset)
     }
