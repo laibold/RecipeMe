@@ -123,7 +123,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
 
         if (name.isNotBlank()) {
             if (quantity.isNotBlank()) {
-                quantityDouble = quantity.toString().toDouble()
+                quantityDouble = quantity.toString().replace(',', '.').toDouble()
             }
             return Ingredient(name.toString().trim(), quantityDouble, ingredientUnit)
         }

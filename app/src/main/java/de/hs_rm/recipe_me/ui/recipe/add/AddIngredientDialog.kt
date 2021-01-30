@@ -92,7 +92,7 @@ class AddIngredientDialog constructor(
         // spinner will be reset by refill, so save and set selected item here
         val selectedSpinnerItemId = binding.ingredientUnitSpinner.selectedItemId
 
-        if (editable != null && !TextUtils.isEmpty(editable)) {
+        if (editable != null && editable.isNotBlank()) { //FIXME
             try {
                 // allow comma as separator
                 val amount = editable.toString().replace(',', '.').toDouble()
