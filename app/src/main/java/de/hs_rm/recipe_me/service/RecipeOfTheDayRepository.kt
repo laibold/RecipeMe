@@ -27,7 +27,7 @@ class RecipeOfTheDayRepository @Inject constructor(
      */
     suspend fun updateRecipeOfTheDay() {
         val currentRecipeOtD = rotdDao.getRecipeOfTheDay()
-        val numberOfRecipes = recipeDao.getRecipeCount() //TODO check
+        val numberOfRecipes = recipeDao.getRecipeCount()
 
         when {
             currentRecipeOtD == null -> {
