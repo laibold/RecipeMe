@@ -7,7 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.hs_rm.recipe_me.R
-import de.hs_rm.recipe_me.declaration.notifyObserver
+import de.hs_rm.recipe_me.declaration.addToValue
+import de.hs_rm.recipe_me.declaration.setValueAt
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.service.RecipeRepository
 import kotlinx.coroutines.launch
@@ -37,8 +38,8 @@ class AddRecipeViewModel @ViewModelInject constructor(
         get() = _cookingSteps
 
     init {
-        _ingredients.value = mutableListOf()
-        _cookingSteps.value = mutableListOf()
+        _ingredients.postValue(mutableListOf())
+        _cookingSteps.postValue(mutableListOf())
     }
 
     /**
@@ -46,6 +47,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
      */
     fun initRecipe() {
         if (_recipe.value == null) {
+            // don't use postValue() here
             _recipe.value = Recipe(recipeCategory)
         }
     }
@@ -81,8 +83,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
         val ingredient = getIngredient(name, quantity, unit)
 
         if (ingredient != null) {
-            _ingredients.value?.add(ingredient)
-            _ingredients.notifyObserver()
+            _ingredients.addToValue(ingredient)
             return true
         }
         return false
@@ -102,8 +103,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
     ): Boolean {
         val ingredient = getIngredient(name, quantity, ingredientUnit)
         if (ingredient != null) {
-            _ingredients.value?.set(this.updatingIngredientIndex, ingredient)
-            _ingredients.notifyObserver()
+            _ingredients.setValueAt(this.updatingIngredientIndex, ingredient)
             return true
         }
         return false
@@ -148,8 +148,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
     fun addCookingStep(text: Editable, time: Editable, timeUnit: TimeUnit): Boolean {
         val cookingStep = getCookingStep(text, time, timeUnit)
         if (cookingStep != null) {
-            _cookingSteps.value?.add(cookingStep)
-            _cookingSteps.notifyObserver()
+            _cookingSteps.addToValue(cookingStep)
             return true
         }
         return false
@@ -165,8 +164,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
     fun updateCookingStep(text: Editable, time: Editable, timeUnit: TimeUnit): Boolean {
         val cookingStep = getCookingStep(text, time, timeUnit)
         if (cookingStep != null) {
-            _cookingSteps.value?.set(this.updatingCookingStepIndex, cookingStep)
-            _cookingSteps.notifyObserver()
+            _cookingSteps.setValueAt(this.updatingCookingStepIndex, cookingStep)
             return true
         }
         return false
@@ -218,9 +216,9 @@ class AddRecipeViewModel @ViewModelInject constructor(
                 _ingredients.value?.let { i -> repository.insert(i) }
                 _cookingSteps.value?.let { c -> repository.insert(c) }
 
-                _ingredients.value = mutableListOf()
-                _cookingSteps.value = mutableListOf()
-                _recipe.value = Recipe(RecipeCategory.values()[0])
+                _ingredients.postValue(mutableListOf())
+                _cookingSteps.postValue(mutableListOf())
+                _recipe.postValue(Recipe(RecipeCategory.values()[0]))
                 recipeId.postValue(id)
             }
         }
