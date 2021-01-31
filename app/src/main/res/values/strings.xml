@@ -108,4 +108,6 @@
     <string name="recipe_of_the_day">Rezept des Tages</string>
     <string name="open">Öffnen</string>
     <string name="no_recipe_otd">Füge Rezepte hinzu, um dich hier täglich neu inspirieren zu lassen.</string>
+    <string name="image_of_the_recipe">Bild des Rezepts</string>
+    <string name="change_image">Bild ändern</string>
 </resources>

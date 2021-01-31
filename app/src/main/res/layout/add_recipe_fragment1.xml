@@ -12,13 +12,31 @@
             layout="@layout/material_header"
             app:headlineText="@{@string/new_recipe}" />
 
+        <ImageView
+            android:id="@+id/recipe_image"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:contentDescription="@string/image_of_the_recipe"
+            android:scaleType="centerCrop"
+            android:src="@drawable/hummus_default"
+            app:layout_constraintTop_toBottomOf="@id/header" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/change_image_button"
+            style="@style/tertiary_button_white"
+            android:layout_marginEnd="@dimen/outline_horizontal"
+            android:layout_marginBottom="10dp"
+            android:text="@string/change_image"
+            app:layout_constraintBottom_toBottomOf="@id/recipe_image"
+            app:layout_constraintEnd_toEndOf="@id/recipe_image" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/outline_horizontal"
             android:layout_marginTop="@dimen/default_space"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/header"
+            app:layout_constraintTop_toBottomOf="@id/recipe_image"
             app:layout_constraintWidth_percent="0.7">
 
             <TextView
