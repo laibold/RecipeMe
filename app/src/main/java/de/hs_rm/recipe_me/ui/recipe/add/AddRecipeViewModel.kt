@@ -86,6 +86,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
             _ingredients.addToValue(ingredient)
             return true
         }
+
         return false
     }
 
@@ -102,10 +103,12 @@ class AddRecipeViewModel @ViewModelInject constructor(
         ingredientUnit: IngredientUnit
     ): Boolean {
         val ingredient = getIngredient(name, quantity, ingredientUnit)
+
         if (ingredient != null) {
             _ingredients.setValueAt(this.updatingIngredientIndex, ingredient)
             return true
         }
+
         return false
     }
 
