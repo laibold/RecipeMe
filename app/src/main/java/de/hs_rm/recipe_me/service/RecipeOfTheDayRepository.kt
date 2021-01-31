@@ -37,7 +37,7 @@ class RecipeOfTheDayRepository @Inject constructor(
                     rotdDao.insert(RecipeOfTheDay(LocalDate.now(), recipe.id))
                 }
             }
-            rotdInvalid(currentRecipeOtD) and (numberOfRecipes > 1) -> {
+            rotdInvalid(currentRecipeOtD) && (numberOfRecipes > 1) -> {
                 // rotd existing, not valid anymore and more than 1 recipes available -> rotd should change
                 var newRotd = generateRecipeOfTheDay(numberOfRecipes)
                 while (currentRecipeOtD.recipeId == newRotd.id) {

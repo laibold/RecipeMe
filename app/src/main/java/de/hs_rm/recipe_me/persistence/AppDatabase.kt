@@ -73,6 +73,9 @@ abstract class AppDatabase : RoomDatabase() {
                             " ON UPDATE NO ACTION" +
                             " ON DELETE CASCADE )"
                 )
+                database.execSQL(
+                    "CREATE INDEX index_RecipeOfTheDay_recipeId ON RecipeOfTheDay(recipeId)"
+                )
             }
         }
     }
