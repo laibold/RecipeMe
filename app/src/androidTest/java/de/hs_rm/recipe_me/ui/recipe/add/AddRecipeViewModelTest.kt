@@ -6,15 +6,11 @@ import android.widget.EditText
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.persistence.RecipeDao
 import de.hs_rm.recipe_me.service.RecipeRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -31,7 +27,7 @@ class AddRecipeViewModelTest {
     private lateinit var appContext: Context
 
     /**
-     * Build inMemory database and
+     * Build inMemory database and create ViewModel
      */
     @Before
     fun init() {
@@ -43,6 +39,9 @@ class AddRecipeViewModelTest {
         viewModel = AddRecipeViewModel(recipeRepository)
     }
 
+    /**
+     * Try to set recipe name and servings with invalid values. Function should return false.
+     */
     @Test
     fun setRecipeAttributesUnsuccessful() {
         assertFalse(viewModel.setRecipeAttributes("", "", RecipeCategory.SNACKS))
@@ -51,36 +50,38 @@ class AddRecipeViewModelTest {
         assertFalse(viewModel.setRecipeAttributes("name", "0", RecipeCategory.SNACKS))
     }
 
+    /**
+     * Set recipe name and servings with valid values. Function should return true.
+     */
     @Test
     fun setRecipeAttributesSuccessful() {
         assertTrue(viewModel.setRecipeAttributes("n", "1", RecipeCategory.SNACKS))
     }
 
+    /**
+     * Add Ingredients with valid values, check return values and amount of ingredients.
+     */
     @Test
     fun addIngredientSuccessful() {
+        db.clearAllTables()
         val name = getEditable("Valid Name")
         val quantity1 = getEditable("1.5")
         val quantity2 = getEditable("1,5")
         val unit = IngredientUnit.NONE
 
-        var countBefore = 0
-        var countAfter = 0
-
-        GlobalScope.launch(Dispatchers.Main) {
-            countBefore = viewModel.ingredients.getOrAwaitValue().size
-            //TODO remove observer
-        }
+        val countBefore = viewModel.ingredients.value?.size!!
 
         assertTrue(viewModel.addIngredient(name, quantity1, unit))
         assertTrue(viewModel.addIngredient(name, quantity2, unit))
 
-        GlobalScope.launch(Dispatchers.Main) {
-            countAfter = viewModel.ingredients.getOrAwaitValue().size
-        }
+        val countAfter = viewModel.ingredients.value?.size!!
 
-        assertEquals(countBefore + 2, countAfter)
+        assertEquals((countBefore + 2), countAfter)
     }
 
+    /**
+     * Mock Editable text from EditText
+     */
     private fun getEditable(s: String): Editable {
         val editText = EditText(appContext)
         editText.setText(s)
