@@ -24,6 +24,15 @@ interface RecipeDao {
     @Insert
     suspend fun insert(cookingStep: CookingStep): Long
 
+    @Update
+    suspend fun update(recipe: Recipe)
+
+    @Update
+    suspend fun update(ingredient: Ingredient)
+
+    @Update
+    suspend fun update(cookingStep: CookingStep)
+
     @Delete
     suspend fun delete(recipe: Recipe)
 

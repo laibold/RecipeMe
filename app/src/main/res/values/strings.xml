@@ -108,4 +108,6 @@
     <string name="recipe_of_the_day">Rezept des Tages</string>
     <string name="open">Öffnen</string>
     <string name="no_recipe_otd">Füge Rezepte hinzu, um dich hier täglich neu inspirieren zu lassen.</string>
+    <string name="edit_recipe">Rezept bearbeiten</string>
+    <string name="err_recipe_not_found">Fehler: Rezept konnte nicht gefunden werden.</string>
 </resources>

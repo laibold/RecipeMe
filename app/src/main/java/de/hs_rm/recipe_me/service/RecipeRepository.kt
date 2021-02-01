@@ -1,9 +1,10 @@
 package de.hs_rm.recipe_me.service
 
 import androidx.lifecycle.LiveData
+import de.hs_rm.recipe_me.model.recipe.CookingStep
+import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
-import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
 import de.hs_rm.recipe_me.persistence.RecipeDao
 import javax.inject.Inject
@@ -21,24 +22,6 @@ class RecipeRepository @Inject constructor(
      */
     suspend fun insert(recipe: Recipe): Long {
         return recipeDao.insert(recipe)
-    }
-
-    /**
-     * Insert [CookingStep] to repository
-     * @return id of inserted CookingStep
-     */
-    suspend fun insert(cookingStep: CookingStep): Long {
-        return recipeDao.insert(cookingStep)
-    }
-
-    /**
-     * Insert List of [CookingStep]s to repository
-     */
-    @JvmName("insertCookingSteps")
-    suspend fun insert(cookingSteps: MutableList<CookingStep>) {
-        for (cookingStep in cookingSteps) {
-            insert(cookingStep)
-        }
     }
 
     /**
@@ -60,17 +43,28 @@ class RecipeRepository @Inject constructor(
     }
 
     /**
+     * Insert [CookingStep] to repository
+     * @return id of inserted CookingStep
+     */
+    suspend fun insert(cookingStep: CookingStep): Long {
+        return recipeDao.insert(cookingStep)
+    }
+
+    /**
+     * Insert List of [CookingStep]s to repository
+     */
+    @JvmName("insertCookingSteps")
+    suspend fun insert(cookingSteps: List<CookingStep>) {
+        for (cookingStep in cookingSteps) {
+            insert(cookingStep)
+        }
+    }
+
+    /**
      * Get all recipes
      */
     fun getRecipes(): LiveData<List<RecipeWithRelations>> {
         return recipeDao.getRecipes()
-    }
-
-    /**
-     * Clear recipes
-     */
-    suspend fun clearRecipes() {
-        recipeDao.clear()
     }
 
     /**
@@ -100,6 +94,48 @@ class RecipeRepository @Inject constructor(
     fun getRecipeTotal(): LiveData<Int> {
         return recipeDao.getRecipeCountAsLiveData()
     }
+
+//    /**
+//     * Update [Recipe]
+//     * @return id of updated recipe
+//     */
+//    suspend fun update(recipe: Recipe) {
+//        recipeDao.update(recipe)
+//    }
+//
+//    /**
+//     * Update [Ingredient]
+//     */
+//    suspend fun update(ingredient: Ingredient) {
+//        recipeDao.update(ingredient)
+//    }
+//
+//    /**
+//     * Update List of Ingredients
+//     */
+//    @JvmName("updateIngredients")
+//    suspend fun update(ingredients: List<Ingredient>) {
+//        for (ingredient in ingredients) {
+//            update(ingredient)
+//        }
+//    }
+//
+//    /**
+//     * Update [CookingStep]
+//     */
+//    suspend fun update(cookingStep: CookingStep) {
+//        recipeDao.update(cookingStep)
+//    }
+//
+//    /**
+//     * Update List of CookingSteps
+//     */
+//    @JvmName("updateCookingSteps")
+//    suspend fun update(cookingSteps: List<CookingStep>) {
+//        for (cookingStep in cookingSteps) {
+//            update(cookingStep)
+//        }
+//    }
 
     /**
      * Delete recipe and it's belonging Ingredients and CookingSteps

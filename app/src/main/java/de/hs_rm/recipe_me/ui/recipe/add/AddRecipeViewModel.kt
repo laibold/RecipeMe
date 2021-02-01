@@ -2,15 +2,13 @@ package de.hs_rm.recipe_me.ui.recipe.add
 
 import android.text.Editable
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.declaration.addToValue
 import de.hs_rm.recipe_me.declaration.setValueAt
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.service.RecipeRepository
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
@@ -38,16 +36,33 @@ class AddRecipeViewModel @ViewModelInject constructor(
         get() = _cookingSteps
 
     init {
-        _ingredients.postValue(mutableListOf())
-        _cookingSteps.postValue(mutableListOf())
+        _ingredients.value = mutableListOf()
+        _cookingSteps.value = mutableListOf()
     }
 
     /**
      * Initialize recipe if not already done
      */
-    fun initRecipe() {
-        if (_recipe.value == null) {
-            // don't use postValue() here
+    fun initRecipe(recipeId: Long) {
+        if (recipeId != Recipe.DEFAULT_ID) {
+            clearValues()
+
+            // recipeId has been committed, so this recipe should be edited and it's values should be entered into the forms
+            viewModelScope.launch {
+                repository.getRecipeWithRelationsById(recipeId).asFlow().collect {
+                    _recipe.postValue(repository.getRecipeById(recipeId))
+
+                    for (ingredient in it.ingredients) {
+                        _ingredients.addToValue(ingredient)
+                    }
+
+                    for (cookingStep in it.cookingSteps) {
+                        _cookingSteps.addToValue(cookingStep)
+                    }
+                }
+
+            }
+        } else if (_recipe.value == null) {
             _recipe.value = Recipe(recipeCategory)
         }
     }
@@ -225,7 +240,31 @@ class AddRecipeViewModel @ViewModelInject constructor(
                 recipeId.postValue(id)
             }
         }
+
+        //TODO update
+
         return recipeId
+    }
+
+    /**
+     * Set given id to each foreign key of ingredients and cooking steps
+     */
+    private fun setIdToIngredientsAndCookingSteps(id: Long) {
+        for (ingredient in _ingredients.value!!) {
+            ingredient.recipeId = id
+        }
+        for (cookingStep in _cookingSteps.value!!) {
+            cookingStep.recipeId = id
+        }
+    }
+
+    /**
+     * Clear recipe, ingredients and cooking steps
+     */
+    fun clearValues() {
+        _ingredients.value = mutableListOf()
+        _cookingSteps.value = mutableListOf()
+        _recipe.value = Recipe(RecipeCategory.values()[0])
     }
 
     /**

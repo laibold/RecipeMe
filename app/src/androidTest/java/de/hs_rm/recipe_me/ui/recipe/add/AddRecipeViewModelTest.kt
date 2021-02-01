@@ -8,6 +8,7 @@ import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
+import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.model.recipe.TimeUnit
 import de.hs_rm.recipe_me.persistence.AppDatabase
@@ -54,7 +55,7 @@ class AddRecipeViewModelTest {
         viewModel.recipeCategory = RecipeCategory.MAIN_DISHES
         GlobalScope.launch(Dispatchers.Main) {
             delay(1000)
-            viewModel.initRecipe()
+            viewModel.initRecipe(Recipe.DEFAULT_ID)
         }
     }
 

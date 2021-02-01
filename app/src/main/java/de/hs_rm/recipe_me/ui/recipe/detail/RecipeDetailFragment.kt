@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeDetailFragmentBinding
@@ -33,12 +35,7 @@ class RecipeDetailFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    val direction = if (args.navigateBackToHome) {
-                        RecipeDetailFragmentDirections.toRecipeHomeFragment()
-                    } else {
-                        RecipeDetailFragmentDirections.toRecipeCategoryFragment(viewModel.recipe.value!!.recipe.category)
-                    }
-                    findNavController().navigate(direction)
+                    onBackPressed()
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
@@ -59,8 +56,13 @@ class RecipeDetailFragment : Fragment() {
         viewModel.loadRecipe(recipeId)
 
         viewModel.recipe.observe(viewLifecycleOwner, { recipeWithRelations ->
-            onRecipeChanged(recipeWithRelations)
-            viewModel.servings.set(recipeWithRelations.recipe.servings)
+            if (recipeWithRelations != null) {
+                onRecipeChanged(recipeWithRelations)
+                viewModel.servings.set(recipeWithRelations.recipe.servings)
+            } else {
+                Toast.makeText(context, getString(R.string.err_recipe_not_found), Toast.LENGTH_LONG).show()
+                onBackPressed()
+            }
         })
 
         viewModel.servings.addOnPropertyChangedCallback(object :
@@ -222,6 +224,18 @@ class RecipeDetailFragment : Fragment() {
         binding.recipeInfo.addToShoppingListButton.visibility = View.VISIBLE
         binding.recipeInfo.toShoppingListAcceptButton.visibility = View.GONE
         binding.recipeInfo.toShoppingListCancelButton.visibility = View.GONE
+    }
+
+    /**
+     * Leave Fragment. Go back to navigation source (Category or Home)
+     */
+    fun onBackPressed() {
+        val direction = if (args.navigateBackToHome || viewModel.recipe.value == null ) {
+            RecipeDetailFragmentDirections.toRecipeHomeFragment()
+        } else {
+            RecipeDetailFragmentDirections.toRecipeCategoryFragment(viewModel.recipe.value!!.recipe.category)
+        }
+        findNavController().navigate(direction)
     }
 
 }

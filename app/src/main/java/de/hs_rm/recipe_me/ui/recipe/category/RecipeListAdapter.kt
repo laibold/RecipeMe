@@ -84,8 +84,10 @@ class RecipeListAdapter(
 
         // Navigate to AddRecipeNavGraph with recipeId to edit the recipe
         holder.binding.editOverlay.editButton.setOnClickListener {
-            val direction =
-                RecipeCategoryFragmentDirections.toAddRecipeNavGraph(recipeId = recipe.id)
+            val direction = RecipeCategoryFragmentDirections.toAddRecipeNavGraph(
+                recipeId = recipe.id,
+                clearValues = true
+            )
             it.findNavController().navigate(direction)
         }
 

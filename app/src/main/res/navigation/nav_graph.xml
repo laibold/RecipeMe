@@ -57,10 +57,16 @@
             android:defaultValue="MAIN_DISHES"
             app:argType="de.hs_rm.recipe_me.model.recipe.RecipeCategory" />
 
+        <!--defaultValue must equal Recipe.DEFAULT_ID-->
         <argument
             android:name="recipeId"
-            android:defaultValue="-1L"
+            android:defaultValue="0L"
             app:argType="long" />
+
+        <argument
+            android:name="clearValues"
+            android:defaultValue="false"
+            app:argType="boolean" />
 
         <fragment
             android:id="@+id/add_recipe_fragment1"
@@ -77,6 +83,11 @@
                 android:name="recipeId"
                 android:defaultValue="-1L"
                 app:argType="long" />
+
+            <argument
+                android:name="clearValues"
+                android:defaultValue="false"
+                app:argType="boolean" />
 
             <action
                 android:id="@+id/to_add_recipe_fragment2"
@@ -136,8 +147,8 @@
 
         <argument
             android:name="navigate_back_to_home"
-            app:argType="boolean"
-            android:defaultValue="false"/>
+            android:defaultValue="false"
+            app:argType="boolean" />
 
         <action
             android:id="@+id/to_cooking_step_fragment"
