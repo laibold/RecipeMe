@@ -82,6 +82,13 @@ class RecipeListAdapter(
             }
         }
 
+        // Navigate to AddRecipeNavGraph with recipeId to edit the recipe
+        holder.binding.editOverlay.editButton.setOnClickListener {
+            val direction =
+                RecipeCategoryFragmentDirections.toAddRecipeNavGraph(recipeId = recipe.id)
+            it.findNavController().navigate(direction)
+        }
+
         // Call fragment if delete button is clicked. It will remove the recipe and refresh the list
         holder.binding.editOverlay.deleteButton.setOnClickListener {
             callbackListener.onCallback(objects[position])

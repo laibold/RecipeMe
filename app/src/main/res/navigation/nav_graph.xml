@@ -57,6 +57,11 @@
             android:defaultValue="MAIN_DISHES"
             app:argType="de.hs_rm.recipe_me.model.recipe.RecipeCategory" />
 
+        <argument
+            android:name="recipeId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+
         <fragment
             android:id="@+id/add_recipe_fragment1"
             android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment1"
@@ -67,6 +72,11 @@
                 android:name="recipeCategory"
                 android:defaultValue="MAIN_DISHES"
                 app:argType="de.hs_rm.recipe_me.model.recipe.RecipeCategory" />
+
+            <argument
+                android:name="recipeId"
+                android:defaultValue="-1L"
+                app:argType="long" />
 
             <action
                 android:id="@+id/to_add_recipe_fragment2"
