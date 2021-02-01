@@ -91,6 +91,10 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
         val validationOk = viewModel.validateCookingSteps()
 
         if (validationOk) {
+            // Content will be cleared at persisting. Detach the objects by removing observer
+            // to prevent the hint text to be shown for a little while
+            viewModel.cookingSteps.removeObservers(viewLifecycleOwner)
+            
             val id = viewModel.persistEntities()
 
             id.observe(viewLifecycleOwner, {
