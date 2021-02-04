@@ -17,8 +17,9 @@ data class RecipeWithRelations(
     )
     var ingredients: List<Ingredient>,
     @Relation(
+        entity = CookingStep::class,
         parentColumn = "id",
         entityColumn = "recipeId"
     )
-    var cookingSteps: List<CookingStep>
+    var cookingSteps: List<CookingStepWithIngredients>
 )

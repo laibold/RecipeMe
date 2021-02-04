@@ -16,7 +16,7 @@ data class CookingStep(
     var timeUnit: TimeUnit
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
+    var cookingStepId: Long = 0
 
     constructor(text: String, time: Int, timeUnit: TimeUnit) : this(
         -1,

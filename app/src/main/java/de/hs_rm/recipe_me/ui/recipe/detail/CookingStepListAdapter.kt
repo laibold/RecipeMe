@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import de.hs_rm.recipe_me.databinding.CookingStepListitemBinding
 import de.hs_rm.recipe_me.declaration.ui.fragments.CookingStepCallbackAdapter
 import de.hs_rm.recipe_me.model.recipe.CookingStep
+import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
 
 /**
  * Adapter to show CookingSteps in [CookingStepFragment]]
@@ -17,10 +18,10 @@ import de.hs_rm.recipe_me.model.recipe.CookingStep
 class CookingStepListAdapter(
     context: Context,
     private val resource: Int,
-    private val objects: List<CookingStep>,
+    private val objects: List<CookingStepWithIngredients>,
     private val callbackListener: CookingStepCallbackAdapter,
 ) :
-    ArrayAdapter<CookingStep>(context, resource, objects) {
+    ArrayAdapter<CookingStepWithIngredients>(context, resource, objects) {
 
     @SuppressLint("SetTextI18n")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -40,7 +41,7 @@ class CookingStepListAdapter(
             holder = convertView.tag as CookingStepViewHolder
         }
 
-        val cookingStep = objects[position]
+        val cookingStep = objects[position].cookingStep
 
         if (cookingStep.imageUri != "") {
             // set image here
@@ -65,7 +66,7 @@ class CookingStepListAdapter(
         }
 
         holder.binding.timerElement.setOnClickListener {
-            callbackListener.onCallback(objects[position])
+            callbackListener.onCallback(cookingStep)
         }
 
         return holder.view
