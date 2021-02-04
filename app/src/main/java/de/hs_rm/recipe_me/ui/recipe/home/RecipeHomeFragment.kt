@@ -2,6 +2,7 @@ package de.hs_rm.recipe_me.ui.recipe.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -35,6 +36,25 @@ class RecipeHomeFragment : Fragment() {
 
         viewModel.loadRecipeOfTheDay()
 
+        // Dispatch Touch event to underlying wrapper.
+        // Subtract scroll position, because dummy view will move, but wrapper won't
+        binding.dummyView.setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_UP -> {
+                    view.performClick()
+                }
+            }
+
+            event.offsetLocation(
+                (-binding.scrollView.scrollX).toFloat(),
+                (-binding.scrollView.scrollY).toFloat()
+            )
+
+            binding.recipeOfTheDayWrapper.dispatchTouchEvent(event)
+
+            false
+        }
+
         viewModel.recipeOfTheDay.observe(viewLifecycleOwner, { recipe ->
             onRecipeOfTheDayChanged(recipe)
         })
@@ -65,9 +85,17 @@ class RecipeHomeFragment : Fragment() {
             binding.recipeOfTheDayName.text = recipe.name
             binding.recipeOfTheDayImage.setImageResource(recipe.category.drawableResId)
 
-            binding.dummyView.setOnClickListener {
+            // Touch event gets dispatched from ScrollViews dummy view
+            binding.recipeOfTheDayButton.setOnTouchListener { view, event ->
+                when (event.action) {
+                    MotionEvent.ACTION_UP -> {
+                        view.performClick()
+                    }
+                }
+
                 val direction = RecipeHomeFragmentDirections.toRecipeDetailFragment(recipe.id, true)
                 findNavController().navigate(direction)
+                true
             }
         }
     }

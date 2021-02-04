@@ -11,6 +11,10 @@
     <dimen name="default_space_button">20dp</dimen>
     <dimen name="small_space">20dp</dimen>
     <dimen name="header_min_height">100dp</dimen>
+    <dimen name="scroll_view_offset_high">260dp</dimen>
+    <dimen name="scroll_view_offset_low">420dp</dimen>
+    <dimen name="scroll_view_image_offset_high">300dp</dimen>
+    <dimen name="scroll_view_image_offset_low">540dp</dimen>
 
     <!--button size-->
     <dimen name="button_width_big">0dp</dimen>

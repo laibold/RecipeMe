@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="540dp" />
+            app:layout_constraintGuide_begin="@dimen/scroll_view_image_offset_low" />
 
         <ImageView
             android:id="@+id/recipe_detail_image"
@@ -71,10 +71,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!--Dummy to let proper view start at 420dp-->
+                <!--Dummy to let proper view start with offset-->
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="420dp" />
+                    android:layout_height="@dimen/scroll_view_offset_low" />
 
                 <include
                     android:id="@+id/recipe_info"
