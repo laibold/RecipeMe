@@ -23,6 +23,8 @@ class AddRecipeViewModel @ViewModelInject constructor(
     private var updatingCookingStepIndex = -1
     private var updatingIngredientIndex = -1
 
+    var recipeToUpdate: Recipe? = null
+
     private val _recipe = MutableLiveData<Recipe>()
     val recipe: LiveData<Recipe>
         get() = _recipe
@@ -44,8 +46,13 @@ class AddRecipeViewModel @ViewModelInject constructor(
      * Initialize recipe if not already done
      */
     fun initRecipe(recipeId: Long) {
+
         if (recipeId != Recipe.DEFAULT_ID) {
             clearValues()
+
+            viewModelScope.launch {
+                recipeToUpdate = repository.getRecipeById(recipeId)
+            }
 
             // recipeId has been committed, so this recipe should be edited and it's values should be entered into the forms
             viewModelScope.launch {
@@ -220,24 +227,56 @@ class AddRecipeViewModel @ViewModelInject constructor(
      */
     fun persistEntities(): LiveData<Long> {
         val recipeId = MutableLiveData<Long>()
-        viewModelScope.launch {
+
+        if (recipeToUpdate != null) {
+            recipeId.value = recipeToUpdate!!.id
+
             _recipe.value?.let { r ->
-                val id = repository.insert(r)
+                recipeToUpdate!!.name = r.name
+                recipeToUpdate!!.servings = r.servings
+                recipeToUpdate!!.category = r.category
+            }
 
-                for (ingredient in _ingredients.value!!) {
-                    ingredient.recipeId = id
+            viewModelScope.launch {
+                repository.update(recipeToUpdate!!)
+            }
+
+            //TODO vorher deleten
+            for (ingredient in _ingredients.value!!) {
+                ingredient.recipeId = recipeToUpdate!!.id
+                viewModelScope.launch {
+                    repository.update(ingredient)
                 }
-                for (cookingStep in _cookingSteps.value!!) {
-                    cookingStep.recipeId = id
+            }
+
+            //TODO vorher deleten
+            for (cookingStep in _cookingSteps.value!!) {
+                cookingStep.recipeId = recipeToUpdate!!.id
+                viewModelScope.launch {
+                    repository.update(cookingStep)
                 }
+            }
 
-                _ingredients.value?.let { i -> repository.insert(i) }
-                _cookingSteps.value?.let { c -> repository.insert(c) }
+        } else {
+            viewModelScope.launch {
+                _recipe.value?.let { r ->
+                    val id = repository.insert(r)
 
-                _ingredients.postValue(mutableListOf())
-                _cookingSteps.postValue(mutableListOf())
-                _recipe.postValue(Recipe(RecipeCategory.values()[0]))
-                recipeId.postValue(id)
+                    for (ingredient in _ingredients.value!!) {
+                        ingredient.recipeId = id
+                    }
+                    for (cookingStep in _cookingSteps.value!!) {
+                        cookingStep.recipeId = id
+                    }
+
+                    _ingredients.value?.let { i -> repository.insert(i) }
+                    _cookingSteps.value?.let { c -> repository.insert(c) }
+
+                    _ingredients.postValue(mutableListOf())
+                    _cookingSteps.postValue(mutableListOf())
+                    _recipe.postValue(Recipe(RecipeCategory.values()[0]))
+                    recipeId.postValue(id)
+                }
             }
         }
 

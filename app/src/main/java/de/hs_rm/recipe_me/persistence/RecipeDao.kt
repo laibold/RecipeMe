@@ -59,6 +59,9 @@ interface RecipeDao {
     @Query("SELECT * FROM Recipe WHERE id = :id")
     suspend fun getRecipeById(id: Long): Recipe
 
+    @Query("SELECT * FROM Recipe WHERE id = :id")
+    fun getRecipeByIdAsLiveData(id: Long): LiveData<Recipe>
+
     @Query("SELECT COUNT(*) FROM Recipe")
     fun getRecipeCountAsLiveData(): LiveData<Int>
 

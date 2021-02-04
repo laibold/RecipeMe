@@ -89,27 +89,34 @@ class RecipeRepository @Inject constructor(
     }
 
     /**
+     * Get a Recipe by its id
+     */
+    fun getRecipeByIdAsLiveData(id: Long): LiveData<Recipe> {
+        return recipeDao.getRecipeByIdAsLiveData(id)
+    }
+
+    /**
      * Get total of recipes
      */
     fun getRecipeTotal(): LiveData<Int> {
         return recipeDao.getRecipeCountAsLiveData()
     }
 
-//    /**
-//     * Update [Recipe]
-//     * @return id of updated recipe
-//     */
-//    suspend fun update(recipe: Recipe) {
-//        recipeDao.update(recipe)
-//    }
-//
-//    /**
-//     * Update [Ingredient]
-//     */
-//    suspend fun update(ingredient: Ingredient) {
-//        recipeDao.update(ingredient)
-//    }
-//
+    /**
+     * Update [Recipe]
+     * @return id of updated recipe
+     */
+    suspend fun update(recipe: Recipe) {
+        recipeDao.update(recipe)
+    }
+
+    /**
+     * Update [Ingredient]
+     */
+    suspend fun update(ingredient: Ingredient) {
+        recipeDao.update(ingredient)
+    }
+
 //    /**
 //     * Update List of Ingredients
 //     */
@@ -119,14 +126,14 @@ class RecipeRepository @Inject constructor(
 //            update(ingredient)
 //        }
 //    }
-//
-//    /**
-//     * Update [CookingStep]
-//     */
-//    suspend fun update(cookingStep: CookingStep) {
-//        recipeDao.update(cookingStep)
-//    }
-//
+
+    /**
+     * Update [CookingStep]
+     */
+    suspend fun update(cookingStep: CookingStep) {
+        recipeDao.update(cookingStep)
+    }
+
 //    /**
 //     * Update List of CookingSteps
 //     */
