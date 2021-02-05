@@ -67,13 +67,6 @@ class RecipeRepository @Inject constructor(
     }
 
     /**
-     * Clear recipes
-     */
-    suspend fun clearRecipes() {
-        recipeDao.clear()
-    }
-
-    /**
      * Get recipes by category
      */
     fun getRecipesByCategory(recipeCategory: RecipeCategory): LiveData<List<Recipe>> {

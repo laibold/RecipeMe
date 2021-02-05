@@ -7,6 +7,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.model.recipe.TimeUnit
@@ -46,8 +47,13 @@ class AddRecipeViewModelTest {
 
         recipeDao = db.recipeDao()
         recipeRepository = RecipeRepository(recipeDao)
+
+        beforeEach() // Don't remove this from here
     }
 
+    /**
+     * Clear all database tables and re-initialize ViewModel and it's recipe
+     */
     private fun beforeEach() {
         db.clearAllTables()
         viewModel = AddRecipeViewModel(recipeRepository)
@@ -291,10 +297,28 @@ class AddRecipeViewModelTest {
 
     /**
      * Test persisting of entities and count them
+     * https://stackoverflow.com/questions/51810330/testing-livedata-transformations
      */
-//    @Test TODO
+    @Test
     fun persistEntitiesSuccessful() {
-        // https://stackoverflow.com/questions/51810330/testing-livedata-transformations
+        val numberOfChildren = 3
+
+        beforeEach()
+        insertTestData(numberOfChildren, numberOfChildren)
+
+        val recipe = viewModel.recipe.getOrAwaitValue()
+
+        assertNotNull(recipe)
+
+        val id = viewModel.persistEntities().getOrAwaitValue(10)
+
+        assertNotEquals(0L, id)
+        assertEquals(1, recipeRepository.getRecipeTotal().getOrAwaitValue())
+
+        val recipeWithRelations = recipeRepository.getRecipeWithRelationsById(id).getOrAwaitValue()
+
+        assertEquals(numberOfChildren, recipeWithRelations.ingredients.size)
+        assertEquals(numberOfChildren, recipeWithRelations.cookingSteps.size)
     }
 
     /**
@@ -346,20 +370,21 @@ class AddRecipeViewModelTest {
     }
 
     /**
-     * Insert as many random recipes as wanted. every recipe will have 3 ingredients and 3 cooking steps
+     * Insert as many random ingredients and cooking steps to ViewModel as wanted.
+     *
      * @param ingredients amount of ingredients to be inserted
      * @param cookingSteps amount of cookingSteps to be inserted
      */
     private fun insertTestData(ingredients: Int, cookingSteps: Int) {
         runBlocking {
-            for (j in 0..ingredients) {
+            for (j in 1..ingredients) {
                 viewModel.addIngredient(
                     getEditable("Inserted name"),
                     getEditable("99"),
                     IngredientUnit.PINCH
                 )
             }
-            for (j in 0..cookingSteps) {
+            for (j in 1..cookingSteps) {
                 viewModel.addCookingStep(
                     getEditable("Inserted text"),
                     getEditable("9"),

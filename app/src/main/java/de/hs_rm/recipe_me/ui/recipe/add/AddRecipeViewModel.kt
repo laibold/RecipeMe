@@ -225,6 +225,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
                 recipeId.postValue(id)
             }
         }
+
         return recipeId
     }
 

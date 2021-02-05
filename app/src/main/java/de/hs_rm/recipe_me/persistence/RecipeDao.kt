@@ -33,9 +33,6 @@ interface RecipeDao {
     @Query("DELETE FROM CookingStep WHERE recipeId = :recipeId")
     suspend fun deleteCookingSteps(recipeId: Long)
 
-    @Query("DELETE FROM Recipe")
-    suspend fun clear()
-
     @Transaction
     @Query("SELECT * FROM Recipe")
     fun getRecipes(): LiveData<List<RecipeWithRelations>>

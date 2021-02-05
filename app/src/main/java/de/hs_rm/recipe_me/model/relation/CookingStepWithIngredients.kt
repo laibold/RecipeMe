@@ -6,6 +6,9 @@ import androidx.room.Relation
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 
+/**
+ * Class for querying [CookingStep] with belonging [Ingredient]s
+ */
 data class CookingStepWithIngredients(
     @Embedded var cookingStep: CookingStep,
     @Relation(

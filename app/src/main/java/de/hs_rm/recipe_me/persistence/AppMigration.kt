@@ -3,7 +3,14 @@ package de.hs_rm.recipe_me.persistence
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
+/**
+ * Migrations as static objects for [AppDatabase]
+ */
 object AppMigration {
+
+    /**
+     * Create table ShoppingListItem
+     */
     val MIGRATION_4_5 = object : Migration(4, 5) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL(
@@ -17,6 +24,9 @@ object AppMigration {
         }
     }
 
+    /**
+     * Create table RecipeOfTheDay
+     */
     val MIGRATION_5_6 = object : Migration(5, 6) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL(
@@ -34,6 +44,10 @@ object AppMigration {
         }
     }
 
+    /**
+     * Rename Primary keys from Ingredient and CookingStep,
+     * Create table CookingStepIngredientCrossRef
+     */
     val MIGRATION_6_7 = object : Migration(6, 7) {
         override fun migrate(database: SupportSQLiteDatabase) {
             // Copy content from Ingredient with new primary key name
