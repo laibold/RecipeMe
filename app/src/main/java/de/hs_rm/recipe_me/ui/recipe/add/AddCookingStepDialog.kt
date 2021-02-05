@@ -22,16 +22,18 @@ import de.hs_rm.recipe_me.declaration.notifyObservers
 import de.hs_rm.recipe_me.declaration.ui.focusAndOpenKeyboard
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.TimeUnit
+import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
 import de.hs_rm.recipe_me.service.Formatter
 
 class AddCookingStepDialog constructor(
     private val activity: Activity,
     private var recipeViewModel: AddRecipeViewModel,
-    private val cookingStep: CookingStep? = null
+    private val cookingStepWithIngredients: CookingStepWithIngredients? = null
 ) : Dialog(activity) {
 
     lateinit var binding: AddCookingStepDialogBinding
-    private val cookingStepViewModel = AddCookingStepViewModel(recipeViewModel.ingredients.value!!)
+    private val cookingStepViewModel = AddCookingStepViewModel()
+    private lateinit var adapter: CookingStepIngredientListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,16 +56,17 @@ class AddCookingStepDialog constructor(
         setButtons()
         setIngredientAdapter()
 
-        cookingStepViewModel.ingredients.observe(activity as LifecycleOwner, { list ->
-            val checkedItems = list.filter { it.checked }
-            if (checkedItems.isNotEmpty()) {
-                binding.formContent.ingredientsTextView.text =
-                    Formatter.formatIngredientList(activity, checkedItems)
-            } else {
-                binding.formContent.ingredientsTextView.text =
-                    activity.getString(R.string.add_via_button)
+        cookingStepViewModel.assignedIngredients.observe(
+            activity as LifecycleOwner, { ingredients ->
+                if (ingredients.isNotEmpty()) {
+                    binding.formContent.ingredientsTextView.text =
+                        Formatter.formatIngredientList(activity, ingredients)
+                } else {
+                    binding.formContent.ingredientsTextView.text =
+                        activity.getString(R.string.add_via_button)
+                }
             }
-        })
+        )
 
         binding.formContent.cookingStepTimeField.doAfterTextChanged { editable ->
             afterTimeTextChanged(editable)
@@ -73,13 +76,15 @@ class AddCookingStepDialog constructor(
             switchToSelectIngredients()
         }
 
-        if (cookingStep != null) {
-            // Update
-            //TODO set selected ingredients
-            binding.formContent.cookingStepField.setText(cookingStep.text)
-            if (cookingStep.time != CookingStep.DEFAULT_TIME) {
-                binding.formContent.cookingStepTimeField.setText(cookingStep.time.toString())
-                binding.formContent.cookingStepTimeSpinner.setSelection(cookingStep.timeUnit.ordinal)
+        if (cookingStepWithIngredients != null) {
+            // Cooking Step has bin reached in and should be updated, set values to fields
+            cookingStepViewModel.assignedIngredients.value!!.addAll(cookingStepWithIngredients.ingredients)
+            cookingStepViewModel.assignedIngredients.notifyObservers()
+
+            binding.formContent.cookingStepField.setText(cookingStepWithIngredients.cookingStep.text)
+            if (cookingStepWithIngredients.cookingStep.time != CookingStep.DEFAULT_TIME) {
+                binding.formContent.cookingStepTimeField.setText(cookingStepWithIngredients.cookingStep.time.toString())
+                binding.formContent.cookingStepTimeSpinner.setSelection(cookingStepWithIngredients.cookingStep.timeUnit.ordinal)
             }
         }
 
@@ -90,7 +95,7 @@ class AddCookingStepDialog constructor(
      * Set default actions and names to bottom buttons
      */
     private fun setButtons() {
-        if (cookingStep != null) {
+        if (cookingStepWithIngredients != null) {
             // Update
             binding.addButton.text = activity.resources.getString(R.string.update)
             binding.addButton.setOnClickListener { updateCookingStepAndClose() }
@@ -110,18 +115,25 @@ class AddCookingStepDialog constructor(
     private fun setIngredientAdapter() {
         val list = binding.ingredientListContent.ingredientsListView
 
-        val adapter = IngredientListAdapter(
+        adapter = CookingStepIngredientListAdapter(
             activity,
             R.layout.ingredient_listitem,
-            cookingStepViewModel.ingredients.value!!
+            recipeViewModel.ingredients.value!!,
+            cookingStepViewModel.assignedIngredients.value!!
         )
         list.adapter = adapter
 
         list.setOnItemClickListener { _, _, _, id ->
-            val ingredient = cookingStepViewModel.ingredients.value!![id.toInt()]
-            ingredient.checked = !ingredient.checked
+            val ingredient = recipeViewModel.ingredients.value!![id.toInt()]
+
+            if (ingredient in cookingStepViewModel.assignedIngredients.value!!) {
+                cookingStepViewModel.assignedIngredients.value!!.remove(ingredient)
+            } else {
+                cookingStepViewModel.assignedIngredients.value!!.add(ingredient)
+            }
+
+            cookingStepViewModel.assignedIngredients.notifyObservers()
             adapter.notifyDataSetChanged()
-            cookingStepViewModel.ingredients.notifyObservers()
         }
     }
 
@@ -162,11 +174,11 @@ class AddCookingStepDialog constructor(
      * Add cooking step to ViewModel scope
      */
     private fun addCookingStepAndClose() {
-        // TODO save CookingStep and Ingredients
-        val success = recipeViewModel.addCookingStep(
+        val success = recipeViewModel.addCookingStepWithIngredients(
             binding.formContent.cookingStepField.text,
             binding.formContent.cookingStepTimeField.text,
-            TimeUnit.values()[binding.formContent.cookingStepTimeSpinner.selectedItemPosition]
+            TimeUnit.values()[binding.formContent.cookingStepTimeSpinner.selectedItemPosition],
+            cookingStepViewModel.assignedIngredients.value!!
         )
 
         if (success) {
@@ -181,10 +193,11 @@ class AddCookingStepDialog constructor(
      * Update cooking step that is already in ViewModel.
      */
     private fun updateCookingStepAndClose() {
-        val success = recipeViewModel.updateCookingStep(
+        val success = recipeViewModel.updateCookingStepWithIngredients(
             binding.formContent.cookingStepField.text,
             binding.formContent.cookingStepTimeField.text,
-            TimeUnit.values()[binding.formContent.cookingStepTimeSpinner.selectedItemPosition]
+            TimeUnit.values()[binding.formContent.cookingStepTimeSpinner.selectedItemPosition],
+            cookingStepViewModel.assignedIngredients.value!!
         )
 
         if (success) {
@@ -209,12 +222,15 @@ class AddCookingStepDialog constructor(
 
         binding.addButton.text = activity.getString(R.string.save)
         binding.addButton.setOnClickListener {
-            //save
             switchToCookingStepForm()
         }
 
-        binding.cancelButton.text = activity.getString(R.string.back)
-        binding.cancelButton.setOnClickListener { switchToCookingStepForm() }
+        binding.cancelButton.text = activity.getString(R.string.cancel_reset)
+        binding.cancelButton.setOnClickListener {
+            switchToCookingStepForm()
+            cookingStepViewModel.resetCheckedStates()
+            adapter.notifyDataSetChanged()
+        }
     }
 
     /**
@@ -226,5 +242,4 @@ class AddCookingStepDialog constructor(
 
         setButtons()
     }
-
 }

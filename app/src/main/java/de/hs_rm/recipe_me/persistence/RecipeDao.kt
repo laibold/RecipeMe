@@ -6,6 +6,7 @@ import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
+import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
 
 /**
@@ -23,6 +24,9 @@ interface RecipeDao {
 
     @Insert
     suspend fun insert(cookingStep: CookingStep): Long
+
+    @Insert
+    suspend fun insert(cookingStepIngredientCrossRef: CookingStepIngredientCrossRef)
 
     @Delete
     suspend fun delete(recipe: Recipe)

@@ -1,17 +1,23 @@
 package de.hs_rm.recipe_me.ui.recipe.add
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import de.hs_rm.recipe_me.declaration.notifyObservers
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 
-class AddCookingStepViewModel constructor(
-    allIngredients: MutableList<Ingredient>
-) : ViewModel() {
+/**
+ * Holds a List of the ingredients that have been assigned to the cooking step.
+ * Important: Never reassign the ingredient list, just add or remove items or use clear()
+ */
+class AddCookingStepViewModel : ViewModel() {
 
-//    lateinit var cookingStepWithIngredients: CookingStepWithIngredients
+    val assignedIngredients = MutableLiveData(mutableListOf<Ingredient>())
 
-    // Create deep copy of ingredients from ViewModel Scope
-    val ingredients = MutableLiveData(allIngredients.map { it.clone() })
-
+    /**
+     * Clear List of assigned Ingredients and notify observers
+     */
+    fun resetCheckedStates() {
+        assignedIngredients.value!!.clear()
+        assignedIngredients.notifyObservers()
+    }
 }

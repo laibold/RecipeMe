@@ -111,4 +111,5 @@
     <string name="add_cooking_step_select_ingredients">Wähle alle Zutaten aus, die in diesem Schritt benötigt werden.</string>
     <string name="save">Speichern</string>
     <string name="add_via_button">Über Button hinzufügen</string>
+    <string name="cancel_reset">Abbrechen und zurücksetzen</string>
 </resources>

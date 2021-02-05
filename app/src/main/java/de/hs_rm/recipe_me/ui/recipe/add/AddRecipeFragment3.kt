@@ -13,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment3Binding
 import de.hs_rm.recipe_me.declaration.ui.fragments.EditCookingStepAdapter
-import de.hs_rm.recipe_me.model.recipe.CookingStep
+import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
 
 @AndroidEntryPoint
 class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
@@ -38,8 +38,13 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
             addCookingStepDialog().show()
         }
 
-        viewModel.cookingSteps.observe(viewLifecycleOwner, {
-            adapter = viewModel.cookingSteps.value?.let { list -> cookingStepListAdapter(list) }
+        viewModel.cookingStepsWithIngredients.observe(viewLifecycleOwner, { list ->
+            adapter = AddCookingStepListAdapter(
+                requireContext(),
+                R.layout.add_cooking_step_listitem,
+                list,
+                this
+            )
             binding.cookingStepListView.adapter = adapter
 
             adapter?.notifyDataSetChanged()
@@ -60,21 +65,8 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
     /**
      * Create add dialog
      */
-    private fun addCookingStepDialog(cookingStep: CookingStep? = null): AddCookingStepDialog {
+    private fun addCookingStepDialog(cookingStep: CookingStepWithIngredients? = null): AddCookingStepDialog {
         return AddCookingStepDialog(requireActivity(), viewModel, cookingStep)
-    }
-
-
-    /**
-     * @return CookingStepListAdapter for CookingStepListView
-     */
-    private fun cookingStepListAdapter(items: MutableList<CookingStep>): AddCookingStepListAdapter {
-        return AddCookingStepListAdapter(
-            requireContext(),
-            R.layout.add_cooking_step_listitem,
-            items,
-            this
-        )
     }
 
     /**
@@ -93,8 +85,8 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
         if (validationOk) {
             // Content will be cleared at persisting. Detach the objects by removing observer
             // to prevent the hint text to be shown for a little while
-            viewModel.cookingSteps.removeObservers(viewLifecycleOwner)
-            
+            viewModel.cookingStepsWithIngredients.removeObservers(viewLifecycleOwner)
+
             val id = viewModel.persistEntities()
 
             id.observe(viewLifecycleOwner, {
@@ -113,8 +105,8 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
     /**
      * Gets called from Adapter when edit was pressed for a CookingStep item
      */
-    override fun onCallback(cookingStep: CookingStep, position: Int) {
-        addCookingStepDialog(cookingStep).show()
+    override fun onCallback(cookingStepWithIngredients: CookingStepWithIngredients, position: Int) {
+        addCookingStepDialog(cookingStepWithIngredients).show()
         viewModel.prepareCookingStepUpdate(position)
     }
 

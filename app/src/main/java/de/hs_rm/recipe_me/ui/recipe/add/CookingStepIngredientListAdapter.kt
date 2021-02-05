@@ -13,10 +13,11 @@ import de.hs_rm.recipe_me.service.Formatter
 /**
  * Adapter for Ingredients in AddCookingStepDialog
  */
-class IngredientListAdapter(
+class CookingStepIngredientListAdapter(
     context: Context,
     private val resource: Int,
     private val objects: List<Ingredient>,
+    private val objectsToCheck: List<Ingredient>
 ) :
     ArrayAdapter<Ingredient>(context, resource, objects) {
 
@@ -41,7 +42,7 @@ class IngredientListAdapter(
 
         holder.binding.itemCheckbox.visibility = View.VISIBLE
         holder.binding.ingredientTextView.text = getIngredientText(ingredient)
-        holder.binding.itemCheckbox.isChecked = ingredient.checked
+        holder.binding.itemCheckbox.isChecked = objectsToCheck.contains(ingredient)
 
         return holder.view
     }

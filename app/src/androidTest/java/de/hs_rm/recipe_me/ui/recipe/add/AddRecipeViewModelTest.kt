@@ -204,8 +204,8 @@ class AddRecipeViewModelTest {
 
         val countBefore = viewModel.cookingSteps.value?.size!!
 
-        assertTrue(viewModel.addCookingStep(text, time1, unit))
-        assertTrue(viewModel.addCookingStep(text, time2, unit))
+        assertTrue(viewModel.addCookingStepWithIngredients(text, time1, unit))
+        assertTrue(viewModel.addCookingStepWithIngredients(text, time2, unit))
 
         val countAfter = viewModel.cookingSteps.value?.size!!
 
@@ -224,7 +224,7 @@ class AddRecipeViewModelTest {
 
         val countBefore = viewModel.cookingSteps.value?.size!!
 
-        assertFalse(viewModel.addCookingStep(textInvalid, timeValid, unit))
+        assertFalse(viewModel.addCookingStepWithIngredients(textInvalid, timeValid, unit))
 
         val countAfter = viewModel.cookingSteps.value?.size!!
 
@@ -247,7 +247,7 @@ class AddRecipeViewModelTest {
 
         val countBefore = viewModel.cookingSteps.value?.size!!
 
-        val success = viewModel.updateCookingStep(
+        val success = viewModel.updateCookingStepWithIngredients(
             getEditable(text),
             getEditable(time.toString()),
             unit
@@ -279,7 +279,7 @@ class AddRecipeViewModelTest {
 
         val countBefore = viewModel.cookingSteps.value?.size!!
 
-        val success = viewModel.updateCookingStep(
+        val success = viewModel.updateCookingStepWithIngredients(
             getEditable(text),
             getEditable(time.toString()),
             unit
@@ -385,7 +385,7 @@ class AddRecipeViewModelTest {
                 )
             }
             for (j in 1..cookingSteps) {
-                viewModel.addCookingStep(
+                viewModel.addCookingStepWithIngredients(
                     getEditable("Inserted text"),
                     getEditable("9"),
                     TimeUnit.HOUR
