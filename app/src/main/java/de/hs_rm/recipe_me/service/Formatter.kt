@@ -18,6 +18,9 @@ object Formatter {
         return DecimalFormat("#.##").format(quantity).replace(".", ",")
     }
 
+    /**
+     * Format Ingredient to String with Quantity and Unit
+     */
     fun formatIngredient(
         context: Context,
         ingredient: Ingredient,
@@ -32,6 +35,9 @@ object Formatter {
         )
     }
 
+    /**
+     * Format values of Ingredient to String with Quantity and Unit
+     */
     fun formatIngredientValues(
         context: Context,
         name: String,
@@ -55,6 +61,15 @@ object Formatter {
         }
 
         return unitText + name
+    }
+
+    /**
+     * Format List of ingredients to comma separated String
+     */
+    fun formatIngredientList(context: Context, ingredients: List<Ingredient>): String {
+        val stringList = ingredients.map { formatIngredient(context, it) }
+
+        return stringList.joinToString(", ")
     }
 
 }

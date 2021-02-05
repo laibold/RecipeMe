@@ -1,6 +1,5 @@
 package de.hs_rm.recipe_me.model.recipe
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
@@ -31,6 +30,10 @@ data class Ingredient(
     companion object {
         @Ignore
         const val DEFAULT_QUANTITY = 0.0
+    }
+
+    fun clone(): Ingredient {
+        return Ingredient(recipeId, name, quantity, unit)
     }
 
 }

@@ -4,16 +4,6 @@ import android.content.Context
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.FragmentActivity
-
-fun FragmentActivity?.closeKeyboard() {
-    val view: View? = this?.currentFocus
-    if (view != null) {
-        val imm: InputMethodManager =
-            this?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
-    }
-}
 
 // https://developer.squareup.com/blog/showing-the-android-keyboard-reliably/
 fun View.focusAndOpenKeyboard() {

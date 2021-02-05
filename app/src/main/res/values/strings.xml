@@ -108,4 +108,7 @@
     <string name="recipe_of_the_day">Rezept des Tages</string>
     <string name="open">Öffnen</string>
     <string name="no_recipe_otd">Füge Rezepte hinzu, um dich hier täglich neu inspirieren zu lassen.</string>
+    <string name="add_cooking_step_select_ingredients">Wähle alle Zutaten aus, die in diesem Schritt benötigt werden.</string>
+    <string name="save">Speichern</string>
+    <string name="add_via_button">Über Button hinzufügen</string>
 </resources>
