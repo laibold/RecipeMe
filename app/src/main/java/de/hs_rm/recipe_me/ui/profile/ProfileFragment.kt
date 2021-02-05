@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -39,12 +38,8 @@ class ProfileFragment : Fragment() {
             binding.profileQuantityRecipesText.text = getRecipeTotalText(it)
         })
 
-        binding.changeProfilePicButton.setOnClickListener {
-            Toast.makeText(
-                context,
-                "Hier kannst du bald dein Profilbild ändern",
-                Toast.LENGTH_LONG
-            ).show()
+        binding.editProfileButton.setOnClickListener {
+            editProfileDialog().show()
         }
 
         binding.toSiteNoticeElement.setOnClickListener {
@@ -68,5 +63,12 @@ class ProfileFragment : Fragment() {
         val firstPart = requireContext().resources.getString(R.string.recipe_total_text_1)
         val mapStr = getString(R.string.recipe_total_text_map)
         return viewModel.getRecipeTotalText(firstPart, mapStr, total)
+    }
+
+    /**
+     * Create edit dialog
+     */
+    private fun editProfileDialog(): EditProfileDialog {
+        return EditProfileDialog(requireActivity(), viewModel)
     }
 }
