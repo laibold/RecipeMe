@@ -110,4 +110,6 @@
     <string name="no_recipe_otd">Füge Rezepte hinzu, um dich hier täglich neu inspirieren zu lassen.</string>
     <string name="image_of_the_recipe">Bild des Rezepts</string>
     <string name="change_image">Bild ändern</string>
+    <string name="file_provider" translatable="false">com.kroegerama.imgpicker.demo.fileprovider</string>
+    <string name="pick_single">Wähle ein Bild aus</string>
 </resources>

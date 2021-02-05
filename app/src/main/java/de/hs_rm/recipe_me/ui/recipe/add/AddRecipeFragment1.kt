@@ -1,26 +1,44 @@
 package de.hs_rm.recipe_me.ui.recipe.add
 
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import com.kroegerama.imgpicker.BottomSheetImagePicker
+import com.kroegerama.imgpicker.ButtonType
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment1Binding
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 
 @AndroidEntryPoint
-class AddRecipeFragment1 : Fragment() {
+class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedListener {
+
+    override fun onImagesSelected(uris: List<Uri>, tag: String?) {
+        binding.imageContainer.removeAllViews()
+        uris.forEach { uri ->
+            val iv = LayoutInflater.from(context)
+                .inflate(R.layout.scrollitem_image, binding.imageContainer, false) as ImageView
+            binding.imageContainer.addView(iv)
+            bitmap.value = Glide.with(this).asBitmap().load(uri).centerCrop().into(1000, 1000).get()
+        }
+    }
 
     private lateinit var binding: AddRecipeFragment1Binding
     private val args: AddRecipeFragment1Args by navArgs()
     private val viewModel: AddRecipeViewModel by activityViewModels()
+    private var bitmap = MutableLiveData<Bitmap>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +64,14 @@ class AddRecipeFragment1 : Fragment() {
         }
         if (viewModel.recipe.value?.servings != 0) {
             binding.recipeServingsField.setText(viewModel.recipe.value!!.servings.toString())
+        }
+
+        bitmap.observe(viewLifecycleOwner, {
+            binding.recipeImage.setImageBitmap(it)
+        })
+
+        binding.changeImageButton.setOnClickListener {
+            getPicture()
         }
 
         binding.nextButton.setOnClickListener { onNext() }
@@ -97,4 +123,14 @@ class AddRecipeFragment1 : Fragment() {
         return nameValid == 0 && servingsValid == 0
     }
 
+    private fun getPicture() {
+        BottomSheetImagePicker.Builder(getString(R.string.file_provider))
+            .cameraButton(ButtonType.Button)            //style of the camera link (Button in header, Image tile, None)
+            .galleryButton(ButtonType.Button)           //style of the gallery link
+            .singleSelectTitle(R.string.pick_single)    //header text
+            .peekHeight(R.dimen.peekHeight)             //peek height of the bottom sheet
+            .columnSize(R.dimen.columnSize)             //size of the columns (will be changed a little to fit)
+            .requestTag("single")                       //tag can be used if multiple pickers are used
+            .show(childFragmentManager)
+    }
 }
