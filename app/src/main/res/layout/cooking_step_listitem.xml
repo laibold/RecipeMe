@@ -35,13 +35,27 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="1." />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/assigned_ingredients_text_view"
+            style="@style/small_text"
+            android:textColor="@color/dark_gray"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingHorizontal="@dimen/outline_horizontal"
+            android:visibility="gone"
+            tools:text="@tools:sample/lorem/random"
+            tools:maxLines="1"
+            tools:visibility="visible" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cooking_step_text_element"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/small_space"
             android:backgroundTint="@color/red"
             android:paddingHorizontal="@dimen/outline_horizontal">
 
@@ -51,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:lines="5"
+                tools:lines="3"
                 tools:text="@tools:sample/lorem/random" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

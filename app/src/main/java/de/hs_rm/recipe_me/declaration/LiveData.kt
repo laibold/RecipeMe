@@ -23,3 +23,12 @@ fun <T> MutableLiveData<MutableList<T>>.setValueAt(index: Int, item: T) {
     items[index] = item
     this.postValue(items)
 }
+
+/**
+ * Notify observers of MutableLiveData. Observers won't recognize if for example
+ * if the content of a [MutableList] inside of LiveData gets changed.
+ * Call this method as a workaround.
+ */
+fun <T> MutableLiveData<T>.notifyObservers() {
+    this.value = this.value
+}

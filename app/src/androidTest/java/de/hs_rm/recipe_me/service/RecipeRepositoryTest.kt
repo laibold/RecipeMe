@@ -2,42 +2,46 @@ package de.hs_rm.recipe_me.service
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.model.recipe.*
-import kotlinx.coroutines.*
-import org.junit.Assert.*
+import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
+import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
+import de.hs_rm.recipe_me.persistence.AppDatabase
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import javax.inject.Inject
+import java.util.concurrent.Executors
 
 /**
  * https://developer.android.com/training/dependency-injection/hilt-testing
  */
 @RunWith(AndroidJUnit4::class)
-@HiltAndroidTest
 class RecipeRepositoryTest {
 
     @get:Rule
-    var hiltRule = HiltAndroidRule(this)
+    var instantExecutorRule = InstantTaskExecutorRule()
 
-    @get:Rule
-    val rule = InstantTaskExecutorRule()
-
-    @Inject
     lateinit var repository: RecipeRepository
 
     private lateinit var appContext: Context
 
     @Before
     fun init() {
-        hiltRule.inject()
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        val db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java)
+            .setTransactionExecutor(Executors.newSingleThreadExecutor())
+            .build()
+
+        val recipeDao = db.recipeDao()
+        repository = RecipeRepository(recipeDao)
+
         insertTestRecipe()
     }
 
@@ -45,7 +49,7 @@ class RecipeRepositoryTest {
     fun testInjection() {
         assertNotNull(repository)
     }
-    
+
     fun addIngredient() {
         // TODO
     }
@@ -75,7 +79,7 @@ class RecipeRepositoryTest {
             repository.insert(CookingStep(id, "uri", "put to dishwasher", 1, TimeUnit.HOUR))
         }
 
-        val recipe = repository.getRecipeWithRelationsById(id).getOrAwaitValue(2)
+        val recipe = repository.getRecipeWithRelationsById(id).getOrAwaitValue()
 
         recipes = repository.getRecipes().getOrAwaitValue()
         val sizeAfter = recipes.size
@@ -87,7 +91,7 @@ class RecipeRepositoryTest {
         assertEquals(recipe.recipe.imageUri, imageUri)
 
         assertEquals(recipe.ingredients.size, 2)
-        assertEquals(recipe.cookingSteps.size, 3)
+        assertEquals(recipe.cookingStepsWithIngredients.size, 3)
     }
 
     @Test
@@ -102,6 +106,42 @@ class RecipeRepositoryTest {
         val sizeAfter = recipes.size
 
         assertEquals(sizeBefore, sizeAfter + 1)
+    }
+
+    /**
+     * Test if after inserting CookingStep and belonging Ingredients a valid
+     * [CookingStepWithIngredients] object can be requested from the repo
+     */
+    @Test
+    fun insertCookingStepWithIngredientsSuccessful() {
+        val ingredient1 = Ingredient("Ingredient1", 1.1, IngredientUnit.NONE)
+        val ingredient2 = Ingredient("Ingredient2", 2.2, IngredientUnit.GRAM)
+        val cookingStep = CookingStep("StepText", 2, TimeUnit.MINUTE)
+
+        var recipeId = 0L
+
+        runBlocking {
+            recipeId = repository.insert(Recipe())
+
+            cookingStep.recipeId = recipeId
+
+            val stepId = repository.insert(cookingStep)
+
+            val id1 = repository.insert(ingredient1)
+            val id2 = repository.insert(ingredient2)
+
+            repository.insert(CookingStepIngredientCrossRef(stepId, id1))
+            repository.insert(CookingStepIngredientCrossRef(stepId, id2))
+        }
+
+        val recipe = repository.getRecipeWithRelationsById(recipeId).getOrAwaitValue()
+
+        assertEquals(1, recipe.cookingStepsWithIngredients.size)
+        assertEquals(cookingStep, recipe.cookingStepsWithIngredients[0].cookingStep)
+
+        assertEquals(recipe.cookingStepsWithIngredients[0].ingredients.size, 2)
+        assertEquals(recipe.cookingStepsWithIngredients[0].ingredients[0], ingredient1)
+        assertEquals(recipe.cookingStepsWithIngredients[0].ingredients[1], ingredient2)
     }
 
     private fun insertTestRecipe() {

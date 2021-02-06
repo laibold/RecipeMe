@@ -15,7 +15,8 @@ data class Ingredient(
     var unit: IngredientUnit
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
+    var ingredientId: Long = 0
+
     @Ignore
     var checked = false
 
@@ -29,6 +30,29 @@ data class Ingredient(
     companion object {
         @Ignore
         const val DEFAULT_QUANTITY = 0.0
+    }
+
+    /**
+     * Returns if name, quantity and unit are equal
+     */
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Ingredient
+
+        if (name != other.name) return false
+        if (quantity != other.quantity) return false
+        if (unit != other.unit) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + quantity.hashCode()
+        result = 31 * result + unit.hashCode()
+        return result
     }
 
 }

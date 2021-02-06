@@ -27,7 +27,7 @@
     <dimen name="font_size_headline_2">23dp</dimen>
     <dimen name="font_size_headline_3">18dp</dimen>
     <dimen name="font_size_text">16sp</dimen>
-    <dimen name="font_size_tertiary">13sp</dimen>
+    <dimen name="font_size_text_small">13sp</dimen>
     <dimen name="design_bottom_navigation_text_size" tools:override="true">30sp</dimen>
     <dimen name="design_bottom_navigation_active_text_size" tools:override="true">30sp</dimen>
 

@@ -16,7 +16,7 @@ data class CookingStep(
     var timeUnit: TimeUnit
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
+    var cookingStepId: Long = 0
 
     constructor(text: String, time: Int, timeUnit: TimeUnit) : this(
         -1,
@@ -41,5 +41,31 @@ data class CookingStep(
             TimeUnit.HOUR -> time * 3600
         }
     }
+
+    /**
+     * Return if imageUri, text, time and timeUnit are equal
+     */
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as CookingStep
+
+        if (imageUri != other.imageUri) return false
+        if (text != other.text) return false
+        if (time != other.time) return false
+        if (timeUnit != other.timeUnit) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = imageUri.hashCode()
+        result = 31 * result + text.hashCode()
+        result = 31 * result + time
+        result = 31 * result + timeUnit.hashCode()
+        return result
+    }
+
 
 }

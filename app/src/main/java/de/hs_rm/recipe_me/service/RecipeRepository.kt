@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.model.recipe.*
+import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
 import de.hs_rm.recipe_me.persistence.RecipeDao
 import javax.inject.Inject
@@ -59,18 +60,15 @@ class RecipeRepository @Inject constructor(
         }
     }
 
+    suspend fun insert(cookingStepIngredientCrossRef: CookingStepIngredientCrossRef) {
+        recipeDao.insert(cookingStepIngredientCrossRef)
+    }
+
     /**
      * Get all recipes
      */
     fun getRecipes(): LiveData<List<RecipeWithRelations>> {
         return recipeDao.getRecipes()
-    }
-
-    /**
-     * Clear recipes
-     */
-    suspend fun clearRecipes() {
-        recipeDao.clear()
     }
 
     /**
