@@ -45,10 +45,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:maxLines="1"
             android:paddingHorizontal="@dimen/outline_horizontal"
             android:visibility="gone"
-            tools:text="1 Aubergine, 2 EL Olivenöl, Salz, Pfeffer"
+            tools:text="@tools:sample/lorem/random"
+            tools:maxLines="1"
             tools:visibility="visible" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -63,7 +63,7 @@
                 android:id="@+id/cooking_step_text"
                 style="@style/text"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:lines="3"
                 tools:text="@tools:sample/lorem/random" />
