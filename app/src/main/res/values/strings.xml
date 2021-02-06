@@ -112,4 +112,6 @@
     <string name="save">Speichern</string>
     <string name="add_via_button">Über Button hinzufügen</string>
     <string name="cancel_reset">Abbrechen und zurücksetzen</string>
+    <string name="edit_assigned_ingredients">Zugehörige Zutaten bearbeiten</string>
+    <string name="related_ingredients">Zugehörige Zutaten</string>
 </resources>

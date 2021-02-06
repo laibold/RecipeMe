@@ -11,6 +11,7 @@ import de.hs_rm.recipe_me.databinding.CookingStepListitemBinding
 import de.hs_rm.recipe_me.declaration.ui.fragments.CookingStepCallbackAdapter
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
+import de.hs_rm.recipe_me.service.Formatter
 
 /**
  * Adapter to show CookingSteps in [CookingStepFragment]]
@@ -41,7 +42,8 @@ class CookingStepListAdapter(
             holder = convertView.tag as CookingStepViewHolder
         }
 
-        val cookingStep = objects[position].cookingStep
+        val cookingStepWithIngredients = objects[position]
+        val cookingStep = cookingStepWithIngredients.cookingStep
 
         if (cookingStep.imageUri != "") {
             // set image here
@@ -51,6 +53,14 @@ class CookingStepListAdapter(
 
         holder.binding.cookingStepNumber.text = (position + 1).toString()
         holder.binding.cookingStepText.text = cookingStep.text
+
+        if (cookingStepWithIngredients.ingredients.isNotEmpty()) {
+            holder.binding.assignedIngredientsTextView.visibility = View.VISIBLE
+            holder.binding.assignedIngredientsTextView.text =
+                Formatter.formatIngredientList(context, cookingStepWithIngredients.ingredients)
+        } else {
+            holder.binding.assignedIngredientsTextView.visibility = View.GONE
+        }
 
         if (cookingStep.time != CookingStep.DEFAULT_TIME) {
             holder.binding.timerElement.visibility = View.VISIBLE

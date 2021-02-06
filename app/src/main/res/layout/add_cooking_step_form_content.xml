@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -74,28 +75,32 @@
             style="@style/label"
             android:layout_marginTop="@dimen/default_space"
             android:labelFor="@id/cooking_step_time_field"
-            android:text="Zugehörige Zutaten"
+            android:text="@string/related_ingredients"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/second_row_layout" />
 
-        <!--TODO font style definieren-->
         <TextView
             android:id="@+id/ingredients_text_view"
+            style="@style/small_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:paddingStart="3dp"
             android:text="@string/add_via_button"
+            android:textColor="@color/dark_gray"
             app:layout_constraintEnd_toStartOf="@id/edit_ingredients_button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ingredients_label" />
+            app:layout_constraintTop_toBottomOf="@id/ingredients_label"
+            tools:ignore="RtlSymmetry" />
 
         <ImageButton
             android:id="@+id/edit_ingredients_button"
             android:layout_width="@dimen/small_circle_button"
             android:layout_height="@dimen/small_circle_button"
             android:background="@android:color/transparent"
+            android:contentDescription="@string/edit_assigned_ingredients"
             android:src="@drawable/ic_baseline_edit_24"
             android:tint="@color/black"
             app:layout_constraintBottom_toBottomOf="@id/ingredients_text_view"
