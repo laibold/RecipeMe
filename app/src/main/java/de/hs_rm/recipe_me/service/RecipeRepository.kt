@@ -5,6 +5,7 @@ import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
+import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
 import de.hs_rm.recipe_me.persistence.RecipeDao
 import javax.inject.Inject
@@ -25,6 +26,24 @@ class RecipeRepository @Inject constructor(
     }
 
     /**
+     * Insert [CookingStep] to repository
+     * @return id of inserted CookingStep
+     */
+    suspend fun insert(cookingStep: CookingStep): Long {
+        return recipeDao.insert(cookingStep)
+    }
+
+    /**
+     * Insert List of [CookingStep]s to repository
+     */
+    @JvmName("insertCookingSteps")
+    suspend fun insert(cookingSteps: MutableList<CookingStep>) {
+        for (cookingStep in cookingSteps) {
+            insert(cookingStep)
+        }
+    }
+
+    /**
      * Insert [Ingredient] to repository
      * @return id of inserted Ingredient
      */
@@ -42,22 +61,8 @@ class RecipeRepository @Inject constructor(
         }
     }
 
-    /**
-     * Insert [CookingStep] to repository
-     * @return id of inserted CookingStep
-     */
-    suspend fun insert(cookingStep: CookingStep): Long {
-        return recipeDao.insert(cookingStep)
-    }
-
-    /**
-     * Insert List of [CookingStep]s to repository
-     */
-    @JvmName("insertCookingSteps")
-    suspend fun insert(cookingSteps: List<CookingStep>) {
-        for (cookingStep in cookingSteps) {
-            insert(cookingStep)
-        }
+    suspend fun insert(cookingStepIngredientCrossRef: CookingStepIngredientCrossRef) {
+        recipeDao.insert(cookingStepIngredientCrossRef)
     }
 
     /**
@@ -134,15 +139,15 @@ class RecipeRepository @Inject constructor(
         recipeDao.update(cookingStep)
     }
 
-//    /**
-//     * Update List of CookingSteps
-//     */
-//    @JvmName("updateCookingSteps")
-//    suspend fun update(cookingSteps: List<CookingStep>) {
-//        for (cookingStep in cookingSteps) {
-//            update(cookingStep)
-//        }
-//    }
+    /**
+     * Update List of CookingSteps
+     */
+    @JvmName("updateCookingSteps")
+    suspend fun update(cookingSteps: List<CookingStep>) {
+        for (cookingStep in cookingSteps) {
+            update(cookingStep)
+        }
+    }
 
     /**
      * Delete recipe and it's belonging Ingredients and CookingSteps

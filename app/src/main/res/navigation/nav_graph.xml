@@ -70,7 +70,7 @@
 
         <fragment
             android:id="@+id/add_recipe_fragment1"
-            android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment1"
+            android:name="de.hs_rm.recipe_me.ui.recipe.add.recipe_information.AddRecipeFragment1"
             android:label="Add Recipe Fragment 1"
             tools:layout="@layout/add_recipe_fragment1">
 
@@ -96,7 +96,7 @@
 
         <fragment
             android:id="@+id/add_recipe_fragment2"
-            android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment2"
+            android:name="de.hs_rm.recipe_me.ui.recipe.add.ingredient.AddRecipeFragment2"
             android:label="Add Recipe Fragment 2"
             tools:layout="@layout/add_recipe_fragment2">
 
@@ -107,7 +107,7 @@
 
         <fragment
             android:id="@+id/add_recipe_fragment3"
-            android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment3"
+            android:name="de.hs_rm.recipe_me.ui.recipe.add.cooking_step.AddRecipeFragment3"
             android:label="Add Recipe Fragment 3"
             tools:layout="@layout/add_recipe_fragment3">
 

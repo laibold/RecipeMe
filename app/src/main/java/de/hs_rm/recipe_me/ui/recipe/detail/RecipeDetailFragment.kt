@@ -152,8 +152,8 @@ class RecipeDetailFragment : Fragment() {
 
         list.setOnItemClickListener { _, _, _, id ->
             if (viewModel.ingredientSelectionActive.get()) {
-                val recipe = viewModel.recipe.value!!.ingredients[id.toInt()]
-                recipe.checked = !recipe.checked
+                val ingredient = viewModel.recipe.value!!.ingredients[id.toInt()]
+                ingredient.checked = !ingredient.checked
                 adapter!!.notifyDataSetChanged()
             }
         }
@@ -164,8 +164,8 @@ class RecipeDetailFragment : Fragment() {
      */
     private fun setCookingSteps(recipeWithRelations: RecipeWithRelations) {
         var allCookingSteps = ""
-        for (cookingStep in recipeWithRelations.cookingSteps)
-            allCookingSteps += cookingStep.text + "\n\n"
+        for (cookingStep in recipeWithRelations.cookingStepsWithIngredients)
+            allCookingSteps += cookingStep.cookingStep.text + "\n\n"
         binding.recipeInfo.steps.text = allCookingSteps
     }
 

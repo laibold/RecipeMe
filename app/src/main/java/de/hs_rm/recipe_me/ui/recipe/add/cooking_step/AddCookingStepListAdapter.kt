@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.ui.recipe.add
+package de.hs_rm.recipe_me.ui.recipe.add.cooking_step
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,15 +8,15 @@ import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import de.hs_rm.recipe_me.databinding.AddCookingStepListitemBinding
 import de.hs_rm.recipe_me.declaration.ui.fragments.EditCookingStepAdapter
-import de.hs_rm.recipe_me.model.recipe.CookingStep
+import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
 
 class AddCookingStepListAdapter(
     context: Context,
     private val resource: Int,
-    private val objects: MutableList<CookingStep>,
+    private val objects: MutableList<CookingStepWithIngredients>,
     private val callbackListener: EditCookingStepAdapter
 ) :
-    ArrayAdapter<CookingStep>(context, resource, objects) {
+    ArrayAdapter<CookingStepWithIngredients>(context, resource, objects) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val holder: CookingStepViewHolder
@@ -35,7 +35,7 @@ class AddCookingStepListAdapter(
             holder = convertView.tag as CookingStepViewHolder
         }
 
-        val cookingStep = objects[position]
+        val cookingStep = objects[position].cookingStep
 
         holder.binding.cookingStepText.text = cookingStep.text
         holder.binding.removeButton.setOnClickListener {
