@@ -20,6 +20,7 @@ class CookingStepListAdapter(
     context: Context,
     private val resource: Int,
     private val objects: List<CookingStepWithIngredients>,
+    private val multiplier: Double,
     private val callbackListener: CookingStepCallbackAdapter,
 ) :
     ArrayAdapter<CookingStepWithIngredients>(context, resource, objects) {
@@ -57,7 +58,11 @@ class CookingStepListAdapter(
         if (cookingStepWithIngredients.ingredients.isNotEmpty()) {
             holder.binding.assignedIngredientsTextView.visibility = View.VISIBLE
             holder.binding.assignedIngredientsTextView.text =
-                Formatter.formatIngredientList(context, cookingStepWithIngredients.ingredients)
+                Formatter.formatIngredientList(
+                    context,
+                    cookingStepWithIngredients.ingredients,
+                    multiplier
+                )
         } else {
             holder.binding.assignedIngredientsTextView.visibility = View.GONE
         }

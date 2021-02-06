@@ -48,6 +48,7 @@ class CookingStepFragment : Fragment(), CookingStepCallbackAdapter {
             requireContext(),
             R.layout.cooking_step_listitem,
             viewModel.recipe.value!!.cookingSteps,
+            viewModel.getServingsMultiplier(),
             this
         )
 
