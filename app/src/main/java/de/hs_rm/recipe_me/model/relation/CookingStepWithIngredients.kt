@@ -17,4 +17,14 @@ data class CookingStepWithIngredients(
         associateBy = Junction(CookingStepIngredientCrossRef::class)
     )
     var ingredients: List<Ingredient>
-)
+) {
+    constructor(cookingStep: CookingStep) : this(
+        cookingStep,
+        listOf()
+    )
+
+    fun clone(): CookingStepWithIngredients {
+        return CookingStepWithIngredients(cookingStep.clone(),ingredients)
+    }
+
+}

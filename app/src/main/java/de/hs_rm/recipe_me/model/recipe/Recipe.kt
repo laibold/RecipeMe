@@ -31,7 +31,7 @@ data class Recipe(
     )
 
     companion object {
-        /** id a Recipe has by default (when it's not already persisted) */
+        /** id a Recipe has by default (when it has not been persisted) */
         const val DEFAULT_ID = 0L
     }
 }

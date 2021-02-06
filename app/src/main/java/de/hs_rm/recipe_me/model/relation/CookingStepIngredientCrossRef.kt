@@ -1,5 +1,6 @@
 package de.hs_rm.recipe_me.model.relation
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.Recipe
@@ -10,5 +11,6 @@ import de.hs_rm.recipe_me.model.recipe.Recipe
 @Entity(primaryKeys = ["cookingStepId", "ingredientId"])
 class CookingStepIngredientCrossRef(
     val cookingStepId: Long,
+    @ColumnInfo(index = true)
     val ingredientId: Long
 )

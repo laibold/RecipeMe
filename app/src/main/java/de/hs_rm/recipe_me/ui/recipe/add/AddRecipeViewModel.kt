@@ -273,84 +273,60 @@ class AddRecipeViewModel @ViewModelInject constructor(
                 repository.update(recipeToUpdate!!)
             }
 
-            //TODO vorher deleten
-            for (ingredient in _ingredients.value!!) {
-                ingredient.recipeId = recipeToUpdate!!.id
-                viewModelScope.launch {
-                    repository.update(ingredient)
-                }
-            }
+            // TODO update ingredients and steps
 
-            //TODO vorher deleten
-            for (cookingStepWithIngredients in _cookingStepsWithIngredients.value!!) {
-                cookingStepWithIngredients.cookingStep.recipeId = recipeToUpdate!!.id
-                viewModelScope.launch {
-                    repository.update(cookingStepWithIngredients.cookingStep)
-                }
-            }
-
-        } else
-        // Save
-
-            viewModelScope.launch {
-                _recipe.value?.let { recipe ->
-                    // Insert recipe
-                    val id = repository.insert(recipe)
-
-                    // Assign recipe id to ingredients and cooking steps
-                    for (ingredient in _ingredients.value!!) {
-                        ingredient.recipeId = id
-                    }
-                    for (cookingStepWithIngredients in _cookingStepsWithIngredients.value!!) {
-                        cookingStepWithIngredients.cookingStep.recipeId = id
-                    }
-
-                    // Insert ingredients
-                    _ingredients.value?.let { ingredients ->
-                        for (ingredient in ingredients) {
-                            // Assign id from inserted entity back to object to create cross reference
-                            ingredient.ingredientId = repository.insert(ingredient)
-                        }
-                    }
-
-                    // Insert cooking steps and create references to the belonging ingredients
-                    _cookingStepsWithIngredients.value?.let { list ->
-                        for (cookingStepWithIngredients in list) {
-                            val cId = repository.insert(cookingStepWithIngredients.cookingStep)
-
-                            // The ingredients are references to the above inserted ones, so they
-                            // now have an id and we can create a cross reference to the CookingSteps
-                            // that have just been inserted
-                            for (ingredient in cookingStepWithIngredients.ingredients) {
-                                repository.insert(
-                                    CookingStepIngredientCrossRef(cId, ingredient.ingredientId)
-                                )
-                            }
-                        }
-
-                        // Reset data
-                        _ingredients.postValue(mutableListOf())
-                        _cookingStepsWithIngredients.postValue(mutableListOf())
-                        _recipe.postValue(Recipe(RecipeCategory.values()[0]))
-                        recipeId.postValue(id)
-                    }
-                }
-            }
-
-        //TODO update
+        } else {
+            // Save
+            saveNewEntities(recipeId)
+        }
 
         return recipeId
     }
 
-    /**
-     * Set given id to each foreign key of ingredients and cooking steps
-     */
-    private fun setIdToIngredientsAndCookingSteps(id: Long) {
-        for (ingredient in _ingredients.value!!) {
-            ingredient.recipeId = id
-        }
-        for (cookingStepWithIngredients in _cookingStepsWithIngredients.value!!) {
-            cookingStepWithIngredients.cookingStep.recipeId = id
+    private fun saveNewEntities(recipeId: MutableLiveData<Long>) {
+        viewModelScope.launch {
+            _recipe.value?.let { recipe ->
+                // Insert recipe
+                val id = repository.insert(recipe)
+
+                // Assign recipe id to ingredients and cooking steps
+                for (ingredient in _ingredients.value!!) {
+                    ingredient.recipeId = id
+                }
+                for (cookingStepWithIngredients in _cookingStepsWithIngredients.value!!) {
+                    cookingStepWithIngredients.cookingStep.recipeId = id
+                }
+
+                // Insert ingredients
+                _ingredients.value?.let { ingredients ->
+                    for (ingredient in ingredients) {
+                        // Assign id from inserted entity back to object to create cross reference
+                        ingredient.ingredientId = repository.insert(ingredient)
+                    }
+                }
+
+                // Insert cooking steps and create references to the belonging ingredients
+                _cookingStepsWithIngredients.value?.let { list ->
+                    for (cookingStepWithIngredients in list) {
+                        val cId = repository.insert(cookingStepWithIngredients.cookingStep)
+
+                        // The ingredients are references to the above inserted ones, so they
+                        // now have an id and we can create a cross reference to the CookingSteps
+                        // that have just been inserted
+                        for (ingredient in cookingStepWithIngredients.ingredients) {
+                            repository.insert(
+                                CookingStepIngredientCrossRef(cId, ingredient.ingredientId)
+                            )
+                        }
+                    }
+
+                    // Reset data
+                    _ingredients.postValue(mutableListOf())
+                    _cookingStepsWithIngredients.postValue(mutableListOf())
+                    _recipe.postValue(Recipe(RecipeCategory.values()[0]))
+                    recipeId.postValue(id)
+                }
+            }
         }
     }
 
@@ -404,3 +380,4 @@ class AddRecipeViewModel @ViewModelInject constructor(
         return _cookingStepsWithIngredients.value!!.isNotEmpty()
     }
 }
+

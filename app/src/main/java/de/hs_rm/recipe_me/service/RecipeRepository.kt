@@ -1,6 +1,8 @@
 package de.hs_rm.recipe_me.service
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.room.Delete
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.Recipe
@@ -153,9 +155,16 @@ class RecipeRepository @Inject constructor(
      * Delete recipe and it's belonging Ingredients and CookingSteps
      */
     suspend fun deleteRecipeAndRelations(recipe: Recipe) {
-        recipeDao.deleteIngredients(recipe.id)
-        recipeDao.deleteCookingSteps(recipe.id)
+        deleteIngredientsAndCookingSteps(recipe.id)
         recipeDao.delete(recipe)
+    }
+
+    /**
+     * Delete belonging Ingredients and CookingSteps with given recipeId
+     */
+    suspend fun deleteIngredientsAndCookingSteps(recipeId: Long) {
+        recipeDao.deleteIngredients(recipeId)
+        recipeDao.deleteCookingSteps(recipeId)
     }
 
 }

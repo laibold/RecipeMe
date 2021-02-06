@@ -9,11 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import de.hs_rm.recipe_me.TestDataProvider
 import de.hs_rm.recipe_me.declaration.getOrAwaitValue
-import de.hs_rm.recipe_me.model.recipe.Ingredient
-import de.hs_rm.recipe_me.model.recipe.IngredientUnit
-import de.hs_rm.recipe_me.model.recipe.Recipe
-import de.hs_rm.recipe_me.model.recipe.RecipeCategory
-import de.hs_rm.recipe_me.model.recipe.TimeUnit
+import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.persistence.RecipeDao
 import de.hs_rm.recipe_me.service.RecipeRepository
@@ -351,6 +347,67 @@ class AddRecipeViewModelTest {
 
         assertEquals(numberOfChildren, recipeWithRelations.ingredients.size)
         assertEquals(numberOfChildren, recipeWithRelations.cookingStepsWithIngredients.size)
+    }
+
+    /**
+     * Test update of all entities
+     */
+    @Test
+    fun updateEntitiesSuccessful() {
+        val numberOfChildren = 3
+
+        val name = "New Name"
+        val servings = "6"
+        val category = RecipeCategory.BREAKFAST
+
+        beforeEach()
+        insertTestData(numberOfChildren, numberOfChildren)
+
+        // Important for test to succeed (LiveData)
+        val recipe = viewModel.recipe.getOrAwaitValue()
+        assertNotNull(recipe)
+
+        val recipeId = viewModel.persistEntities().getOrAwaitValue(10)
+
+        // Test if test insertion succeeded (May be deleted)
+        val recipeWithRelations2 = recipeRepository.getRecipeWithRelationsById(recipeId).getOrAwaitValue(10)
+        assertEquals(numberOfChildren, recipeWithRelations2.ingredients.size)
+        assertEquals(numberOfChildren, recipeWithRelations2.cookingStepsWithIngredients.size)
+
+        // Initialize ViewModel with id
+        viewModel = AddRecipeViewModel(recipeRepository)
+        GlobalScope.launch(Dispatchers.Main) {
+            delay(1000)
+            viewModel.initRecipe(recipeId)
+        }
+
+        // Again important for test to succeed (LiveData)
+        val recipeNew = viewModel.recipe.getOrAwaitValue()
+        assertNotNull(recipeNew)
+
+        // change name, servings and category
+        viewModel.setRecipeAttributes(name, servings, category)
+
+        // add ingredient
+        // delete ingredient
+        // edit ingredient
+
+
+        // add step
+        // remove step
+        // change ingredient in step
+
+        val newRecipeId = viewModel.persistEntities().getOrAwaitValue()
+        assertNotEquals(Recipe.DEFAULT_ID, newRecipeId)
+
+        val recipeWithRelations = recipeRepository.getRecipeWithRelationsById(newRecipeId).getOrAwaitValue()
+
+        assertEquals(name, recipeWithRelations.recipe.name)
+        assertEquals(servings.toInt(), recipeWithRelations.recipe.servings)
+        assertEquals(category, recipeWithRelations.recipe.category)
+
+//        assertEquals(numberOfChildren, recipeWithRelations.ingredients.size)
+//        assertEquals(numberOfChildren, recipeWithRelations.cookingStepsWithIngredients.size)
     }
 
     /**

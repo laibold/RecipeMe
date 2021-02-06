@@ -105,7 +105,7 @@ class RecipeRepositoryTest {
         recipes = repository.getRecipes().getOrAwaitValue()
         val sizeAfter = recipes.size
 
-        assertEquals(sizeBefore, sizeAfter + 1)
+        assertEquals(sizeBefore - 1, sizeAfter)
     }
 
     /**
@@ -143,6 +143,37 @@ class RecipeRepositoryTest {
         assertEquals(recipe.cookingStepsWithIngredients[0].ingredients[0], ingredient1)
         assertEquals(recipe.cookingStepsWithIngredients[0].ingredients[1], ingredient2)
     }
+
+    /**
+     * Test if ingredients and cooking steps get deleted successfully
+     */
+    @Test
+    fun deleteIngredientsAndCookingStepsSuccessful() {
+        var recipeId = 0L
+
+        runBlocking {
+            recipeId = repository.insert(Recipe())
+
+            repository.insert(CookingStep(recipeId, "", "", 0, TimeUnit.SECOND))
+            repository.insert(CookingStep(recipeId, "", "", 0, TimeUnit.SECOND))
+
+            repository.insert(Ingredient(recipeId, "", 0.0, IngredientUnit.NONE))
+            repository.insert(Ingredient(recipeId, "", 0.0, IngredientUnit.NONE))
+            repository.insert(Ingredient(recipeId, "", 0.0, IngredientUnit.NONE))
+        }
+
+        val recipe = repository.getRecipeWithRelationsById(recipeId).getOrAwaitValue()
+        assertEquals(2, recipe.cookingStepsWithIngredients.size)
+        assertEquals(3, recipe.ingredients.size)
+
+        runBlocking { repository.deleteIngredientsAndCookingSteps(recipeId) }
+
+        val recipeAfter = repository.getRecipeWithRelationsById(recipeId).getOrAwaitValue()
+        assertEquals(0, recipeAfter.cookingStepsWithIngredients.size)
+        assertEquals(0, recipeAfter.ingredients.size)
+    }
+
+    /////
 
     private fun insertTestRecipe() {
         runBlocking {

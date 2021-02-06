@@ -16,7 +16,7 @@ data class CookingStep(
     var timeUnit: TimeUnit
 ) {
     @PrimaryKey(autoGenerate = true)
-    var cookingStepId: Long = 0
+    var cookingStepId: Long = DEFAULT_ID
 
     constructor(text: String, time: Int, timeUnit: TimeUnit) : this(
         -1,
@@ -25,11 +25,6 @@ data class CookingStep(
         time,
         timeUnit
     )
-
-    companion object {
-        @Ignore
-        const val DEFAULT_TIME = 0
-    }
 
     /**
      * Returns a given time in seconds
@@ -67,5 +62,16 @@ data class CookingStep(
         return result
     }
 
+    fun clone(): CookingStep {
+        return CookingStep(recipeId, imageUri, text, time, timeUnit)
+    }
 
+    companion object {
+        /** id a CookingStep has by default (when it has not been persisted) */
+        @Ignore
+        const val DEFAULT_ID = 0L
+
+        @Ignore
+        const val DEFAULT_TIME = 0
+    }
 }

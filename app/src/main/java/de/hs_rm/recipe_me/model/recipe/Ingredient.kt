@@ -15,22 +15,17 @@ data class Ingredient(
     var unit: IngredientUnit
 ) {
     @PrimaryKey(autoGenerate = true)
-    var ingredientId: Long = 0
+    var ingredientId: Long = DEFAULT_ID
 
     @Ignore
     var checked = false
 
     constructor(name: String, quantity: Double, unit: IngredientUnit) : this(
-        -1,
+        Recipe.DEFAULT_ID,
         name,
         quantity,
         unit
     )
-
-    companion object {
-        @Ignore
-        const val DEFAULT_QUANTITY = 0.0
-    }
 
     /**
      * Returns if name, quantity and unit are equal
@@ -55,4 +50,16 @@ data class Ingredient(
         return result
     }
 
+    fun clone(): Ingredient {
+        return Ingredient(recipeId, name, quantity, unit)
+    }
+
+    companion object {
+        /** id an Ingredient has by default (when it has not been persisted) */
+        @Ignore
+        val DEFAULT_ID: Long = 0
+
+        @Ignore
+        const val DEFAULT_QUANTITY = 0.0
+    }
 }
