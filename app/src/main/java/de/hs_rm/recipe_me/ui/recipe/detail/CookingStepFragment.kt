@@ -47,7 +47,7 @@ class CookingStepFragment : Fragment(), CookingStepCallbackAdapter {
         val adapter = CookingStepListAdapter(
             requireContext(),
             R.layout.cooking_step_listitem,
-            viewModel.recipe.value!!.cookingSteps,
+            viewModel.recipe.value!!.cookingStepsWithIngredients,
             viewModel.getServingsMultiplier(),
             this
         )

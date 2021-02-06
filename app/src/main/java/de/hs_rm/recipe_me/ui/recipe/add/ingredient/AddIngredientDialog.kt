@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.ui.recipe.add
+package de.hs_rm.recipe_me.ui.recipe.add.ingredient
 
 import android.app.Activity
 import android.app.Dialog
@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.Window
 import android.view.WindowManager
@@ -19,6 +18,7 @@ import de.hs_rm.recipe_me.declaration.ui.focusAndOpenKeyboard
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.service.Formatter
+import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
 
 class AddIngredientDialog constructor(
     private val activity: Activity,

@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.ui.recipe.add
+package de.hs_rm.recipe_me.ui.recipe.add.cooking_step
 
 import android.app.Activity
 import android.app.Dialog
@@ -18,12 +18,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddCookingStepDialogBinding
-import de.hs_rm.recipe_me.declaration.notifyObservers
 import de.hs_rm.recipe_me.declaration.ui.focusAndOpenKeyboard
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.TimeUnit
 import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
 import de.hs_rm.recipe_me.service.Formatter
+import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
 
 class AddCookingStepDialog constructor(
     private val activity: Activity,
@@ -78,8 +78,7 @@ class AddCookingStepDialog constructor(
 
         if (cookingStepWithIngredients != null) {
             // Cooking Step has bin reached in and should be updated, set values to fields
-            cookingStepViewModel.assignedIngredients.value!!.addAll(cookingStepWithIngredients.ingredients)
-            cookingStepViewModel.assignedIngredients.notifyObservers()
+            cookingStepViewModel.addAssignedIngredients(cookingStepWithIngredients.ingredients)
 
             binding.formContent.cookingStepField.setText(cookingStepWithIngredients.cookingStep.text)
             if (cookingStepWithIngredients.cookingStep.time != CookingStep.DEFAULT_TIME) {
@@ -125,14 +124,7 @@ class AddCookingStepDialog constructor(
 
         list.setOnItemClickListener { _, _, _, id ->
             val ingredient = recipeViewModel.ingredients.value!![id.toInt()]
-
-            if (ingredient in cookingStepViewModel.assignedIngredients.value!!) {
-                cookingStepViewModel.assignedIngredients.value!!.remove(ingredient)
-            } else {
-                cookingStepViewModel.assignedIngredients.value!!.add(ingredient)
-            }
-
-            cookingStepViewModel.assignedIngredients.notifyObservers()
+            cookingStepViewModel.toggleCheckedState(ingredient)
             adapter.notifyDataSetChanged()
         }
     }

@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.ui.recipe.add
+package de.hs_rm.recipe_me.ui.recipe.add.cooking_step
 
 import android.animation.AnimatorInflater
 import android.os.Bundle
@@ -14,6 +14,7 @@ import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment3Binding
 import de.hs_rm.recipe_me.declaration.ui.fragments.EditCookingStepAdapter
 import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
+import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
 
 @AndroidEntryPoint
 class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {

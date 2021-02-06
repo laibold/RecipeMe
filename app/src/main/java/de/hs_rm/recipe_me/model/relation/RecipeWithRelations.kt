@@ -21,5 +21,5 @@ data class RecipeWithRelations(
         parentColumn = "id",
         entityColumn = "recipeId"
     )
-    var cookingSteps: List<CookingStepWithIngredients>
+    var cookingStepsWithIngredients: List<CookingStepWithIngredients>
 )

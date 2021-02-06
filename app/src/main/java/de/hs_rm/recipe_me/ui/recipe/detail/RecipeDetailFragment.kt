@@ -162,7 +162,7 @@ class RecipeDetailFragment : Fragment() {
      */
     private fun setCookingSteps(recipeWithRelations: RecipeWithRelations) {
         var allCookingSteps = ""
-        for (cookingStep in recipeWithRelations.cookingSteps)
+        for (cookingStep in recipeWithRelations.cookingStepsWithIngredients)
             allCookingSteps += cookingStep.cookingStep.text + "\n\n"
         binding.recipeInfo.steps.text = allCookingSteps
     }

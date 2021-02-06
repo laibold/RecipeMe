@@ -32,8 +32,27 @@ data class Ingredient(
         const val DEFAULT_QUANTITY = 0.0
     }
 
-    fun clone(): Ingredient {
-        return Ingredient(recipeId, name, quantity, unit)
+    /**
+     * Returns if name, quantity and unit are equal
+     */
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Ingredient
+
+        if (name != other.name) return false
+        if (quantity != other.quantity) return false
+        if (unit != other.unit) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + quantity.hashCode()
+        result = 31 * result + unit.hashCode()
+        return result
     }
 
 }

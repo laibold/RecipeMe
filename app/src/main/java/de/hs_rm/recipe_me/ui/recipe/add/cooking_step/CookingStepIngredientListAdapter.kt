@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.ui.recipe.add
+package de.hs_rm.recipe_me.ui.recipe.add.cooking_step
 
 import android.content.Context
 import android.view.LayoutInflater
