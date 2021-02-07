@@ -21,19 +21,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment1Binding
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
+import de.hs_rm.recipe_me.service.ImageHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedListener {
-
-    override fun onImagesSelected(uris: List<Uri>, tag: String?) {
-        binding.imageContainer.removeAllViews()
-        uris.forEach { uri ->
-            val iv = LayoutInflater.from(context)
-                .inflate(R.layout.scrollitem_image, binding.imageContainer, false) as ImageView
-            binding.imageContainer.addView(iv)
-            bitmap.value = Glide.with(this).asBitmap().load(uri).centerCrop().into(1000, 1000).get()
-        }
-    }
 
     private lateinit var binding: AddRecipeFragment1Binding
     private val args: AddRecipeFragment1Args by navArgs()
@@ -123,14 +117,38 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
         return nameValid == 0 && servingsValid == 0
     }
 
+    override fun onImagesSelected(uris: List<Uri>, tag: String?) {
+        binding.imageContainer.removeAllViews()
+        uris.forEach { uri ->
+            val iv = LayoutInflater.from(context)
+                .inflate(R.layout.scrollitem_image, binding.imageContainer, false) as ImageView
+            binding.imageContainer.addView(iv)
+
+            Glide.with(this).load(uri).into(binding.recipeImage)
+
+            // Save image - TODO save it only when recipe is being saved. Bitmap should be hold in ViewModel until then
+            CoroutineScope(Dispatchers.IO).launch {
+                val bitmap = Glide.with(requireActivity())
+                    .asBitmap()
+                    .load(uri)
+                    .placeholder(android.R.drawable.progress_indeterminate_horizontal) // need placeholder to avoid issue like glide annotations
+                    .error(android.R.drawable.stat_notify_error) // need error to avoid issue like glide annotations
+                    .centerCrop()
+                    .submit(1000, 1000) // TODO auslagern
+                    .get()
+                ImageHandler.saveRecipeImage(bitmap, requireContext(), 1) // TODO replace with id when recipe is saved
+            }
+        }
+    }
+
     private fun getPicture() {
         BottomSheetImagePicker.Builder(getString(R.string.file_provider))
             .cameraButton(ButtonType.Button)            //style of the camera link (Button in header, Image tile, None)
             .galleryButton(ButtonType.Button)           //style of the gallery link
             .singleSelectTitle(R.string.pick_single)    //header text
-            .peekHeight(R.dimen.peekHeight)             //peek height of the bottom sheet
-            .columnSize(R.dimen.columnSize)             //size of the columns (will be changed a little to fit)
-            .requestTag("single")                       //tag can be used if multiple pickers are used
+            .peekHeight(R.dimen.peekHeight)                          //peek height of the bottom sheet
+            .columnSize(R.dimen.columnSize)                           //size of the columns (will be changed a little to fit)
+            .requestTag("single")            //tag can be used if multiple pickers are used
             .show(childFragmentManager)
     }
 }
