@@ -60,6 +60,7 @@ class AddRecipeFragment1 : Fragment() {
                 if (recipe.servings != 0) {
                     binding.recipeServingsField.setText(viewModel.recipe.value!!.servings.toString())
                 }
+                binding.recipeCategorySpinner.setSelection(recipe.category.ordinal)
             }
         })
 

@@ -25,7 +25,7 @@ interface RecipeDao {
     @Insert
     suspend fun insert(cookingStep: CookingStep): Long
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(cookingStepIngredientCrossRef: CookingStepIngredientCrossRef)
 
     @Update
@@ -71,4 +71,16 @@ interface RecipeDao {
 
     @Query("SELECT * FROM Recipe LIMIT 1 OFFSET :offset")
     suspend fun getRecipeByOffset(offset: Int): Recipe
+
+    @Delete
+    suspend fun deleteIngredient(ingredient: Ingredient)
+
+    @Delete
+    suspend fun deleteCookingStep(cookingStep: CookingStep)
+
+    @Query("DELETE FROM CookingStepIngredientCrossRef WHERE ingredientId = :ingredientId OR cookingStepId = :cookingStepId")
+    suspend fun deleteCookingStepIngredientCrossRef(
+        ingredientId: Long = Ingredient.DEFAULT_ID,
+        cookingStepId: Long = CookingStep.DEFAULT_ID
+    )
 }

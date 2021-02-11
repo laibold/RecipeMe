@@ -93,6 +93,7 @@ class RecipeHomeFragment : Fragment() {
                     }
                 }
 
+                //FIXME
                 val direction = RecipeHomeFragmentDirections.toRecipeDetailFragment(recipe.id, true)
                 findNavController().navigate(direction)
                 true

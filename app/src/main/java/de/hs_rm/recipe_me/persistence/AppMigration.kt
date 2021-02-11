@@ -96,6 +96,11 @@ object AppMigration {
                         " ingredientId INTEGER NOT NULL," +
                         " PRIMARY KEY(cookingStepId, ingredientId))"
             )
+            database.execSQL(
+                "CREATE INDEX IF NOT EXISTS " +
+                        "index_CookingStepIngredientCrossRef_ingredientId " +
+                        "ON CookingStepIngredientCrossRef ingredientId"
+            )
         }
     }
 }
