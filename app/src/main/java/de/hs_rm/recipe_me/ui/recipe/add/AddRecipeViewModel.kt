@@ -52,35 +52,37 @@ class AddRecipeViewModel @ViewModelInject constructor(
      * Old Values will be cleared and if recipeId is not default, the related Recipe will be loaded
      */
     fun initRecipe(recipeId: Long) {
-        _ingredients.value = mutableListOf()
-        _cookingStepsWithIngredients.value = mutableListOf()
-        _recipe.value = Recipe(RecipeCategory.values()[0]) // to prevent old recipe to be shown
+        if (_recipe.value == null) {
+            _ingredients.value = mutableListOf()
+            _cookingStepsWithIngredients.value = mutableListOf()
+            _recipe.value = Recipe(RecipeCategory.values()[0]) // to prevent old recipe to be shown
 
-        if (recipeId != Recipe.DEFAULT_ID) {
-            viewModelScope.launch {
-                recipeToUpdate = repository.getRecipeById(recipeId)
-            }
+            if (recipeId != Recipe.DEFAULT_ID) {
+                viewModelScope.launch {
+                    recipeToUpdate = repository.getRecipeById(recipeId)
+                }
 
-            // recipeId has been committed, so this recipe should be edited and it's values should be entered into the forms
-            viewModelScope.launch {
-                repository.getRecipeWithRelationsById(recipeId).asFlow().collect { recipeWithRelations ->
-                    _recipe.postValue(recipeWithRelations.recipe)
-                    oldIngredients = mutableListOf()
-                    oldCookingSteps = mutableListOf()
+                // recipeId has been committed, so this recipe should be edited and it's values should be entered into the forms
+                viewModelScope.launch {
+                    repository.getRecipeWithRelationsById(recipeId).asFlow().collect { recipeWithRelations ->
+                        _recipe.postValue(recipeWithRelations.recipe)
+                        oldIngredients = mutableListOf()
+                        oldCookingSteps = mutableListOf()
 
-                    for (ingredient in recipeWithRelations.ingredients) {
-                        oldIngredients!!.add(ingredient)
-                        _ingredients.addToValue(ingredient)
-                    }
+                        for (ingredient in recipeWithRelations.ingredients) {
+                            oldIngredients!!.add(ingredient)
+                            _ingredients.addToValue(ingredient)
+                        }
 
-                    for (cookingStepWithIngredients in recipeWithRelations.cookingStepsWithIngredients) {
-                        oldCookingSteps!!.add(cookingStepWithIngredients.cookingStep)
-                        _cookingStepsWithIngredients.addToValue(cookingStepWithIngredients)
+                        for (cookingStepWithIngredients in recipeWithRelations.cookingStepsWithIngredients) {
+                            oldCookingSteps!!.add(cookingStepWithIngredients.cookingStep)
+                            _cookingStepsWithIngredients.addToValue(cookingStepWithIngredients)
+                        }
                     }
                 }
+            } else if (_recipe.value == null) {
+                _recipe.value = Recipe(recipeCategory)
             }
-        } else if (_recipe.value == null) {
-            _recipe.value = Recipe(recipeCategory)
         }
     }
 

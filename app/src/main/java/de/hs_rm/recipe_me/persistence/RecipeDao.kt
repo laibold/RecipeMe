@@ -50,7 +50,7 @@ interface RecipeDao {
     @Query("SELECT * FROM Recipe")
     fun getRecipes(): LiveData<List<RecipeWithRelations>>
 
-    @Query("SELECT * FROM Recipe WHERE category = :recipeCategory ORDER BY name ASC")
+    @Query("SELECT * FROM Recipe WHERE category = :recipeCategory ORDER BY name COLLATE NOCASE ASC")
     fun getRecipesByCategory(recipeCategory: RecipeCategory): LiveData<List<Recipe>>
 
     @Transaction

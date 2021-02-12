@@ -23,13 +23,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <!--TODO to class-->
             <ImageButton
                 android:id="@+id/edit_button"
-                android:layout_width="@dimen/small_circle_button"
-                android:layout_height="@dimen/small_circle_button"
+                android:layout_width="@dimen/small_button_size"
+                android:layout_height="@dimen/small_button_size"
                 android:layout_marginEnd="@dimen/default_space"
-                android:background="@drawable/round_button_3dp"
+                android:background="@null"
                 android:contentDescription="@string/delete"
+                android:padding="@dimen/small_button_padding_big_icon"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_baseline_edit_24"
                 android:tint="?attr/colorPrimaryVariant"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -39,10 +42,12 @@
 
             <ImageButton
                 android:id="@+id/delete_button"
-                android:layout_width="@dimen/small_circle_button"
-                android:layout_height="@dimen/small_circle_button"
-                android:background="@drawable/round_button_3dp"
+                android:layout_width="@dimen/small_button_size"
+                android:layout_height="@dimen/small_button_size"
+                android:background="@null"
                 android:contentDescription="@string/delete"
+                android:padding="@dimen/small_button_padding_big_icon"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_baseline_delete_24"
                 android:tint="?attr/colorPrimaryVariant"
                 app:layout_constraintBottom_toBottomOf="parent"

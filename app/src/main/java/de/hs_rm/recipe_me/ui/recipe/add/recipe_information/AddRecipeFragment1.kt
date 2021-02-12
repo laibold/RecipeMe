@@ -44,21 +44,21 @@ class AddRecipeFragment1 : Fragment() {
 
         if (args.recipeId != Recipe.DEFAULT_ID) {
             binding.header.headlineText = getString(R.string.edit_recipe)
+
+            viewModel.recipe.observe(viewLifecycleOwner, { recipe ->
+                if (recipe != null) {
+                    if (recipe.name != "") {
+                        binding.recipeNameField.setText(viewModel.recipe.value!!.name)
+                    }
+                    if (recipe.servings != 0) {
+                        binding.recipeServingsField.setText(viewModel.recipe.value!!.servings.toString())
+                    }
+                    binding.recipeCategorySpinner.setSelection(recipe.category.ordinal)
+                }
+            })
         } else {
             binding.header.headlineText = getString(R.string.new_recipe)
         }
-
-        viewModel.recipe.observe(viewLifecycleOwner, { recipe ->
-            if (recipe != null) {
-                if (recipe.name != "") {
-                    binding.recipeNameField.setText(viewModel.recipe.value!!.name)
-                }
-                if (recipe.servings != 0) {
-                    binding.recipeServingsField.setText(viewModel.recipe.value!!.servings.toString())
-                }
-                binding.recipeCategorySpinner.setSelection(recipe.category.ordinal)
-            }
-        })
 
         binding.nextButton.setOnClickListener { onNext() }
 

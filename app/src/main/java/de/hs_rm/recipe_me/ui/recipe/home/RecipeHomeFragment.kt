@@ -22,14 +22,14 @@ class RecipeHomeFragment : Fragment() {
     private val viewModel: RecipeHomeViewModel by viewModels()
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
-                inflater,
-                R.layout.recipe_home_fragment,
-                container,
-                false
+            inflater,
+            R.layout.recipe_home_fragment,
+            container,
+            false
         )
 
         setAdapter()
@@ -40,19 +40,18 @@ class RecipeHomeFragment : Fragment() {
         // Subtract scroll position, because dummy view will move, but wrapper won't
         binding.dummyView.setOnTouchListener { view, event ->
             when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    event.offsetLocation(
+                        (-binding.scrollView.scrollX).toFloat(),
+                        (-binding.scrollView.scrollY).toFloat()
+                    )
+                    binding.recipeOfTheDayWrapper.dispatchTouchEvent(event)
+                }
                 MotionEvent.ACTION_UP -> {
                     view.performClick()
                 }
             }
-
-            event.offsetLocation(
-                    (-binding.scrollView.scrollX).toFloat(),
-                    (-binding.scrollView.scrollY).toFloat()
-            )
-
-            binding.recipeOfTheDayWrapper.dispatchTouchEvent(event)
-
-            false
+            true
         }
 
         viewModel.recipeOfTheDay.observe(viewLifecycleOwner, { recipe ->
@@ -88,14 +87,15 @@ class RecipeHomeFragment : Fragment() {
             // Touch event gets dispatched from ScrollViews dummy view
             binding.recipeOfTheDayButton.setOnTouchListener { view, event ->
                 when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        val direction =
+                            RecipeHomeFragmentDirections.toRecipeDetailFragment(recipe.id, true)
+                        findNavController().navigate(direction)
+                    }
                     MotionEvent.ACTION_UP -> {
                         view.performClick()
                     }
                 }
-
-                //FIXME
-                val direction = RecipeHomeFragmentDirections.toRecipeDetailFragment(recipe.id, true)
-                findNavController().navigate(direction)
                 true
             }
         }

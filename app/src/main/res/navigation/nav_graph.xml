@@ -145,14 +145,17 @@
             app:argType="boolean" />
 
         <action
+            android:id="@+id/to_add_recipe_nav_graph"
+            app:destination="@id/add_recipe_nav_graph" />
+        <action
             android:id="@+id/to_cooking_step_fragment"
-            app:destination="@+id/cooking_step_fragment" />
+            app:destination="@id/cooking_step_fragment" />
         <action
             android:id="@+id/to_recipe_category_fragment"
-            app:destination="@+id/recipe_category_fragment" />
+            app:destination="@id/recipe_category_fragment" />
         <action
             android:id="@+id/to_recipe_home_fragment"
-            app:destination="@+id/recipe_home_fragment" />
+            app:destination="@id/recipe_home_fragment" />
     </fragment>
 
     <fragment
