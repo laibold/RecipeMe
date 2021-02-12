@@ -12,19 +12,28 @@ import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
+import de.hs_rm.recipe_me.model.user.User
 
 /**
  * Room Database for this app. Use Daos with Dependency Injection
  */
 @Database(
-    entities = [Recipe::class, Ingredient::class, CookingStep::class, ShoppingListItem::class, RecipeOfTheDay::class],
-    version = 6
+    entities = [
+        Recipe::class,
+        Ingredient::class,
+        CookingStep::class,
+        ShoppingListItem::class,
+        RecipeOfTheDay::class,
+        User::class
+    ],
+    version = 8
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun recipeDao(): RecipeDao
     abstract fun shoppingListDao(): ShoppingListDao
     abstract fun recipeOfTheDayDao(): RecipeOfTheDayDao
+    abstract fun userDao(): UserDao
 
     companion object {
         private const val DATABASE_NAME = "test_db"
@@ -45,7 +54,7 @@ abstract class AppDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
 //                .createFromAsset(ASSET_NAME).fallbackToDestructiveMigration()
-                .addMigrations(MIGRATION_4_5, MIGRATION_5_6)
+                .addMigrations(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_8)
                 .build()
         }
 
@@ -78,5 +87,16 @@ abstract class AppDatabase : RoomDatabase() {
                 )
             }
         }
+
+        private val MIGRATION_6_8 = object : Migration(6, 8) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    "CREATE TABLE IF NOT EXISTS User (" +
+                        " id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        " name TEXT NOT NULL)"
+                )
+            }
+        }
+
     }
 }

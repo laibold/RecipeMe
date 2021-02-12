@@ -32,6 +32,13 @@ class EditProfileDialog constructor(
         val width = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
         window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
 
+        binding.editNameField.setText(viewModel.user.value?.name)
+
+        binding.saveButton.setOnClickListener {
+            viewModel.saveUser(binding.editNameField.text.toString())
+            dismiss()
+        }
+
         binding.cancelButton.setOnClickListener {
             dismiss()
         }

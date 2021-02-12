@@ -1,5 +1,6 @@
 package de.hs_rm.recipe_me.service
 
+import androidx.lifecycle.LiveData
 import de.hs_rm.recipe_me.model.user.User
 import de.hs_rm.recipe_me.persistence.UserDao
 import javax.inject.Inject
@@ -13,14 +14,15 @@ class UserRepository @Inject constructor(
 ) {
 
     /**
-     * Insert or update given [User]
+     * Insert or update [User] with given name
      */
-    suspend fun insertOrUpdate(user: User) {
-        when (userDao.getUser()) {
+    suspend fun insertOrUpdate(name: String) {
+        when (val user = userDao.getUser()) {
             null -> {
-                userDao.insert(user)
+                userDao.insert(User(name))
             }
             else -> {
+                user.name = name
                 userDao.update(user)
             }
         }
@@ -34,11 +36,10 @@ class UserRepository @Inject constructor(
     }
 
     /**
-     * @return id of the current [User], -1 when there is none
+     * @return current [User] as LiveData
      */
-    suspend fun getUser(): Long {
-        val user = userDao.getUser()
-        return user?.id ?: -1
+    fun getUser(): LiveData<User?> {
+        return userDao.getUserAsLiveData()
     }
 
 

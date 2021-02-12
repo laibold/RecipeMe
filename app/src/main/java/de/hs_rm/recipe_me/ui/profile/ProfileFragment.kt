@@ -13,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.BuildConfig
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.ProfileFragmentBinding
+import de.hs_rm.recipe_me.model.user.User
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -33,9 +34,14 @@ class ProfileFragment : Fragment() {
         )
 
         viewModel.loadRecipeTotal()
+        viewModel.loadUser()
 
         viewModel.total.observe(viewLifecycleOwner, {
             binding.profileQuantityRecipesText.text = getRecipeTotalText(it)
+        })
+
+        viewModel.user.observe(viewLifecycleOwner, { user ->
+            binding.profileGreeting.text = getUserGreeting(user)
         })
 
         binding.editProfileButton.setOnClickListener {
@@ -70,5 +76,15 @@ class ProfileFragment : Fragment() {
      */
     private fun editProfileDialog(): EditProfileDialog {
         return EditProfileDialog(requireActivity(), viewModel)
+    }
+
+    /**
+     * @return Greeting with name of the user or default greeting
+     */
+    private fun getUserGreeting(user: User?): String {
+        if (user == null) {
+            return getString(R.string.profile_greeting)
+        }
+        return "Hallo, " + user.name + "!"
     }
 }
