@@ -20,12 +20,12 @@ import java.util.*
  * Adapter for View of Recipes by RecipeCategory. Layout: recipe_listitem in ListView
  */
 class RecipeListAdapter(
-    context: Context,
-    private val resource: Int,
-    private val objects: List<Recipe>,
-    private val callbackListener: DeleteRecipeCallbackAdapter
+        context: Context,
+        private val resource: Int,
+        private val objects: List<Recipe>,
+        private val callbackListener: DeleteRecipeCallbackAdapter
 ) :
-    ArrayAdapter<Recipe>(context, resource, objects) {
+        ArrayAdapter<Recipe>(context, resource, objects) {
 
     /**
      * Indicates whether a recipe list item is selected. Other items will observe this value
@@ -40,10 +40,10 @@ class RecipeListAdapter(
 
         if (convertView == null) {
             val viewBinding = DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                resource,
-                parent,
-                false
+                    LayoutInflater.from(parent.context),
+                    resource,
+                    parent,
+                    false
             ) as RecipeListitemBinding
 
             holder = RecipeViewHolder(viewBinding)
@@ -84,10 +84,7 @@ class RecipeListAdapter(
 
         // Navigate to AddRecipeNavGraph with recipeId to edit the recipe
         holder.binding.editOverlay.editButton.setOnClickListener {
-            val direction = RecipeCategoryFragmentDirections.toAddRecipeNavGraph(
-                recipeId = recipe.id,
-                clearValues = true
-            )
+            val direction = RecipeCategoryFragmentDirections.toAddRecipeNavGraph(recipeId = recipe.id)
             it.findNavController().navigate(direction)
         }
 
@@ -106,7 +103,7 @@ class RecipeListAdapter(
         itemSelected.set(false)
         val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         vibrator.vibrate(
-            VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE)
+                VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE)
         )
 
         itemSelected.set(true)

@@ -2,7 +2,6 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
     app:startDestination="@id/recipe_home_fragment">
 
     <fragment
@@ -62,11 +61,6 @@
             android:name="recipeId"
             android:defaultValue="0L"
             app:argType="long" />
-
-        <argument
-            android:name="clearValues"
-            android:defaultValue="false"
-            app:argType="boolean" />
 
         <fragment
             android:id="@+id/add_recipe_fragment1"

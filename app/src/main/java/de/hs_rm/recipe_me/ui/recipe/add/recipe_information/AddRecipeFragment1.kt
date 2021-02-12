@@ -25,24 +25,20 @@ class AddRecipeFragment1 : Fragment() {
     private val viewModel: AddRecipeViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.add_recipe_fragment1,
-            container,
-            false
+                inflater,
+                R.layout.add_recipe_fragment1,
+                container,
+                false
         )
 
         // Pre-set category in spinner depending on navigation source, default none
         viewModel.recipeCategory = args.recipeCategory
         binding.recipeCategorySpinner.adapter = spinnerAdapter()
         binding.recipeCategorySpinner.setSelection(viewModel.recipeCategory.ordinal)
-
-        if (args.clearValues) {
-            viewModel.clearValues()
-        }
 
         viewModel.initRecipe(args.recipeId)
 
@@ -85,9 +81,9 @@ class AddRecipeFragment1 : Fragment() {
 
         if (validationOk) {
             viewModel.setRecipeAttributes(
-                binding.recipeNameField.text.toString().trim(),
-                binding.recipeServingsField.text.toString(),
-                RecipeCategory.values()[binding.recipeCategorySpinner.selectedItemPosition]
+                    binding.recipeNameField.text.toString().trim(),
+                    binding.recipeServingsField.text.toString(),
+                    RecipeCategory.values()[binding.recipeCategorySpinner.selectedItemPosition]
             )
 
             val direction = AddRecipeFragment1Directions.toAddRecipeFragment2()

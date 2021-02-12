@@ -37,6 +37,5 @@
 
     <!--divider size-->
     <dimen name="divider_big">35dp</dimen>
-    <dimen name="divider_small">10dp</dimen>
 
 </resources>

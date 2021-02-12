@@ -22,14 +22,14 @@ class RecipeHomeFragment : Fragment() {
     private val viewModel: RecipeHomeViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.recipe_home_fragment,
-            container,
-            false
+                inflater,
+                R.layout.recipe_home_fragment,
+                container,
+                false
         )
 
         setAdapter()
@@ -46,8 +46,8 @@ class RecipeHomeFragment : Fragment() {
             }
 
             event.offsetLocation(
-                (-binding.scrollView.scrollX).toFloat(),
-                (-binding.scrollView.scrollY).toFloat()
+                    (-binding.scrollView.scrollX).toFloat(),
+                    (-binding.scrollView.scrollY).toFloat()
             )
 
             binding.recipeOfTheDayWrapper.dispatchTouchEvent(event)
