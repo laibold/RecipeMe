@@ -59,6 +59,10 @@ class AddRecipeViewModelTest {
             delay(1000)
             viewModel.initRecipe(Recipe.DEFAULT_ID)
         }
+
+        viewModel.recipe.getOrAwaitValue()
+        viewModel.ingredients.getOrAwaitValue()
+        viewModel.cookingStepsWithIngredients.getOrAwaitValue()
     }
 
     /**
@@ -354,7 +358,7 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun updateEntitiesSuccessful() {
-        val numberOfChildren = 3
+        val numberOfChildren = 2
 
         val name = "New Name"
         val servings = "6"
@@ -362,10 +366,6 @@ class AddRecipeViewModelTest {
 
         beforeEach()
         insertTestData(numberOfChildren, numberOfChildren)
-
-        // Important for test to succeed (LiveData)
-        val recipe = viewModel.recipe.getOrAwaitValue()
-        assertNotNull(recipe)
 
         val recipeId = viewModel.persistEntities().getOrAwaitValue(10)
 
@@ -381,33 +381,42 @@ class AddRecipeViewModelTest {
             viewModel.initRecipe(recipeId)
         }
 
-        // Again important for test to succeed (LiveData)
-        val recipeNew = viewModel.recipe.getOrAwaitValue()
-        assertNotNull(recipeNew)
+        viewModel.recipe.getOrAwaitValue()
+        viewModel.ingredients.getOrAwaitValue()
+        viewModel.cookingStepsWithIngredients.getOrAwaitValue()
 
         // change name, servings and category
         viewModel.setRecipeAttributes(name, servings, category)
 
         // add ingredient
+        viewModel.addIngredient(getEditable("New Ingredient"), getEditable("1"), IngredientUnit.NONE)
         // delete ingredient
+        viewModel.ingredients.value!!.removeAt(1)
         // edit ingredient
-
+        viewModel.prepareIngredientUpdate(0)
+        viewModel.updateIngredient(getEditable("Updated Ingredient"), getEditable("2"), IngredientUnit.CAN)
 
         // add step
+        viewModel.addCookingStepWithIngredients(getEditable("New Step"), getEditable(""), TimeUnit.SECOND, mutableListOf())
+        // edit step
         // remove step
-        // change ingredient in step
+        // change (add/remove) ingredient in step
 
         val newRecipeId = viewModel.persistEntities().getOrAwaitValue()
         assertNotEquals(Recipe.DEFAULT_ID, newRecipeId)
 
-        val recipeWithRelations = recipeRepository.getRecipeWithRelationsById(newRecipeId).getOrAwaitValue()
+        val recipeWithRelations = recipeRepository.getRecipeWithRelationsById(newRecipeId).getOrAwaitValue(10)
 
         assertEquals(name, recipeWithRelations.recipe.name)
         assertEquals(servings.toInt(), recipeWithRelations.recipe.servings)
         assertEquals(category, recipeWithRelations.recipe.category)
 
-//        assertEquals(numberOfChildren, recipeWithRelations.ingredients.size)
-//        assertEquals(numberOfChildren, recipeWithRelations.cookingStepsWithIngredients.size)
+        assertEquals(2, recipeWithRelations.ingredients.size)
+        assertEquals(Ingredient("Updated Ingredient", 2.0, IngredientUnit.CAN), recipeWithRelations.ingredients[0] )
+        assertEquals(Ingredient("New Ingredient", 1.0, IngredientUnit.NONE), recipeWithRelations.ingredients[1] )
+
+        assertEquals(3, recipeWithRelations.cookingStepsWithIngredients.size)
+        assertEquals(CookingStep("New Step", 0, TimeUnit.SECOND), recipeWithRelations.cookingStepsWithIngredients[2].cookingStep)
     }
 
     /**
