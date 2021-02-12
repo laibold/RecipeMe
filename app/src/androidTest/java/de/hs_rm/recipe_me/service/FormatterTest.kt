@@ -48,4 +48,16 @@ class FormatterTest {
         assertEquals(str, "4,5 Dosen Chickpeas")
     }
 
+    @Test
+    fun formatIngredientListSuccessful() {
+        val ingredients = listOf(
+            Ingredient("Bananas", 3.0, IngredientUnit.NONE),
+            Ingredient("Chickpeas", 1.5, IngredientUnit.CAN),
+            Ingredient("Curcuma", 0.0, IngredientUnit.NONE)
+        )
+        val str = Formatter.formatIngredientList(context, ingredients)
+
+        assertEquals("3 Bananas, 1,5 Dosen Chickpeas, Curcuma", str)
+    }
+
 }

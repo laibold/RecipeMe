@@ -66,7 +66,7 @@ object Formatter {
     /**
      * Format List of ingredients to comma separated String
      */
-    fun formatIngredientList(context: Context, ingredients: List<Ingredient>, multiplier: Double = 0.0): String {
+    fun formatIngredientList(context: Context, ingredients: List<Ingredient>, multiplier: Double = 1.0): String {
         val stringList = ingredients.map { formatIngredient(context, it, multiplier) }
 
         return stringList.joinToString(", ")
