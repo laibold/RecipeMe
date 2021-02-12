@@ -89,7 +89,8 @@ class RecipeDetailFragment : Fragment() {
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     val direction = RecipeDetailFragmentDirections.toAddRecipeNavGraph(
-                        recipeId = viewModel.recipe.value?.recipe!!.id
+                        recipeId = viewModel.recipe.value?.recipe!!.id,
+                        clearValues = true
                     )
                     view.findNavController().navigate(direction)
                 }

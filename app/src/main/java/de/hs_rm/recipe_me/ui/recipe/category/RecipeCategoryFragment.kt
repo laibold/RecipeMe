@@ -27,15 +27,15 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
     private var isInitialized = false
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
-                inflater,
-                R.layout.recipe_category_fragment,
-                container,
-                false
+            inflater,
+            R.layout.recipe_category_fragment,
+            container,
+            false
         )
 
         viewModel.category = args.recipeCategory
@@ -48,7 +48,10 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
         }
 
         binding.addButton.setOnClickListener {
-            val direction = RecipeCategoryFragmentDirections.toAddRecipeNavGraph(viewModel.category)
+            val direction = RecipeCategoryFragmentDirections.toAddRecipeNavGraph(
+                viewModel.category,
+                clearValues = true
+            )
             findNavController().navigate(direction)
         }
 
@@ -64,16 +67,16 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
         // Set action to back button: if item in adapter is selected, remove the selection by setting
         // itemSelected to false. If nothing is selected, navigate to HomeFragment
         val callback: OnBackPressedCallback =
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        if (adapter.itemSelected.get()) {
-                            adapter.removeSelection()
-                        } else {
-                            val direction = RecipeCategoryFragmentDirections.toRecipeHomeFragment()
-                            findNavController().navigate(direction)
-                        }
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (adapter.itemSelected.get()) {
+                        adapter.removeSelection()
+                    } else {
+                        val direction = RecipeCategoryFragmentDirections.toRecipeHomeFragment()
+                        findNavController().navigate(direction)
                     }
                 }
+            }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
@@ -109,18 +112,18 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
      */
     private fun deleteDialog(recipe: Recipe): CustomAlertDialog {
         return CustomAlertDialog.Builder(requireActivity())
-                .title(R.string.delete)
-                .message(R.string.delete_recipe_message)
-                .positiveButton(R.string.delete) {
-                    viewModel.deleteRecipeAndRelations(recipe)
-                    adapter.notifyDataSetChanged()
-                }
-                .negativeButton(
-                        R.string.cancel
-                ) {
-                    adapter.removeSelection()
-                }
-                .create()
+            .title(R.string.delete)
+            .message(R.string.delete_recipe_message)
+            .positiveButton(R.string.delete) {
+                viewModel.deleteRecipeAndRelations(recipe)
+                adapter.notifyDataSetChanged()
+            }
+            .negativeButton(
+                R.string.cancel
+            ) {
+                adapter.removeSelection()
+            }
+            .create()
     }
 
     /**

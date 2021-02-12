@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
  * Used in [AddRecipeFragment1], [AddRecipeFragment2] and [AddRecipeFragment3],
  */
 class AddRecipeViewModel @ViewModelInject constructor(
-        private val repository: RecipeRepository
+    private val repository: RecipeRepository
 ) : ViewModel() {
 
     lateinit var recipeCategory: RecipeCategory
@@ -43,28 +43,27 @@ class AddRecipeViewModel @ViewModelInject constructor(
         get() = _ingredients
 
     private val _cookingStepsWithIngredients =
-            MutableLiveData<MutableList<CookingStepWithIngredients>>()
+        MutableLiveData<MutableList<CookingStepWithIngredients>>()
     val cookingStepsWithIngredients: LiveData<MutableList<CookingStepWithIngredients>>
         get() = _cookingStepsWithIngredients
 
     /**
-     * Initialize recipe if not already done.
+     * Initialize recipe, Ingredients and cookingStepsWithIngredients.
      * Old Values will be cleared and if recipeId is not default, the related Recipe will be loaded
      */
     fun initRecipe(recipeId: Long) {
-        if (_recipe.value == null) {
-            _ingredients.value = mutableListOf()
-            _cookingStepsWithIngredients.value = mutableListOf()
-            _recipe.value = Recipe(RecipeCategory.values()[0]) // to prevent old recipe to be shown
+        _ingredients.value = mutableListOf()
+        _cookingStepsWithIngredients.value = mutableListOf()
 
-            if (recipeId != Recipe.DEFAULT_ID) {
-                viewModelScope.launch {
-                    recipeToUpdate = repository.getRecipeById(recipeId)
-                }
+        if (recipeId != Recipe.DEFAULT_ID) {
+            viewModelScope.launch {
+                recipeToUpdate = repository.getRecipeById(recipeId)
+            }
 
-                // recipeId has been committed, so this recipe should be edited and it's values should be entered into the forms
-                viewModelScope.launch {
-                    repository.getRecipeWithRelationsById(recipeId).asFlow().collect { recipeWithRelations ->
+            // recipeId has been committed, so this recipe should be edited and it's values should be entered into the forms
+            viewModelScope.launch {
+                repository.getRecipeWithRelationsById(recipeId).asFlow()
+                    .collect { recipeWithRelations ->
                         _recipe.postValue(recipeWithRelations.recipe)
                         oldIngredients = mutableListOf()
                         oldCookingSteps = mutableListOf()
@@ -79,10 +78,10 @@ class AddRecipeViewModel @ViewModelInject constructor(
                             _cookingStepsWithIngredients.addToValue(cookingStepWithIngredients)
                         }
                     }
-                }
-            } else if (_recipe.value == null) {
-                _recipe.value = Recipe(recipeCategory)
             }
+        } else {
+            // Add recipe
+            _recipe.value = Recipe(recipeCategory)
         }
     }
 
@@ -132,13 +131,13 @@ class AddRecipeViewModel @ViewModelInject constructor(
      * @return true if cooking step could be updated
      */
     fun updateIngredient(
-            name: Editable,
-            quantity: Editable,
-            ingredientUnit: IngredientUnit
+        name: Editable,
+        quantity: Editable,
+        ingredientUnit: IngredientUnit
     ): Boolean {
         val ingredientToUpdate = _ingredients.value!![updatingIngredientIndex]
         val ingredient =
-                getIngredient(name, quantity, ingredientUnit, ingredientToUpdate.ingredientId)
+            getIngredient(name, quantity, ingredientUnit, ingredientToUpdate.ingredientId)
 
         if (ingredient != null) {
             _ingredients.setValueAt(this.updatingIngredientIndex, ingredient)
@@ -158,10 +157,10 @@ class AddRecipeViewModel @ViewModelInject constructor(
      * @return true if cooking step could be created
      */
     private fun getIngredient(
-            name: Editable,
-            quantity: Editable,
-            ingredientUnit: IngredientUnit,
-            ingredientId: Long = Ingredient.DEFAULT_ID
+        name: Editable,
+        quantity: Editable,
+        ingredientUnit: IngredientUnit,
+        ingredientId: Long = Ingredient.DEFAULT_ID
     ): Ingredient? {
         var quantityDouble = Ingredient.DEFAULT_QUANTITY
 
@@ -195,13 +194,13 @@ class AddRecipeViewModel @ViewModelInject constructor(
      * @return true if cooking step could be added
      */
     fun addCookingStepWithIngredients(
-            text: Editable,
-            time: Editable,
-            timeUnit: TimeUnit,
-            ingredients: MutableList<Ingredient>
+        text: Editable,
+        time: Editable,
+        timeUnit: TimeUnit,
+        ingredients: MutableList<Ingredient>
     ): Boolean {
         val cookingStepWithIngredients =
-                getCookingStepWithIngredients(text, time, timeUnit, ingredients)
+            getCookingStepWithIngredients(text, time, timeUnit, ingredients)
         if (cookingStepWithIngredients != null) {
             _cookingStepsWithIngredients.addToValue(cookingStepWithIngredients)
             return true
@@ -218,26 +217,26 @@ class AddRecipeViewModel @ViewModelInject constructor(
      * @return true if cooking step could be updated
      */
     fun updateCookingStepWithIngredients(
-            text: Editable,
-            time: Editable,
-            timeUnit: TimeUnit,
-            ingredients: MutableList<Ingredient>
+        text: Editable,
+        time: Editable,
+        timeUnit: TimeUnit,
+        ingredients: MutableList<Ingredient>
     ): Boolean {
         val objectToUpdate =
-                _cookingStepsWithIngredients.value!![updatingCookingStepIndex].cookingStep
+            _cookingStepsWithIngredients.value!![updatingCookingStepIndex].cookingStep
         val cookingStepWithIngredients =
-                getCookingStepWithIngredients(
-                        text,
-                        time,
-                        timeUnit,
-                        ingredients,
-                        objectToUpdate.cookingStepId
-                )
+            getCookingStepWithIngredients(
+                text,
+                time,
+                timeUnit,
+                ingredients,
+                objectToUpdate.cookingStepId
+            )
 
         if (cookingStepWithIngredients != null) {
             _cookingStepsWithIngredients.setValueAt(
-                    this.updatingCookingStepIndex,
-                    cookingStepWithIngredients
+                this.updatingCookingStepIndex,
+                cookingStepWithIngredients
             )
             return true
         }
@@ -254,11 +253,11 @@ class AddRecipeViewModel @ViewModelInject constructor(
      * @return true if cooking step could be created
      */
     private fun getCookingStepWithIngredients(
-            text: Editable,
-            time: Editable,
-            timeUnit: TimeUnit,
-            ingredients: MutableList<Ingredient>,
-            cookingStepId: Long = CookingStep.DEFAULT_ID
+        text: Editable,
+        time: Editable,
+        timeUnit: TimeUnit,
+        ingredients: MutableList<Ingredient>,
+        cookingStepId: Long = CookingStep.DEFAULT_ID
     ): CookingStepWithIngredients? {
         var timeInt = CookingStep.DEFAULT_TIME
 
@@ -267,8 +266,8 @@ class AddRecipeViewModel @ViewModelInject constructor(
                 timeInt = time.toString().toInt()
             }
             val cookingStepWithIngredients = CookingStepWithIngredients(
-                    CookingStep(text.toString().trim(), timeInt, timeUnit),
-                    ingredients
+                CookingStep(text.toString().trim(), timeInt, timeUnit),
+                ingredients
             )
             if (cookingStepId != CookingStep.DEFAULT_ID) {
                 cookingStepWithIngredients.cookingStep.cookingStepId = cookingStepId
@@ -362,7 +361,10 @@ class AddRecipeViewModel @ViewModelInject constructor(
                     cookingStep.cookingStepId = repository.insert(cookingStep)
                 }
 
-                insertCookingStepIngredientCrossRefs(cookingStepWithIngredients.ingredients, cookingStep.cookingStepId)
+                insertCookingStepIngredientCrossRefs(
+                    cookingStepWithIngredients.ingredients,
+                    cookingStep.cookingStepId
+                )
             }
 
             // Delete CookingSteps that are in old but not in new list
@@ -409,7 +411,10 @@ class AddRecipeViewModel @ViewModelInject constructor(
                 _cookingStepsWithIngredients.value?.let { list ->
                     for (cookingStepWithIngredients in list) {
                         val cId = repository.insert(cookingStepWithIngredients.cookingStep)
-                        insertCookingStepIngredientCrossRefs(cookingStepWithIngredients.ingredients, cId)
+                        insertCookingStepIngredientCrossRefs(
+                            cookingStepWithIngredients.ingredients,
+                            cId
+                        )
                     }
                 }
                 recipeId.postValue(id)
@@ -422,7 +427,10 @@ class AddRecipeViewModel @ViewModelInject constructor(
      * Insert a cross reference entry for every given ingredient and cooking step.
      * Use this after the ingredients have been inserted. They need to have their auto-generated id
      */
-    private suspend fun insertCookingStepIngredientCrossRefs(ingredients: List<Ingredient>, cookingStepId: Long) {
+    private suspend fun insertCookingStepIngredientCrossRefs(
+        ingredients: List<Ingredient>,
+        cookingStepId: Long
+    ) {
         // The ingredients are references to already inserted ones, so they
         // now have an id and we can create a cross reference to the CookingSteps
         // that have just been inserted
