@@ -85,6 +85,6 @@ class ProfileFragment : Fragment() {
         if (user == null) {
             return getString(R.string.profile_greeting)
         }
-        return "Hallo, " + user.name + "!"
+        return getString(R.string.profile_greeting_name).format(user.name)
     }
 }

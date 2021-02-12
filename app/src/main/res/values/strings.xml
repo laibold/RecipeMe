@@ -111,4 +111,5 @@
     <string name="save">Speichern</string>
     <string name="shopping_list_export_headline">Sieh, was auf %s RecipeMe-Einkaufsliste steht:\n\n</string>
     <string name="my">meiner</string>
+    <string name="profile_greeting_name">Hallo, %s!</string>
 </resources>
