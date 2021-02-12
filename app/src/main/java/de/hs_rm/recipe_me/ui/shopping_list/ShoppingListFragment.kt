@@ -8,10 +8,12 @@ import android.view.inputmethod.EditorInfo
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.ShoppingListFragmentBinding
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
+import de.hs_rm.recipe_me.model.user.User
 import de.hs_rm.recipe_me.service.Formatter
 import de.hs_rm.recipe_me.service.TextSharer
 
@@ -35,6 +37,7 @@ class ShoppingListFragment : Fragment() {
         )
 
         viewModel.loadShoppingListItems()
+        viewModel.loadUser()
 
         viewModel.shoppingListItems.observe(viewLifecycleOwner, {
             onShoppingListItemsChanged(it)
@@ -59,9 +62,12 @@ class ShoppingListFragment : Fragment() {
             viewModel.clearCheckedItems()
         }
 
-        binding.shareButton.setOnClickListener {
-            TextSharer.share(requireContext(), getShareText())
-        }
+        viewModel.user.observe(viewLifecycleOwner, { user ->
+            binding.shareButton.setOnClickListener {
+                TextSharer.share(requireContext(), getShareText(user))
+            }
+        })
+
 
         return binding.root
     }
@@ -130,9 +136,14 @@ class ShoppingListFragment : Fragment() {
     /**
      * @return Text for sharing list items to other apps
      */
-    private fun getShareText(): String {
-        var s =
-            requireContext().resources.getString(R.string.shopping_list_export_headline) + "\n\n"
+    private fun getShareText(user: User?): String {
+        val username = if (user == null) {
+            getString(R.string.my)
+        } else {
+            Formatter.formatNameToGenitive(user.name)
+        }
+        var s = getString(R.string.shopping_list_export_headline).format(username)
+
         viewModel.shoppingListItems.value?.let {
             for (item in it) {
                 if (!item.checked) {
