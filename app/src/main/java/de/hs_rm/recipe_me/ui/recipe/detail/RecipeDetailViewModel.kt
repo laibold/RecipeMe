@@ -20,7 +20,7 @@ class RecipeDetailViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     lateinit var recipe: LiveData<RecipeWithRelations>
-    var servings = ObservableInt()
+    var servings = ObservableInt(NOT_INITIALIZED)
     var ingredientSelectionActive = ObservableBoolean(false)
 
     /**
@@ -54,7 +54,7 @@ class RecipeDetailViewModel @ViewModelInject constructor(
     }
 
     /**
-     * Add selected ingredients to shopping lits
+     * Add selected ingredients to shopping list
      */
     fun addSelectedIngredientsToShoppingList() {
         recipe.value?.let {
@@ -80,6 +80,10 @@ class RecipeDetailViewModel @ViewModelInject constructor(
                 ingredient.checked = false
             }
         }
+    }
+
+    companion object {
+        const val NOT_INITIALIZED = -1
     }
 
 }

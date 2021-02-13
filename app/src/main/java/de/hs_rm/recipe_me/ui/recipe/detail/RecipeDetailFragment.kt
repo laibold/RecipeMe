@@ -60,7 +60,6 @@ class RecipeDetailFragment : Fragment() {
 
         viewModel.recipe.observe(viewLifecycleOwner, { recipeWithRelations ->
             onRecipeChanged(recipeWithRelations)
-            viewModel.servings.set(recipeWithRelations.recipe.servings)
         })
 
         viewModel.servings.addOnPropertyChangedCallback(object :
@@ -116,13 +115,22 @@ class RecipeDetailFragment : Fragment() {
         return binding.root
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.servings.set(RecipeDetailViewModel.NOT_INITIALIZED)
+    }
+
     /**
      * Set recipe name, servings, ingredients and cooking steps to view
      */
     private fun onRecipeChanged(recipeWithRelations: RecipeWithRelations) {
         binding.recipeDetailName.headlineText = recipeWithRelations.recipe.name
-        onServingsChanged(recipeWithRelations.recipe.servings)
         setIngredientAdapter(recipeWithRelations)
+        if (viewModel.servings.get() == RecipeDetailViewModel.NOT_INITIALIZED) {
+            viewModel.servings.set(recipeWithRelations.recipe.servings)
+        } else {
+            onServingsChanged(viewModel.servings.get())
+        }
         setCookingSteps(recipeWithRelations)
         setImage(recipeWithRelations)
         binding.recipeInfo.wrapper.visibility = View.VISIBLE
@@ -222,6 +230,15 @@ class RecipeDetailFragment : Fragment() {
         binding.recipeInfo.addToShoppingListButton.visibility = View.VISIBLE
         binding.recipeInfo.toShoppingListAcceptButton.visibility = View.GONE
         binding.recipeInfo.toShoppingListCancelButton.visibility = View.GONE
+    }
+
+    private fun onBackPressed() {
+        // to prevent servingsElement from showing -1
+        binding.recipeInfo.wrapper.visibility = View.GONE
+        viewModel.servings.set(RecipeDetailViewModel.NOT_INITIALIZED)
+        val direction =
+            RecipeDetailFragmentDirections.toRecipeCategoryFragment(viewModel.recipe.value!!.recipe.category)
+        findNavController().navigate(direction)
     }
 
 }
