@@ -12,16 +12,12 @@ import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.concurrent.Executors
 
-/**
- * https://developer.android.com/training/dependency-injection/hilt-testing
- */
 @RunWith(AndroidJUnit4::class)
 class RecipeRepositoryTest {
 
@@ -45,17 +41,62 @@ class RecipeRepositoryTest {
         insertTestRecipe()
     }
 
+    /**
+     * Tests if added [Ingredient] has expected name, quantity and unit
+     */
     @Test
-    fun testInjection() {
-        assertNotNull(repository)
-    }
-
     fun addIngredient() {
-        // TODO
+        val recipeName = "TestRecipe"
+        val servings = 2
+        val category = RecipeCategory.SNACKS
+        val imageUri = "uri"
+        var id = -1L
+
+        runBlocking {
+            id = repository.insert(Recipe(recipeName, servings, category, imageUri))
+            repository.insert(Ingredient(id, "Ingredient1", 2.0, IngredientUnit.GRAM))
+        }
+
+        val recipe = repository.getRecipeWithRelationsById(id).getOrAwaitValue()
+
+        assertEquals(recipe.ingredients.size, 1)
+        assertEquals(
+            recipe.ingredients[0].name,
+            "Ingredient1"
+        )
+        assertEquals(
+            recipe.ingredients[0].quantity,
+            2.0, 0.0
+        )
+        assertEquals(
+            recipe.ingredients[0].unit,
+            IngredientUnit.GRAM
+        )
+
     }
 
+    /**
+     * Tests if added [CookingStep] has expected  text, time and time unit
+     */
+    @Test
     fun addCookingStep() {
-        // TODO
+        val recipeName = "TestRecipe"
+        val servings = 2
+        val category = RecipeCategory.SNACKS
+        val imageUri = "uri"
+        var id = -1L
+
+        runBlocking {
+            id = repository.insert(Recipe(recipeName, servings, category, imageUri))
+            repository.insert(CookingStep(id, "uri", "cook", 20, TimeUnit.SECOND))
+        }
+
+        val recipe = repository.getRecipeWithRelationsById(id).getOrAwaitValue()
+
+        assertEquals(recipe.cookingStepsWithIngredients.size, 1)
+        assertEquals(recipe.cookingStepsWithIngredients[0].cookingStep.text, "cook")
+        assertEquals(recipe.cookingStepsWithIngredients[0].cookingStep.time, 20)
+        assertEquals(recipe.cookingStepsWithIngredients[0].cookingStep.timeUnit, TimeUnit.SECOND)
     }
 
     @Test

@@ -165,13 +165,22 @@ class RecipeDetailFragment : Fragment() {
         return binding.root
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.servings.set(RecipeDetailViewModel.NOT_INITIALIZED)
+    }
+
     /**
      * Set recipe name, servings, ingredients and cooking steps to view
      */
     private fun onRecipeChanged(recipeWithRelations: RecipeWithRelations) {
         binding.recipeDetailName.headlineText = recipeWithRelations.recipe.name
-        onServingsChanged(recipeWithRelations.recipe.servings)
         setIngredientAdapter(recipeWithRelations)
+        if (viewModel.servings.get() == RecipeDetailViewModel.NOT_INITIALIZED) {
+            viewModel.servings.set(recipeWithRelations.recipe.servings)
+        } else {
+            onServingsChanged(viewModel.servings.get())
+        }
         setCookingSteps(recipeWithRelations)
         setImage(recipeWithRelations)
         binding.recipeInfo.wrapper.visibility = View.VISIBLE
@@ -273,10 +282,10 @@ class RecipeDetailFragment : Fragment() {
         binding.recipeInfo.toShoppingListCancelButton.visibility = View.GONE
     }
 
-    /**
-     * Leave Fragment. Go back to navigation source (Category or Home)
-     */
-    fun onBackPressed() {
+    private fun onBackPressed() {
+        // to prevent servingsElement from showing -1
+        binding.recipeInfo.wrapper.visibility = View.GONE
+        viewModel.servings.set(RecipeDetailViewModel.NOT_INITIALIZED)
         val direction = if (args.navigateBackToHome || viewModel.recipe.value == null) {
             RecipeDetailFragmentDirections.toRecipeHomeFragment()
         } else {
