@@ -1,50 +1,36 @@
 package de.hs_rm.recipe_me.service
 
 import android.content.Context
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.model.recipe.*
+import de.hs_rm.recipe_me.persistence.AppDatabase
+import de.hs_rm.recipe_me.persistence.RecipeDao
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import javax.inject.Inject
 
-/**
- * https://developer.android.com/training/dependency-injection/hilt-testing
- */
 @RunWith(AndroidJUnit4::class)
-@HiltAndroidTest
 class RecipeRepositoryTest {
 
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
-
-    @get:Rule
-    val rule = InstantTaskExecutorRule()
-
-    @Inject
+    private lateinit var db: AppDatabase
+    private lateinit var recipeDao: RecipeDao
     lateinit var repository: RecipeRepository
 
     private lateinit var appContext: Context
 
     @Before
     fun init() {
-        hiltRule.inject()
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        insertTestRecipe()
-    }
+        db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java).build()
+        recipeDao = db.recipeDao()
+        repository = RecipeRepository(recipeDao)
 
-    @Test
-    fun testInjection() {
-        assertNotNull(repository)
+        insertTestRecipe()
     }
 
     /**

@@ -1,59 +1,39 @@
 package de.hs_rm.recipe_me.service
 
 import android.content.Context
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
-import junit.framework.Assert.assertEquals
+import de.hs_rm.recipe_me.persistence.AppDatabase
+import de.hs_rm.recipe_me.persistence.ShoppingListDao
+import org.junit.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
-import org.junit.*
+import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
-import javax.inject.Inject
 
-/**
- * https://developer.android.com/training/dependency-injection/hilt-testing
- */
 @RunWith(AndroidJUnit4::class)
-@HiltAndroidTest
 class ShoppingListRepositoryTest {
 
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
-
-    @get:Rule
-    val rule = InstantTaskExecutorRule()
-
-    @Inject
-    lateinit var repository: ShoppingListRepository
+    private lateinit var db: AppDatabase
+    private lateinit var shoppingListDao: ShoppingListDao
+    private lateinit var repository: ShoppingListRepository
 
     private lateinit var appContext: Context
     private val testIds = mutableListOf<Long>()
 
     @Before
     fun init() {
-        hiltRule.inject()
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java).build()
+        shoppingListDao = db.shoppingListDao()
+        repository = ShoppingListRepository(shoppingListDao)
+
         insertTestItems()
-    }
-
-    @After
-    fun cleanup() {
-        for (id in testIds) {
-            runBlocking {
-                repository.deleteItemById(id)
-            }
-        }
-    }
-
-    @Test
-    fun testInjection() {
-        Assert.assertNotNull(repository)
     }
 
     /**
@@ -89,8 +69,8 @@ class ShoppingListRepositoryTest {
             )
         }
 
-        assertEquals(400.0, repository.getAllItems().getOrAwaitValue()[1].quantity)
-        assertEquals(1.0, repository.getAllItems().getOrAwaitValue()[0].quantity)
+        assertEquals(400.0, repository.getAllItems().getOrAwaitValue()[1].quantity, 0.0)
+        assertEquals(1.0, repository.getAllItems().getOrAwaitValue()[0].quantity, 0.0)
     }
 
     private fun insertTestItems() {
