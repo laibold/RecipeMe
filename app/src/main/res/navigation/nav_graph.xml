@@ -102,6 +102,9 @@
             <action
                 android:id="@+id/to_add_recipe_fragment3"
                 app:destination="@+id/add_recipe_fragment3" />
+            <action
+                android:id="@+id/to_add_recipe_fragment1"
+                app:destination="@+id/add_recipe_fragment1" />
         </fragment>
 
         <fragment
