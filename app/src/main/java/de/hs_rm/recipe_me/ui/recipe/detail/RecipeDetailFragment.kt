@@ -172,6 +172,7 @@ class RecipeDetailFragment : Fragment() {
 
     /**
      * Set recipe name, servings, ingredients and cooking steps to view
+     * Hide cooking step elements when recipe has no cooking steps
      */
     private fun onRecipeChanged(recipeWithRelations: RecipeWithRelations) {
         binding.recipeDetailName.headlineText = recipeWithRelations.recipe.name
@@ -181,7 +182,13 @@ class RecipeDetailFragment : Fragment() {
         } else {
             onServingsChanged(viewModel.servings.get())
         }
-        setCookingSteps(recipeWithRelations)
+
+        if (recipeWithRelations.cookingStepsWithIngredients.isEmpty()) {
+            binding.forwardButton.visibility = View.GONE
+            binding.recipeInfo.cookingStepsHeadline.visibility = View.GONE
+        } else {
+            setCookingSteps(recipeWithRelations)
+        }
         setImage(recipeWithRelations)
         binding.recipeInfo.wrapper.visibility = View.VISIBLE
     }
