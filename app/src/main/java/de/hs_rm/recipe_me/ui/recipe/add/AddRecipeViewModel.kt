@@ -1,16 +1,23 @@
 package de.hs_rm.recipe_me.ui.recipe.add
 
+import android.app.Application
+import android.graphics.Bitmap
+import android.net.Uri
 import android.text.Editable
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bumptech.glide.Glide
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.declaration.addToValue
 import de.hs_rm.recipe_me.declaration.setValueAt
 import de.hs_rm.recipe_me.model.recipe.*
+import de.hs_rm.recipe_me.service.ImageHandler
 import de.hs_rm.recipe_me.service.RecipeRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
@@ -18,8 +25,9 @@ import kotlinx.coroutines.launch
  * Used in [AddRecipeFragment1], [AddRecipeFragment2] and [AddRecipeFragment3],
  */
 class AddRecipeViewModel @ViewModelInject constructor(
-    private val repository: RecipeRepository
-) : ViewModel() {
+    private val repository: RecipeRepository,
+    private val app: Application
+) : AndroidViewModel(app) {
 
     lateinit var recipeCategory: RecipeCategory
     private var updatingCookingStepIndex = -1
@@ -36,6 +44,10 @@ class AddRecipeViewModel @ViewModelInject constructor(
     private val _cookingSteps = MutableLiveData<MutableList<CookingStep>>()
     val cookingSteps: LiveData<MutableList<CookingStep>>
         get() = _cookingSteps
+
+    private val _recipeImage = MutableLiveData<Bitmap>()
+    val recipeImage: LiveData<Bitmap>
+        get() = _recipeImage
 
     init {
         _ingredients.postValue(mutableListOf())
@@ -219,6 +231,8 @@ class AddRecipeViewModel @ViewModelInject constructor(
                 _ingredients.value?.let { i -> repository.insert(i) }
                 _cookingSteps.value?.let { c -> repository.insert(c) }
 
+                saveImage(id)
+
                 _ingredients.postValue(mutableListOf())
                 _cookingSteps.postValue(mutableListOf())
                 _recipe.postValue(Recipe(RecipeCategory.values()[0]))
@@ -226,6 +240,19 @@ class AddRecipeViewModel @ViewModelInject constructor(
             }
         }
         return recipeId
+    }
+
+    /**
+     * Save image to recipe folder with recipe id
+     */
+    private fun saveImage(recipeId: Long) {
+        _recipeImage.value?.let {
+            ImageHandler.saveRecipeImage(
+                it,
+                app.applicationContext,
+                recipeId
+            )
+        }
     }
 
     /**
@@ -267,6 +294,24 @@ class AddRecipeViewModel @ViewModelInject constructor(
      */
     fun validateCookingSteps(): Boolean {
         return _cookingSteps.value!!.isNotEmpty()
+    }
+
+    /**
+     * Load picture from given uri and save ot to viewModel scope
+     */
+    fun setRecipeImage(uri: Uri, width: Int, height: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            _recipeImage.postValue(
+                Glide.with(app.applicationContext)
+                    .asBitmap()
+                    .load(uri)
+                    .placeholder(android.R.drawable.progress_indeterminate_horizontal) // need placeholder to avoid issue like glide annotations
+                    .error(android.R.drawable.stat_notify_error) // need error to avoid issue like glide annotations
+                    .centerCrop()
+                    .submit(width, height)
+                    .get()
+            )
+        }
     }
 
 }

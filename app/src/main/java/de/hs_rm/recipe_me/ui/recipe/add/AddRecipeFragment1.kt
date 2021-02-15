@@ -1,6 +1,5 @@
 package de.hs_rm.recipe_me.ui.recipe.add
 
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +10,6 @@ import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -21,10 +19,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment1Binding
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
-import de.hs_rm.recipe_me.service.ImageHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedListener {
@@ -32,7 +26,6 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
     private lateinit var binding: AddRecipeFragment1Binding
     private val args: AddRecipeFragment1Args by navArgs()
     private val viewModel: AddRecipeViewModel by activityViewModels()
-    private var bitmap = MutableLiveData<Bitmap>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,16 +46,14 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
         viewModel.initRecipe()
 
         // If user has already set a name and navigates back to this fragment, show name in field
-        if (viewModel.recipe.value?.name != "") {
-            binding.recipeNameField.setText(viewModel.recipe.value!!.name)
-        }
-        if (viewModel.recipe.value?.servings != 0) {
-            binding.recipeServingsField.setText(viewModel.recipe.value!!.servings.toString())
-        }
+        viewModel.recipe.value?.let { recipe ->
+            binding.recipeNameField.setText(recipe.name)
+            binding.recipeServingsField.setText(recipe.servings.toString())
 
-        bitmap.observe(viewLifecycleOwner, {
-            binding.recipeImage.setImageBitmap(it)
-        })
+            viewModel.recipeImage.value?.let { image ->
+                binding.recipeImage.setImageBitmap(image)
+            }
+        }
 
         binding.changeImageButton.setOnClickListener {
             getPicture()
@@ -117,30 +108,31 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
         return nameValid == 0 && servingsValid == 0
     }
 
+    /**
+     * Callback when Image is selected in BottomSheetListener
+     */
     override fun onImagesSelected(uris: List<Uri>, tag: String?) {
         binding.imageContainer.removeAllViews()
-        uris.forEach { uri ->
+
+        if (uris.isNotEmpty()) {
+            val uri = uris[0]
+
             val iv = LayoutInflater.from(context)
                 .inflate(R.layout.scrollitem_image, binding.imageContainer, false) as ImageView
             binding.imageContainer.addView(iv)
 
             Glide.with(this).load(uri).into(binding.recipeImage)
 
-            // Save image - TODO save it only when recipe is being saved. Bitmap should be hold in ViewModel until then
-            CoroutineScope(Dispatchers.IO).launch {
-                val bitmap = Glide.with(requireActivity())
-                    .asBitmap()
-                    .load(uri)
-                    .placeholder(android.R.drawable.progress_indeterminate_horizontal) // need placeholder to avoid issue like glide annotations
-                    .error(android.R.drawable.stat_notify_error) // need error to avoid issue like glide annotations
-                    .centerCrop()
-                    .submit(1000, 1000) // TODO auslagern
-                    .get()
-                ImageHandler.saveRecipeImage(bitmap, requireContext(), 1) // TODO replace with id when recipe is saved
-            }
+            val imageWidth = resources.getInteger(R.integer.recipe_image_width)
+            val imageHeight = resources.getInteger(R.integer.recipe_image_height)
+            viewModel.setRecipeImage(uri, imageWidth, imageHeight)
         }
+
     }
 
+    /**
+     * Show BottomSheetImagePicker
+     */
     private fun getPicture() {
         BottomSheetImagePicker.Builder(getString(R.string.file_provider))
             .cameraButton(ButtonType.Button)            //style of the camera link (Button in header, Image tile, None)
