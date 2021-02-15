@@ -11,14 +11,21 @@
     <dimen name="default_space_button">20dp</dimen>
     <dimen name="small_space">20dp</dimen>
     <dimen name="header_min_height">100dp</dimen>
+    <dimen name="scroll_view_offset_high">260dp</dimen>
+    <dimen name="scroll_view_offset_low">420dp</dimen>
+    <dimen name="scroll_view_image_offset_high">300dp</dimen>
+    <dimen name="scroll_view_image_offset_low">540dp</dimen>
+    <dimen name="elevation_low">3dp</dimen>
 
     <!--button size-->
-    <dimen name="button_width_big">0dp</dimen>
-    <dimen name="button_height_big">55dp</dimen>
-    <dimen name="button_big_width_percentage">0.40</dimen>
-    <dimen name="button_width_small">@dimen/wrap_content</dimen>
-    <dimen name="button_height_small">40dp</dimen>
-    <dimen name="small_circle_button">40dp</dimen>
+    <dimen name="big_button_width">0dp</dimen>
+    <dimen name="big_button_height">55dp</dimen>
+    <dimen name="big_button_width_percentage">0.40</dimen>
+    <dimen name="wide_small_button_height">40dp</dimen>
+    <dimen name="small_button_size">48dp</dimen>
+    <dimen name="small_button_padding_big_icon">9dp</dimen>
+    <dimen name="small_button_padding_small_icon">12dp</dimen>
+    <dimen name="small_circle_button_size">40dp</dimen>
     <dimen name="small_arrow_button">14dp</dimen>
     <dimen name="invisible_button_height">35sp</dimen>
 
@@ -27,13 +34,12 @@
     <dimen name="font_size_headline_2">23dp</dimen>
     <dimen name="font_size_headline_3">18dp</dimen>
     <dimen name="font_size_text">16sp</dimen>
-    <dimen name="font_size_tertiary">13sp</dimen>
+    <dimen name="font_size_text_small">13sp</dimen>
     <dimen name="design_bottom_navigation_text_size" tools:override="true">30sp</dimen>
     <dimen name="design_bottom_navigation_active_text_size" tools:override="true">30sp</dimen>
 
     <!--divider size-->
     <dimen name="divider_big">35dp</dimen>
-    <dimen name="divider_small">10dp</dimen>
 
     <dimen name="peekHeight">260dp</dimen>
     <dimen name="columnSize">92dp</dimen>

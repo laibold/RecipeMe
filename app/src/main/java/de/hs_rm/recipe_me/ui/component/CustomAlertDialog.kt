@@ -12,9 +12,7 @@ import android.view.View.*
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.button.MaterialButton
 import de.hs_rm.recipe_me.R
@@ -46,7 +44,7 @@ class CustomAlertDialog private constructor(
         val width = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
         window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
 
-        if (customIcon != Companion.DEFAULT_ICON_VALUE) {
+        if (customIcon != DEFAULT_ICON_VALUE) {
             val iconView = findViewById<ImageButton>(R.id.delete_icon)
             iconView.background = ResourcesCompat.getDrawable(activity.resources, customIcon, null)
         }

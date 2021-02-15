@@ -64,22 +64,6 @@ class Converters {
     }
 
     /**
-     * [Ingredient] -> [String]
-     */
-    @TypeConverter
-    fun ingredientToString(ingredients: MutableList<Ingredient>): String {
-        return Gson().toJson(ingredients)
-    }
-
-    /**
-     * [Int] -> [TimeUnit]
-     */
-    @TypeConverter
-    fun stringToIngredient(str: String): MutableList<Ingredient> {
-        return Gson().fromJson(str, object : TypeToken<List<Ingredient>>() {}.type)
-    }
-
-    /**
      * [LocalDate] -> [String]
      */
     @TypeConverter

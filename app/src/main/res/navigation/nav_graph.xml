@@ -2,7 +2,6 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
     app:startDestination="@id/recipe_home_fragment">
 
     <fragment
@@ -57,9 +56,20 @@
             android:defaultValue="MAIN_DISHES"
             app:argType="de.hs_rm.recipe_me.model.recipe.RecipeCategory" />
 
+        <!--defaultValue must equal Recipe.DEFAULT_ID-->
+        <argument
+            android:name="recipeId"
+            android:defaultValue="0L"
+            app:argType="long" />
+
+        <argument
+            android:name="clearValues"
+            android:defaultValue="false"
+            app:argType="boolean" />
+
         <fragment
             android:id="@+id/add_recipe_fragment1"
-            android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment1"
+            android:name="de.hs_rm.recipe_me.ui.recipe.add.recipe_information.AddRecipeFragment1"
             android:label="Add Recipe Fragment 1"
             tools:layout="@layout/add_recipe_fragment1">
 
@@ -68,6 +78,16 @@
                 android:defaultValue="MAIN_DISHES"
                 app:argType="de.hs_rm.recipe_me.model.recipe.RecipeCategory" />
 
+            <argument
+                android:name="recipeId"
+                android:defaultValue="-1L"
+                app:argType="long" />
+
+            <argument
+                android:name="clearValues"
+                android:defaultValue="false"
+                app:argType="boolean" />
+
             <action
                 android:id="@+id/to_add_recipe_fragment2"
                 app:destination="@+id/add_recipe_fragment2" />
@@ -75,18 +95,21 @@
 
         <fragment
             android:id="@+id/add_recipe_fragment2"
-            android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment2"
+            android:name="de.hs_rm.recipe_me.ui.recipe.add.ingredient.AddRecipeFragment2"
             android:label="Add Recipe Fragment 2"
             tools:layout="@layout/add_recipe_fragment2">
 
             <action
                 android:id="@+id/to_add_recipe_fragment3"
                 app:destination="@+id/add_recipe_fragment3" />
+            <action
+                android:id="@+id/to_add_recipe_fragment1"
+                app:destination="@+id/add_recipe_fragment1" />
         </fragment>
 
         <fragment
             android:id="@+id/add_recipe_fragment3"
-            android:name="de.hs_rm.recipe_me.ui.recipe.add.AddRecipeFragment3"
+            android:name="de.hs_rm.recipe_me.ui.recipe.add.cooking_step.AddRecipeFragment3"
             android:label="Add Recipe Fragment 3"
             tools:layout="@layout/add_recipe_fragment3">
 
@@ -126,18 +149,21 @@
 
         <argument
             android:name="navigate_back_to_home"
-            app:argType="boolean"
-            android:defaultValue="false"/>
+            android:defaultValue="false"
+            app:argType="boolean" />
 
         <action
+            android:id="@+id/to_add_recipe_nav_graph"
+            app:destination="@id/add_recipe_nav_graph" />
+        <action
             android:id="@+id/to_cooking_step_fragment"
-            app:destination="@+id/cooking_step_fragment" />
+            app:destination="@id/cooking_step_fragment" />
         <action
             android:id="@+id/to_recipe_category_fragment"
-            app:destination="@+id/recipe_category_fragment" />
+            app:destination="@id/recipe_category_fragment" />
         <action
             android:id="@+id/to_recipe_home_fragment"
-            app:destination="@+id/recipe_home_fragment" />
+            app:destination="@id/recipe_home_fragment" />
     </fragment>
 
     <fragment

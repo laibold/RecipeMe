@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="540dp" />
+            app:layout_constraintGuide_begin="@dimen/scroll_view_image_offset_low" />
 
         <ImageView
             android:id="@+id/recipe_detail_image"
@@ -37,10 +37,39 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <include
-            android:id="@+id/recipe_detail_name"
-            layout="@layout/image_header"
-            app:layout_constraintTop_toTopOf="parent"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/top_elements_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/scroll_view_offset_low"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!--TODO create class-->
+            <ImageButton
+                android:id="@+id/edit_recipe_button"
+                android:layout_width="@dimen/small_button_size"
+                android:layout_height="@dimen/small_button_size"
+                android:layout_marginEnd="5dp"
+                android:background="@null"
+                android:contentDescription="@string/delete"
+                android:padding="@dimen/small_button_padding_big_icon"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_baseline_edit_24"
+                android:tint="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/recipe_detail_name"
+                app:layout_constraintTop_toTopOf="@id/recipe_detail_name"
+                app:layout_constraintBottom_toBottomOf="@id/recipe_detail_name" />
+
+            <include
+                android:id="@+id/recipe_detail_name"
+                layout="@layout/image_header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@id/edit_recipe_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/forward_button"
@@ -71,10 +100,11 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!--Dummy to let proper view start at 420dp-->
+                <!--Dummy to let proper view start with offset-->
                 <View
+                    android:id="@+id/dummy_view"
                     android:layout_width="match_parent"
-                    android:layout_height="420dp" />
+                    android:layout_height="@dimen/scroll_view_offset_low" />
 
                 <include
                     android:id="@+id/recipe_info"

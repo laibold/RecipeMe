@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.ui.recipe.add
+package de.hs_rm.recipe_me.ui.recipe.add.recipe_information
 
 import android.net.Uri
 import android.os.Bundle
@@ -18,7 +18,10 @@ import com.kroegerama.imgpicker.ButtonType
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment1Binding
+import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
+import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
+
 
 @AndroidEntryPoint
 class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedListener {
@@ -43,16 +46,31 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
         binding.recipeCategorySpinner.adapter = spinnerAdapter()
         binding.recipeCategorySpinner.setSelection(viewModel.recipeCategory.ordinal)
 
-        viewModel.initRecipe()
+        if (args.clearValues) {
+            viewModel.initRecipe(args.recipeId)
+        }
 
-        // If user has already set a name and navigates back to this fragment, show name in field
-        viewModel.recipe.value?.let { recipe ->
-            binding.recipeNameField.setText(recipe.name)
-            binding.recipeServingsField.setText(recipe.servings.toString())
+        if (args.recipeId != Recipe.DEFAULT_ID) {
+            binding.header.headlineText = getString(R.string.edit_recipe)
 
-            viewModel.recipeImage.value?.let { image ->
-                binding.recipeImage.setImageBitmap(image)
-            }
+            viewModel.recipe.observe(viewLifecycleOwner, { recipe ->
+                if (recipe != null) {
+                    if (recipe.name != "") {
+                        binding.recipeNameField.setText(viewModel.recipe.value!!.name)
+                    }
+                    if (recipe.servings != 0) {
+                        binding.recipeServingsField.setText(viewModel.recipe.value!!.servings.toString())
+                    }
+                    binding.recipeCategorySpinner.setSelection(recipe.category.ordinal)
+                }
+            })
+        } else {
+            binding.header.headlineText = getString(R.string.new_recipe)
+        }
+
+        //TODO hier oder woanders?
+        viewModel.recipeImage.value?.let { image ->
+            binding.recipeImage.setImageBitmap(image)
         }
 
         binding.changeImageButton.setOnClickListener {

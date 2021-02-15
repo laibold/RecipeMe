@@ -1,6 +1,6 @@
-package de.hs_rm.recipe_me.ui.recipe.add
+package de.hs_rm.recipe_me.ui.recipe.add.cooking_step
 
-import android.animation.AnimatorInflater
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +13,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment3Binding
 import de.hs_rm.recipe_me.declaration.ui.fragments.EditCookingStepAdapter
-import de.hs_rm.recipe_me.model.recipe.CookingStep
+import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
+import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
 
 @AndroidEntryPoint
 class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
@@ -38,8 +39,13 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
             addCookingStepDialog().show()
         }
 
-        viewModel.cookingSteps.observe(viewLifecycleOwner, {
-            adapter = viewModel.cookingSteps.value?.let { list -> cookingStepListAdapter(list) }
+        viewModel.cookingStepsWithIngredients.observe(viewLifecycleOwner, { list ->
+            adapter = AddCookingStepListAdapter(
+                requireContext(),
+                R.layout.add_cooking_step_listitem,
+                list,
+                this
+            )
             binding.cookingStepListView.adapter = adapter
 
             adapter?.notifyDataSetChanged()
@@ -60,21 +66,8 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
     /**
      * Create add dialog
      */
-    private fun addCookingStepDialog(cookingStep: CookingStep? = null): AddCookingStepDialog {
+    private fun addCookingStepDialog(cookingStep: CookingStepWithIngredients? = null): AddCookingStepDialog {
         return AddCookingStepDialog(requireActivity(), viewModel, cookingStep)
-    }
-
-
-    /**
-     * @return CookingStepListAdapter for CookingStepListView
-     */
-    private fun cookingStepListAdapter(items: MutableList<CookingStep>): AddCookingStepListAdapter {
-        return AddCookingStepListAdapter(
-            requireContext(),
-            R.layout.add_cooking_step_listitem,
-            items,
-            this
-        )
     }
 
     /**
@@ -87,30 +80,25 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
     /**
      * Navigation on next button
      */
+    @SuppressLint("ClickableViewAccessibility")
     private fun onNext() {
-        val validationOk = viewModel.validateCookingSteps()
+        binding.loadingSpinner.root.visibility = View.VISIBLE
 
-        if (validationOk) {
-            val id = viewModel.persistEntities()
+        val id = viewModel.persistEntities()
+        // Remove observer to pretend a wrong list to be shown for a little while
+        viewModel.cookingStepsWithIngredients.removeObservers(viewLifecycleOwner)
 
-            id.observe(viewLifecycleOwner, {
-                val direction = AddRecipeFragment3Directions.toRecipeDetailFragment(it)
-                findNavController().navigate(direction)
-            })
-        } else {
-            AnimatorInflater.loadAnimator(context, R.animator.jump)
-                .apply {
-                    setTarget(binding.addCookingStepFab)
-                    start()
-                }
-        }
+        id.observe(viewLifecycleOwner, {
+            val direction = AddRecipeFragment3Directions.toRecipeDetailFragment(it)
+            findNavController().navigate(direction)
+        })
     }
 
     /**
      * Gets called from Adapter when edit was pressed for a CookingStep item
      */
-    override fun onCallback(cookingStep: CookingStep, position: Int) {
-        addCookingStepDialog(cookingStep).show()
+    override fun onCallback(cookingStepWithIngredients: CookingStepWithIngredients, position: Int) {
+        addCookingStepDialog(cookingStepWithIngredients).show()
         viewModel.prepareCookingStepUpdate(position)
     }
 

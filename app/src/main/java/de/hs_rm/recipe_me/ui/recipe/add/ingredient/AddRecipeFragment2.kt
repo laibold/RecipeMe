@@ -1,10 +1,11 @@
-package de.hs_rm.recipe_me.ui.recipe.add
+package de.hs_rm.recipe_me.ui.recipe.add.ingredient
 
 import android.animation.AnimatorInflater
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -14,6 +15,7 @@ import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment2Binding
 import de.hs_rm.recipe_me.declaration.ui.fragments.EditIngredientAdapter
 import de.hs_rm.recipe_me.model.recipe.Ingredient
+import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
 
 @AndroidEntryPoint
 class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
@@ -21,6 +23,20 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
     private lateinit var binding: AddRecipeFragment2Binding
     private val viewModel: AddRecipeViewModel by activityViewModels()
     private var adapter: AddIngredientListAdapter? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Set action to back button: always navigate to AddRecipeFragment1 without clearing Values
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val direction = AddRecipeFragment2Directions.toAddRecipeFragment1(clearValues = false)
+                    findNavController().navigate(direction)
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

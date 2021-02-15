@@ -1,6 +1,6 @@
 package de.hs_rm.recipe_me.declaration.ui.fragments
 
-import de.hs_rm.recipe_me.model.recipe.CookingStep
+import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
 
 /**
  * Contains the abstract method onCallback(), which can be used to define a callback from
@@ -8,5 +8,5 @@ import de.hs_rm.recipe_me.model.recipe.CookingStep
  * Afterwards it's possible to call the defined method in the Fragment from within the Adapter.
  */
 interface EditCookingStepAdapter {
-    fun onCallback(cookingStep: CookingStep, position: Int)
+    fun onCallback(cookingStepWithIngredients: CookingStepWithIngredients, position: Int)
 }
