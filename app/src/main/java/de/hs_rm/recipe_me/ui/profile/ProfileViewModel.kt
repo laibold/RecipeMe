@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.service.RecipeRepository
 
 /**

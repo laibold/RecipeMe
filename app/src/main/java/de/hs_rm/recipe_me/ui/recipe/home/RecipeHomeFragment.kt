@@ -2,6 +2,7 @@ package de.hs_rm.recipe_me.ui.recipe.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -35,6 +36,24 @@ class RecipeHomeFragment : Fragment() {
 
         viewModel.loadRecipeOfTheDay()
 
+        // Dispatch Touch event to underlying wrapper.
+        // Subtract scroll position, because dummy view will move, but wrapper won't
+        binding.dummyView.setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    event.offsetLocation(
+                        (-binding.scrollView.scrollX).toFloat(),
+                        (-binding.scrollView.scrollY).toFloat()
+                    )
+                    binding.recipeOfTheDayWrapper.dispatchTouchEvent(event)
+                }
+                MotionEvent.ACTION_UP -> {
+                    view.performClick()
+                }
+            }
+            true
+        }
+
         viewModel.recipeOfTheDay.observe(viewLifecycleOwner, { recipe ->
             onRecipeOfTheDayChanged(recipe)
         })
@@ -44,7 +63,7 @@ class RecipeHomeFragment : Fragment() {
         }
 
         binding.addButton.setOnClickListener {
-            val direction = RecipeHomeFragmentDirections.toAddRecipeNavGraph()
+            val direction = RecipeHomeFragmentDirections.toAddRecipeNavGraph(clearValues = true)
             findNavController().navigate(direction)
         }
 
@@ -65,9 +84,19 @@ class RecipeHomeFragment : Fragment() {
             binding.recipeOfTheDayName.text = recipe.name
             binding.recipeOfTheDayImage.setImageResource(recipe.category.drawableResId)
 
-            binding.dummyView.setOnClickListener {
-                val direction = RecipeHomeFragmentDirections.toRecipeDetailFragment(recipe.id, true)
-                findNavController().navigate(direction)
+            // Touch event gets dispatched from ScrollViews dummy view
+            binding.recipeOfTheDayButton.setOnTouchListener { view, event ->
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        val direction =
+                            RecipeHomeFragmentDirections.toRecipeDetailFragment(recipe.id, true)
+                        findNavController().navigate(direction)
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        view.performClick()
+                    }
+                }
+                true
             }
         }
     }

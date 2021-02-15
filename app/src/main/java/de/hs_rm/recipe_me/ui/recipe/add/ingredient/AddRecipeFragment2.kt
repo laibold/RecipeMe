@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -22,6 +23,20 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
     private lateinit var binding: AddRecipeFragment2Binding
     private val viewModel: AddRecipeViewModel by activityViewModels()
     private var adapter: AddIngredientListAdapter? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Set action to back button: always navigate to AddRecipeFragment1 without clearing Values
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val direction = AddRecipeFragment2Directions.toAddRecipeFragment1(clearValues = false)
+                    findNavController().navigate(direction)
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

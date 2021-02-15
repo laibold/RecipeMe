@@ -1,9 +1,12 @@
 package de.hs_rm.recipe_me.ui.recipe.detail
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
@@ -11,6 +14,7 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,17 +37,13 @@ class RecipeDetailFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    val direction = if (args.navigateBackToHome) {
-                        RecipeDetailFragmentDirections.toRecipeHomeFragment()
-                    } else {
-                        RecipeDetailFragmentDirections.toRecipeCategoryFragment(viewModel.recipe.value!!.recipe.category)
-                    }
-                    findNavController().navigate(direction)
+                    onBackPressed()
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -58,8 +58,58 @@ class RecipeDetailFragment : Fragment() {
         val recipeId = args.recipeId
         viewModel.loadRecipe(recipeId)
 
+        // Disable right padding for headline
+        binding.recipeDetailName.headline.setPadding(
+            binding.recipeDetailName.headline.paddingLeft,
+            binding.recipeDetailName.headline.paddingTop,
+            0,
+            binding.recipeDetailName.headline.paddingBottom,
+        )
+
+        // Dispatch touch events from dummyView to topElementsWrapper
+        // Subtract scroll position, because dummy view will move, but wrapper won't
+        binding.dummyView.setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    event.offsetLocation(
+                        (-binding.scrollView.scrollX).toFloat(),
+                        (-binding.scrollView.scrollY).toFloat()
+                    )
+                    binding.topElementsWrapper.dispatchTouchEvent(event)
+                }
+                MotionEvent.ACTION_UP -> {
+                    view.performClick()
+                }
+            }
+            true
+        }
+
+        // Navigate to edit recipe
+        binding.editRecipeButton.setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    val direction = RecipeDetailFragmentDirections.toAddRecipeNavGraph(
+                        recipeId = viewModel.recipe.value?.recipe!!.id,
+                        clearValues = true
+                    )
+                    view.findNavController().navigate(direction)
+                }
+                MotionEvent.ACTION_UP -> {
+                    view.performClick()
+                }
+            }
+            true
+        }
+
         viewModel.recipe.observe(viewLifecycleOwner, { recipeWithRelations ->
-            onRecipeChanged(recipeWithRelations)
+            if (recipeWithRelations != null) {
+                onRecipeChanged(recipeWithRelations)
+                viewModel.servings.set(recipeWithRelations.recipe.servings)
+            } else {
+                Toast.makeText(context, getString(R.string.err_recipe_not_found), Toast.LENGTH_LONG)
+                    .show()
+                onBackPressed()
+            }
         })
 
         viewModel.servings.addOnPropertyChangedCallback(object :
@@ -122,6 +172,7 @@ class RecipeDetailFragment : Fragment() {
 
     /**
      * Set recipe name, servings, ingredients and cooking steps to view
+     * Hide cooking step elements when recipe has no cooking steps
      */
     private fun onRecipeChanged(recipeWithRelations: RecipeWithRelations) {
         binding.recipeDetailName.headlineText = recipeWithRelations.recipe.name
@@ -131,7 +182,13 @@ class RecipeDetailFragment : Fragment() {
         } else {
             onServingsChanged(viewModel.servings.get())
         }
-        setCookingSteps(recipeWithRelations)
+
+        if (recipeWithRelations.cookingStepsWithIngredients.isEmpty()) {
+            binding.forwardButton.visibility = View.GONE
+            binding.recipeInfo.cookingStepsHeadline.visibility = View.GONE
+        } else {
+            setCookingSteps(recipeWithRelations)
+        }
         setImage(recipeWithRelations)
         binding.recipeInfo.wrapper.visibility = View.VISIBLE
     }
@@ -236,8 +293,11 @@ class RecipeDetailFragment : Fragment() {
         // to prevent servingsElement from showing -1
         binding.recipeInfo.wrapper.visibility = View.GONE
         viewModel.servings.set(RecipeDetailViewModel.NOT_INITIALIZED)
-        val direction =
+        val direction = if (args.navigateBackToHome || viewModel.recipe.value == null) {
+            RecipeDetailFragmentDirections.toRecipeHomeFragment()
+        } else {
             RecipeDetailFragmentDirections.toRecipeCategoryFragment(viewModel.recipe.value!!.recipe.category)
+        }
         findNavController().navigate(direction)
     }
 

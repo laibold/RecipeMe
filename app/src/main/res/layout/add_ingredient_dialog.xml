@@ -40,6 +40,7 @@
                     style="@style/edit_text"
                     android:layout_width="100dp"
                     android:digits="0123456789.,"
+                    android:maxLength="8"
                     android:hint="@string/hint_ingredient_quantity"
                     android:importantForAutofill="no"
                     android:inputType="numberDecimal"

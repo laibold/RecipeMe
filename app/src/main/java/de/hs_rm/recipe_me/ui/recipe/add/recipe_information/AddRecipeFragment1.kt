@@ -13,8 +13,10 @@ import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment1Binding
+import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
+
 
 @AndroidEntryPoint
 class AddRecipeFragment1 : Fragment() {
@@ -39,14 +41,26 @@ class AddRecipeFragment1 : Fragment() {
         binding.recipeCategorySpinner.adapter = spinnerAdapter()
         binding.recipeCategorySpinner.setSelection(viewModel.recipeCategory.ordinal)
 
-        viewModel.initRecipe()
-
-        // If user has already set a name and navigates back to this fragment, show name in field
-        if (viewModel.recipe.value?.name != "") {
-            binding.recipeNameField.setText(viewModel.recipe.value!!.name)
+        if (args.clearValues) {
+            viewModel.initRecipe(args.recipeId)
         }
-        if (viewModel.recipe.value?.servings != 0) {
-            binding.recipeServingsField.setText(viewModel.recipe.value!!.servings.toString())
+
+        if (args.recipeId != Recipe.DEFAULT_ID) {
+            binding.header.headlineText = getString(R.string.edit_recipe)
+
+            viewModel.recipe.observe(viewLifecycleOwner, { recipe ->
+                if (recipe != null) {
+                    if (recipe.name != "") {
+                        binding.recipeNameField.setText(viewModel.recipe.value!!.name)
+                    }
+                    if (recipe.servings != 0) {
+                        binding.recipeServingsField.setText(viewModel.recipe.value!!.servings.toString())
+                    }
+                    binding.recipeCategorySpinner.setSelection(recipe.category.ordinal)
+                }
+            })
+        } else {
+            binding.header.headlineText = getString(R.string.new_recipe)
         }
 
         binding.nextButton.setOnClickListener { onNext() }

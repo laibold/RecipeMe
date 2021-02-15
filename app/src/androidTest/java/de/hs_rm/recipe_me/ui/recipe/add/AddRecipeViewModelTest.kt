@@ -9,10 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import de.hs_rm.recipe_me.TestDataProvider
 import de.hs_rm.recipe_me.declaration.getOrAwaitValue
-import de.hs_rm.recipe_me.model.recipe.Ingredient
-import de.hs_rm.recipe_me.model.recipe.IngredientUnit
-import de.hs_rm.recipe_me.model.recipe.RecipeCategory
-import de.hs_rm.recipe_me.model.recipe.TimeUnit
+import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.persistence.RecipeDao
 import de.hs_rm.recipe_me.service.RecipeRepository
@@ -60,8 +57,12 @@ class AddRecipeViewModelTest {
         viewModel.recipeCategory = RecipeCategory.MAIN_DISHES
         GlobalScope.launch(Dispatchers.Main) {
             delay(1000)
-            viewModel.initRecipe()
+            viewModel.initRecipe(Recipe.DEFAULT_ID)
         }
+
+        viewModel.recipe.getOrAwaitValue()
+        viewModel.ingredients.getOrAwaitValue()
+        viewModel.cookingStepsWithIngredients.getOrAwaitValue()
     }
 
     /**
@@ -350,6 +351,72 @@ class AddRecipeViewModelTest {
 
         assertEquals(numberOfChildren, recipeWithRelations.ingredients.size)
         assertEquals(numberOfChildren, recipeWithRelations.cookingStepsWithIngredients.size)
+    }
+
+    /**
+     * Test update of all entities
+     */
+    @Test
+    fun updateEntitiesSuccessful() {
+        val numberOfChildren = 2
+
+        val name = "New Name"
+        val servings = "6"
+        val category = RecipeCategory.BREAKFAST
+
+        beforeEach()
+        insertTestData(numberOfChildren, numberOfChildren)
+
+        val recipeId = viewModel.persistEntities().getOrAwaitValue(10)
+
+        // Test if test insertion succeeded (May be deleted)
+        val recipeWithRelations2 = recipeRepository.getRecipeWithRelationsById(recipeId).getOrAwaitValue(10)
+        assertEquals(numberOfChildren, recipeWithRelations2.ingredients.size)
+        assertEquals(numberOfChildren, recipeWithRelations2.cookingStepsWithIngredients.size)
+
+        // Initialize ViewModel with id
+        viewModel = AddRecipeViewModel(recipeRepository)
+        GlobalScope.launch(Dispatchers.Main) {
+            delay(1000)
+            viewModel.initRecipe(recipeId)
+        }
+
+        viewModel.recipe.getOrAwaitValue()
+        viewModel.ingredients.getOrAwaitValue()
+        viewModel.cookingStepsWithIngredients.getOrAwaitValue()
+
+        // change name, servings and category
+        viewModel.setRecipeAttributes(name, servings, category)
+
+        // add ingredient
+        viewModel.addIngredient(getEditable("New Ingredient"), getEditable("1"), IngredientUnit.NONE)
+        // delete ingredient
+        viewModel.ingredients.value!!.removeAt(1)
+        // edit ingredient
+        viewModel.prepareIngredientUpdate(0)
+        viewModel.updateIngredient(getEditable("Updated Ingredient"), getEditable("2"), IngredientUnit.CAN)
+
+        // add step
+        viewModel.addCookingStepWithIngredients(getEditable("New Step"), getEditable(""), TimeUnit.SECOND, mutableListOf())
+        // edit step
+        // remove step
+        // change (add/remove) ingredient in step
+
+        val newRecipeId = viewModel.persistEntities().getOrAwaitValue()
+        assertNotEquals(Recipe.DEFAULT_ID, newRecipeId)
+
+        val recipeWithRelations = recipeRepository.getRecipeWithRelationsById(newRecipeId).getOrAwaitValue(10)
+
+        assertEquals(name, recipeWithRelations.recipe.name)
+        assertEquals(servings.toInt(), recipeWithRelations.recipe.servings)
+        assertEquals(category, recipeWithRelations.recipe.category)
+
+        assertEquals(2, recipeWithRelations.ingredients.size)
+        assertEquals(Ingredient("Updated Ingredient", 2.0, IngredientUnit.CAN), recipeWithRelations.ingredients[0] )
+        assertEquals(Ingredient("New Ingredient", 1.0, IngredientUnit.NONE), recipeWithRelations.ingredients[1] )
+
+        assertEquals(3, recipeWithRelations.cookingStepsWithIngredients.size)
+        assertEquals(CookingStep("New Step", 0, TimeUnit.SECOND), recipeWithRelations.cookingStepsWithIngredients[2].cookingStep)
     }
 
     /**

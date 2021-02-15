@@ -48,7 +48,10 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
         }
 
         binding.addButton.setOnClickListener {
-            val direction = RecipeCategoryFragmentDirections.toAddRecipeNavGraph(viewModel.category)
+            val direction = RecipeCategoryFragmentDirections.toAddRecipeNavGraph(
+                viewModel.category,
+                clearValues = true
+            )
             findNavController().navigate(direction)
         }
 

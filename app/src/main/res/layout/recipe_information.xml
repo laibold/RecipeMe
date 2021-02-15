@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_top"
                 android:gravity="center_vertical"
+                android:includeFontPadding="false"
                 android:text="@string/ingredients"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -37,10 +38,9 @@
             <include
                 android:id="@+id/servings_element"
                 layout="@layout/servings"
-                android:layout_width="160sp"
+                android:layout_width="180sp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_top"
-                android:layout_marginEnd="@dimen/outline_horizontal"
+                app:layout_constraintTop_toTopOf="@id/recipe_info_headline"
                 app:layout_constraintBottom_toBottomOf="@id/recipe_info_headline"
                 app:layout_constraintEnd_toEndOf="parent" />
 

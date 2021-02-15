@@ -9,8 +9,7 @@
 
         <include
             android:id="@+id/header"
-            layout="@layout/material_header"
-            app:headlineText="@{@string/new_recipe}" />
+            layout="@layout/material_header" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
