@@ -1,5 +1,6 @@
 package de.hs_rm.recipe_me.ui.recipe.add
 
+import android.app.Application
 import android.content.Context
 import android.text.Editable
 import android.widget.EditText
@@ -50,7 +51,8 @@ class AddRecipeViewModelTest {
 
     private fun beforeEach() {
         db.clearAllTables()
-        viewModel = AddRecipeViewModel(recipeRepository)
+        viewModel =
+            AddRecipeViewModel(recipeRepository, appContext.applicationContext as Application)
         viewModel.recipeCategory = RecipeCategory.MAIN_DISHES
         GlobalScope.launch(Dispatchers.Main) {
             delay(1000)
