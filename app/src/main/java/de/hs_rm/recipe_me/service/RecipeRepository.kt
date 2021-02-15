@@ -122,16 +122,6 @@ class RecipeRepository @Inject constructor(
         recipeDao.update(ingredient)
     }
 
-//    /**
-//     * Update List of Ingredients
-//     */
-//    @JvmName("updateIngredients")
-//    suspend fun update(ingredients: List<Ingredient>) {
-//        for (ingredient in ingredients) {
-//            update(ingredient)
-//        }
-//    }
-
     /**
      * Update [CookingStep]
      */
@@ -149,13 +139,19 @@ class RecipeRepository @Inject constructor(
         }
     }
 
+    /**
+     * Delete given Ingredient and its relations from database
+     */
     suspend fun deleteIngredient(ingredient: Ingredient) {
-        recipeDao.deleteCookingStepIngredientCrossRef(ingredientId = ingredient.ingredientId)
+        deleteCookingStepIngredientCrossRefs(ingredientId = ingredient.ingredientId)
         recipeDao.deleteIngredient(ingredient)
     }
 
+    /**
+     * Delete given CookingStep and its relations from database
+     */
     suspend fun deleteCookingStep(cookingStep: CookingStep) {
-        recipeDao.deleteCookingStepIngredientCrossRef(cookingStepId = cookingStep.cookingStepId)
+        deleteCookingStepIngredientCrossRefs(cookingStepId = cookingStep.cookingStepId)
         recipeDao.deleteCookingStep(cookingStep)
     }
 
@@ -173,6 +169,16 @@ class RecipeRepository @Inject constructor(
     suspend fun deleteIngredientsAndCookingSteps(recipeId: Long) {
         recipeDao.deleteIngredients(recipeId)
         recipeDao.deleteCookingSteps(recipeId)
+    }
+
+    /**
+     * Delete all cross references relating to the given Ingredient or CookingStep ids
+     */
+    suspend fun deleteCookingStepIngredientCrossRefs(
+        ingredientId: Long = Ingredient.DEFAULT_ID,
+        cookingStepId: Long = CookingStep.DEFAULT_ID
+    ) {
+        recipeDao.deleteCookingStepIngredientCrossRefs(ingredientId, cookingStepId)
     }
 
 }

@@ -1,5 +1,6 @@
 package de.hs_rm.recipe_me.ui.recipe.add.cooking_step
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -79,7 +80,10 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
     /**
      * Navigation on next button
      */
+    @SuppressLint("ClickableViewAccessibility")
     private fun onNext() {
+        binding.loadingSpinner.root.visibility = View.VISIBLE
+
         val id = viewModel.persistEntities()
         // Remove observer to pretend a wrong list to be shown for a little while
         viewModel.cookingStepsWithIngredients.removeObservers(viewLifecycleOwner)

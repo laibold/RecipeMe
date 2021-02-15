@@ -361,6 +361,8 @@ class AddRecipeViewModel @ViewModelInject constructor(
                     cookingStep.cookingStepId = repository.insert(cookingStep)
                 }
 
+                // Delete relations to ingredients and re-insert them. This might be the fastest way
+                repository.deleteCookingStepIngredientCrossRefs(cookingStepId = cookingStep.cookingStepId)
                 insertCookingStepIngredientCrossRefs(
                     cookingStepWithIngredients.ingredients,
                     cookingStep.cookingStepId
