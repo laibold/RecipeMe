@@ -55,11 +55,11 @@ class AddCookingStepDialog constructor(
                 binding.cookingStepTimeSpinner.setSelection(cookingStep.timeUnit.ordinal)
             }
 
-            binding.addButton.text = activity.resources.getString(R.string.update)
+            binding.addButton.text = activity.getString(R.string.update)
             binding.addButton.setOnClickListener { updateCookingStepAndClose() }
         } else {
             // Add
-            binding.addButton.text = activity.resources.getString(R.string.add)
+            binding.addButton.text = activity.getString(R.string.add)
             binding.addButton.setOnClickListener { addCookingStepAndClose() }
         }
 
@@ -114,8 +114,7 @@ class AddCookingStepDialog constructor(
         if (success) {
             dismiss()
         } else {
-            binding.cookingStepField.error =
-                activity.resources.getString(R.string.err_enter_description)
+            binding.cookingStepField.error = activity.getString(R.string.err_enter_description)
         }
     }
 
@@ -132,8 +131,7 @@ class AddCookingStepDialog constructor(
         if (success) {
             dismiss()
         } else {
-            binding.cookingStepField.error =
-                activity.resources.getString(R.string.err_enter_description)
+            binding.cookingStepField.error = activity.getString(R.string.err_enter_description)
         }
     }
 

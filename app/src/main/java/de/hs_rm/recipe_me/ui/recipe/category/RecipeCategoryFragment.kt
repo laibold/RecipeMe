@@ -39,7 +39,7 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
         )
 
         viewModel.category = args.recipeCategory
-        val name = context?.resources?.getString(viewModel.category.nameResId)
+        val name = getString(viewModel.category.nameResId)
         binding.header.headlineText = name
         binding.categoryImage.setImageResource(viewModel.category.drawableResId)
 

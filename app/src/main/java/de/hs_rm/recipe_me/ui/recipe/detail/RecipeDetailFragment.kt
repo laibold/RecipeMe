@@ -174,11 +174,9 @@ class RecipeDetailFragment : Fragment() {
         binding.recipeInfo.servingsElement.servingsSize.text = servings.toString()
 
         if (servings > 1)
-            binding.recipeInfo.servingsElement.servingsText.text =
-                requireContext().resources.getString(R.string.servings)
+            binding.recipeInfo.servingsElement.servingsText.text = getString(R.string.servings)
         else
-            binding.recipeInfo.servingsElement.servingsText.text =
-                requireContext().resources.getString(R.string.serving)
+            binding.recipeInfo.servingsElement.servingsText.text = getString(R.string.serving)
 
         if (adapter != null) {
             adapter!!.multiplier = viewModel.getServingsMultiplier()

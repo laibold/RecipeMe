@@ -97,12 +97,12 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
     private fun validate(): Boolean {
         val nameValid = viewModel.validateName(binding.recipeNameField.text)
         if (nameValid != 0) {
-            binding.recipeNameField.error = requireContext().resources.getString(nameValid)
+            binding.recipeNameField.error = getString(nameValid)
         }
 
         val servingsValid = viewModel.validateServings(binding.recipeServingsField.text)
         if (servingsValid != 0) {
-            binding.recipeServingsField.error = requireContext().resources.getString(servingsValid)
+            binding.recipeServingsField.error = getString(servingsValid)
         }
 
         return nameValid == 0 && servingsValid == 0

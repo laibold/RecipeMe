@@ -54,8 +54,7 @@ class ProfileFragment : Fragment() {
 
         val versionNumber = BuildConfig.VERSION_NAME
 
-        binding.versionText.text =
-            "${requireContext().resources.getString(R.string.version)}: $versionNumber"
+        binding.versionText.text = "${getString(R.string.version)}: $versionNumber"
 
         return binding.root
     }
@@ -65,7 +64,7 @@ class ProfileFragment : Fragment() {
      */
     @SuppressLint("SetTextI18n")
     private fun getRecipeTotalText(total: Int): String {
-        val firstPart = requireContext().resources.getString(R.string.recipe_total_text_1)
+        val firstPart = getString(R.string.recipe_total_text_1)
         val mapStr = getString(R.string.recipe_total_text_map)
         return viewModel.getRecipeTotalText(firstPart, mapStr, total)
     }

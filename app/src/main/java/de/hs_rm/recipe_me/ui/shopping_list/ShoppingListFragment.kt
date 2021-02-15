@@ -118,8 +118,7 @@ class ShoppingListFragment : Fragment() {
     private fun onAddItem() {
         if (binding.addItemEditText.text.isBlank()) {
             binding.addItemEditText.text.clear()
-            binding.addItemEditText.error =
-                requireContext().resources.getString(R.string.err_enter_text)
+            binding.addItemEditText.error = getString(R.string.err_enter_text)
         } else {
             viewModel.addShoppingListItem(binding.addItemEditText.text)
             binding.shoppingListListLayout.scrollView.smoothScrollTo(0, 0)
@@ -131,8 +130,7 @@ class ShoppingListFragment : Fragment() {
      * @return Text for sharing list items to other apps
      */
     private fun getShareText(): String {
-        var s =
-            requireContext().resources.getString(R.string.shopping_list_export_headline) + "\n\n"
+        var s = getString(R.string.shopping_list_export_headline) + "\n\n"
         viewModel.shoppingListItems.value?.let {
             for (item in it) {
                 if (!item.checked) {
@@ -145,7 +143,7 @@ class ShoppingListFragment : Fragment() {
                 }
             }
         }
-        s += "\n" + requireContext().resources.getString(R.string.store_link)
+        s += "\n" + getString(R.string.store_link)
         return s
     }
 

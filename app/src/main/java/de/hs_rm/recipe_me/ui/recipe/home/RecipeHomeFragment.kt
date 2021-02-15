@@ -57,7 +57,7 @@ class RecipeHomeFragment : Fragment() {
      */
     private fun onRecipeOfTheDayChanged(recipe: Recipe?) {
         if (recipe == null) {
-            binding.recipeOfTheDayName.text = resources.getString(R.string.no_recipe_otd)
+            binding.recipeOfTheDayName.text = getString(R.string.no_recipe_otd)
             binding.recipeOfTheDayButton.visibility = View.GONE
             binding.recipeOfTheDayImage.setImageResource(R.drawable.cooking_default)
             binding.gradientOverlay.setBackgroundResource(R.drawable.gradient_overlay)
