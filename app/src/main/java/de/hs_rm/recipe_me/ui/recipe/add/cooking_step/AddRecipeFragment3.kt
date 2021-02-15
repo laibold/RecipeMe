@@ -1,6 +1,5 @@
 package de.hs_rm.recipe_me.ui.recipe.add.cooking_step
 
-import android.animation.AnimatorInflater
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -81,26 +80,14 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
      * Navigation on next button
      */
     private fun onNext() {
-        val validationOk = viewModel.validateCookingSteps()
+        val id = viewModel.persistEntities()
+        // Remove observer to pretend a wrong list to be shown for a little while
+        viewModel.cookingStepsWithIngredients.removeObservers(viewLifecycleOwner)
 
-        if (validationOk) {
-            // Content will be cleared at persisting. Detach the objects by removing observer
-            // to prevent the hint text to be shown for a little while
-            viewModel.cookingStepsWithIngredients.removeObservers(viewLifecycleOwner)
-
-            val id = viewModel.persistEntities()
-
-            id.observe(viewLifecycleOwner, {
-                val direction = AddRecipeFragment3Directions.toRecipeDetailFragment(it)
-                findNavController().navigate(direction)
-            })
-        } else {
-            AnimatorInflater.loadAnimator(context, R.animator.jump)
-                .apply {
-                    setTarget(binding.addCookingStepFab)
-                    start()
-                }
-        }
+        id.observe(viewLifecycleOwner, {
+            val direction = AddRecipeFragment3Directions.toRecipeDetailFragment(it)
+            findNavController().navigate(direction)
+        })
     }
 
     /**

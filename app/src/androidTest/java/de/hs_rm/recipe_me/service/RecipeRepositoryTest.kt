@@ -24,7 +24,7 @@ class RecipeRepositoryTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    lateinit var repository: RecipeRepository
+    private lateinit var repository: RecipeRepository
 
     private lateinit var appContext: Context
 

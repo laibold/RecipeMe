@@ -31,7 +31,7 @@ data class CookingStep(
      */
     fun getTimeInSeconds(): Int {
         return when (timeUnit) {
-            TimeUnit.SECOND -> time;
+            TimeUnit.SECOND -> time
             TimeUnit.MINUTE -> time * 60
             TimeUnit.HOUR -> time * 3600
         }

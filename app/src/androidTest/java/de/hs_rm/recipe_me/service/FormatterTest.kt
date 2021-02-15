@@ -13,7 +13,7 @@ import org.junit.Assert.*
 @RunWith(AndroidJUnit4::class)
 class FormatterTest {
 
-    lateinit var context: Context
+    private lateinit var context: Context
 
     @Before
     fun initContext() {

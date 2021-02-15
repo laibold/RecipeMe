@@ -23,8 +23,4 @@ data class CookingStepWithIngredients(
         listOf()
     )
 
-    fun clone(): CookingStepWithIngredients {
-        return CookingStepWithIngredients(cookingStep.clone(),ingredients)
-    }
-
 }

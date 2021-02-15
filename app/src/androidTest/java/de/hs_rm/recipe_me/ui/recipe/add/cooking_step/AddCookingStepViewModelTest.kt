@@ -17,7 +17,7 @@ class AddCookingStepViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    lateinit var viewModel: AddCookingStepViewModel
+    private lateinit var viewModel: AddCookingStepViewModel
 
     @Before
     fun init() {

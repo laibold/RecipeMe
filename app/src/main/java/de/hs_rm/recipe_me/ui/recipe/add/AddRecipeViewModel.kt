@@ -472,11 +472,4 @@ class AddRecipeViewModel @ViewModelInject constructor(
         return _ingredients.value!!.isNotEmpty()
     }
 
-    /**
-     * Validate cooking steps (at least one)
-     * @return true if valid
-     */
-    fun validateCookingSteps(): Boolean {
-        return _cookingStepsWithIngredients.value!!.isNotEmpty()
-    }
 }

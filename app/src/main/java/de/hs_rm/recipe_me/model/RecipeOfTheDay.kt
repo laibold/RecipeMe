@@ -7,7 +7,6 @@ import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import java.time.LocalDate
-import java.util.*
 
 /**
  * Entity for recipe of the day. Holds a date field and a foreign key for a recipe

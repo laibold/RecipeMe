@@ -31,32 +31,32 @@ object TestDataProvider {
         return CookingStep(recipeId, imageUri, description, time, unit)
     }
 
-    fun getRandomString(length: Int): String {
+    private fun getRandomString(length: Int): String {
         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
         return (1..length)
             .map { allowedChars.random() }
             .joinToString("")
     }
 
-    fun getRandomDouble(maxValue: Double): Double {
+    private fun getRandomDouble(maxValue: Double): Double {
         return Random.nextDouble(0.0, maxValue)
     }
 
-    fun getRandomInt(maxValue: Int): Int {
+    private fun getRandomInt(maxValue: Int): Int {
         return Random.nextInt(maxValue)
     }
 
-    fun getRandomRecipeCategory(): RecipeCategory {
+    private fun getRandomRecipeCategory(): RecipeCategory {
         val categoryIndex = Random.nextInt(0, RecipeCategory.values().size)
         return RecipeCategory.values()[categoryIndex]
     }
 
-    fun getRandomTimeUnit(): TimeUnit {
+    private fun getRandomTimeUnit(): TimeUnit {
         val unitIndex = Random.nextInt(0, TimeUnit.values().size)
         return TimeUnit.values()[unitIndex]
     }
 
-    fun getRandomIngredientUnit(): IngredientUnit {
+    private fun getRandomIngredientUnit(): IngredientUnit {
         val unitIndex = Random.nextInt(0, IngredientUnit.values().size)
         return IngredientUnit.values()[unitIndex]
     }
