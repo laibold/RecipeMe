@@ -31,7 +31,7 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    val direction = AddRecipeFragment2Directions.toAddRecipeFragment1(clearValues = false)
+                    val direction = AddRecipeFragment2Directions.toAddRecipeNavGraph(clearValues = false)
                     findNavController().navigate(direction)
                 }
             }
