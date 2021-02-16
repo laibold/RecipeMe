@@ -7,9 +7,7 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import de.hs_rm.recipe_me.model.recipe.Recipe
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
+import java.io.*
 
 object ImageHandler {
 
@@ -23,14 +21,11 @@ object ImageHandler {
 
     private fun saveImage(
         image: Bitmap,
-        context: Context,
-        relativePath: String,
+        absolutePath: String,
         filename: String,
     ): String? {
-        val path = getImageDirPath(context) + "/" + relativePath
-
         var savedImagePath: String? = null
-        val storageDir = File(path)
+        val storageDir = File(absolutePath)
         var success = true
         if (!storageDir.exists()) {
             success = storageDir.mkdirs()
@@ -53,7 +48,7 @@ object ImageHandler {
     /**
      * https://arkapp.medium.com/accessing-images-on-android-10-scoped-storage-bbe65160c3f4
      */
-    fun getBitmap(context: Context, imageUri: Uri): Bitmap? {
+    private fun getBitmap(context: Context, imageUri: Uri): Bitmap? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             ImageDecoder.decodeBitmap(
                 ImageDecoder.createSource(context.contentResolver, imageUri)
@@ -68,26 +63,32 @@ object ImageHandler {
     }
 
     fun saveRecipeImage(context: Context, image: Bitmap, id: Long): String? {
-        val relativePath = "$RECIPES_PATH/$id"
-        return saveImage(image, context, relativePath, RECIPE_IMAGE_NAME)
+        return saveImage(image, getRecipeDirPath(context, id), RECIPE_IMAGE_NAME)
     }
 
-    fun getRecipeImage(context: Context, recipe: Recipe) {
-        // TODO
-    }
+    fun getRecipeImage(context: Context, recipe: Recipe): Bitmap? {
+        val uri = Uri.fromFile(File(getRecipeDirPath(context, recipe.id) + RECIPE_IMAGE_NAME))
 
-    /**
-     * Returns absolute path to the main image of the given recipe
-     */
-    private fun getRecipeImagePath(context: Context, id: Long): String {
-        return getRecipeDirPath(context, id) + "/$RECIPE_IMAGE_NAME"
+        return try {
+            getBitmap(context, uri)
+        } catch (ex: Exception) {
+            when (ex) {
+                is IOException,
+                is FileNotFoundException,
+                -> {
+                    BitmapFactory.decodeResource(context.resources, recipe.category.drawableResId)
+//                    null
+                }
+                else -> throw ex
+            }
+        }
     }
 
     /**
      * Returns absolute path to the image of the CookingStep of given recipe
      */
     fun getCookingStepPath(context: Context, recipeId: Long, cookingStepId: Long): String {
-        return getRecipeImagePath(context,
+        return getRecipeDirPath(context,
             recipeId) + "/$cookingStepId" + COOKING_STEP_PATTERN.format(cookingStepId)
     }
 

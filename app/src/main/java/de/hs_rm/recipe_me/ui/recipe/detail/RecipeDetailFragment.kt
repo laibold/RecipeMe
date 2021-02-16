@@ -21,6 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeDetailFragmentBinding
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
+import de.hs_rm.recipe_me.service.ImageHandler
 
 @AndroidEntryPoint
 class RecipeDetailFragment : Fragment() {
@@ -46,7 +47,7 @@ class RecipeDetailFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = DataBindingUtil.inflate(
             inflater,
@@ -197,8 +198,8 @@ class RecipeDetailFragment : Fragment() {
      * Set background image
      */
     private fun setImage(recipeWithRelations: RecipeWithRelations) {
-        // TODO ImageHandler.getRecipeImage != null ? image : category
-        binding.recipeDetailImage.setImageResource(recipeWithRelations.recipe.category.drawableResId)
+        val bitmap = ImageHandler.getRecipeImage(requireContext(), recipeWithRelations.recipe)
+        binding.recipeDetailImage.setImageBitmap(bitmap)
     }
 
     /**

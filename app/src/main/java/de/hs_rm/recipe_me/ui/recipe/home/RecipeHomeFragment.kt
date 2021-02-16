@@ -14,6 +14,7 @@ import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeHomeFragmentBinding
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
+import de.hs_rm.recipe_me.service.ImageHandler
 
 @AndroidEntryPoint
 class RecipeHomeFragment : Fragment() {
@@ -82,7 +83,9 @@ class RecipeHomeFragment : Fragment() {
             binding.gradientOverlay.setBackgroundResource(R.drawable.gradient_overlay)
         } else {
             binding.recipeOfTheDayName.text = recipe.name
-            binding.recipeOfTheDayImage.setImageResource(recipe.category.drawableResId)
+
+            val bitmap = ImageHandler.getRecipeImage(requireContext(), recipe)
+            binding.recipeOfTheDayImage.setImageBitmap(bitmap)
 
             // Touch event gets dispatched from ScrollViews dummy view
             binding.recipeOfTheDayButton.setOnTouchListener { view, event ->

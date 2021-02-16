@@ -20,6 +20,7 @@ import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment1Binding
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
+import de.hs_rm.recipe_me.service.ImageHandler
 import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
 
 
@@ -63,15 +64,13 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
                         binding.recipeServingsField.setText(viewModel.recipe.value!!.servings.toString())
                     }
                     binding.recipeCategorySpinner.setSelection(recipe.category.ordinal)
+
+                    val bitmap = ImageHandler.getRecipeImage(requireContext(), recipe)
+                    binding.recipeImage.setImageBitmap(bitmap)
                 }
             })
         } else {
             binding.header.headlineText = getString(R.string.new_recipe)
-        }
-
-        //TODO hier oder woanders?
-        viewModel.recipeImage.value?.let { image ->
-            binding.recipeImage.setImageBitmap(image)
         }
 
         binding.changeImageButton.setOnClickListener {

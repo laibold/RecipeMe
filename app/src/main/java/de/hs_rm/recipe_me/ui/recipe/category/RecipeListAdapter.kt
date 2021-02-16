@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import de.hs_rm.recipe_me.databinding.RecipeListitemBinding
 import de.hs_rm.recipe_me.declaration.ui.fragments.DeleteRecipeCallbackAdapter
 import de.hs_rm.recipe_me.model.recipe.Recipe
+import de.hs_rm.recipe_me.service.ImageHandler
 import java.util.*
 
 /**
@@ -55,8 +56,8 @@ class RecipeListAdapter(
         val recipe = objects[position]
         holder.binding.recipeName.text = recipe.name
 
-        // TODO ImageHandler.getRecipeImage != null ? image : category
-        holder.binding.recipeImageView.setImageResource(recipe.category.drawableResId)
+        val bitmap = ImageHandler.getRecipeImage(context, recipe)
+        holder.binding.recipeImageView.setImageBitmap(bitmap)
 
         // on long click remove other selection by setting itemSelected and set selection to this item
         holder.binding.itemWrapper.setOnLongClickListener {
