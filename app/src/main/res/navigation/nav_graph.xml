@@ -78,9 +78,10 @@
                 android:defaultValue="MAIN_DISHES"
                 app:argType="de.hs_rm.recipe_me.model.recipe.RecipeCategory" />
 
+            <!--defaultValue must equal Recipe.DEFAULT_ID-->
             <argument
                 android:name="recipeId"
-                android:defaultValue="-1L"
+                android:defaultValue="0L"
                 app:argType="long" />
 
             <argument
@@ -90,7 +91,7 @@
 
             <action
                 android:id="@+id/to_add_recipe_fragment2"
-                app:destination="@+id/add_recipe_fragment2" />
+                app:destination="@id/add_recipe_fragment2" />
         </fragment>
 
         <fragment
@@ -101,10 +102,12 @@
 
             <action
                 android:id="@+id/to_add_recipe_fragment3"
-                app:destination="@+id/add_recipe_fragment3" />
+                app:destination="@id/add_recipe_fragment3" />
+
             <action
-                android:id="@+id/to_add_recipe_fragment1"
-                app:destination="@+id/add_recipe_fragment1" />
+                android:id="@+id/to_add_recipe_nav_graph"
+                app:destination="@id/add_recipe_nav_graph"
+                app:popUpTo="@id/add_recipe_nav_graph"/>
         </fragment>
 
         <fragment
@@ -115,7 +118,7 @@
 
             <action
                 android:id="@+id/to_recipe_detail_fragment"
-                app:destination="@+id/recipe_detail_fragment" />
+                app:destination="@id/recipe_detail_fragment" />
         </fragment>
 
     </navigation>
