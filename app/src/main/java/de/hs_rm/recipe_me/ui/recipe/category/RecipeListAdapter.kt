@@ -54,6 +54,8 @@ class RecipeListAdapter(
 
         val recipe = objects[position]
         holder.binding.recipeName.text = recipe.name
+
+        // TODO ImageHandler.getRecipeImage != null ? image : category
         holder.binding.recipeImageView.setImageResource(recipe.category.drawableResId)
 
         // on long click remove other selection by setting itemSelected and set selection to this item

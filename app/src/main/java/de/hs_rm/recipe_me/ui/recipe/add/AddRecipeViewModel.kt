@@ -55,6 +55,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
     val cookingStepsWithIngredients: LiveData<MutableList<CookingStepWithIngredients>>
         get() = _cookingStepsWithIngredients
 
+    // TODO LiveData or not?
     private val _recipeImage = MutableLiveData<Bitmap>()
     val recipeImage: LiveData<Bitmap>
         get() = _recipeImage
@@ -421,6 +422,7 @@ class AddRecipeViewModel @ViewModelInject constructor(
                 }
             }
 
+            saveImage(recipeToUpdate!!.id)
             recipeId.postValue(recipeToUpdate!!.id)
         }
         return recipeId
@@ -464,6 +466,8 @@ class AddRecipeViewModel @ViewModelInject constructor(
                         )
                     }
                 }
+
+                saveImage(id)
                 recipeId.postValue(id)
             }
         }
@@ -487,13 +491,14 @@ class AddRecipeViewModel @ViewModelInject constructor(
     }
 
     /**
-     * Save image to recipe folder with recipe id
+     * Save image to recipe folder with recipe id.
+     * An existing image will be replaced.
      */
     private fun saveImage(recipeId: Long) {
         _recipeImage.value?.let {
             ImageHandler.saveRecipeImage(
-                it,
                 app.applicationContext,
+                it,
                 recipeId
             )
         }

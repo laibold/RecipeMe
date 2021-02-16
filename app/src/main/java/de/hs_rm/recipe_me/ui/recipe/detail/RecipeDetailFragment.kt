@@ -197,6 +197,7 @@ class RecipeDetailFragment : Fragment() {
      * Set background image
      */
     private fun setImage(recipeWithRelations: RecipeWithRelations) {
+        // TODO ImageHandler.getRecipeImage != null ? image : category
         binding.recipeDetailImage.setImageResource(recipeWithRelations.recipe.category.drawableResId)
     }
 

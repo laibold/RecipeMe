@@ -50,6 +50,7 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
             viewModel.initRecipe(args.recipeId)
         }
 
+        // TODO only works because of bug: default for recipeId is -1 and DEFAULT_ID is 0
         if (args.recipeId != Recipe.DEFAULT_ID) {
             binding.header.headlineText = getString(R.string.edit_recipe)
 
