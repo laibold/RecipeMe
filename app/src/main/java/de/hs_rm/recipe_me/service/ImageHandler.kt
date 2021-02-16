@@ -1,13 +1,18 @@
 package de.hs_rm.recipe_me.service
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
+import android.widget.ImageView
+import com.bumptech.glide.Glide
 import de.hs_rm.recipe_me.model.recipe.Recipe
-import java.io.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 
 object ImageHandler {
 
@@ -18,6 +23,8 @@ object ImageHandler {
     private const val RECIPE_IMAGE_NAME = "/recipe_image.jpg"
     private const val COOKING_STEP_PATTERN = "/step_%s.jpg"
     private const val PROFILE_IMAGE_NAME = "/profile_image.jpg"
+
+    private const val JPEG_QUALITY = 50
 
     private fun saveImage(
         image: Bitmap,
@@ -35,7 +42,7 @@ object ImageHandler {
             savedImagePath = imageFile.absolutePath
             try {
                 val fOut: OutputStream = FileOutputStream(imageFile)
-                image.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
+                image.compress(Bitmap.CompressFormat.JPEG, JPEG_QUALITY, fOut)
                 fOut.close()
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -60,6 +67,18 @@ object ImageHandler {
                     BitmapFactory.decodeStream(inputStream)
                 }
         }
+
+//        return Glide.with(context)
+//            .asBitmap()
+//            .load(imageUri)
+//            .submit(1000, 1000)
+
+    }
+
+    fun setRecipeImageToView(activity: Activity, imageView: ImageView, recipe: Recipe) {
+        Glide.with(activity)
+            .load(getRecipeDirPath(activity, recipe.id) + RECIPE_IMAGE_NAME)
+            .into(imageView)
     }
 
     fun saveRecipeImage(context: Context, image: Bitmap, id: Long): String? {
@@ -69,27 +88,16 @@ object ImageHandler {
     fun getRecipeImage(context: Context, recipe: Recipe): Bitmap? {
         val uri = Uri.fromFile(File(getRecipeDirPath(context, recipe.id) + RECIPE_IMAGE_NAME))
 
-        return try {
-            getBitmap(context, uri)
-        } catch (ex: Exception) {
-            when (ex) {
-                is IOException,
-                is FileNotFoundException,
-                -> {
-                    BitmapFactory.decodeResource(context.resources, recipe.category.drawableResId)
-//                    null
-                }
-                else -> throw ex
-            }
-        }
+        return getBitmap(context, uri)
     }
 
     /**
      * Returns absolute path to the image of the CookingStep of given recipe
      */
     fun getCookingStepPath(context: Context, recipeId: Long, cookingStepId: Long): String {
-        return getRecipeDirPath(context,
-            recipeId) + "/$cookingStepId" + COOKING_STEP_PATTERN.format(cookingStepId)
+        return getRecipeDirPath(context, recipeId) +
+                "/$cookingStepId" +
+                COOKING_STEP_PATTERN.format(cookingStepId)
     }
 
     /**

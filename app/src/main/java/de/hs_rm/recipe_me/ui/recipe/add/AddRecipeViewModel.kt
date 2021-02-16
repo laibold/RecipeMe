@@ -4,6 +4,7 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.net.Uri
 import android.text.Editable
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.bumptech.glide.Glide
@@ -337,8 +338,10 @@ class AddRecipeViewModel @ViewModelInject constructor(
      */
     fun persistEntities(): LiveData<Long> {
         return if (recipeToUpdate != null) {
+            Log.i("tachchen", "Rezept wird geupdated")
             updateEntities()
         } else {
+            Log.i("tachchen", "Rezept wird gespeichert")
             saveNewEntities()
         }
     }
