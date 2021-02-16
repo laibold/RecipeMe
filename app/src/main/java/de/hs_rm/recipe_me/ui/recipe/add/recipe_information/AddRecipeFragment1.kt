@@ -48,13 +48,12 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
         binding.recipeCategorySpinner.setSelection(viewModel.recipeCategory.ordinal)
 
         if (args.clearValues) {
+            // when user navigates to fragment to create or edit a recipe
             viewModel.initRecipe(args.recipeId)
         }
 
-        // TODO only works because of bug: default for recipeId is -1 and DEFAULT_ID is 0
-        if (args.recipeId != Recipe.DEFAULT_ID) {
-            binding.header.headlineText = getString(R.string.edit_recipe)
-
+        // observe recipe in viewModel except user is navigating to fragment to create a new recipe
+        if (!(args.clearValues && args.recipeId == Recipe.DEFAULT_ID)) {
             viewModel.recipe.observe(viewLifecycleOwner, { recipe ->
                 if (recipe != null) {
                     if (recipe.name != "") {
@@ -69,6 +68,10 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
                     binding.recipeImage.setImageBitmap(bitmap)
                 }
             })
+        }
+
+        if (args.recipeId != Recipe.DEFAULT_ID) {
+            binding.header.headlineText = getString(R.string.edit_recipe)
         } else {
             binding.header.headlineText = getString(R.string.new_recipe)
         }
