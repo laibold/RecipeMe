@@ -2,27 +2,35 @@
 <resources>
 
     <style name="headline_1">
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:fontFamily">@font/raleway_extrabold</item>
         <item name="android:textSize">@dimen/font_size_headline_1</item>
         <item name="android:textColor">?attr/colorOnSecondary</item>
         <item name="android:layout_marginStart">@dimen/outline_horizontal</item>
-        <item name="android:layout_marginTop">@dimen/margin_top</item>
+        <item name="android:layout_marginTop">@dimen/space_top</item>
     </style>
 
     <style name="headline_2">
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:fontFamily">@font/raleway_extrabold</item>
         <item name="android:textSize">@dimen/font_size_headline_2</item>
         <item name="android:textColor">?attr/colorOnSecondary</item>
-        <item name="android:layout_marginTop">@dimen/margin_top</item>
+        <item name="android:layout_marginTop">@dimen/space_top</item>
+    </style>
+
+    <style name="headline_3">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/raleway_extrabold</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="android:textSize">@dimen/font_size_headline_3</item>
     </style>
 
     <style name="headline_image">
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:fontFamily">@font/raleway_extrabold</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:shadowColor">#3C3131</item>
@@ -44,7 +52,7 @@
     </style>
 
     <style name="small_text" parent="text">
-        <item name="android:textSize">@dimen/font_size_tertiary</item>
+        <item name="android:textSize">@dimen/font_size_text_small</item>
     </style>
 
     <style name="bold_text" parent="text">
@@ -64,18 +72,18 @@
     </style>
 
     <style name="primary_button" parent="styled_button">
-        <item name="android:layout_height">@dimen/button_height_big</item>
-        <item name="android:layout_width">@dimen/button_width_big</item>
-        <item name="layout_constraintWidth_percent">@dimen/button_big_width_percentage</item>
+        <item name="android:layout_height">@dimen/big_button_height</item>
+        <item name="android:layout_width">@dimen/big_button_width</item>
+        <item name="layout_constraintWidth_percent">@dimen/big_button_width_percentage</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textSize">@dimen/font_size_text</item>
         <item name="android:backgroundTint">?attr/colorPrimaryVariant</item>
     </style>
 
     <style name="secondary_button" parent="styled_button">
-        <item name="android:layout_height">@dimen/button_height_big</item>
-        <item name="android:layout_width">@dimen/button_width_big</item>
-        <item name="layout_constraintWidth_percent">@dimen/button_big_width_percentage</item>
+        <item name="android:layout_height">@dimen/big_button_height</item>
+        <item name="android:layout_width">@dimen/big_button_width</item>
+        <item name="layout_constraintWidth_percent">@dimen/big_button_width_percentage</item>
         <item name="android:textColor">?attr/colorPrimaryVariant</item>
         <item name="android:textSize">@dimen/font_size_text</item>
         <item name="android:backgroundTint">?attr/colorOnPrimary</item>
@@ -84,21 +92,35 @@
     </style>
 
     <style name="tertiary_button" parent="styled_button">
-        <item name="android:layout_width">@dimen/button_width_small</item>
-        <item name="android:layout_height">@dimen/button_height_small</item>
+        <item name="android:layout_width">@dimen/wrap_content</item>
+        <item name="android:layout_height">@dimen/wide_small_button_height</item>
         <item name="android:textColor">?attr/colorOnSecondary</item>
-        <item name="android:textSize">@dimen/font_size_tertiary</item>
+        <item name="android:textSize">@dimen/font_size_text_small</item>
         <item name="android:backgroundTint">?attr/colorOnPrimary</item>
         <item name="strokeWidth">2dp</item>
         <item name="strokeColor">?attr/colorOnSecondary</item>
     </style>
 
+    <style name="tertiary_button_white" parent="tertiary_button">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <!--TODO dark gray transparent background-->
+        <item name="android:backgroundTint">@android:color/transparent</item>
+        <item name="strokeColor">?attr/colorOnPrimary</item>
+    </style>
+
     <style name="small_circle_button">
-        <item name="android:layout_width">@dimen/small_circle_button</item>
-        <item name="android:layout_height">@dimen/small_circle_button</item>
+        <item name="android:layout_width">@dimen/small_circle_button_size</item>
+        <item name="android:layout_height">@dimen/small_circle_button_size</item>
         <item name="android:background">@drawable/round_button_filled</item>
         <item name="android:tint">@color/white</item>
         <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="invisible_button" parent="styled_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">?attr/colorPrimaryVariant</item>
+        <item name="android:layout_height">@dimen/invisible_button_height</item>
     </style>
 
     <style name="edit_text">

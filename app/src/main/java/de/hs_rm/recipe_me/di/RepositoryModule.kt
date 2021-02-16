@@ -5,7 +5,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import de.hs_rm.recipe_me.persistence.RecipeDao
+import de.hs_rm.recipe_me.persistence.RecipeOfTheDayDao
 import de.hs_rm.recipe_me.persistence.ShoppingListDao
+import de.hs_rm.recipe_me.service.RecipeOfTheDayRepository
 import de.hs_rm.recipe_me.service.RecipeRepository
 import de.hs_rm.recipe_me.service.ShoppingListRepository
 import javax.inject.Singleton
@@ -26,5 +28,12 @@ object RepositoryModule {
     @Singleton
     fun providesShoppingListRepository(shoppingListDataSource: ShoppingListDao) =
         ShoppingListRepository(shoppingListDataSource)
+
+    @Provides
+    @Singleton
+    fun providesRecipeOfTheDayRepository(
+        rotdDataSource: RecipeOfTheDayDao,
+        recipeDataSource: RecipeDao
+    ) = RecipeOfTheDayRepository(rotdDataSource, recipeDataSource)
 
 }

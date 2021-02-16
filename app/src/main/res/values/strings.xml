@@ -36,11 +36,9 @@
     <string name="sprig_sg">Zweig</string>
     <string name="sprig_pl">Zweige</string>
     <string name="none_unit">---</string>
-    <string name="name_hint">Name</string>
     <string name="label_recipe_name">Name des Rezepts</string>
     <string name="hint_recipe_name">z.B. Leckerer Hummus</string>
     <string name="category">Kategorie</string>
-    <string name="recipe">Rezept</string>
     <string name="new_recipe">Neues Rezept</string>
     <string name="desc_add_recipe">Rezept hinzufügen</string>
     <string name="delete">Löschen</string>
@@ -77,8 +75,7 @@
     <string name="err_enter_name">Namen eingeben</string>
     <string name="err_enter_servings">Portionen angeben</string>
     <string name="err_servings_greater_than_zero">Wert größer als 0 angeben</string>
-    <string name="err_at_least_one_ingredient">Mindestens eine Zutat angeben</string>
-    <string name="err_at_least_one_cooking_step">Mindestens einen Schritt angeben</string>
+    <string name="err_enter_description">Beschreibung angeben</string>
     <string name="can_sg">Dose</string>
     <string name="can_pl">Dosen</string>
     <string name="glas_sg">Glas</string>
@@ -90,6 +87,12 @@
     <string name="store_link">http://play.google.com/store/apps/details?id=de.hs_rm.recipe_me</string>
     <string name="timer">Timer</string>
     <string name="start_timer">Timer starten</string>
+    <string name="cooking_steps">Koch-Schritte</string>
+    <string name="add_cooking_steps_text">Füge über den Button neue Koch-Schritte hinzu.</string>
+    <string name="add_ingredients_text">Füge über den Button neue Zutaten hinzu.</string>
+    <string name="add_items_text">Nicht alle Zutaten zu Hause?\n\Füge hier oder aus der Rezept-Ansicht hinzu, was noch fehlt.</string>
+    <string name="share">Teilen</string>
+    <string name="add_recipe_text">Noch ziemlich leer hier.\n\Füge über den Button leckere Rezepte hinzu.</string>
     <string name="profile_greeting">Hallo, Chefkoch!</string>
     <string name="change_profile_picture">Profilbild ändern</string>
     <string name="site_notice">Impressum</string>
@@ -97,7 +100,18 @@
     <string name="photo_credits">Bildnachweis</string>
     <string name="beckbold">Beckbold Development</string>
     <string name="site_notice_text">Christina Becker, Marvin Laibold\n\beckbold.development@gmail.com</string>
-    <string name="photo_credits_text">App icon uses icon made by monkik from www.flaticon.com\n\Clipboard icon made by Freepik from www.flaticon.com\n\Main dishes photo by Natalia Y on Unsplash\n\Snacks photo by Kyle Brinker on Unsplash\n\Soups photo by Cayla1 on Unsplash\n\Beverages photo by Kim Daniels on Unsplash\n\Baked goods photo by Rebecca Matthews on Unsplash\n\Breakfast photo by Dani Rendina on Unsplash\n\Desserts photo by Jennifer Schmidt on Unsplash\n\Salad photo by Hermes Rivera on Unsplash</string>
+    <string name="photo_credits_text">App icon uses icon made by monkik from www.flaticon.com\n\Clipboard icon made by Freepik from www.flaticon.com\n\Chef icon made by Freepik from www.flaticon.com\n\Main dishes photo by Natalia Y on Unsplash\n\Snacks photo by Kyle Brinker on Unsplash\n\Soups photo by Cayla1 on Unsplash\n\Beverages photo by Kim Daniels on Unsplash\n\Baked goods photo by Rebecca Matthews on Unsplash\n\Breakfast photo by Dani Rendina on Unsplash\n\Desserts photo by Jennifer Schmidt on Unsplash\n\Salad photo by Hermes Rivera on Unsplash</string>
     <string name="version">Version</string>
     <string name="recipe_total_text_map">{\"1\":\"Rezept erstellt - da geht noch mehr!\",\"10\":\"Rezepte erstellt - da geht noch mehr!\",\"20\":\"Rezepte erstellt - du bist auf einem guten Weg.\",\"30\":\"Rezepte erstellt - du kannst schon fast ein Restaurant aufmachen.\",\"40\":\"Rezepte erstellt - boah, Respekt!\",\"50\":\"Rezepte erstellt - deine Waage wollt\' ich nicht sein.\",\"60\":\"Rezepte erstellt - wer soll das alles essen? Sag mal!\",\"61\":\"Rezepte erstellt - du bist ein wahrer Meisterkoch!\"}</string>
+    <string name="recipe_of_the_day">Rezept des Tages</string>
+    <string name="open">Öffnen</string>
+    <string name="no_recipe_otd">Füge Rezepte hinzu, um dich hier täglich neu inspirieren zu lassen.</string>
+    <string name="edit_recipe">Rezept bearbeiten</string>
+    <string name="err_recipe_not_found">Fehler: Rezept konnte nicht gefunden werden.</string>
+    <string name="add_cooking_step_select_ingredients">Wähle alle Zutaten aus, die in diesem Schritt benötigt werden.</string>
+    <string name="save">Speichern</string>
+    <string name="add_via_button">Über Button hinzufügen</string>
+    <string name="cancel_reset">Abbrechen und zurücksetzen</string>
+    <string name="edit_assigned_ingredients">Zugehörige Zutaten bearbeiten</string>
+    <string name="related_ingredients">Zugehörige Zutaten</string>
 </resources>

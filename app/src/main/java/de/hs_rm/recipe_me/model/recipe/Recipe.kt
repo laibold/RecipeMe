@@ -14,7 +14,7 @@ data class Recipe(
     var imageUri: String,
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
+    var id: Long = DEFAULT_ID
 
     constructor() : this(
         "",
@@ -29,4 +29,9 @@ data class Recipe(
         recipeCategory,
         ""
     )
+
+    companion object {
+        /** id a Recipe has by default (when it has not been persisted) */
+        const val DEFAULT_ID = 0L
+    }
 }

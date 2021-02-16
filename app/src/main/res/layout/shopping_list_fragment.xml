@@ -7,22 +7,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/shopping_list_headline"
-            style="@style/headline_1"
-            android:text="@string/shopping_list"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <include
+            android:id="@+id/header"
+            layout="@layout/material_header"
+            app:headlineText="@{@string/shopping_list}" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content_wrapper"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:paddingStart="@dimen/outline_horizontal"
             android:paddingEnd="@dimen/outline_horizontal"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/shopping_list_headline">
+            app:layout_constraintTop_toBottomOf="@id/header"
+            tools:visibility="visible">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/add_item_wrapper"
@@ -37,8 +38,9 @@
                     style="@style/edit_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/default_margin"
+                    android:layout_marginTop="@dimen/default_space"
                     android:hint="@string/new_ingredient"
+                    android:imeOptions="actionDone"
                     android:importantForAutofill="no"
                     android:inputType="textCapSentences"
                     android:maxLength="@integer/shopping_list_item_name_max_length"
@@ -51,13 +53,14 @@
 
                 <ImageButton
                     android:id="@+id/add_item_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_button_text"
-                    android:layout_marginBottom="12dp"
+                    android:layout_width="@dimen/small_button_size"
+                    android:layout_height="@dimen/small_button_size"
                     android:background="@null"
                     android:contentDescription="@string/add_to_shopping_list"
-                    android:src="@drawable/ic_baseline_add_circle_outline_24"
+                    android:padding="@dimen/small_button_padding_small_icon"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_baseline_add_circle_24"
+                    android:tint="?attr/colorPrimaryVariant"
                     android:tooltipText="@string/add_to_shopping_list"
                     app:layout_constraintBottom_toBottomOf="@id/add_item_edit_text"
                     app:layout_constraintStart_toEndOf="@id/add_item_edit_text" />
@@ -80,10 +83,13 @@
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/share_button"
             style="@style/custom_floating_action_button"
-            android:contentDescription="@string/desc_add_recipe"
+            android:contentDescription="@string/share"
             android:src="@drawable/ic_baseline_share_24"
+            android:tooltipText="@string/share"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

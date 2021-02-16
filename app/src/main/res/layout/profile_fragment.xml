@@ -7,12 +7,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/profile_headline"
-            style="@style/headline_1"
-            android:text="@string/profile"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <include
+            android:id="@+id/header"
+            layout="@layout/material_header"
+            app:headlineText="@{@string/profile}" />
 
         <ImageView
             android:id="@+id/profile_picture"
@@ -22,12 +20,12 @@
             android:background="@drawable/profile_picture_default"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_headline" />
+            app:layout_constraintTop_toBottomOf="@+id/header" />
 
         <ImageButton
             android:id="@+id/change_profile_pic_button"
-            android:layout_width="@dimen/small_circle_button"
-            android:layout_height="@dimen/small_circle_button"
+            android:layout_width="@dimen/small_button_size"
+            android:layout_height="@dimen/small_button_size"
             android:layout_marginStart="133dp"
             android:layout_marginTop="133dp"
             android:background="@drawable/round_button_filled"
@@ -45,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/outline_horizontal"
-            android:layout_marginTop="@dimen/margin_top"
+            android:layout_marginTop="@dimen/space_top"
             android:text="@string/profile_greeting"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/profile_picture" />
@@ -68,7 +66,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/profile_quantity_recipes_text"
             android:layout_marginHorizontal="@dimen/outline_horizontal"
-            android:layout_marginTop="@dimen/margin_top">
+            android:layout_marginTop="@dimen/space_top">
 
             <TextView
                 android:id="@+id/to_site_notice_headline"

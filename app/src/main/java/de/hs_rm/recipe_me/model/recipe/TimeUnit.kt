@@ -22,10 +22,10 @@ enum class TimeUnit(private val singularResId: Int, private val pluralResId: Int
         resources: Resources,
         amount: Int?
     ): String {
-        return if (amount == null || amount == 1) {
-            resources.getString(singularResId)
-        } else {
+        return if (amount == null || amount != 1) {
             resources.getString(pluralResId)
+        } else {
+            resources.getString(singularResId)
         }
     }
 }

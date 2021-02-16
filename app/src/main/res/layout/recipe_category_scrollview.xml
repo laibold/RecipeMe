@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/layout_rounded_top"
+        android:elevation="4dp"
+        android:minHeight="300dp"
+        android:paddingTop="15dp">
+
+        <include layout="@layout/grabber_view" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/divider_big"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
+
+            <de.hs_rm.recipe_me.ui.component.UnscrollableListView
+                android:id="@+id/recipe_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="@dimen/divider_big"
+                android:scrollbars="none"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/recipe_listitem"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/add_hint_text"
+                style="@style/headline_3"
+                android:paddingStart="@dimen/outline_horizontal"
+                android:paddingEnd="100dp"
+                android:text="@string/add_recipe_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

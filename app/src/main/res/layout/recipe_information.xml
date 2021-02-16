@@ -5,22 +5,16 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:minHeight="300dp"
         android:layout_height="match_parent"
         android:layout_marginTop="0dp"
         android:background="@drawable/layout_rounded_top"
         android:elevation="4dp"
+        android:minHeight="300dp"
         android:paddingHorizontal="@dimen/outline_horizontal"
         android:paddingTop="15dp"
-        android:paddingBottom="30dp">
+        android:paddingBottom="@dimen/default_space">
 
-        <View
-            android:layout_width="27dp"
-            android:layout_height="2dp"
-            android:background="#BCBCBC"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <include layout="@layout/grabber_view" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/wrapper"
@@ -34,8 +28,9 @@
                 style="@style/headline_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top"
+                android:layout_marginTop="@dimen/space_top"
                 android:gravity="center_vertical"
+                android:includeFontPadding="false"
                 android:text="@string/ingredients"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -43,10 +38,9 @@
             <include
                 android:id="@+id/servings_element"
                 layout="@layout/servings"
-                android:layout_width="160sp"
+                android:layout_width="180sp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top"
-                android:layout_marginEnd="@dimen/outline_horizontal"
+                app:layout_constraintTop_toTopOf="@id/recipe_info_headline"
                 app:layout_constraintBottom_toBottomOf="@id/recipe_info_headline"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -54,14 +48,12 @@
                 android:id="@+id/ingredients_list_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top"
+                android:layout_marginTop="@dimen/small_space"
                 android:divider="@android:color/transparent"
                 android:dividerHeight="0dp"
                 android:listSelector="@android:color/transparent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recipe_info_headline"
                 tools:listitem="@layout/ingredient_listitem" />
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/shopping_list_button_wrapper"
@@ -73,7 +65,7 @@
                 <ImageButton
                     android:id="@+id/add_to_shopping_list_button"
                     style="@style/small_circle_button"
-                    android:layout_marginVertical="@dimen/margin_top"
+                    android:layout_marginVertical="@dimen/small_space"
                     android:contentDescription="@string/add_to_shopping_list"
                     android:paddingBottom="2dp"
                     android:src="@drawable/ic_clipboards"
@@ -85,7 +77,7 @@
                 <ImageButton
                     android:id="@+id/to_shopping_list_cancel_button"
                     style="@style/small_circle_button"
-                    android:layout_marginVertical="@dimen/margin_top"
+                    android:layout_marginVertical="@dimen/small_space"
                     android:background="@drawable/round_button_2dp"
                     android:contentDescription="@string/cancel"
                     android:src="@drawable/ic_baseline_clear_24"
@@ -99,8 +91,8 @@
                 <ImageButton
                     android:id="@+id/to_shopping_list_accept_button"
                     style="@style/small_circle_button"
-                    android:layout_marginVertical="@dimen/margin_top"
-                    android:layout_marginStart="@dimen/default_margin"
+                    android:layout_marginVertical="@dimen/small_space"
+                    android:layout_marginStart="@dimen/default_space"
                     android:contentDescription="@string/add_to_shopping_list"
                     android:src="@drawable/ic_baseline_check_24"
                     android:tooltipText="@string/add_to_shopping_list"
@@ -128,11 +120,11 @@
                 style="@style/text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top"
+                android:layout_marginTop="@dimen/small_space"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cooking_steps_headline"
-                tools:text="@tools:sample/lorem/random"
-                tools:lines="10"/>
+                tools:lines="10"
+                tools:text="@tools:sample/lorem/random" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

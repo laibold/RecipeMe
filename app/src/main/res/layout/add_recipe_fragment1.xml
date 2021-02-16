@@ -7,25 +7,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/headline"
-            style="@style/headline_1"
-            android:text="@string/new_recipe"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <include
+            android:id="@+id/header"
+            layout="@layout/material_header" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/outline_horizontal"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="@dimen/default_space"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/headline"
+            app:layout_constraintTop_toBottomOf="@id/header"
             app:layout_constraintWidth_percent="0.7">
 
             <TextView
                 android:id="@+id/recipe_name_label"
                 style="@style/label"
+                android:labelFor="@id/recipe_name_field"
                 android:text="@string/label_recipe_name"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -46,6 +44,7 @@
                 android:id="@+id/recipe_category_label"
                 style="@style/label"
                 android:layout_marginTop="20dp"
+                android:labelFor="@id/recipe_category_spinner"
                 android:text="@string/category"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/recipe_name_field" />
@@ -62,6 +61,7 @@
                 android:id="@+id/recipe_servings_label"
                 style="@style/label"
                 android:layout_marginTop="20dp"
+                android:labelFor="@id/recipe_servings_field"
                 android:text="@string/label_recipe_servings"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/recipe_category_spinner" />

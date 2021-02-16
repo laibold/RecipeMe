@@ -5,22 +5,27 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="46dp">
+        android:layout_height="46dp"
+        android:paddingHorizontal="@dimen/outline_horizontal">
 
         <TextView
             android:id="@+id/ingredient_text_view"
             style="@style/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:maxLines="1"
+            app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/button_wrapper"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="200g Kichererbsen aus dem Glas" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/button_wrapper"
-            android:layout_width="72dp"
+            android:layout_width="80dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +46,7 @@
                 android:id="@+id/remove_button"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/ic_baseline_remove_circle_outline_24"
+                android:background="@drawable/ic_baseline_delete_24"
                 app:backgroundTint="?attr/colorOnSecondary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

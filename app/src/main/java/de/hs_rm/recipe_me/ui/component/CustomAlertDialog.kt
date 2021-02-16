@@ -12,14 +12,10 @@ import android.view.View.*
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.button.MaterialButton
 import de.hs_rm.recipe_me.R
-
-private const val DEFAULT_ICON_VALUE = -1
 
 /**
  * Alert Dialog with custom design. Use [CustomAlertDialog.Builder] to create an instance
@@ -147,6 +143,10 @@ class CustomAlertDialog private constructor(
             negativeButtonText,
             negativeButtonListener!!
         )
+    }
+
+    companion object {
+        private const val DEFAULT_ICON_VALUE = -1
     }
 
 }

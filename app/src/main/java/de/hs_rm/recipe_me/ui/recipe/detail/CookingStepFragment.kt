@@ -6,7 +6,6 @@ import android.provider.AlarmClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -34,7 +33,7 @@ class CookingStepFragment : Fragment(), CookingStepCallbackAdapter {
             false
         )
 
-        binding.recipeNameHeadline.text = viewModel.recipe.value!!.recipe.name
+        binding.header.headlineText = viewModel.recipe.value!!.recipe.name
 
         setAdapter()
 
@@ -48,7 +47,8 @@ class CookingStepFragment : Fragment(), CookingStepCallbackAdapter {
         val adapter = CookingStepListAdapter(
             requireContext(),
             R.layout.cooking_step_listitem,
-            viewModel.recipe.value!!.cookingSteps,
+            viewModel.recipe.value!!.cookingStepsWithIngredients,
+            viewModel.getServingsMultiplier(),
             this
         )
 
