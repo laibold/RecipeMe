@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment3Binding
@@ -20,7 +22,7 @@ import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
 class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
 
     private lateinit var binding: AddRecipeFragment3Binding
-    private val viewModel: AddRecipeViewModel by activityViewModels()
+    private val viewModel: AddRecipeViewModel by hiltNavGraphViewModels(R.id.add_recipe_nav_graph)
     private var adapter: AddCookingStepListAdapter? = null
 
     override fun onCreateView(

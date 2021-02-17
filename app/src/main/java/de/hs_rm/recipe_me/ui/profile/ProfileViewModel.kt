@@ -1,16 +1,18 @@
 package de.hs_rm.recipe_me.ui.profile
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.service.RecipeRepository
+import javax.inject.Inject
 
 /**
  * ViewModel for [ProfileViewModel]
  */
-class ProfileViewModel @ViewModelInject constructor(
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
     private val repository: RecipeRepository
 ) : ViewModel() {
 

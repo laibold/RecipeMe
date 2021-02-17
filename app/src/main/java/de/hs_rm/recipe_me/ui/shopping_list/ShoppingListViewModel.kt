@@ -1,18 +1,20 @@
 package de.hs_rm.recipe_me.ui.shopping_list
 
 import android.text.Editable
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 import de.hs_rm.recipe_me.service.ShoppingListRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * ViewModel for [ShoppingListFragment]
  */
-class ShoppingListViewModel @ViewModelInject constructor(
+@HiltViewModel
+class ShoppingListViewModel @Inject constructor(
     private val repository: ShoppingListRepository
 ) : ViewModel() {
 

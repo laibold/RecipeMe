@@ -9,7 +9,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment2Binding
@@ -21,7 +23,7 @@ import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
 class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
 
     private lateinit var binding: AddRecipeFragment2Binding
-    private val viewModel: AddRecipeViewModel by activityViewModels()
+    private val viewModel: AddRecipeViewModel by hiltNavGraphViewModels(R.id.add_recipe_nav_graph)
     private var adapter: AddIngredientListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

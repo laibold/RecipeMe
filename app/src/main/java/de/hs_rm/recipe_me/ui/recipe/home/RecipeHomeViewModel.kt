@@ -1,19 +1,21 @@
 package de.hs_rm.recipe_me.ui.recipe.home
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.service.RecipeOfTheDayRepository
 import de.hs_rm.recipe_me.service.RecipeRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * ViewModel for [RecipeHomeFragment]
  */
-class RecipeHomeViewModel @ViewModelInject constructor(
+@HiltViewModel
+class RecipeHomeViewModel @Inject constructor(
     private val rotdRepository: RecipeOfTheDayRepository,
     private val recipeRepository: RecipeRepository
 ) : ViewModel() {

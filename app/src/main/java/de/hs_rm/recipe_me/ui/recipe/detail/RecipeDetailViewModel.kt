@@ -2,19 +2,21 @@ package de.hs_rm.recipe_me.ui.recipe.detail
 
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
 import de.hs_rm.recipe_me.service.RecipeRepository
 import de.hs_rm.recipe_me.service.ShoppingListRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Shared ViewModel for [RecipeDetailFragment] and [CookingStepFragment]
  */
-class RecipeDetailViewModel @ViewModelInject constructor(
+@HiltViewModel
+class RecipeDetailViewModel @Inject constructor(
     private val recipeRepository: RecipeRepository,
     private val shoppingListRepository: ShoppingListRepository
 ) : ViewModel() {

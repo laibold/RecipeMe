@@ -5,9 +5,9 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.text.Editable
 import android.util.Log
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.bumptech.glide.Glide
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.declaration.addToValue
 import de.hs_rm.recipe_me.declaration.setValueAt
@@ -25,12 +25,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Shared ViewModel for adding recipes.
  * Used in [AddRecipeFragment1], [AddRecipeFragment2] and [AddRecipeFragment3],
  */
-class AddRecipeViewModel @ViewModelInject constructor(
+@HiltViewModel
+class AddRecipeViewModel @Inject constructor(
     private val repository: RecipeRepository,
     private val app: Application,
 ) : AndroidViewModel(app) {

@@ -6,11 +6,13 @@ import de.hs_rm.recipe_me.persistence.RecipeDao
 import de.hs_rm.recipe_me.persistence.RecipeOfTheDayDao
 import java.time.LocalDate
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.random.Random
 
 /**
  * Single Source of Truth for [RecipeOfTheDay]. Use it with Dependency Injection
  */
+@Singleton
 class RecipeOfTheDayRepository @Inject constructor(
     private val rotdDao: RecipeOfTheDayDao,
     private val recipeDao: RecipeDao

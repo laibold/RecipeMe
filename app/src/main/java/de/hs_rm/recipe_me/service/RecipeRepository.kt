@@ -9,10 +9,12 @@ import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
 import de.hs_rm.recipe_me.persistence.RecipeDao
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Single Source of Truth for [Recipe]. Use it with Dependency Injection
  */
+@Singleton
 class RecipeRepository @Inject constructor(
     private val recipeDao: RecipeDao
 ) {

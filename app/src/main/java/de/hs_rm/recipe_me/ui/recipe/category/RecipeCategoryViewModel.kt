@@ -1,18 +1,20 @@
 package de.hs_rm.recipe_me.ui.recipe.category
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.service.RecipeRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * ViewModel for [RecipeCategoryFragment]
  */
-class RecipeCategoryViewModel @ViewModelInject constructor(
+@HiltViewModel
+class RecipeCategoryViewModel @Inject constructor(
     private val repository: RecipeRepository
 ) : ViewModel() {
 
