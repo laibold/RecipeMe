@@ -56,7 +56,7 @@ class AddRecipeViewModelTest {
         db.clearAllTables()
         viewModel =
             AddRecipeViewModel(recipeRepository, appContext.applicationContext as Application)
-        viewModel.recipeCategory = RecipeCategory.MAIN_DISHES
+        viewModel.setCategory(RecipeCategory.MAIN_DISHES)
         GlobalScope.launch(Dispatchers.Main) {
             delay(1000)
             viewModel.initRecipe(Recipe.DEFAULT_ID)

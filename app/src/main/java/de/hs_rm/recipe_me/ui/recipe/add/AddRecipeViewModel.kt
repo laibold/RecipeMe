@@ -6,7 +6,6 @@ import android.net.Uri
 import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.*
-import com.bumptech.glide.Glide
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.declaration.addToValue
@@ -37,7 +36,6 @@ class AddRecipeViewModel @Inject constructor(
     private val app: Application,
 ) : AndroidViewModel(app) {
 
-    lateinit var recipeCategory: RecipeCategory
     private var updatingCookingStepIndex = -1
     private var updatingIngredientIndex = -1
 
@@ -45,8 +43,12 @@ class AddRecipeViewModel @Inject constructor(
     private var oldIngredients: MutableList<Ingredient>? = null
     private var oldCookingSteps: MutableList<CookingStep>? = null
 
+    private val _recipeCategory = MutableLiveData<RecipeCategory>()
+    val category: LiveData<RecipeCategory>
+        get() = _recipeCategory
+
     private val _recipe = MutableLiveData<Recipe>()
-    val recipe: LiveData<Recipe>
+    val recipe: LiveData<Recipe?>
         get() = _recipe
 
     private val _ingredients = MutableLiveData<MutableList<Ingredient>>()
@@ -58,10 +60,21 @@ class AddRecipeViewModel @Inject constructor(
     val cookingStepsWithIngredients: LiveData<MutableList<CookingStepWithIngredients>>
         get() = _cookingStepsWithIngredients
 
-    // TODO LiveData or not?
     private val _recipeImage = MutableLiveData<Bitmap>()
     val recipeImage: LiveData<Bitmap>
         get() = _recipeImage
+
+    /**
+     * Clear variable values on initialization because ViewModel has Activity lifecycle scope
+     */
+    fun clearValues() {
+        _ingredients.value = mutableListOf()
+        _cookingStepsWithIngredients.value = mutableListOf()
+        recipeToUpdate = null
+        _recipe.value = null
+        _recipeImage.value = null
+        recipeToUpdate = null
+    }
 
     /**
      * Initialize recipe, Ingredients and cookingStepsWithIngredients.
@@ -69,16 +82,12 @@ class AddRecipeViewModel @Inject constructor(
      * This method should only be called when entering the add/edit recipe graph
      */
     fun initRecipe(recipeId: Long) {
-        recipeToUpdate = null
-        _recipe.value = null
-        _ingredients.value = mutableListOf()
-        _cookingStepsWithIngredients.value = mutableListOf()
-        _recipeImage.value = null
-        recipeToUpdate = null
+        clearValues()
 
         if (recipeId != Recipe.DEFAULT_ID) {
             viewModelScope.launch {
                 recipeToUpdate = repository.getRecipeById(recipeId)
+                setRecipeImage(recipeToUpdate!!)
             }
 
             // recipeId has been committed, so this recipe should be edited and it's values should be entered into the forms
@@ -100,9 +109,10 @@ class AddRecipeViewModel @Inject constructor(
                         }
                     }
             }
+
         } else {
             // Add recipe
-            _recipe.value = Recipe(recipeCategory)
+            _recipe.value = Recipe(_recipeCategory.value!!)
         }
     }
 
@@ -124,6 +134,10 @@ class AddRecipeViewModel @Inject constructor(
             }
         }
         return false
+    }
+
+    fun setCategory(recipeCategory: RecipeCategory) {
+        _recipeCategory.value = recipeCategory
     }
 
     /**
@@ -515,19 +529,23 @@ class AddRecipeViewModel @Inject constructor(
     }
 
     /**
-     * Load picture from given uri and save ot to viewModel scope
+     * Load picture from given uri and save it to viewModel scope
      */
     fun setRecipeImage(uri: Uri, width: Int, height: Int) {
         CoroutineScope(Dispatchers.IO).launch {
             _recipeImage.postValue(
-                Glide.with(app.applicationContext)
-                    .asBitmap()
-                    .load(uri)
-                    .placeholder(android.R.drawable.progress_indeterminate_horizontal) // need placeholder to avoid issue like glide annotations
-                    .error(android.R.drawable.stat_notify_error) // need error to avoid issue like glide annotations
-                    .centerCrop()
-                    .submit(width, height)
-                    .get()
+                ImageHandler.getImageFromUri(app.applicationContext, uri, width, height)
+            )
+        }
+    }
+
+    /**
+     * Load picture from given uri and save it to viewModel scope
+     */
+    private fun setRecipeImage(recipe: Recipe) {
+        CoroutineScope(Dispatchers.IO).launch {
+            _recipeImage.postValue(
+                ImageHandler.getRecipeImage(app.applicationContext, recipe)
             )
         }
     }

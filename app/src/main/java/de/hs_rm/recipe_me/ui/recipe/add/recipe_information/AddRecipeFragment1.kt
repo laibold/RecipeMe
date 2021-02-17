@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
@@ -12,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
 import com.kroegerama.imgpicker.BottomSheetImagePicker
 import com.kroegerama.imgpicker.ButtonType
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +22,6 @@ import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.service.ImageHandler
 import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
-
 
 @AndroidEntryPoint
 class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedListener {
@@ -43,9 +42,8 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
         )
 
         // Pre-set category in spinner depending on navigation source, default none
-        viewModel.recipeCategory = args.recipeCategory
+        viewModel.setCategory(args.recipeCategory)
         binding.recipeCategorySpinner.adapter = spinnerAdapter()
-        binding.recipeCategorySpinner.setSelection(viewModel.recipeCategory.ordinal)
 
         if (args.clearValues) {
             // when user navigates to fragment to create or edit a recipe
@@ -53,6 +51,7 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
         }
 
         // observe recipe in viewModel except user is navigating to fragment to create a new recipe
+        // means: user is editing a recipe or is moving back from fragment 2
         if (!(args.clearValues && args.recipeId == Recipe.DEFAULT_ID)) {
             viewModel.recipe.observe(viewLifecycleOwner, { recipe ->
                 if (recipe != null) {
@@ -63,11 +62,38 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
                         binding.recipeServingsField.setText(viewModel.recipe.value!!.servings.toString())
                     }
                     binding.recipeCategorySpinner.setSelection(recipe.category.ordinal)
-
-                    ImageHandler.setRecipeImageToView(requireContext(), binding.recipeImage, recipe)
                 }
             })
         }
+
+        // Observe category and set spinner selection and image if no custom image has been set
+        viewModel.category.observe(viewLifecycleOwner, { category ->
+            val ordinal = category.ordinal
+            if (binding.recipeCategorySpinner.selectedItemPosition != ordinal) {
+                binding.recipeCategorySpinner.setSelection(ordinal)
+            }
+
+            setRecipeImageToView(category)
+        })
+
+        viewModel.recipeImage.observe(viewLifecycleOwner, { image ->
+            if (image != null) {
+                binding.recipeImage.setImageBitmap(image)
+            }
+        })
+
+        // On selection changed in spinner set category in viewModel
+        binding.recipeCategorySpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    p: AdapterView<*>?, v: View?, position: Int, i: Long
+                ) {
+                    val category = RecipeCategory.values()[position]
+                    viewModel.setCategory(category)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
 
         if (args.recipeId != Recipe.DEFAULT_ID) {
             binding.header.headlineText = getString(R.string.edit_recipe)
@@ -82,6 +108,16 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
         binding.nextButton.setOnClickListener { onNext() }
 
         return binding.root
+    }
+
+    /**
+     * Set bitmap to imageView.
+     * If no custom image is available, the image of the recipe category will be used.
+     */
+    private fun setRecipeImageToView(category: RecipeCategory) {
+        if (viewModel.recipeImage.value == null) {
+            binding.recipeImage.setImageResource(category.drawableResId)
+        }
     }
 
     /**
@@ -141,13 +177,12 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
                 .inflate(R.layout.scrollitem_image, binding.imageContainer, false) as ImageView
             binding.imageContainer.addView(iv)
 
-            Glide.with(this).load(uri).into(binding.recipeImage)
-
-            val imageWidth = resources.getInteger(R.integer.recipe_image_width)
-            val imageHeight = resources.getInteger(R.integer.recipe_image_height)
-            viewModel.setRecipeImage(uri, imageWidth, imageHeight)
+            viewModel.setRecipeImage(
+                uri,
+                ImageHandler.RECIPE_IMAGE_WIDTH,
+                ImageHandler.RECIPE_IMAGE_HEIGHT
+            )
         }
-
     }
 
     /**

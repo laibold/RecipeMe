@@ -7,8 +7,4 @@
     <integer name="cooking_step_text_max_length">500</integer>
     <integer name="shopping_list_item_name_max_length">40</integer>
 
-    <!--Image sizes-->
-    <integer name="recipe_image_width">1000</integer>
-    <integer name="recipe_image_height">1000</integer>
-
 </resources>

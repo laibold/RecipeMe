@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import java.io.File
@@ -21,6 +22,8 @@ object ImageHandler {
     private const val PROFILE_IMAGE_NAME = "/profile_image.jpg"
 
     private const val JPEG_QUALITY = 50
+    const val RECIPE_IMAGE_WIDTH = 1000
+    const val RECIPE_IMAGE_HEIGHT = 1000
 
     private fun saveImage(
         image: Bitmap,
@@ -53,11 +56,37 @@ object ImageHandler {
      * If no custom image is available, the image of the recipe category will be used.
      */
     fun setRecipeImageToView(context: Context, imageView: ImageView, recipe: Recipe) {
-        return ImageLoader().setRecipeImageToView(context, imageView, recipe)
+        ImageLoader().setRecipeImageToView(context, imageView, recipe)
+    }
+
+    /**
+     * Returns Bitmap with recipe image if available, otherwise null
+     */
+    fun getRecipeImage(context: Context, recipe: Recipe): Bitmap? {
+        val file = File(getRecipeDirPath(context, recipe.id) + RECIPE_IMAGE_NAME)
+        return if (file.exists()) {
+            ImageLoader().getImageFromUri(
+                context,
+                Uri.fromFile(file),
+                RECIPE_IMAGE_WIDTH,
+                RECIPE_IMAGE_HEIGHT
+            )
+        } else {
+            null
+        }
+    }
+
+    /**
+     * Returns image as Bitmap from given Uri
+     * Must be called from Dispatchers.IO coroutine scope
+     */
+    fun getImageFromUri(context: Context, uri: Uri, width: Int, height: Int): Bitmap {
+        return ImageLoader().getImageFromUri(context, uri, width, height)
     }
 
     /**
      * Save recipe image to file system
+     * Must be called from Dispatchers.IO coroutine scope
      */
     fun saveRecipeImage(context: Context, image: Bitmap, id: Long): String? {
         return saveImage(image, getRecipeDirPath(context, id), RECIPE_IMAGE_NAME)
@@ -94,8 +123,8 @@ object ImageHandler {
     }
 
     /**
-     * Private class to create an object instance for function setRecipeImageToView.
-     * Glide seems to have problems with loading images in a static/singleton based method
+     * Private class to create an object instance for functions setRecipeImageToView() and getImageFromUri().
+     * Glide seems to have problems with loading images in a static/singleton based method.
      */
     private class ImageLoader {
 
@@ -116,6 +145,21 @@ object ImageHandler {
             } else {
                 imageView.setImageResource(recipe.category.drawableResId)
             }
+        }
+
+        /**
+         * Load recipe image to bitmap, return null if image doesn't exist.
+         * Must be called from Dispatchers.IO coroutine scope.
+         */
+        fun getImageFromUri(context: Context, uri: Uri, width: Int, height: Int): Bitmap {
+            return Glide.with(context)
+                .asBitmap()
+                .load(uri)
+                .placeholder(android.R.drawable.progress_indeterminate_horizontal) // need placeholder to avoid issue like glide annotations
+                .error(android.R.drawable.stat_notify_error) // need error to avoid issue like glide annotations
+                .centerCrop()
+                .submit(width, height)
+                .get()
         }
     }
 
