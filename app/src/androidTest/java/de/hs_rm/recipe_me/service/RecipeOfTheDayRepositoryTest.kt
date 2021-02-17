@@ -10,6 +10,8 @@ import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.persistence.RecipeDao
 import de.hs_rm.recipe_me.persistence.RecipeOfTheDayDao
+import de.hs_rm.recipe_me.service.repository.RecipeOfTheDayRepository
+import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Before

@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
-import de.hs_rm.recipe_me.service.RecipeRepository
+import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

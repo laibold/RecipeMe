@@ -14,7 +14,7 @@ import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
 import de.hs_rm.recipe_me.service.ImageHandler
-import de.hs_rm.recipe_me.service.RecipeRepository
+import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import de.hs_rm.recipe_me.ui.recipe.add.cooking_step.AddCookingStepListAdapter
 import de.hs_rm.recipe_me.ui.recipe.add.cooking_step.AddRecipeFragment3
 import de.hs_rm.recipe_me.ui.recipe.add.ingredient.AddIngredientListAdapter
@@ -359,10 +359,8 @@ class AddRecipeViewModel @Inject constructor(
      */
     fun persistEntities(): LiveData<Long> {
         return if (recipeToUpdate != null) {
-            Log.i("tachchen", "Rezept wird geupdated")
             updateEntities()
         } else {
-            Log.i("tachchen", "Rezept wird gespeichert")
             saveNewEntities()
         }
     }

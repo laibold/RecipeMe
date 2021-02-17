@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
-import de.hs_rm.recipe_me.service.RecipeRepository
-import de.hs_rm.recipe_me.service.ShoppingListRepository
+import de.hs_rm.recipe_me.service.repository.RecipeRepository
+import de.hs_rm.recipe_me.service.repository.ShoppingListRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

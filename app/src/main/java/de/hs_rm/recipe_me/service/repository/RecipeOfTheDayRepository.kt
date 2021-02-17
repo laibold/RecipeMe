@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.service
+package de.hs_rm.recipe_me.service.repository
 
 import de.hs_rm.recipe_me.model.RecipeOfTheDay
 import de.hs_rm.recipe_me.model.recipe.Recipe

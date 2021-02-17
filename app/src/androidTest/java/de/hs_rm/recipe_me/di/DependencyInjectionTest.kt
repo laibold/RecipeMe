@@ -6,9 +6,9 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.persistence.RecipeDao
 import de.hs_rm.recipe_me.persistence.ShoppingListDao
-import de.hs_rm.recipe_me.service.RecipeOfTheDayRepository
-import de.hs_rm.recipe_me.service.RecipeRepository
-import de.hs_rm.recipe_me.service.ShoppingListRepository
+import de.hs_rm.recipe_me.service.repository.RecipeOfTheDayRepository
+import de.hs_rm.recipe_me.service.repository.RecipeRepository
+import de.hs_rm.recipe_me.service.repository.ShoppingListRepository
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule

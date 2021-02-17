@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
-import de.hs_rm.recipe_me.service.RecipeRepository
+import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import javax.inject.Inject
 
 /**

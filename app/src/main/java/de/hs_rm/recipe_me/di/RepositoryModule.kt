@@ -7,9 +7,9 @@ import dagger.hilt.components.SingletonComponent
 import de.hs_rm.recipe_me.persistence.RecipeDao
 import de.hs_rm.recipe_me.persistence.RecipeOfTheDayDao
 import de.hs_rm.recipe_me.persistence.ShoppingListDao
-import de.hs_rm.recipe_me.service.RecipeOfTheDayRepository
-import de.hs_rm.recipe_me.service.RecipeRepository
-import de.hs_rm.recipe_me.service.ShoppingListRepository
+import de.hs_rm.recipe_me.service.repository.RecipeOfTheDayRepository
+import de.hs_rm.recipe_me.service.repository.RecipeRepository
+import de.hs_rm.recipe_me.service.repository.ShoppingListRepository
 import javax.inject.Singleton
 
 /**
