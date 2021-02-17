@@ -65,11 +65,16 @@ class AddRecipeViewModel @Inject constructor(
 
     /**
      * Initialize recipe, Ingredients and cookingStepsWithIngredients.
-     * Old Values will be cleared and if recipeId is not default, the related Recipe will be loaded
+     * Old Values will be cleared and if recipeId is not default, the related Recipe will be loaded.
+     * This method should only be called when entering the add/edit recipe graph
      */
     fun initRecipe(recipeId: Long) {
+        recipeToUpdate = null
+        _recipe.value = null
         _ingredients.value = mutableListOf()
         _cookingStepsWithIngredients.value = mutableListOf()
+        _recipeImage.value = null
+        recipeToUpdate = null
 
         if (recipeId != Recipe.DEFAULT_ID) {
             viewModelScope.launch {
