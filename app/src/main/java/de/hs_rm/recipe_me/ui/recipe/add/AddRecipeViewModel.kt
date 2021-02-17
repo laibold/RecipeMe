@@ -47,7 +47,7 @@ class AddRecipeViewModel @Inject constructor(
     val category: LiveData<RecipeCategory>
         get() = _recipeCategory
 
-    private val _recipe = MutableLiveData<Recipe>()
+    private val _recipe = MutableLiveData<Recipe?>()
     val recipe: LiveData<Recipe?>
         get() = _recipe
 
@@ -60,17 +60,16 @@ class AddRecipeViewModel @Inject constructor(
     val cookingStepsWithIngredients: LiveData<MutableList<CookingStepWithIngredients>>
         get() = _cookingStepsWithIngredients
 
-    private val _recipeImage = MutableLiveData<Bitmap>()
-    val recipeImage: LiveData<Bitmap>
+    private val _recipeImage = MutableLiveData<Bitmap?>()
+    val recipeImage: LiveData<Bitmap?>
         get() = _recipeImage
 
     /**
      * Clear variable values on initialization because ViewModel has Activity lifecycle scope
      */
-    fun clearValues() {
+    private fun clearValues() {
         _ingredients.value = mutableListOf()
         _cookingStepsWithIngredients.value = mutableListOf()
-        recipeToUpdate = null
         _recipe.value = null
         _recipeImage.value = null
         recipeToUpdate = null
