@@ -1,14 +1,10 @@
 package de.hs_rm.recipe_me.service
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
 import android.widget.ImageView
-import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import java.io.File
 import java.io.FileOutputStream
@@ -53,42 +49,18 @@ object ImageHandler {
     }
 
     /**
-     * https://arkapp.medium.com/accessing-images-on-android-10-scoped-storage-bbe65160c3f4
+     * Load recipe image and set it to imageView.
+     * If no custom image is available, the image of the recipe category will be used.
      */
-    private fun getBitmap(context: Context, imageUri: Uri): Bitmap? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            ImageDecoder.decodeBitmap(
-                ImageDecoder.createSource(context.contentResolver, imageUri)
-            )
-        } else {
-            context
-                .contentResolver
-                .openInputStream(imageUri)?.use { inputStream ->
-                    BitmapFactory.decodeStream(inputStream)
-                }
-        }
-
-//        return Glide.with(context)
-//            .asBitmap()
-//            .load(imageUri)
-//            .submit(1000, 1000)
-
+    fun setRecipeImageToView(context: Context, imageView: ImageView, recipe: Recipe) {
+        return ImageLoader().setRecipeImageToView(context, imageView, recipe)
     }
 
-    fun setRecipeImageToView(activity: Activity, imageView: ImageView, recipe: Recipe) {
-        Glide.with(activity)
-            .load(getRecipeDirPath(activity, recipe.id) + RECIPE_IMAGE_NAME)
-            .into(imageView)
-    }
-
+    /**
+     * Save recipe image to file system
+     */
     fun saveRecipeImage(context: Context, image: Bitmap, id: Long): String? {
         return saveImage(image, getRecipeDirPath(context, id), RECIPE_IMAGE_NAME)
-    }
-
-    fun getRecipeImage(context: Context, recipe: Recipe): Bitmap? {
-        val uri = Uri.fromFile(File(getRecipeDirPath(context, recipe.id) + RECIPE_IMAGE_NAME))
-
-        return getBitmap(context, uri)
     }
 
     /**
@@ -119,6 +91,32 @@ object ImageHandler {
      */
     private fun getImageDirPath(context: Context): String {
         return context.getExternalFilesDir(null)?.absolutePath + IMAGES_PATH
+    }
+
+    /**
+     * Private class to create an object instance for function setRecipeImageToView.
+     * Glide seems to have problems with loading images in a static/singleton based method
+     */
+    private class ImageLoader {
+
+        /**
+         * Load recipe image and set it to imageView.
+         * If no custom image is available, the image of the recipe category will be used.
+         */
+        fun setRecipeImageToView(context: Context, imageView: ImageView, recipe: Recipe) {
+            val file = File(getRecipeDirPath(context, recipe.id) + RECIPE_IMAGE_NAME)
+            if (file.exists()) {
+                GlideApp.with(context)
+                    .setDefaultRequestOptions(
+                        RequestOptions()
+                            .error(recipe.category.drawableResId)
+                    )
+                    .load(Uri.fromFile(file))
+                    .into(imageView)
+            } else {
+                imageView.setImageResource(recipe.category.drawableResId)
+            }
+        }
     }
 
 }

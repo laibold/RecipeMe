@@ -198,8 +198,11 @@ class RecipeDetailFragment : Fragment() {
      * Set background image
      */
     private fun setImage(recipeWithRelations: RecipeWithRelations) {
-        val bitmap = ImageHandler.getRecipeImage(requireContext(), recipeWithRelations.recipe)
-        binding.recipeDetailImage.setImageBitmap(bitmap)
+        ImageHandler.setRecipeImageToView(
+            requireContext(),
+            binding.recipeDetailImage,
+            recipeWithRelations.recipe
+        )
     }
 
     /**

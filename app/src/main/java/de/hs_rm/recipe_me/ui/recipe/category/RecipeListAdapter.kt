@@ -56,8 +56,7 @@ class RecipeListAdapter(
         val recipe = objects[position]
         holder.binding.recipeName.text = recipe.name
 
-        val bitmap = ImageHandler.getRecipeImage(context, recipe)
-        holder.binding.recipeImageView.setImageBitmap(bitmap)
+        ImageHandler.setRecipeImageToView(context, holder.binding.recipeImageView, recipe)
 
         // on long click remove other selection by setting itemSelected and set selection to this item
         holder.binding.itemWrapper.setOnLongClickListener {

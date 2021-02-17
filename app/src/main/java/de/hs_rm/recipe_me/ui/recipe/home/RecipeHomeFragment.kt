@@ -84,8 +84,7 @@ class RecipeHomeFragment : Fragment() {
         } else {
             binding.recipeOfTheDayName.text = recipe.name
 
-            val bitmap = ImageHandler.getRecipeImage(requireContext(), recipe)
-            binding.recipeOfTheDayImage.setImageBitmap(bitmap)
+            ImageHandler.setRecipeImageToView(requireContext(), binding.recipeOfTheDayImage, recipe)
 
             // Touch event gets dispatched from ScrollViews dummy view
             binding.recipeOfTheDayButton.setOnTouchListener { view, event ->

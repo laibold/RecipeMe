@@ -64,8 +64,7 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
                     }
                     binding.recipeCategorySpinner.setSelection(recipe.category.ordinal)
 
-                    val bitmap = ImageHandler.getRecipeImage(requireContext(), recipe)
-                    binding.recipeImage.setImageBitmap(bitmap)
+                    ImageHandler.setRecipeImageToView(requireContext(), binding.recipeImage, recipe)
                 }
             })
         }

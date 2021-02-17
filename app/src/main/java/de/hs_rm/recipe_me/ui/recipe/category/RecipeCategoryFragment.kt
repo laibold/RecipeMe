@@ -24,7 +24,6 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
     private val args: RecipeCategoryFragmentArgs by navArgs()
     private lateinit var binding: RecipeCategoryFragmentBinding
     private lateinit var adapter: RecipeListAdapter
-    private var isInitialized = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -98,9 +97,7 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
     private fun setAdapter() {
         val list = binding.recipeScrollview.recipeList
         viewModel.getRecipesByCategory(viewModel.category).observe(this.viewLifecycleOwner, {
-            if (!isInitialized) {
-                binding.recipeScrollview.contentWrapper.visibility = View.VISIBLE
-            }
+            binding.recipeScrollview.contentWrapper.visibility = View.VISIBLE
             adapter = RecipeListAdapter(requireContext(), R.layout.recipe_listitem, it, this)
             list.adapter = adapter
             adapter.notifyDataSetChanged()
