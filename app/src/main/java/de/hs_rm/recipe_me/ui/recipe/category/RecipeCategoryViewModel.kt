@@ -10,6 +10,8 @@ import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.service.ImageHandler
 import de.hs_rm.recipe_me.service.repository.RecipeRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,13 +34,15 @@ class RecipeCategoryViewModel @Inject constructor(
     }
 
     /**
-     * Delete recipe and it's belonging Ingredients and CookingSteps
+     * Delete recipe and its belonging Ingredients and CookingSteps
      */
     fun deleteRecipeAndRelations(recipe: Recipe) {
+        CoroutineScope(Dispatchers.IO).launch {
+            ImageHandler.deleteRecipeImage(app.applicationContext, recipe.id)
+        }
         viewModelScope.launch {
             repository.deleteRecipeAndRelations(recipe)
         }
-        ImageHandler.deleteRecipeImage(app.applicationContext, recipe.id)
     }
 
 }

@@ -96,14 +96,15 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
     private fun setAdapter() {
         val list = binding.recipeScrollview.recipeList
         viewModel.getRecipesByCategory(viewModel.category).observe(this.viewLifecycleOwner, {
-            if (it.isNotEmpty()) {
+            if (it.isEmpty()) {
+                binding.recipeScrollview.addHintText.visibility = View.VISIBLE
+            } else {
                 binding.recipeScrollview.addHintText.visibility = View.GONE
             }
 
             binding.recipeScrollview.contentWrapper.visibility = View.VISIBLE
             adapter = RecipeListAdapter(requireContext(), R.layout.recipe_listitem, it, this)
             list.adapter = adapter
-            adapter.notifyDataSetChanged()
         })
     }
 
@@ -116,7 +117,6 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
             .message(R.string.delete_recipe_message)
             .positiveButton(R.string.delete) {
                 viewModel.deleteRecipeAndRelations(recipe)
-                adapter.notifyDataSetChanged()
             }
             .negativeButton(
                 R.string.cancel

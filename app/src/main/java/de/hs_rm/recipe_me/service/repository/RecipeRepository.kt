@@ -158,7 +158,7 @@ class RecipeRepository @Inject constructor(
     }
 
     /**
-     * Delete recipe and it's belonging Ingredients and CookingSteps
+     * Delete recipe and its belonging Ingredients and CookingSteps
      */
     suspend fun deleteRecipeAndRelations(recipe: Recipe) {
         deleteIngredientsAndCookingSteps(recipe.id)
@@ -169,6 +169,7 @@ class RecipeRepository @Inject constructor(
      * Delete belonging Ingredients and CookingSteps with given recipeId
      */
     suspend fun deleteIngredientsAndCookingSteps(recipeId: Long) {
+        recipeDao.deleteCookingStepIngredientCrossRefsByRecipeId(recipeId)
         recipeDao.deleteIngredients(recipeId)
         recipeDao.deleteCookingSteps(recipeId)
     }
@@ -182,5 +183,4 @@ class RecipeRepository @Inject constructor(
     ) {
         recipeDao.deleteCookingStepIngredientCrossRefs(ingredientId, cookingStepId)
     }
-
 }

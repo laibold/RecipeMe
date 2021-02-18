@@ -64,48 +64,42 @@ class AddRecipeViewModel @Inject constructor(
         get() = _recipeImage
 
     /**
-     * Clear variable values on initialization because ViewModel has Activity lifecycle scope
-     */
-    private fun clearValues() {
-        _ingredients.value = mutableListOf()
-        _cookingStepsWithIngredients.value = mutableListOf()
-        _recipe.value = null
-        _recipeImage.value = null
-        recipeToUpdate = null
-    }
-
-    /**
      * Initialize recipe, Ingredients and cookingStepsWithIngredients.
      * Old Values will be cleared and if recipeId is not default, the related Recipe will be loaded.
      * This method should only be called when entering the add/edit recipe graph
      */
     fun initRecipe(recipeId: Long) {
-        clearValues()
+        _ingredients.value = mutableListOf()
+        _cookingStepsWithIngredients.value = mutableListOf()
 
         if (recipeId != Recipe.DEFAULT_ID) {
+            // recipeId has been committed, so this recipe should be edited and its values should be entered into the forms
             viewModelScope.launch {
                 recipeToUpdate = repository.getRecipeById(recipeId)
-                setRecipeImage(recipeToUpdate!!)
-            }
 
-            // recipeId has been committed, so this recipe should be edited and it's values should be entered into the forms
-            viewModelScope.launch {
-                repository.getRecipeWithRelationsById(recipeId).asFlow()
-                    .collect { recipeWithRelations ->
-                        _recipe.postValue(recipeWithRelations.recipe)
-                        oldIngredients = mutableListOf()
-                        oldCookingSteps = mutableListOf()
+                if (recipeToUpdate != null) {
+                    setRecipeImage(recipeToUpdate!!)
 
-                        for (ingredient in recipeWithRelations.ingredients) {
-                            oldIngredients!!.add(ingredient)
-                            _ingredients.addToValue(ingredient)
+                    repository.getRecipeWithRelationsById(recipeId).asFlow()
+                        .collect { recipeWithRelations ->
+                                _recipe.postValue(recipeWithRelations.recipe)
+
+                                oldIngredients = mutableListOf()
+                                oldCookingSteps = mutableListOf()
+
+                                for (ingredient in recipeWithRelations.ingredients) {
+                                    oldIngredients!!.add(ingredient)
+                                    _ingredients.addToValue(ingredient)
+                                }
+
+                                for (cookingStepWithIngredients in recipeWithRelations.cookingStepsWithIngredients) {
+                                    oldCookingSteps!!.add(cookingStepWithIngredients.cookingStep)
+                                    _cookingStepsWithIngredients.addToValue(
+                                        cookingStepWithIngredients
+                                    )
+                                }
                         }
-
-                        for (cookingStepWithIngredients in recipeWithRelations.cookingStepsWithIngredients) {
-                            oldCookingSteps!!.add(cookingStepWithIngredients.cookingStep)
-                            _cookingStepsWithIngredients.addToValue(cookingStepWithIngredients)
-                        }
-                    }
+                }
             }
 
         } else {

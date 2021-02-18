@@ -108,7 +108,7 @@ class RecipeOfTheDayRepositoryTest {
 
     /**
      * Test that when there are 2 recipes in the database, the rotd get's switched every time
-     * the current rotd gets invalid (when it's date doesn't match today's one).
+     * the current rotd gets invalid (when its date doesn't match today's one).
      */
     @Test
     fun switchRotdSuccessful() {

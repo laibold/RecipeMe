@@ -53,7 +53,7 @@ class AddRecipeViewModelTest {
     }
 
     /**
-     * Clear all database tables and re-initialize ViewModel and it's recipe
+     * Clear all database tables and re-initialize ViewModel and its recipe
      */
     private fun beforeEach() {
         db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java)

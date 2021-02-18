@@ -25,6 +25,7 @@
 
             <de.hs_rm.recipe_me.ui.component.UnscrollableRecyclerView
                 android:id="@+id/recipe_list"
+                android:overScrollMode="never"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="none"
