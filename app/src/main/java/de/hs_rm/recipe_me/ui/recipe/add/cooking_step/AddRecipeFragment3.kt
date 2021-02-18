@@ -8,9 +8,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStore
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
@@ -18,7 +15,6 @@ import de.hs_rm.recipe_me.databinding.AddRecipeFragment3Binding
 import de.hs_rm.recipe_me.declaration.ui.fragments.EditCookingStepAdapter
 import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
 import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
-
 
 @AndroidEntryPoint
 class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
@@ -53,7 +49,7 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
             binding.cookingStepListView.adapter = adapter
 
             adapter?.notifyDataSetChanged()
-            // Scroll to bottom //TODO evaluieren
+            // Scroll to bottom
             binding.cookingStepListView.post {
                 binding.cookingStepListView.setSelection(adapter!!.count - 1)
             }
@@ -93,20 +89,9 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
         viewModel.cookingStepsWithIngredients.removeObservers(viewLifecycleOwner)
 
         id.observe(viewLifecycleOwner, {
-            // Workaround to end viewModel's lifecycle manually
-            // (it cant be cleared individually, but no other viewModel should live at this moment)
-            requireActivity().viewModelStore.clear()
-            savedStateRegistry.unregisterSavedStateProvider(key)
-
-            viewModel.
-
             val direction = AddRecipeFragment3Directions.toRecipeDetailFragment(it)
             findNavController().navigate(direction)
         })
-    }
-
-    private fun clearViewModel() {
-        requireActivity().viewModelStore
     }
 
     /**

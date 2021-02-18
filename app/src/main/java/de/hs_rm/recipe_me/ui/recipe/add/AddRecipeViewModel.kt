@@ -64,13 +64,23 @@ class AddRecipeViewModel @Inject constructor(
         get() = _recipeImage
 
     /**
+     * Clear variable values on initialization because ViewModel has Activity lifecycle scope
+     */
+    private fun clearValues() {
+        _ingredients.value = mutableListOf()
+        _cookingStepsWithIngredients.value = mutableListOf()
+        _recipe.value = null
+        _recipeImage.value = null
+        recipeToUpdate = null
+    }
+
+    /**
      * Initialize recipe, Ingredients and cookingStepsWithIngredients.
      * Old Values will be cleared and if recipeId is not default, the related Recipe will be loaded.
      * This method should only be called when entering the add/edit recipe graph
      */
     fun initRecipe(recipeId: Long) {
-        _ingredients.value = mutableListOf()
-        _cookingStepsWithIngredients.value = mutableListOf()
+        clearValues()
 
         if (recipeId != Recipe.DEFAULT_ID) {
             // recipeId has been committed, so this recipe should be edited and its values should be entered into the forms
@@ -82,22 +92,22 @@ class AddRecipeViewModel @Inject constructor(
 
                     repository.getRecipeWithRelationsById(recipeId).asFlow()
                         .collect { recipeWithRelations ->
-                                _recipe.postValue(recipeWithRelations.recipe)
+                            _recipe.postValue(recipeWithRelations.recipe)
 
-                                oldIngredients = mutableListOf()
-                                oldCookingSteps = mutableListOf()
+                            oldIngredients = mutableListOf()
+                            oldCookingSteps = mutableListOf()
 
-                                for (ingredient in recipeWithRelations.ingredients) {
-                                    oldIngredients!!.add(ingredient)
-                                    _ingredients.addToValue(ingredient)
-                                }
+                            for (ingredient in recipeWithRelations.ingredients) {
+                                oldIngredients!!.add(ingredient)
+                                _ingredients.addToValue(ingredient)
+                            }
 
-                                for (cookingStepWithIngredients in recipeWithRelations.cookingStepsWithIngredients) {
-                                    oldCookingSteps!!.add(cookingStepWithIngredients.cookingStep)
-                                    _cookingStepsWithIngredients.addToValue(
-                                        cookingStepWithIngredients
-                                    )
-                                }
+                            for (cookingStepWithIngredients in recipeWithRelations.cookingStepsWithIngredients) {
+                                oldCookingSteps!!.add(cookingStepWithIngredients.cookingStep)
+                                _cookingStepsWithIngredients.addToValue(
+                                    cookingStepWithIngredients
+                                )
+                            }
                         }
                 }
             }
@@ -438,6 +448,7 @@ class AddRecipeViewModel @Inject constructor(
 
             saveImage(recipeToUpdate!!.id)
             recipeId.postValue(recipeToUpdate!!.id)
+            clearValues()
         }
         return recipeId
     }
@@ -483,6 +494,7 @@ class AddRecipeViewModel @Inject constructor(
 
                 saveImage(id)
                 recipeId.postValue(id)
+                clearValues()
             }
         }
         return recipeId

@@ -58,6 +58,11 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
             adapter = viewModel.ingredients.value?.let { list -> ingredientListAdapter(list) }
             binding.ingredientsListView.adapter = adapter
             adapter?.notifyDataSetChanged()
+
+            // Scroll to bottom
+            binding.ingredientsListView.post {
+                binding.ingredientsListView.setSelection(adapter!!.count - 1)
+            }
         })
 
         binding.ingredientsListView.emptyView = binding.addHintText
