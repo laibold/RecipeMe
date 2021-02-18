@@ -6,6 +6,7 @@ import android.net.Uri
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import java.io.File
 import java.io.FileOutputStream
@@ -141,6 +142,7 @@ object ImageHandler {
                             .error(recipe.category.drawableResId)
                     )
                     .load(Uri.fromFile(file))
+                    .signature(ObjectKey(System.currentTimeMillis())) // use timestap to prevent problems with caching
                     .into(imageView)
             } else {
                 imageView.setImageResource(recipe.category.drawableResId)
@@ -155,6 +157,7 @@ object ImageHandler {
             return Glide.with(context)
                 .asBitmap()
                 .load(uri)
+                .signature(ObjectKey(System.currentTimeMillis())) // use timestap to prevent problems with caching
                 .placeholder(android.R.drawable.progress_indeterminate_horizontal) // need placeholder to avoid issue like glide annotations
                 .error(android.R.drawable.stat_notify_error) // need error to avoid issue like glide annotations
                 .centerCrop()
