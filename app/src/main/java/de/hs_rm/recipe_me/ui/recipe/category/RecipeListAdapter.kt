@@ -6,27 +6,22 @@ import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
 import androidx.databinding.ObservableBoolean
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import de.hs_rm.recipe_me.databinding.RecipeListitemBinding
 import de.hs_rm.recipe_me.declaration.ui.fragments.DeleteRecipeCallbackAdapter
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.service.ImageHandler
-import java.util.*
 
-/**
- * Adapter for View of Recipes by RecipeCategory. Layout: recipe_listitem in ListView
- */
 class RecipeListAdapter(
-    context: Context,
+    private val context: Context,
     private val resource: Int,
     private val objects: List<Recipe>,
     private val callbackListener: DeleteRecipeCallbackAdapter
-) :
-    ArrayAdapter<Recipe>(context, resource, objects) {
+) : RecyclerView.Adapter<RecipeListAdapter.RecipeViewHolder>() {
 
     /**
      * Indicates whether a recipe list item is selected. Other items will observe this value
@@ -36,24 +31,23 @@ class RecipeListAdapter(
      */
     var itemSelected = ObservableBoolean(false)
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val holder: RecipeViewHolder
+    class RecipeViewHolder(val binding: RecipeListitemBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
-        if (convertView == null) {
-            val viewBinding = DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                resource,
-                parent,
-                false
-            ) as RecipeListitemBinding
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
+        val viewBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(parent.context),
+            resource,
+            parent,
+            false
+        ) as RecipeListitemBinding
 
-            holder = RecipeViewHolder(viewBinding)
-            holder.view.tag = holder
-        } else {
-            holder = convertView.tag as RecipeViewHolder
-        }
+        return RecipeViewHolder(viewBinding)
+    }
 
+    override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {
         val recipe = objects[position]
+
         holder.binding.recipeName.text = recipe.name
 
         ImageHandler.setRecipeImageToView(context, holder.binding.recipeImageView, recipe)
@@ -97,9 +91,9 @@ class RecipeListAdapter(
         holder.binding.editOverlay.deleteButton.setOnClickListener {
             callbackListener.onCallback(objects[position])
         }
-
-        return holder.view
     }
+
+    override fun getItemCount() = objects.size
 
     /**
      * Remove other selection, vibrate and show new selection
@@ -130,9 +124,4 @@ class RecipeListAdapter(
         itemSelected.set(false)
     }
 
-    // https://www.spreys.com/view-holder-design-pattern-for-android/
-    // https://stackoverflow.com/questions/43973490/how-to-do-android-data-binding-a-customadapter-inherited-from-baseadapter-for-sp
-    private class RecipeViewHolder(val binding: RecipeListitemBinding) {
-        val view: View = binding.root
-    }
 }
