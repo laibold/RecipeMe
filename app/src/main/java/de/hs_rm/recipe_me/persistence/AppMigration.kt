@@ -102,4 +102,18 @@ object AppMigration {
             )
         }
     }
+
+    /**
+     * Create table User
+     */
+    val MIGRATION_7_8 = object : Migration(7, 8) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS User (" +
+                        " id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        " name TEXT NOT NULL)"
+            )
+        }
+    }
+
 }

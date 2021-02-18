@@ -3,24 +3,46 @@ package de.hs_rm.recipe_me.ui.profile
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import de.hs_rm.recipe_me.model.user.User
 import de.hs_rm.recipe_me.service.RecipeRepository
+import de.hs_rm.recipe_me.service.UserRepository
+import kotlinx.coroutines.launch
 
 /**
  * ViewModel for [ProfileViewModel]
  */
 class ProfileViewModel @ViewModelInject constructor(
-    private val repository: RecipeRepository
+    private val recipeRepository: RecipeRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     lateinit var total: LiveData<Int>
+    lateinit var user: LiveData<User?>
 
     /**
      * Get total from repository and save it to ViewModel
      */
     fun loadRecipeTotal() {
-        total = repository.getRecipeTotal()
+        total = recipeRepository.getRecipeTotal()
+    }
+
+    /**
+     * Load user from repository and save it to ViewModel
+     */
+    fun loadUser() {
+        user = userRepository.getUser()
+    }
+
+    /**
+     * Insert or update user with given name in the repository
+     */
+    fun saveUser(name: String) {
+        viewModelScope.launch {
+            userRepository.insertOrUpdate(name)
+        }
     }
 
     /**

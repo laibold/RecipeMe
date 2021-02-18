@@ -29,7 +29,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_top"
-                android:gravity="center_vertical"
                 android:includeFontPadding="false"
                 android:text="@string/ingredients"
                 app:layout_constraintStart_toStartOf="parent"
@@ -109,11 +108,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_below_headline_1"
-                android:gravity="center_vertical"
                 android:text="@string/steps"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/shopping_list_button_wrapper" />
-            <!--TODO why center_vertical?-->
 
             <TextView
                 android:id="@+id/steps"
