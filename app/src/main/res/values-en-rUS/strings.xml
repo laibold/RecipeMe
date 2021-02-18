@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="recipes">Recipes</string>
+    <string name="shopping_list">Shopping list</string>
+    <string name="profile">Profile</string>
+    <string name="next">Forward</string>
+    <string name="back">Back</string>
+    <string name="add">Add</string>
+    <string name="baked_goods">Baked goods</string>
+    <string name="salads">Salads</string>
+    <string name="main_dishes">Main dishes</string>
+    <string name="desserts">Desserts</string>
+    <string name="soups">Soups</string>
+    <string name="snacks">Snacks</string>
+    <string name="breakfast">Breakfast</string>
+    <string name="beverages">Beverages</string>
+    <string name="gram">g</string>
+    <string name="milliliter">ml</string>
+    <string name="teaspoon">tsp</string>
+    <string name="tablespoon">tbsp</string>
+    <string name="centimeter">cm</string>
+    <string name="package_sg">package</string>
+    <string name="package_pl">packages</string>
+    <string name="pack_sg">pack</string>
+    <string name="pack_pl">packs</string>
+    <string name="pinch_sg">pinch</string>
+    <string name="pinch_pl">pinches</string>
+    <string name="slice_sg">slice</string>
+    <string name="slice_pl">slices</string>
+    <string name="dash_sg">dash</string>
+    <string name="dash_pl">dashes</string>
+    <string name="stick_sg">stick</string>
+    <string name="stick_pl">sticks</string>
+    <string name="clove_sg">clove</string>
+    <string name="clove_pl">cloves</string>
+    <string name="sprig_sg">sprig</string>
+    <string name="sprig_pl">sprigs</string>
+    <string name="label_recipe_name">Recipe name</string>
+    <string name="hint_recipe_name">e.g. Yummy hummus</string>
+    <string name="category">Category</string>
+    <string name="new_recipe">New recipe</string>
+    <string name="desc_add_recipe">Add recipe</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_recipe_message">Confirm delete?</string>
+</resources>

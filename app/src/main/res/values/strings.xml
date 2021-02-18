@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">RecipeMe</string>
-    <string name="recipes">Rezepte</string>
+    <string name="app_name" translatable="false">RecipeMe</string>
     <string name="shopping_list">Einkaufsliste</string>
     <string name="profile">Profil</string>
     <string name="next">Weiter</string>
@@ -35,7 +34,7 @@
     <string name="clove_pl">Zehen</string>
     <string name="sprig_sg">Zweig</string>
     <string name="sprig_pl">Zweige</string>
-    <string name="none_unit">---</string>
+    <string name="none_unit" translatable="false">---</string>
     <string name="label_recipe_name">Name des Rezepts</string>
     <string name="hint_recipe_name">z.B. Leckerer Hummus</string>
     <string name="category">Kategorie</string>
@@ -114,4 +113,5 @@
     <string name="cancel_reset">Abbrechen und zurücksetzen</string>
     <string name="edit_assigned_ingredients">Zugehörige Zutaten bearbeiten</string>
     <string name="related_ingredients">Zugehörige Zutaten</string>
+    <string name="recipes">Rezep</string>
 </resources>
