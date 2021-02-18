@@ -1,11 +1,14 @@
 package de.hs_rm.recipe_me.ui.recipe.category
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
+import de.hs_rm.recipe_me.service.ImageHandler
 import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,8 +18,9 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class RecipeCategoryViewModel @Inject constructor(
-    private val repository: RecipeRepository
-) : ViewModel() {
+    private val repository: RecipeRepository,
+    private val app: Application
+) : AndroidViewModel(app) {
 
     lateinit var category: RecipeCategory
 
@@ -34,6 +38,7 @@ class RecipeCategoryViewModel @Inject constructor(
         viewModelScope.launch {
             repository.deleteRecipeAndRelations(recipe)
         }
+        ImageHandler.deleteRecipeImage(app.applicationContext, recipe.id)
     }
 
 }

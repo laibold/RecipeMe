@@ -4,7 +4,6 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.net.Uri
 import android.text.Editable
-import android.util.Log
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.R
@@ -33,7 +32,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddRecipeViewModel @Inject constructor(
     private val repository: RecipeRepository,
-    private val app: Application,
+    private val app: Application
 ) : AndroidViewModel(app) {
 
     private var updatingCookingStepIndex = -1

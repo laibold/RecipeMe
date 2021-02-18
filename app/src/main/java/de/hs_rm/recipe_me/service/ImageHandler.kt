@@ -53,6 +53,21 @@ object ImageHandler {
     }
 
     /**
+     * Deletes image from file system
+     * @param absolutePath Absolute path to folder where image is located
+     * @param filename Filename with leading "/"
+     */
+    private fun deleteImage(absolutePath: String, filename: String) {
+        val directory = File(absolutePath).absoluteFile
+        File(absolutePath + filename).absoluteFile.delete()
+
+        // If directory is now empty, also delete it
+        if (directory.list() != null && directory.list().isEmpty()) {
+            directory.delete()
+        }
+    }
+
+    /**
      * Load recipe image and set it to imageView.
      * If no custom image is available, the image of the recipe category will be used.
      */
@@ -86,11 +101,19 @@ object ImageHandler {
     }
 
     /**
-     * Save recipe image to file system
+     * Saves recipe image to file system
      * Must be called from Dispatchers.IO coroutine scope
      */
     fun saveRecipeImage(context: Context, image: Bitmap, id: Long): String? {
         return saveImage(image, getRecipeDirPath(context, id), RECIPE_IMAGE_NAME)
+    }
+
+    /**
+     * Deletes recipe image from file system. If it's the only file in the directory,
+     * the directory also gets deleted
+     */
+    fun deleteRecipeImage(context: Context, id: Long) {
+        deleteImage(getRecipeDirPath(context, id), RECIPE_IMAGE_NAME)
     }
 
     /**
@@ -142,7 +165,7 @@ object ImageHandler {
                             .error(recipe.category.drawableResId)
                     )
                     .load(Uri.fromFile(file))
-                    .signature(ObjectKey(System.currentTimeMillis())) // use timestap to prevent problems with caching
+                    .signature(ObjectKey(System.currentTimeMillis())) // use timestamp to prevent problems with caching
                     .into(imageView)
             } else {
                 imageView.setImageResource(recipe.category.drawableResId)
@@ -157,7 +180,7 @@ object ImageHandler {
             return Glide.with(context)
                 .asBitmap()
                 .load(uri)
-                .signature(ObjectKey(System.currentTimeMillis())) // use timestap to prevent problems with caching
+                .signature(ObjectKey(System.currentTimeMillis())) // use timestamp to prevent problems with caching
                 .placeholder(android.R.drawable.progress_indeterminate_horizontal) // need placeholder to avoid issue like glide annotations
                 .error(android.R.drawable.stat_notify_error) // need error to avoid issue like glide annotations
                 .centerCrop()
