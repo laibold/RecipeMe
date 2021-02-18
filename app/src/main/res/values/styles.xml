@@ -91,6 +91,7 @@
         <item name="strokeColor">?attr/colorPrimaryVariant</item>
     </style>
 
+    <!--TODO check if needed in black -->
     <style name="tertiary_button" parent="styled_button">
         <item name="android:layout_width">@dimen/wrap_content</item>
         <item name="android:layout_height">@dimen/wide_small_button_height</item>
@@ -103,9 +104,12 @@
 
     <style name="tertiary_button_white" parent="tertiary_button">
         <item name="android:textColor">?attr/colorOnPrimary</item>
-        <!--TODO dark gray transparent background-->
-        <item name="android:backgroundTint">@android:color/transparent</item>
+        <item name="android:backgroundTint">@color/translucent_black</item>
         <item name="strokeColor">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="tertiary_button_transparent" parent="tertiary_button_white">
+        <item name="android:backgroundTint">@android:color/transparent</item>
     </style>
 
     <style name="small_circle_button">

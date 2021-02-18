@@ -36,7 +36,7 @@
             android:layout_marginTop="@dimen/default_space"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/recipe_image"
-            app:layout_constraintWidth_percent="0.7">
+            app:layout_constraintWidth_percent="0.8">
 
             <TextView
                 android:id="@+id/recipe_name_label"
@@ -58,42 +58,54 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/recipe_name_label" />
 
-            <TextView
-                android:id="@+id/recipe_category_label"
-                style="@style/label"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginTop="20dp"
-                android:labelFor="@id/recipe_category_spinner"
-                android:text="@string/category"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recipe_name_field" />
+                app:layout_constraintTop_toBottomOf="@id/recipe_name_field"
+                app:layout_constraintStart_toStartOf="parent">
 
-            <Spinner
-                android:id="@+id/recipe_category_spinner"
-                style="@style/spinner"
-                android:layout_width="wrap_content"
-                android:spinnerMode="dropdown"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recipe_category_label" />
+                <TextView
+                    android:id="@+id/recipe_category_label"
+                    style="@style/label"
+                    android:labelFor="@id/recipe_category_spinner"
+                    android:text="@string/category"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/recipe_servings_label"
-                style="@style/label"
-                android:layout_marginTop="20dp"
-                android:labelFor="@id/recipe_servings_field"
-                android:text="@string/label_recipe_servings"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recipe_category_spinner" />
+                <Spinner
+                    android:id="@+id/recipe_category_spinner"
+                    style="@style/spinner"
+                    android:layout_width="wrap_content"
+                    android:spinnerMode="dropdown"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recipe_category_label" />
 
-            <EditText
-                android:id="@+id/recipe_servings_field"
-                style="@style/edit_text"
-                android:layout_width="100dp"
-                android:hint="@string/hint_recipe_servings"
-                android:importantForAutofill="no"
-                android:inputType="number"
-                android:maxLength="3"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recipe_servings_label" />
+                <TextView
+                    android:id="@+id/recipe_servings_label"
+                    style="@style/label"
+                    android:labelFor="@id/recipe_servings_field"
+                    android:text="@string/label_recipe_servings"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/recipe_servings_field" />
+
+                <EditText
+                    android:id="@+id/recipe_servings_field"
+                    style="@style/edit_text"
+                    android:layout_width="0dp"
+                    android:hint="@string/hint_recipe_servings"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:layout_marginStart="@dimen/default_space"
+                    app:layout_constraintStart_toEndOf="@id/recipe_category_spinner"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recipe_servings_label" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

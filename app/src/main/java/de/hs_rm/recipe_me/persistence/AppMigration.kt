@@ -102,4 +102,48 @@ object AppMigration {
             )
         }
     }
+
+    /**
+     * Drop column imageUri for Recipe and CookingStep
+     */
+    val MIGRATION_7_8 = object : Migration(7, 8) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            // Copy content from Recipe without imageUri
+            database.execSQL("ALTER TABLE Recipe RENAME TO Recipe_old")
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS Recipe(" +
+                        " id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        " name TEXT NOT NULL," +
+                        " servings INTEGER NOT NULL," +
+                        " category INTEGER NOT NULL)"
+            )
+            database.execSQL(
+                "INSERT INTO Recipe (id, name, servings, category)" +
+                        " SELECT id, name, servings, category" +
+                        " FROM Recipe_old"
+            )
+            database.execSQL(
+                "DROP TABLE Recipe_old"
+            )
+
+            // Copy content from CookingStep without imageUri
+            database.execSQL("ALTER TABLE CookingStep RENAME TO CookingStep_old")
+            database.execSQL(
+                "CREATE TABLE CookingStep (" +
+                        " cookingStepId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        " recipeId INTEGER NOT NULL," +
+                        " text TEXT NOT NULL," +
+                        " time INTEGER NOT NULL," +
+                        " timeUnit INTEGER NOT NULL)"
+            )
+            database.execSQL(
+                "INSERT INTO CookingStep (cookingStepId, recipeId, text, time, timeUnit)" +
+                        " SELECT cookingStepId, recipeId, text, time, timeUnit" +
+                        " FROM CookingStep_old"
+            )
+            database.execSQL(
+                "DROP TABLE CookingStep_old"
+            )
+        }
+    }
 }

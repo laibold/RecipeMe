@@ -9,9 +9,8 @@ object TestDataProvider {
         val name = getRandomString(10)
         val servings = Random.nextInt(1, 10)
         val category = getRandomRecipeCategory()
-        val imageUri = ""
 
-        return Recipe(name, servings, category, imageUri)
+        return Recipe(name, servings, category)
     }
 
     fun getRandomIngredient(recipeId: Long): Ingredient {
@@ -23,12 +22,11 @@ object TestDataProvider {
     }
 
     fun getRandomCookingStep(recipeId: Long): CookingStep {
-        val imageUri = ""
         val description = getRandomString(20)
         val time = getRandomInt(60)
         val unit = getRandomTimeUnit()
 
-        return CookingStep(recipeId, imageUri, description, time, unit)
+        return CookingStep(recipeId, description, time, unit)
     }
 
     private fun getRandomString(length: Int): String {
