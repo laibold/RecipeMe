@@ -11,7 +11,6 @@ data class Recipe(
     var name: String,
     var servings: Int,
     var category: RecipeCategory,
-    var imageUri: String,
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = DEFAULT_ID
@@ -19,15 +18,13 @@ data class Recipe(
     constructor() : this(
         "",
         0,
-        RecipeCategory.values()[0],
-        ""
+        RecipeCategory.values()[0]
     )
 
     constructor(recipeCategory: RecipeCategory) : this(
         "",
         0,
-        recipeCategory,
-        ""
+        recipeCategory
     )
 
     companion object {

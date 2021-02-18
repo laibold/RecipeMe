@@ -50,11 +50,10 @@ class RecipeRepositoryTest {
         val recipeName = "TestRecipe"
         val servings = 2
         val category = RecipeCategory.SNACKS
-        val imageUri = "uri"
         var id = -1L
 
         runBlocking {
-            id = repository.insert(Recipe(recipeName, servings, category, imageUri))
+            id = repository.insert(Recipe(recipeName, servings, category))
             repository.insert(Ingredient(id, "Ingredient1", 2.0, IngredientUnit.GRAM))
         }
 
@@ -84,12 +83,11 @@ class RecipeRepositoryTest {
         val recipeName = "TestRecipe"
         val servings = 2
         val category = RecipeCategory.SNACKS
-        val imageUri = "uri"
         var id = -1L
 
         runBlocking {
-            id = repository.insert(Recipe(recipeName, servings, category, imageUri))
-            repository.insert(CookingStep(id, "uri", "cook", 20, TimeUnit.SECOND))
+            id = repository.insert(Recipe(recipeName, servings, category))
+            repository.insert(CookingStep(id, "cook", 20, TimeUnit.SECOND))
         }
 
         val recipe = repository.getRecipeWithRelationsById(id).getOrAwaitValue()
@@ -105,7 +103,6 @@ class RecipeRepositoryTest {
         val recipeName = "TestRecipe"
         val servings = 2
         val category = RecipeCategory.SNACKS
-        val imageUri = "uri"
 
         var recipes = repository.getRecipes().getOrAwaitValue()
         val sizeBefore = recipes.size
@@ -113,12 +110,12 @@ class RecipeRepositoryTest {
         var id = -1L
 
         runBlocking {
-            id = repository.insert(Recipe(recipeName, servings, category, imageUri))
+            id = repository.insert(Recipe(recipeName, servings, category))
             repository.insert(Ingredient(id, "Ingredient1", 2.0, IngredientUnit.GRAM))
             repository.insert(Ingredient(id, "Ingredient2", 0.0, IngredientUnit.NONE))
-            repository.insert(CookingStep(id, "uri", "cook", 20, TimeUnit.SECOND))
-            repository.insert(CookingStep(id, "uri", "serve", 0, TimeUnit.SECOND))
-            repository.insert(CookingStep(id, "uri", "put to dishwasher", 1, TimeUnit.HOUR))
+            repository.insert(CookingStep(id, "cook", 20, TimeUnit.SECOND))
+            repository.insert(CookingStep(id, "serve", 0, TimeUnit.SECOND))
+            repository.insert(CookingStep(id, "put to dishwasher", 1, TimeUnit.HOUR))
         }
 
         val recipe = repository.getRecipeWithRelationsById(id).getOrAwaitValue()
@@ -130,7 +127,6 @@ class RecipeRepositoryTest {
         assertEquals(recipe.recipe.name, recipeName)
         assertEquals(recipe.recipe.servings, servings)
         assertEquals(recipe.recipe.category, category)
-        assertEquals(recipe.recipe.imageUri, imageUri)
 
         assertEquals(recipe.ingredients.size, 2)
         assertEquals(recipe.cookingStepsWithIngredients.size, 3)
@@ -196,8 +192,8 @@ class RecipeRepositoryTest {
         runBlocking {
             recipeId = repository.insert(Recipe())
 
-            repository.insert(CookingStep(recipeId, "", "", 0, TimeUnit.SECOND))
-            repository.insert(CookingStep(recipeId, "", "", 0, TimeUnit.SECOND))
+            repository.insert(CookingStep(recipeId, "", 0, TimeUnit.SECOND))
+            repository.insert(CookingStep(recipeId, "", 0, TimeUnit.SECOND))
 
             repository.insert(Ingredient(recipeId, "", 0.0, IngredientUnit.NONE))
             repository.insert(Ingredient(recipeId, "", 0.0, IngredientUnit.NONE))
@@ -219,7 +215,7 @@ class RecipeRepositoryTest {
 
     private fun insertTestRecipe() {
         runBlocking {
-            repository.insert(Recipe("recipeName", 3, RecipeCategory.SNACKS, ""))
+            repository.insert(Recipe("recipeName", 3, RecipeCategory.SNACKS))
         }
     }
 

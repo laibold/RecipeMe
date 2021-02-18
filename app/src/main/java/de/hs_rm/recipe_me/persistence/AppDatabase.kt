@@ -24,7 +24,7 @@ import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
         RecipeOfTheDay::class,
         CookingStepIngredientCrossRef::class
     ],
-    version = 7
+    version = 8
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -54,7 +54,8 @@ abstract class AppDatabase : RoomDatabase() {
                 .addMigrations(
                     AppMigration.MIGRATION_4_5,
                     AppMigration.MIGRATION_5_6,
-                    AppMigration.MIGRATION_6_7
+                    AppMigration.MIGRATION_6_7,
+                    AppMigration.MIGRATION_7_8
                 )
                 .build()
         }
