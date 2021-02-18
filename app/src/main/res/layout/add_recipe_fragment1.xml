@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/add_recipe_layout"
@@ -17,7 +19,7 @@
             android:layout_height="150dp"
             android:contentDescription="@string/image_of_the_recipe"
             android:scaleType="centerCrop"
-            android:src="@drawable/hummus_default"
+            tools:src="@drawable/category_baked_goods"
             app:layout_constraintTop_toBottomOf="@id/header" />
 
         <com.google.android.material.button.MaterialButton
