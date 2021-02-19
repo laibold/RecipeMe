@@ -12,6 +12,7 @@ import de.hs_rm.recipe_me.declaration.setValueAt
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
+import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
 import de.hs_rm.recipe_me.service.ImageHandler
 import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import de.hs_rm.recipe_me.ui.recipe.add.cooking_step.AddCookingStepListAdapter
@@ -21,7 +22,6 @@ import de.hs_rm.recipe_me.ui.recipe.add.ingredient.AddRecipeFragment2
 import de.hs_rm.recipe_me.ui.recipe.add.recipe_information.AddRecipeFragment1
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -63,6 +63,8 @@ class AddRecipeViewModel @Inject constructor(
     val recipeImage: LiveData<Bitmap?>
         get() = _recipeImage
 
+    private lateinit var observer: Observer<RecipeWithRelations>
+
     /**
      * Clear variable values on initialization because ViewModel has Activity lifecycle scope
      */
@@ -84,31 +86,36 @@ class AddRecipeViewModel @Inject constructor(
 
         if (recipeId != Recipe.DEFAULT_ID) {
             // recipeId has been committed, so this recipe should be edited and its values should be entered into the forms
+
             viewModelScope.launch {
                 recipeToUpdate = repository.getRecipeById(recipeId)
 
                 if (recipeToUpdate != null) {
                     setRecipeImage(recipeToUpdate!!)
 
-                    repository.getRecipeWithRelationsById(recipeId).asFlow()
-                        .collect { recipeWithRelations ->
-                            _recipe.postValue(recipeWithRelations.recipe)
+                    val loadedRecipeWithRelations = repository.getRecipeWithRelationsById(recipeId)
 
-                            oldIngredients = mutableListOf()
-                            oldCookingSteps = mutableListOf()
+                    observer = Observer { recipeWithRelations ->
+                        _recipe.postValue(recipeWithRelations.recipe)
 
-                            for (ingredient in recipeWithRelations.ingredients) {
-                                oldIngredients!!.add(ingredient)
-                                _ingredients.addToValue(ingredient)
-                            }
+                        oldIngredients = mutableListOf()
+                        oldCookingSteps = mutableListOf()
 
-                            for (cookingStepWithIngredients in recipeWithRelations.cookingStepsWithIngredients) {
-                                oldCookingSteps!!.add(cookingStepWithIngredients.cookingStep)
-                                _cookingStepsWithIngredients.addToValue(
-                                    cookingStepWithIngredients
-                                )
-                            }
+                        for (ingredient in recipeWithRelations.ingredients) {
+                            oldIngredients!!.add(ingredient)
+                            _ingredients.addToValue(ingredient)
                         }
+
+                        for (cookingStepWithIngredients in recipeWithRelations.cookingStepsWithIngredients) {
+                            oldCookingSteps!!.add(cookingStepWithIngredients.cookingStep)
+                            _cookingStepsWithIngredients.addToValue(
+                                cookingStepWithIngredients
+                            )
+                        }
+                        loadedRecipeWithRelations.removeObserver(observer)
+                    }
+
+                    loadedRecipeWithRelations.observeForever(observer)
                 }
             }
 
@@ -448,7 +455,6 @@ class AddRecipeViewModel @Inject constructor(
 
             saveImage(recipeToUpdate!!.id)
             recipeId.postValue(recipeToUpdate!!.id)
-            clearValues()
         }
         return recipeId
     }
@@ -494,7 +500,6 @@ class AddRecipeViewModel @Inject constructor(
 
                 saveImage(id)
                 recipeId.postValue(id)
-                clearValues()
             }
         }
         return recipeId
