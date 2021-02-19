@@ -122,4 +122,6 @@
     <string name="image_of_the_recipe">Bild des Rezepts</string>
     <string name="change_image">Bild ändern</string>
     <string name="pick_single">Wähle ein Bild aus</string>
+    <string name="cup_sg">Tasse</string>
+    <string name="cup_pl">Tassen</string>
 </resources>

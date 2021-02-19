@@ -116,4 +116,6 @@
     <string name="image_of_the_recipe">Image of the recipe</string>
     <string name="change_image">Change image</string>
     <string name="pick_single">Select an image</string>
+    <string name="cup_sg">cup</string>
+    <string name="cup_pl">cups</string>
 </resources>

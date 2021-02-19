@@ -23,7 +23,8 @@ enum class IngredientUnit(private val singularResId: Int, private val pluralResI
     DASH(R.string.dash_sg, R.string.dash_pl),
     STICK(R.string.stick_sg, R.string.stick_pl),
     CLOVE(R.string.clove_sg, R.string.clove_pl),
-    SPRIG(R.string.sprig_sg, R.string.sprig_pl);
+    SPRIG(R.string.sprig_sg, R.string.sprig_pl),
+    CUP(R.string.cup_sg, R.string.cup_pl);
 
     companion object {
         fun getNumberStringList(resources: Resources, amount: Double?): List<String> {
