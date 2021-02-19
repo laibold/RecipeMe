@@ -113,9 +113,21 @@
     <string name="related_ingredients">Required ingredients</string>
     <string name="recipe_total_text_map">{\"1\":\"recipe so far - you can do better!\",\"10\":\"recipes so far - you can do better!\",\"20\":\"recipes so far - you\'re on the right track.\",\"30\":\"recipes so far - you can almost start a restaurant.\",\"40\":\"recipes so far - not bad at all!\",\"50\":\"recipes so far - that poor scale!\",\"60\":\"recipes so far - who\'s supposed to eat all that?\",\"61\":\"recipes so far - you\'re a true master chef!\"}</string>
     <string name="profile_picture">Profile picture</string>
-    <string name="image_of_the_recipe">Image of the recipe</string>
     <string name="change_image">Change image</string>
     <string name="pick_single">Select an image</string>
     <string name="cup_sg">cup</string>
     <string name="cup_pl">cups</string>
+    <string name="add_cooking_step">Add step</string>
+    <string name="edit_cooking_step">Edit step</string>
+    <string name="delete_cooking_step">Delete step</string>
+    <string name="add_ingredient">Add ingredient</string>
+    <string name="edit_ingredient">Edit ingredient</string>
+    <string name="delete_ingredient">Delete ingredient</string>
+    <string name="set_timer">Start timer</string>
+    <string name="delete_recipe">Delete recipe</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="to_site_notice">To site notice</string>
+    <string name="category_picture">Category\'s image</string>
+    <string name="rotd_picture">Recipe of the day\'s image</string>
+    <string name="image_of_the_recipe">Recipe\'s image</string>
 </resources>

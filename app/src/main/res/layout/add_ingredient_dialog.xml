@@ -40,10 +40,10 @@
                     style="@style/edit_text"
                     android:layout_width="100dp"
                     android:digits="0123456789.,"
-                    android:maxLength="8"
                     android:hint="@string/hint_ingredient_quantity"
                     android:importantForAutofill="no"
                     android:inputType="numberDecimal"
+                    android:maxLength="8"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ingredient_quantity_label" />
 

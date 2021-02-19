@@ -24,6 +24,7 @@
                 android:layout_height="140dp"
                 app:cardCornerRadius="70dp"
                 app:cardElevation="0dp"
+                android:contentDescription="@string/profile_picture"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">

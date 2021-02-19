@@ -97,7 +97,7 @@
     <string name="photo_credits">Bildnachweis</string>
     <string name="beckbold" translatable="false">Beckbold Development</string>
     <string name="site_notice_text" translatable="false">Christina Becker, Marvin Laibold\n\beckbold.development@gmail.com</string>
-    <string name="photo_credits_text" translatable="false">App icon uses icon made by monkik from www.flaticon.com\n\Clipboard icon made by Freepik from www.flaticon.com\n\Chef icon made by Freepik from www.flaticon.com\n\Main dishes photo by Natalia Y on Unsplash\n\Snacks photo by Kyle Brinker on Unsplash\n\Soups photo by Cayla1 on Unsplash\n\Beverages photo by Kim Daniels on Unsplash\n\Baked goods photo by Rebecca Matthews on Unsplash\n\Breakfast photo by Dani Rendina on Unsplash\n\Desserts photo by Jennifer Schmidt on Unsplash\n\Salad photo by Hermes Rivera on Unsplash</string>
+    <string name="photo_credits_text" translatable="false">App icon uses icon made by monkik from www.flaticon.com\n\Chef icon made by Freepik from www.flaticon.com\n\Baked goods photo by Rebecca Matthews on Unsplash\n\Beverages photo by Kim Daniels on Unsplash\n\Breakfast photo by Dani Rendina on Unsplash\n\Cooking photo by Gaelle Marcel on Unsplash\n\Desserts photo by Jennifer Schmidt on Unsplash\n\Main dishes photo by Natalia Y on Unsplash\n\Salads photo by Hermes Rivera on Unsplash\n\Snacks photo by Kyle Brinker on Unsplash\n\Soups photo by Cayla1 on Unsplash</string>
     <string name="version">Version</string>
     <string name="recipe_total_text_map">{\"1\":\"Rezept erstellt - da geht noch mehr!\",\"10\":\"Rezepte erstellt - da geht noch mehr!\",\"20\":\"Rezepte erstellt - du bist auf einem guten Weg.\",\"30\":\"Rezepte erstellt - du kannst schon fast ein Restaurant aufmachen.\",\"40\":\"Rezepte erstellt - boah, Respekt!\",\"50\":\"Rezepte erstellt - deine Waage wollt\' ich nicht sein.\",\"60\":\"Rezepte erstellt - wer soll das alles essen? Sag mal!\",\"61\":\"Rezepte erstellt - du bist ein wahrer Meisterkoch!\"}</string>
     <string name="recipe_of_the_day">Rezept des Tages</string>
@@ -124,4 +124,16 @@
     <string name="pick_single">Wähle ein Bild aus</string>
     <string name="cup_sg">Tasse</string>
     <string name="cup_pl">Tassen</string>
+    <string name="add_cooking_step">Schritt hinzufügen</string>
+    <string name="edit_cooking_step">Schritt bearbeiten</string>
+    <string name="delete_cooking_step">Schritt löschen</string>
+    <string name="add_ingredient">Zutat hinzufügen</string>
+    <string name="edit_ingredient">Zutat bearbeiten</string>
+    <string name="delete_ingredient">Zutat löschen</string>
+    <string name="set_timer">Timer starten</string>
+    <string name="delete_recipe">Rezept löschen</string>
+    <string name="edit_profile">Profil bearbeiten</string>
+    <string name="to_site_notice">Zum Impressum</string>
+    <string name="category_picture">Kategorie-Bild</string>
+    <string name="rotd_picture">Rezept des Tages-Bild</string>
 </resources>

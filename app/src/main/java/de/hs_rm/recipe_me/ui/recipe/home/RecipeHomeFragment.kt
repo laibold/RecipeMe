@@ -131,7 +131,7 @@ class RecipeHomeFragment : Fragment() {
      * Zooms into image when ScrollView gets moved upwards and the other way round
      */
     private fun onScroll(scrollY: Int) {
-        if (scrollY < 800) { // TODO check on tablet
+        if (scrollY < 1100) {
             val scaleVal = (1 + (scrollY.toFloat() / 9000))
             binding.recipeOfTheDayImage.scaleX = scaleVal
             binding.recipeOfTheDayImage.scaleY = scaleVal
