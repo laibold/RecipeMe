@@ -1,17 +1,13 @@
 package de.hs_rm.recipe_me.ui.recipe.category
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
-import de.hs_rm.recipe_me.service.ImageHandler
+import de.hs_rm.recipe_me.service.repository.RecipeImageRepository
 import de.hs_rm.recipe_me.service.repository.RecipeRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,9 +16,9 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class RecipeCategoryViewModel @Inject constructor(
-    private val repository: RecipeRepository,
-    private val app: Application
-) : AndroidViewModel(app) {
+    private val recipeRepository: RecipeRepository,
+    private val imageRepository: RecipeImageRepository
+) : ViewModel() {
 
     lateinit var category: RecipeCategory
 
@@ -30,18 +26,16 @@ class RecipeCategoryViewModel @Inject constructor(
      * Returns LiveData with list of recipes that match the given [RecipeCategory]
      */
     fun getRecipesByCategory(recipeCategory: RecipeCategory): LiveData<List<Recipe>> {
-        return repository.getRecipesByCategory(recipeCategory)
+        return recipeRepository.getRecipesByCategory(recipeCategory)
     }
 
     /**
      * Delete recipe and its belonging Ingredients and CookingSteps
      */
     fun deleteRecipeAndRelations(recipe: Recipe) {
-        CoroutineScope(Dispatchers.IO).launch {
-            ImageHandler.deleteRecipeImage(app.applicationContext, recipe.id)
-        }
+        imageRepository.deleteRecipeImage(recipe.id)
         viewModelScope.launch {
-            repository.deleteRecipeAndRelations(recipe)
+            recipeRepository.deleteRecipeAndRelations(recipe)
         }
     }
 

@@ -53,13 +53,17 @@ object ImageHandler {
     }
 
     /**
-     * Deletes image from file system
+     * Deletes image from file system if it exists.
      * @param absolutePath Absolute path to folder where image is located
      * @param filename Filename with leading "/"
      */
     private fun deleteImage(absolutePath: String, filename: String) {
+        val file = File(absolutePath + filename).absoluteFile
         val directory = File(absolutePath).absoluteFile
-        File(absolutePath + filename).absoluteFile.delete()
+
+        if (file.exists()) {
+            file.delete()
+        }
 
         // If directory is now empty, also delete it
         if (directory.list() != null && directory.list().isEmpty()) {
@@ -76,7 +80,8 @@ object ImageHandler {
     }
 
     /**
-     * Returns Bitmap with recipe image if available, otherwise null
+     * Returns Bitmap with recipe image if available, otherwise null.
+     * This function should be called from a repository.
      */
     fun getRecipeImage(context: Context, recipe: Recipe): Bitmap? {
         val file = File(getRecipeDirPath(context, recipe.id) + RECIPE_IMAGE_NAME)
@@ -173,7 +178,7 @@ object ImageHandler {
         }
 
         /**
-         * Load recipe image to bitmap, return null if image doesn't exist.
+         * Load recipe image to bitmap, return error image if image doesn't exist.
          * Must be called from Dispatchers.IO coroutine scope.
          */
         fun getImageFromUri(context: Context, uri: Uri, width: Int, height: Int): Bitmap {

@@ -63,6 +63,9 @@ class RecipeRepository @Inject constructor(
         }
     }
 
+    /**
+     * Insert CookingStepIngredientCrossRef
+     */
     suspend fun insert(cookingStepIngredientCrossRef: CookingStepIngredientCrossRef) {
         recipeDao.insert(cookingStepIngredientCrossRef)
     }
@@ -93,13 +96,6 @@ class RecipeRepository @Inject constructor(
      */
     suspend fun getRecipeById(id: Long): Recipe {
         return recipeDao.getRecipeById(id)
-    }
-
-    /**
-     * Get a Recipe by its id
-     */
-    fun getRecipeByIdAsLiveData(id: Long): LiveData<Recipe> {
-        return recipeDao.getRecipeByIdAsLiveData(id)
     }
 
     /**

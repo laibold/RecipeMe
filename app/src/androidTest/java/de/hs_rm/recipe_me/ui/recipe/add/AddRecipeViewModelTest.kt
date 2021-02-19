@@ -1,6 +1,5 @@
 package de.hs_rm.recipe_me.ui.recipe.add
 
-import android.app.Application
 import android.content.Context
 import android.text.Editable
 import android.widget.EditText
@@ -13,6 +12,7 @@ import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.persistence.RecipeDao
+import de.hs_rm.recipe_me.service.repository.RecipeImageRepository
 import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import kotlinx.coroutines.*
 import org.junit.After
@@ -32,6 +32,7 @@ class AddRecipeViewModelTest {
 
     private lateinit var db: AppDatabase
     private lateinit var recipeRepository: RecipeRepository
+    private lateinit var recipeImageRepository: RecipeImageRepository
     private lateinit var recipeDao: RecipeDao
     private lateinit var viewModel: AddRecipeViewModel
 
@@ -62,10 +63,11 @@ class AddRecipeViewModelTest {
 
         recipeDao = db.recipeDao()
         recipeRepository = RecipeRepository(recipeDao)
+        recipeImageRepository = RecipeImageRepository(appContext)
 
         db.clearAllTables()
         viewModel =
-            AddRecipeViewModel(recipeRepository, appContext.applicationContext as Application)
+            AddRecipeViewModel(recipeRepository, recipeImageRepository)
         viewModel.setCategory(RecipeCategory.MAIN_DISHES)
         GlobalScope.launch(Dispatchers.Main) {
             delay(1000)
@@ -412,15 +414,19 @@ class AddRecipeViewModelTest {
         viewModel.ingredients.value!!.removeAt(1)
         // edit ingredient
         viewModel.prepareIngredientUpdate(0)
-        viewModel.updateIngredient(getEditable("Updated Ingredient"),
+        viewModel.updateIngredient(
+            getEditable("Updated Ingredient"),
             getEditable("2"),
-            IngredientUnit.CAN)
+            IngredientUnit.CAN
+        )
 
         // add step
-        viewModel.addCookingStepWithIngredients(getEditable("New Step"),
+        viewModel.addCookingStepWithIngredients(
+            getEditable("New Step"),
             getEditable(""),
             TimeUnit.SECOND,
-            mutableListOf())
+            mutableListOf()
+        )
         // edit step
         // remove step
         // change (add/remove) ingredient in step
@@ -436,14 +442,20 @@ class AddRecipeViewModelTest {
         assertEquals(category, recipeWithRelations.recipe.category)
 
         assertEquals(2, recipeWithRelations.ingredients.size)
-        assertEquals(Ingredient("Updated Ingredient", 2.0, IngredientUnit.CAN),
-            recipeWithRelations.ingredients[0])
-        assertEquals(Ingredient("New Ingredient", 1.0, IngredientUnit.NONE),
-            recipeWithRelations.ingredients[1])
+        assertEquals(
+            Ingredient("Updated Ingredient", 2.0, IngredientUnit.CAN),
+            recipeWithRelations.ingredients[0]
+        )
+        assertEquals(
+            Ingredient("New Ingredient", 1.0, IngredientUnit.NONE),
+            recipeWithRelations.ingredients[1]
+        )
 
         assertEquals(3, recipeWithRelations.cookingStepsWithIngredients.size)
-        assertEquals(CookingStep("New Step", 0, TimeUnit.SECOND),
-            recipeWithRelations.cookingStepsWithIngredients[2].cookingStep)
+        assertEquals(
+            CookingStep("New Step", 0, TimeUnit.SECOND),
+            recipeWithRelations.cookingStepsWithIngredients[2].cookingStep
+        )
     }
 
     /**

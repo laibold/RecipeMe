@@ -1,6 +1,5 @@
 package de.hs_rm.recipe_me.ui.recipe.add
 
-import android.app.Application
 import android.graphics.Bitmap
 import android.net.Uri
 import android.text.Editable
@@ -13,7 +12,7 @@ import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
-import de.hs_rm.recipe_me.service.ImageHandler
+import de.hs_rm.recipe_me.service.repository.RecipeImageRepository
 import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import de.hs_rm.recipe_me.ui.recipe.add.cooking_step.AddCookingStepListAdapter
 import de.hs_rm.recipe_me.ui.recipe.add.cooking_step.AddRecipeFragment3
@@ -31,9 +30,9 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class AddRecipeViewModel @Inject constructor(
-    private val repository: RecipeRepository,
-    private val app: Application
-) : AndroidViewModel(app) {
+    private val recipeRepository: RecipeRepository,
+    private val imageRepository: RecipeImageRepository,
+) : ViewModel() {
 
     private var updatingCookingStepIndex = -1
     private var updatingIngredientIndex = -1
@@ -88,12 +87,13 @@ class AddRecipeViewModel @Inject constructor(
             // recipeId has been committed, so this recipe should be edited and its values should be entered into the forms
 
             viewModelScope.launch {
-                recipeToUpdate = repository.getRecipeById(recipeId)
+                recipeToUpdate = recipeRepository.getRecipeById(recipeId)
 
                 if (recipeToUpdate != null) {
                     setRecipeImage(recipeToUpdate!!)
 
-                    val loadedRecipeWithRelations = repository.getRecipeWithRelationsById(recipeId)
+                    val loadedRecipeWithRelations =
+                        recipeRepository.getRecipeWithRelationsById(recipeId)
 
                     observer = Observer { recipeWithRelations ->
                         _recipe.postValue(recipeWithRelations.recipe)
@@ -393,7 +393,7 @@ class AddRecipeViewModel @Inject constructor(
             lateinit var ingredientList: List<Ingredient>
             lateinit var cookingStepList: List<CookingStepWithIngredients>
 
-            repository.update(recipeToUpdate!!)
+            recipeRepository.update(recipeToUpdate!!)
 
             _ingredients.value?.let { ingredients ->
                 for (ingredient in ingredients) {
@@ -413,16 +413,16 @@ class AddRecipeViewModel @Inject constructor(
             for (ingredient in ingredientList) {
                 if (ingredient.ingredientId != Ingredient.DEFAULT_ID) {
                     // Items that have already been in the database
-                    repository.update(ingredient)
+                    recipeRepository.update(ingredient)
                 } else {
                     // New items
-                    ingredient.ingredientId = repository.insert(ingredient)
+                    ingredient.ingredientId = recipeRepository.insert(ingredient)
                 }
             }
             // Delete ingredients that are in old but not in new list
             for (ingredient in oldIngredients!!) {
                 if (!ingredientList.contains(ingredient)) {
-                    repository.deleteIngredient(ingredient)
+                    recipeRepository.deleteIngredient(ingredient)
                 }
             }
 
@@ -432,14 +432,14 @@ class AddRecipeViewModel @Inject constructor(
 
                 if (cookingStep.cookingStepId != CookingStep.DEFAULT_ID) {
                     // Items that have already been in the database
-                    repository.update(cookingStep)
+                    recipeRepository.update(cookingStep)
                 } else {
                     // New items
-                    cookingStep.cookingStepId = repository.insert(cookingStep)
+                    cookingStep.cookingStepId = recipeRepository.insert(cookingStep)
                 }
 
                 // Delete relations to ingredients and re-insert them. This might be the fastest way
-                repository.deleteCookingStepIngredientCrossRefs(cookingStepId = cookingStep.cookingStepId)
+                recipeRepository.deleteCookingStepIngredientCrossRefs(cookingStepId = cookingStep.cookingStepId)
                 insertCookingStepIngredientCrossRefs(
                     cookingStepWithIngredients.ingredients,
                     cookingStep.cookingStepId
@@ -449,7 +449,7 @@ class AddRecipeViewModel @Inject constructor(
             // Delete CookingSteps that are in old but not in new list
             for (cookingStep in oldCookingSteps!!) {
                 if (!cookingStepList.map { it.cookingStep }.contains(cookingStep)) {
-                    repository.deleteCookingStep(cookingStep)
+                    recipeRepository.deleteCookingStep(cookingStep)
                 }
             }
 
@@ -469,7 +469,7 @@ class AddRecipeViewModel @Inject constructor(
         viewModelScope.launch {
             _recipe.value?.let { recipe ->
                 // Insert recipe
-                val id = repository.insert(recipe)
+                val id = recipeRepository.insert(recipe)
 
                 // Assign recipe id to ingredients and cooking steps
                 for (ingredient in _ingredients.value!!) {
@@ -483,14 +483,14 @@ class AddRecipeViewModel @Inject constructor(
                 _ingredients.value?.let { ingredients ->
                     for (ingredient in ingredients) {
                         // Assign id from inserted entity back to object to create cross reference
-                        ingredient.ingredientId = repository.insert(ingredient)
+                        ingredient.ingredientId = recipeRepository.insert(ingredient)
                     }
                 }
 
                 // Insert cooking steps and create references to the belonging ingredients
                 _cookingStepsWithIngredients.value?.let { list ->
                     for (cookingStepWithIngredients in list) {
-                        val cId = repository.insert(cookingStepWithIngredients.cookingStep)
+                        val cId = recipeRepository.insert(cookingStepWithIngredients.cookingStep)
                         insertCookingStepIngredientCrossRefs(
                             cookingStepWithIngredients.ingredients,
                             cId
@@ -517,7 +517,12 @@ class AddRecipeViewModel @Inject constructor(
         // now have an id and we can create a cross reference to the CookingSteps
         // that have just been inserted
         for (ingredient in ingredients) {
-            repository.insert(CookingStepIngredientCrossRef(cookingStepId, ingredient.ingredientId))
+            recipeRepository.insert(
+                CookingStepIngredientCrossRef(
+                    cookingStepId,
+                    ingredient.ingredientId
+                )
+            )
         }
     }
 
@@ -527,11 +532,7 @@ class AddRecipeViewModel @Inject constructor(
      */
     private fun saveImage(recipeId: Long) {
         _recipeImage.value?.let {
-            ImageHandler.saveRecipeImage(
-                app.applicationContext,
-                it,
-                recipeId
-            )
+            imageRepository.saveRecipeImage(it, recipeId)
         }
     }
 
@@ -541,7 +542,7 @@ class AddRecipeViewModel @Inject constructor(
     fun setRecipeImage(uri: Uri, width: Int, height: Int) {
         CoroutineScope(Dispatchers.IO).launch {
             _recipeImage.postValue(
-                ImageHandler.getImageFromUri(app.applicationContext, uri, width, height)
+                imageRepository.getImageFromUri(uri, width, height)
             )
         }
     }
@@ -552,7 +553,7 @@ class AddRecipeViewModel @Inject constructor(
     private fun setRecipeImage(recipe: Recipe) {
         CoroutineScope(Dispatchers.IO).launch {
             _recipeImage.postValue(
-                ImageHandler.getRecipeImage(app.applicationContext, recipe)
+                imageRepository.getRecipeImage(recipe)
             )
         }
     }

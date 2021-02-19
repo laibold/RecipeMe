@@ -38,7 +38,7 @@ object DataSourceModule {
     }
 
     @Provides
-    fun providesUserDao(appDatabase: AppDatabase): UserDao {
+    fun provideUserDao(appDatabase: AppDatabase): UserDao {
         return appDatabase.userDao()
     }
 
