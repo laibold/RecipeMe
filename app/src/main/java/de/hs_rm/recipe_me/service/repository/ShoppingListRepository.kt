@@ -3,7 +3,7 @@ package de.hs_rm.recipe_me.service.repository
 import androidx.lifecycle.LiveData
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
-import de.hs_rm.recipe_me.persistence.ShoppingListDao
+import de.hs_rm.recipe_me.persistence.dao.ShoppingListDao
 import javax.inject.Inject
 
 /**

@@ -2,8 +2,8 @@ package de.hs_rm.recipe_me.service.repository
 
 import de.hs_rm.recipe_me.model.RecipeOfTheDay
 import de.hs_rm.recipe_me.model.recipe.Recipe
-import de.hs_rm.recipe_me.persistence.RecipeDao
-import de.hs_rm.recipe_me.persistence.RecipeOfTheDayDao
+import de.hs_rm.recipe_me.persistence.dao.RecipeDao
+import de.hs_rm.recipe_me.persistence.dao.RecipeOfTheDayDao
 import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -7,7 +7,7 @@ import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
-import de.hs_rm.recipe_me.persistence.RecipeDao
+import de.hs_rm.recipe_me.persistence.dao.RecipeDao
 import javax.inject.Inject
 import javax.inject.Singleton
 

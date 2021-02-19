@@ -8,8 +8,8 @@ import de.hs_rm.recipe_me.TestDataProvider
 import de.hs_rm.recipe_me.model.RecipeOfTheDay
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.persistence.AppDatabase
-import de.hs_rm.recipe_me.persistence.RecipeDao
-import de.hs_rm.recipe_me.persistence.RecipeOfTheDayDao
+import de.hs_rm.recipe_me.persistence.dao.RecipeDao
+import de.hs_rm.recipe_me.persistence.dao.RecipeOfTheDayDao
 import de.hs_rm.recipe_me.service.repository.RecipeOfTheDayRepository
 import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import kotlinx.coroutines.runBlocking

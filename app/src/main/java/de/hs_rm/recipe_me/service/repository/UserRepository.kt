@@ -2,7 +2,7 @@ package de.hs_rm.recipe_me.service.repository
 
 import androidx.lifecycle.LiveData
 import de.hs_rm.recipe_me.model.user.User
-import de.hs_rm.recipe_me.persistence.UserDao
+import de.hs_rm.recipe_me.persistence.dao.UserDao
 import javax.inject.Inject
 
 /**

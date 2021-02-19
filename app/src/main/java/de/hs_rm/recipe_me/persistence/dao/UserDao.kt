@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.persistence
+package de.hs_rm.recipe_me.persistence.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.persistence
+package de.hs_rm.recipe_me.persistence.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -59,9 +59,6 @@ interface RecipeDao {
 
     @Query("SELECT * FROM Recipe WHERE id = :id")
     suspend fun getRecipeById(id: Long): Recipe
-
-    @Query("SELECT * FROM Recipe WHERE id = :id")
-    fun getRecipeByIdAsLiveData(id: Long): LiveData<Recipe>
 
     @Query("SELECT COUNT(*) FROM Recipe")
     fun getRecipeCountAsLiveData(): LiveData<Int>

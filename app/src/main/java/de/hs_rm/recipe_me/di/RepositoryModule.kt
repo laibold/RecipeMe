@@ -6,10 +6,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import de.hs_rm.recipe_me.persistence.RecipeDao
-import de.hs_rm.recipe_me.persistence.RecipeOfTheDayDao
-import de.hs_rm.recipe_me.persistence.ShoppingListDao
-import de.hs_rm.recipe_me.persistence.UserDao
+import de.hs_rm.recipe_me.persistence.dao.RecipeDao
+import de.hs_rm.recipe_me.persistence.dao.RecipeOfTheDayDao
+import de.hs_rm.recipe_me.persistence.dao.ShoppingListDao
+import de.hs_rm.recipe_me.persistence.dao.UserDao
 import de.hs_rm.recipe_me.service.repository.*
 import javax.inject.Singleton
 

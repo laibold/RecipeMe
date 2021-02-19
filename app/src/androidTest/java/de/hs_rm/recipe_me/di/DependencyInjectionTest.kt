@@ -4,9 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import de.hs_rm.recipe_me.persistence.RecipeDao
-import de.hs_rm.recipe_me.persistence.ShoppingListDao
-import de.hs_rm.recipe_me.persistence.UserDao
+import de.hs_rm.recipe_me.persistence.dao.RecipeDao
+import de.hs_rm.recipe_me.persistence.dao.ShoppingListDao
+import de.hs_rm.recipe_me.persistence.dao.UserDao
 import de.hs_rm.recipe_me.service.repository.*
 import org.junit.Assert.assertNotNull
 import org.junit.Before

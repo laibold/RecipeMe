@@ -11,7 +11,7 @@ import de.hs_rm.recipe_me.TestDataProvider
 import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.persistence.AppDatabase
-import de.hs_rm.recipe_me.persistence.RecipeDao
+import de.hs_rm.recipe_me.persistence.dao.RecipeDao
 import de.hs_rm.recipe_me.service.repository.RecipeImageRepository
 import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import kotlinx.coroutines.*

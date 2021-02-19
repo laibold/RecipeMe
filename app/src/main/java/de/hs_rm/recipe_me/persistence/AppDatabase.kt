@@ -12,6 +12,10 @@ import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 import de.hs_rm.recipe_me.model.user.User
+import de.hs_rm.recipe_me.persistence.dao.RecipeDao
+import de.hs_rm.recipe_me.persistence.dao.RecipeOfTheDayDao
+import de.hs_rm.recipe_me.persistence.dao.ShoppingListDao
+import de.hs_rm.recipe_me.persistence.dao.UserDao
 
 /**
  * Room Database for this app. Use Daos with Dependency Injection

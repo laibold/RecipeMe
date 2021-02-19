@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.persistence
+package de.hs_rm.recipe_me.persistence.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -17,9 +17,6 @@ interface RecipeOfTheDayDao {
 
     @Update
     suspend fun update(recipeOfTheDay: RecipeOfTheDay)
-
-    @Query("DELETE FROM RecipeOfTheDay")
-    suspend fun clear()
 
     @Query("SELECT * FROM RecipeOfTheDay LIMIT 1")
     suspend fun getRecipeOfTheDay(): RecipeOfTheDay?
