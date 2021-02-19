@@ -22,7 +22,7 @@
                 android:id="@+id/profile_image_card_view"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
-                app:cardCornerRadius="250dp"
+                app:cardCornerRadius="70dp"
                 app:cardElevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,6 @@
                     android:layout_width="140dp"
                     android:layout_height="140dp"
                     android:contentDescription="@string/profile_picture"
-                    android:scaleType="centerCrop"
                     android:src="@drawable/profile_picture_default" />
 
             </androidx.cardview.widget.CardView>
