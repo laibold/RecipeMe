@@ -48,7 +48,7 @@
                 android:id="@+id/edit_recipe_button"
                 android:layout_width="@dimen/small_button_size"
                 android:layout_height="@dimen/small_button_size"
-                android:layout_marginEnd="5dp"
+                android:layout_marginEnd="@dimen/outline_horizontal"
                 android:background="@null"
                 android:contentDescription="@string/edit_recipe"
                 android:padding="@dimen/small_button_padding_big_icon"

@@ -15,8 +15,9 @@
 
         <ImageButton
             android:id="@+id/edit_profile_button"
-            android:layout_width="@dimen/header_button_size"
-            android:layout_height="@dimen/header_button_size"
+            android:layout_width="@dimen/small_button_size"
+            android:layout_height="@dimen/small_button_size"
+            android:padding="@dimen/small_button_padding_big_icon"
             android:layout_marginEnd="@dimen/outline_horizontal"
             android:background="@null"
             android:contentDescription="@string/edit_profile"
