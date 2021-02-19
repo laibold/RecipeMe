@@ -18,7 +18,6 @@
     <dimen name="scroll_view_image_offset_high">@dimen/_250sdp</dimen>
     <dimen name="scroll_view_image_offset_low">@dimen/_325sdp</dimen>
 
-
     <!--button size-->
     <dimen name="big_button_width">0dp</dimen>
     <dimen name="big_button_height">55dp</dimen>

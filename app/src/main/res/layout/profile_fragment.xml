@@ -15,14 +15,8 @@
 
         <ImageButton
             android:id="@+id/edit_profile_button"
-            android:layout_width="@dimen/small_button_size"
-            android:layout_height="@dimen/small_button_size"
-            android:padding="@dimen/small_button_padding_big_icon"
-            android:layout_marginEnd="@dimen/outline_horizontal"
-            android:background="@null"
+            style="@style/header_button"
             android:contentDescription="@string/edit_profile"
-            android:elevation="@dimen/elevation_low"
-            android:scaleType="centerCrop"
             android:src="@drawable/ic_baseline_edit_24"
             android:tint="@color/dark_red"
             android:tooltipText="@string/edit_profile"
@@ -36,10 +30,10 @@
             android:layout_height="180dp"
             android:layout_marginTop="@dimen/space_below_headline_1"
             android:background="@drawable/profile_picture_default"
+            android:contentDescription="@string/profile_picture"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/header"
-            android:contentDescription="@string/profile_picture" />
+            app:layout_constraintTop_toBottomOf="@+id/header" />
 
         <TextView
             android:id="@+id/profile_greeting"
@@ -89,11 +83,11 @@
                 android:layout_marginStart="@dimen/space_button_text"
                 android:background="@drawable/ic_baseline_arrow_forward_ios_24"
                 android:clickable="false"
+                android:contentDescription="@string/to_site_notice"
                 android:focusable="false"
                 app:layout_constraintBottom_toBottomOf="@id/to_site_notice_headline"
                 app:layout_constraintStart_toEndOf="@id/to_site_notice_headline"
-                app:layout_constraintTop_toTopOf="@id/to_site_notice_headline"
-                android:contentDescription="@string/to_site_notice" />
+                app:layout_constraintTop_toTopOf="@id/to_site_notice_headline" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -104,19 +98,19 @@
             android:layout_marginHorizontal="@dimen/outline_horizontal"
             android:layout_marginBottom="@dimen/default_space_button"
             android:background="@drawable/ic_baseline_access_time_24"
+            android:contentDescription="@null"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:contentDescription="@null" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/version_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_button_text"
-            tools:text="@string/version"
             app:layout_constraintBottom_toBottomOf="@id/version_icon"
             app:layout_constraintStart_toEndOf="@+id/version_icon"
-            app:layout_constraintTop_toTopOf="@+id/version_icon" />
+            app:layout_constraintTop_toTopOf="@+id/version_icon"
+            tools:text="@string/version" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

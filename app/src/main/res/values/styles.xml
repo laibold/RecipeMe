@@ -103,7 +103,6 @@
 
     <style name="tertiary_button_white" parent="tertiary_button">
         <item name="android:textColor">?attr/colorOnPrimary</item>
-        <!--TODO dark gray transparent background-->
         <item name="android:backgroundTint">@android:color/transparent</item>
         <item name="strokeColor">?attr/colorOnPrimary</item>
     </style>
@@ -121,6 +120,16 @@
         <item name="android:background">@android:color/transparent</item>
         <item name="android:textColor">?attr/colorPrimaryVariant</item>
         <item name="android:layout_height">@dimen/invisible_button_height</item>
+    </style>
+
+    <style name="header_button">
+        <item name="android:layout_width">@dimen/small_button_size</item>
+        <item name="android:layout_height">@dimen/small_button_size</item>
+        <item name="android:padding">@dimen/small_button_padding_big_icon</item>
+        <item name="android:layout_marginEnd">@dimen/outline_horizontal</item>
+        <item name="android:background">@null</item>
+        <item name="android:elevation">@dimen/elevation_low</item>
+        <item name="android:scaleType">centerCrop</item>
     </style>
 
     <style name="edit_text">
