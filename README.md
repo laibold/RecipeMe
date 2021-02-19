@@ -1,7 +1,7 @@
 # RecipeMe
 Android app for organizing recipes
 
-<p float="left">
+<p style="float:left">
   <img src="https://user-images.githubusercontent.com/39668950/105490666-65b30880-5cb5-11eb-8e51-6f51fad94570.png" width="200" />
   <img src="https://user-images.githubusercontent.com/39668950/105492099-af045780-5cb7-11eb-9faf-42911ee1c121.png" width="200" />
   <img src="https://user-images.githubusercontent.com/39668950/105490687-6ba8e980-5cb5-11eb-8c3a-c618a3d59769.png" width="200" /> 

@@ -29,7 +29,6 @@
     <dimen name="small_circle_button_size">40dp</dimen>
     <dimen name="small_arrow_button">14dp</dimen>
     <dimen name="invisible_button_height">35sp</dimen>
-    <dimen name="header_button_size">30dp</dimen>
 
     <!--text size-->
     <dimen name="font_size_headline_1">35dp</dimen>

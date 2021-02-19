@@ -71,7 +71,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/desc_cook_recipe"
-            android:tooltipText="@string/desc_cook_recipe"
             android:src="@drawable/ic_chef_hat"
             android:tooltipText="@string/desc_cook_recipe"
             app:backgroundTint="@color/dark_red"

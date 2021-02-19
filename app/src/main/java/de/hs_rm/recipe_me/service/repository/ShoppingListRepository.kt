@@ -50,13 +50,6 @@ class ShoppingListRepository @Inject constructor(
     }
 
     /**
-     * Delete item by given id
-     */
-    suspend fun deleteItemById(id: Long) {
-        shoppingListDao.delete(id)
-    }
-
-    /**
      * Get LiveData with List of all Items
      */
     fun getAllItems(): LiveData<List<ShoppingListItem>> {

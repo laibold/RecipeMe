@@ -59,7 +59,7 @@
     <string name="label_ingredient_unit">Unit</string>
     <string name="done">Done!</string>
     <string name="label_cooking_step">Description of cooking step</string>
-    <string name="hint_cooking_step">e.g. Cut lemons in half and ...</string>
+    <string name="hint_cooking_step">e.g. Cut lemons in half and …</string>
     <string name="label_cooking_step_time">Time (optional)</string>
     <string name="hint_cooking_step_time">e.g. 90</string>
     <string name="second_sg">second</string>
@@ -82,7 +82,6 @@
     <string name="new_ingredient">New ingredient</string>
     <string name="remove_checked_items">Remove checked items</string>
     <string name="err_enter_text">Enter text</string>
-    <string name="timer">Timer</string>
     <string name="start_timer">Start timer</string>
     <string name="cooking_steps">Cooking steps</string>
     <string name="add_cooking_steps_text">Press the button to add cooking steps.</string>
