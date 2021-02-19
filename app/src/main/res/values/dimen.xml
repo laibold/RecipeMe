@@ -11,11 +11,13 @@
     <dimen name="default_space_button">20dp</dimen>
     <dimen name="small_space">20dp</dimen>
     <dimen name="header_min_height">100dp</dimen>
-    <dimen name="scroll_view_offset_high">260dp</dimen>
-    <dimen name="scroll_view_offset_low">420dp</dimen>
-    <dimen name="scroll_view_image_offset_high">300dp</dimen>
-    <dimen name="scroll_view_image_offset_low">540dp</dimen>
     <dimen name="elevation_low">3dp</dimen>
+    <!--sdp to make dummy view for scrolling adjust itself to different screen sizes-->
+    <dimen name="scroll_view_offset_high">@dimen/_210sdp</dimen>
+    <dimen name="scroll_view_offset_low">@dimen/_300sdp</dimen>
+    <dimen name="scroll_view_image_offset_high">@dimen/_250sdp</dimen>
+    <dimen name="scroll_view_image_offset_low">@dimen/_325sdp</dimen>
+
 
     <!--button size-->
     <dimen name="big_button_width">0dp</dimen>
