@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profile_layout"
@@ -27,15 +28,28 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/header" />
 
-        <ImageView
-            android:id="@+id/profile_picture"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/profile_image_card_view"
             android:layout_width="180dp"
             android:layout_height="180dp"
             android:layout_marginTop="@dimen/space_below_headline_1"
-            android:background="@drawable/profile_picture_default"
+            app:cardBackgroundColor="@color/light_gray"
+            app:cardCornerRadius="250dp"
+            app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/header" />
+            app:layout_constraintTop_toBottomOf="@+id/header">
+
+            <ImageView
+                android:id="@+id/profile_image"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:contentDescription="@string/profile_picture"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile_picture_default"
+                android:visibility="invisible" />
+
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/profile_greeting"
@@ -46,7 +60,7 @@
             android:layout_marginTop="@dimen/default_space"
             android:text="@string/profile_greeting"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profile_picture" />
+            app:layout_constraintTop_toBottomOf="@id/profile_image_card_view" />
 
         <TextView
             android:id="@+id/profile_quantity_recipes_text"
@@ -57,7 +71,9 @@
             android:layout_marginTop="@dimen/space_below_headline_2"
             android:layout_marginEnd="@dimen/outline_horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profile_greeting" />
+            app:layout_constraintTop_toBottomOf="@id/profile_greeting"
+            tools:maxLines="2"
+            tools:text="@tools:sample/lorem/random" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/to_site_notice_element"

@@ -539,7 +539,7 @@ class AddRecipeViewModel @Inject constructor(
     /**
      * Load picture from given uri and save it to viewModel scope
      */
-    fun setRecipeImage(uri: Uri, width: Int, height: Int) {
+    fun setPickedRecipeImage(uri: Uri, width: Int, height: Int) {
         CoroutineScope(Dispatchers.IO).launch {
             _recipeImage.postValue(
                 imageRepository.getImageFromUri(uri, width, height)
@@ -548,7 +548,7 @@ class AddRecipeViewModel @Inject constructor(
     }
 
     /**
-     * Load picture from given uri and save it to viewModel scope
+     * Load recipe image from repository and save it to viewModel scope
      */
     private fun setRecipeImage(recipe: Recipe) {
         CoroutineScope(Dispatchers.IO).launch {

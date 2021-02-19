@@ -25,7 +25,17 @@ object ImageHandler {
     private const val JPEG_QUALITY = 50
     const val RECIPE_IMAGE_WIDTH = 1000
     const val RECIPE_IMAGE_HEIGHT = 1000
+    const val PROFILE_IMAGE_WIDTH = 700
+    const val PROFILE_IMAGE_HEIGHT = 700
 
+    /**
+     * Saves image to file system
+     * @param image Image to save
+     * @param absolutePath Absolute path to directory where image should be stored
+     * @param filename Filename with leading '/' and filename extension (e.g. /file.jpg)
+     *
+     * @return On success path to image as String, else null
+     */
     private fun saveImage(
         image: Bitmap,
         absolutePath: String,
@@ -80,6 +90,14 @@ object ImageHandler {
     }
 
     /**
+     * Returns image as Bitmap from given Uri
+     * Must be called from Dispatchers.IO coroutine scope
+     */
+    fun getImageFromUri(context: Context, uri: Uri, width: Int, height: Int): Bitmap {
+        return ImageLoader().getImageFromUri(context, uri, width, height)
+    }
+
+    /**
      * Returns Bitmap with recipe image if available, otherwise null.
      * This function should be called from a repository.
      */
@@ -95,14 +113,6 @@ object ImageHandler {
         } else {
             null
         }
-    }
-
-    /**
-     * Returns image as Bitmap from given Uri
-     * Must be called from Dispatchers.IO coroutine scope
-     */
-    fun getImageFromUri(context: Context, uri: Uri, width: Int, height: Int): Bitmap {
-        return ImageLoader().getImageFromUri(context, uri, width, height)
     }
 
     /**
@@ -122,6 +132,32 @@ object ImageHandler {
     }
 
     /**
+     * Returns Bitmap with profile image if available, otherwise null.
+     * This function should be called from a repository.
+     */
+    fun getProfileImage(context: Context): Bitmap? {
+        val file = File(getProfileDirPath(context) + PROFILE_IMAGE_NAME)
+        return if (file.exists()) {
+            ImageLoader().getImageFromUri(
+                context,
+                Uri.fromFile(file),
+                PROFILE_IMAGE_WIDTH,
+                PROFILE_IMAGE_HEIGHT
+            )
+        } else {
+            null
+        }
+    }
+
+    /**
+     * Saves recipe image to file system
+     * Must be called from Dispatchers.IO coroutine scope
+     */
+    fun saveProfileImage(context: Context, image: Bitmap): String? {
+        return saveImage(image, getProfileDirPath(context), PROFILE_IMAGE_NAME)
+    }
+
+    /**
      * Returns absolute path to the image of the CookingStep of given recipe
      */
     fun getCookingStepPath(context: Context, recipeId: Long, cookingStepId: Long): String {
@@ -138,10 +174,10 @@ object ImageHandler {
     }
 
     /**
-     * Returns absolute path to the profile image
+     * Returns absolute path to the profile image directory
      */
-    fun getProfileImagePath(context: Context): String {
-        return getImageDirPath(context) + PROFILE_PATH + PROFILE_IMAGE_NAME
+    private fun getProfileDirPath(context: Context): String {
+        return getImageDirPath(context) + PROFILE_PATH
     }
 
     /**

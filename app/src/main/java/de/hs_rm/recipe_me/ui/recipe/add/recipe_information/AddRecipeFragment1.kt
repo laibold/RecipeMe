@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -102,9 +101,7 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
             binding.header.headlineText = getString(R.string.new_recipe)
         }
 
-        binding.changeImageButton.setOnClickListener {
-            getPicture()
-        }
+        binding.changeImageButton.setOnClickListener { getImage() }
 
         binding.nextButton.setOnClickListener { onNext() }
 
@@ -169,16 +166,10 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
      * Callback when Image is selected in BottomSheetListener
      */
     override fun onImagesSelected(uris: List<Uri>, tag: String?) {
-        binding.imageContainer.removeAllViews()
-
         if (uris.isNotEmpty()) {
             val uri = uris[0]
 
-            val iv = LayoutInflater.from(context)
-                .inflate(R.layout.scrollitem_image, binding.imageContainer, false) as ImageView
-            binding.imageContainer.addView(iv)
-
-            viewModel.setRecipeImage(
+            viewModel.setPickedRecipeImage(
                 uri,
                 ImageHandler.RECIPE_IMAGE_WIDTH,
                 ImageHandler.RECIPE_IMAGE_HEIGHT
@@ -189,7 +180,7 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
     /**
      * Show BottomSheetImagePicker
      */
-    private fun getPicture() {
+    private fun getImage() {
         BottomSheetImagePicker.Builder(getString(R.string.file_provider))
             .cameraButton(ButtonType.Button)            //style of the camera link (Button in header, Image tile, None)
             .galleryButton(ButtonType.Button)           //style of the gallery link

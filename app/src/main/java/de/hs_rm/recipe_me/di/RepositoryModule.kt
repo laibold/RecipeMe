@@ -10,11 +10,7 @@ import de.hs_rm.recipe_me.persistence.RecipeDao
 import de.hs_rm.recipe_me.persistence.RecipeOfTheDayDao
 import de.hs_rm.recipe_me.persistence.ShoppingListDao
 import de.hs_rm.recipe_me.persistence.UserDao
-import de.hs_rm.recipe_me.service.UserRepository
-import de.hs_rm.recipe_me.service.repository.RecipeImageRepository
-import de.hs_rm.recipe_me.service.repository.RecipeOfTheDayRepository
-import de.hs_rm.recipe_me.service.repository.RecipeRepository
-import de.hs_rm.recipe_me.service.repository.ShoppingListRepository
+import de.hs_rm.recipe_me.service.repository.*
 import javax.inject.Singleton
 
 /**
@@ -49,8 +45,12 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideUserRepository(
-        @ApplicationContext context: Context,
         userDataSource: UserDao
-    ) = UserRepository(context, userDataSource)
+    ) = UserRepository(userDataSource)
+
+    @Singleton
+    @Provides
+    fun provideUserImageRepository(@ApplicationContext context: Context) =
+        UserImageRepository(context)
 
 }

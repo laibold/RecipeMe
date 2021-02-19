@@ -11,6 +11,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Single Source of Truth for recipe images. Use it with Dependency Injection
+ */
 @Singleton
 class RecipeImageRepository @Inject constructor(
     private val context: Context,
@@ -25,6 +28,9 @@ class RecipeImageRepository @Inject constructor(
         }
     }
 
+    /**
+     * Returns Bitmap with recipe image if available, otherwise null
+     */
     fun getRecipeImage(recipe: Recipe): Bitmap? {
         return ImageHandler.getRecipeImage(context, recipe)
     }
@@ -37,6 +43,9 @@ class RecipeImageRepository @Inject constructor(
         return ImageHandler.getImageFromUri(context, uri, width, height)
     }
 
+    /**
+     * Deletes recipe image from file system in a coroutine
+     */
     fun deleteRecipeImage(recipeId: Long) {
         CoroutineScope(Dispatchers.IO).launch {
             ImageHandler.deleteRecipeImage(context, recipeId)
