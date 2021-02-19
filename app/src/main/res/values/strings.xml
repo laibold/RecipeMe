@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">RecipeMe</string>
-    <string name="recipes">Rezepte</string>
+    <string name="app_name" translatable="false">RecipeMe</string>
     <string name="shopping_list">Einkaufsliste</string>
     <string name="profile">Profil</string>
     <string name="next">Weiter</string>
@@ -35,7 +34,7 @@
     <string name="clove_pl">Zehen</string>
     <string name="sprig_sg">Zweig</string>
     <string name="sprig_pl">Zweige</string>
-    <string name="none_unit">---</string>
+    <string name="none_unit" translatable="false">---</string>
     <string name="label_recipe_name">Name des Rezepts</string>
     <string name="hint_recipe_name">z.B. Leckerer Hummus</string>
     <string name="category">Kategorie</string>
@@ -60,8 +59,8 @@
     <string name="label_ingredient_unit">Einheit</string>
     <string name="done">Fertig!</string>
     <string name="label_cooking_step">Beschreibung des Schrittes</string>
-    <string name="hint_cooking_step">z.B. Zitronen halbieren und…</string>
-    <string name="label_cooking_step_time">Timer-Zeit falls erforderlich</string>
+    <string name="hint_cooking_step">z.B. Zitronen halbieren und …</string>
+    <string name="label_cooking_step_time">Timer-Zeit (optional)</string>
     <string name="hint_cooking_step_time">z.B. 90</string>
     <string name="second_sg">Sekunde</string>
     <string name="second_pl">Sekunden</string>
@@ -69,7 +68,6 @@
     <string name="hour_sg">Stunde</string>
     <string name="hour_pl">Stunden</string>
     <string name="minute_pl">Minuten</string>
-    <string name="update">Speichern</string>
     <string name="label_recipe_servings">Portionen</string>
     <string name="hint_recipe_servings">z.B. 2</string>
     <string name="err_enter_name">Namen eingeben</string>
@@ -83,12 +81,12 @@
     <string name="new_ingredient">Neue Zutat</string>
     <string name="remove_checked_items">Markierte Elemente entfernen</string>
     <string name="err_enter_text">Text eingeben</string>
-    <string name="store_link">http://play.google.com/store/apps/details?id=de.hs_rm.recipe_me</string>
+    <string name="store_link" translatable="false">http://play.google.com/store/apps/details?id=de.hs_rm.recipe_me</string>
     <string name="timer">Timer</string>
     <string name="start_timer">Timer starten</string>
     <string name="cooking_steps">Koch-Schritte</string>
-    <string name="add_cooking_steps_text">Füge über den Button neue Koch-Schritte hinzu.</string>
-    <string name="add_ingredients_text">Füge über den Button neue Zutaten hinzu.</string>
+    <string name="add_cooking_steps_text">Füge über den Button Koch-Schritte hinzu.</string>
+    <string name="add_ingredients_text">Füge über den Button Zutaten hinzu.</string>
     <string name="add_items_text">Nicht alle Zutaten zu Hause?\n\Füge hier oder aus der Rezept-Ansicht hinzu, was noch fehlt.</string>
     <string name="share">Teilen</string>
     <string name="add_recipe_text">Noch ziemlich leer hier.\n\Füge über den Button leckere Rezepte hinzu.</string>
@@ -97,18 +95,14 @@
     <string name="site_notice">Impressum</string>
     <string name="recipe_total_text_1">Du hast bisher</string>
     <string name="photo_credits">Bildnachweis</string>
-    <string name="beckbold">Beckbold Development</string>
-    <string name="site_notice_text">Christina Becker, Marvin Laibold\n\beckbold.development@gmail.com</string>
-    <string name="photo_credits_text">App icon uses icon made by monkik from www.flaticon.com\n\Clipboard icon made by Freepik from www.flaticon.com\n\Chef icon made by Freepik from www.flaticon.com\n\Main dishes photo by Natalia Y on Unsplash\n\Snacks photo by Kyle Brinker on Unsplash\n\Soups photo by Cayla1 on Unsplash\n\Beverages photo by Kim Daniels on Unsplash\n\Baked goods photo by Rebecca Matthews on Unsplash\n\Breakfast photo by Dani Rendina on Unsplash\n\Desserts photo by Jennifer Schmidt on Unsplash\n\Salad photo by Hermes Rivera on Unsplash</string>
+    <string name="beckbold" translatable="false">Beckbold Development</string>
+    <string name="site_notice_text" translatable="false">Christina Becker, Marvin Laibold\n\beckbold.development@gmail.com</string>
+    <string name="photo_credits_text" translatable="false">App icon uses icon made by monkik from www.flaticon.com\n\Clipboard icon made by Freepik from www.flaticon.com\n\Chef icon made by Freepik from www.flaticon.com\n\Main dishes photo by Natalia Y on Unsplash\n\Snacks photo by Kyle Brinker on Unsplash\n\Soups photo by Cayla1 on Unsplash\n\Beverages photo by Kim Daniels on Unsplash\n\Baked goods photo by Rebecca Matthews on Unsplash\n\Breakfast photo by Dani Rendina on Unsplash\n\Desserts photo by Jennifer Schmidt on Unsplash\n\Salad photo by Hermes Rivera on Unsplash</string>
     <string name="version">Version</string>
     <string name="recipe_total_text_map">{\"1\":\"Rezept erstellt - da geht noch mehr!\",\"10\":\"Rezepte erstellt - da geht noch mehr!\",\"20\":\"Rezepte erstellt - du bist auf einem guten Weg.\",\"30\":\"Rezepte erstellt - du kannst schon fast ein Restaurant aufmachen.\",\"40\":\"Rezepte erstellt - boah, Respekt!\",\"50\":\"Rezepte erstellt - deine Waage wollt\' ich nicht sein.\",\"60\":\"Rezepte erstellt - wer soll das alles essen? Sag mal!\",\"61\":\"Rezepte erstellt - du bist ein wahrer Meisterkoch!\"}</string>
     <string name="recipe_of_the_day">Rezept des Tages</string>
     <string name="open">Öffnen</string>
     <string name="no_recipe_otd">Füge Rezepte hinzu, um dich hier täglich neu inspirieren zu lassen.</string>
-    <string name="image_of_the_recipe">Bild des Rezepts</string>
-    <string name="change_image">Bild ändern</string>
-    <string name="file_provider" translatable="false">com.kroegerama.imgpicker.demo.fileprovider</string>
-    <string name="pick_single">Wähle ein Bild aus</string>
     <string name="edit_recipe">Rezept bearbeiten</string>
     <string name="err_recipe_not_found">Fehler: Rezept konnte nicht gefunden werden.</string>
     <string name="add_cooking_step_select_ingredients">Wähle alle Zutaten aus, die in diesem Schritt benötigt werden.</string>
@@ -117,9 +111,17 @@
     <string name="cancel_reset">Abbrechen und zurücksetzen</string>
     <string name="edit_assigned_ingredients">Zugehörige Zutaten bearbeiten</string>
     <string name="related_ingredients">Zugehörige Zutaten</string>
+    <string name="recipes">Rezepte</string>
+    <string name="update">Aktualisieren</string>
     <string name="your_name">Dein Name</string>
     <string name="shopping_list_export_headline">Sieh, was auf %s RecipeMe-Einkaufsliste steht:\n\n</string>
     <string name="my">meiner</string>
     <string name="profile_greeting_name">Hallo, %s!</string>
     <string name="profile_picture">Profilbild</string>
+    <string name="file_provider" translatable="false">com.kroegerama.imgpicker.demo.fileprovider</string>
+    <string name="image_of_the_recipe">Bild des Rezepts</string>
+    <string name="change_image">Bild ändern</string>
+    <string name="pick_single">Wähle ein Bild aus</string>
+    <string name="cup_sg">Tasse</string>
+    <string name="cup_pl">Tassen</string>
 </resources>
