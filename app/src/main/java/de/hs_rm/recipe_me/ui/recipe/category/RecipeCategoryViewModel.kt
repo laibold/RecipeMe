@@ -9,6 +9,7 @@ import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.service.repository.RecipeImageRepository
 import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 /**
@@ -27,6 +28,14 @@ class RecipeCategoryViewModel @Inject constructor(
      */
     fun getRecipesByCategory(recipeCategory: RecipeCategory): LiveData<List<Recipe>> {
         return recipeRepository.getRecipesByCategory(recipeCategory)
+    }
+
+    /**
+     * Returns file of recipeImage that can be loaded into view via Glide.
+     * If no image is available, null will be returned
+     */
+    fun getRecipeImageFile(recipeId: Long): File? {
+        return imageRepository.getRecipeImageFile(recipeId)
     }
 
     /**

@@ -103,7 +103,7 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
             }
 
             binding.recipeScrollview.contentWrapper.visibility = View.VISIBLE
-            adapter = RecipeListAdapter(requireContext(), R.layout.recipe_listitem, it, this)
+            adapter = RecipeListAdapter(requireContext(), R.layout.recipe_listitem, it, viewModel, this)
             list.adapter = adapter
         })
     }

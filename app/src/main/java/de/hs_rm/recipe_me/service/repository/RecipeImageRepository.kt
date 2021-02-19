@@ -8,6 +8,7 @@ import de.hs_rm.recipe_me.service.ImageHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -33,6 +34,14 @@ class RecipeImageRepository @Inject constructor(
      */
     fun getRecipeImage(recipe: Recipe): Bitmap? {
         return ImageHandler.getRecipeImage(context, recipe)
+    }
+
+    /**
+     * Returns file of recipeImage that can be loaded into view via Glide.
+     * If no image is available, null will be returned
+     */
+    fun getRecipeImageFile(recipeId: Long): File? {
+        return ImageHandler.getRecipeImageFile(context, recipeId)
     }
 
     /**

@@ -1,6 +1,7 @@
 package de.hs_rm.recipe_me.ui.recipe.category
 
 import android.content.Context
+import android.net.Uri
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.LayoutInflater
@@ -11,15 +12,18 @@ import androidx.databinding.Observable
 import androidx.databinding.ObservableBoolean
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import de.hs_rm.recipe_me.databinding.RecipeListitemBinding
 import de.hs_rm.recipe_me.declaration.ui.fragments.DeleteRecipeCallbackAdapter
 import de.hs_rm.recipe_me.model.recipe.Recipe
-import de.hs_rm.recipe_me.service.ImageHandler
+import de.hs_rm.recipe_me.service.GlideApp
 
 class RecipeListAdapter(
     private val context: Context,
     private val resource: Int,
     private val objects: List<Recipe>,
+    private val viewModel: RecipeCategoryViewModel,
     private val callbackListener: DeleteRecipeCallbackAdapter
 ) : RecyclerView.Adapter<RecipeListAdapter.RecipeViewHolder>() {
 
@@ -50,7 +54,19 @@ class RecipeListAdapter(
 
         holder.binding.recipeName.text = recipe.name
 
-        ImageHandler.setRecipeImageToView(context, holder.binding.recipeImageView, recipe)
+        val imageFile = viewModel.getRecipeImageFile(recipe.id)
+        if (imageFile != null) {
+            GlideApp.with(context)
+                .setDefaultRequestOptions(
+                    RequestOptions()
+                        .error(recipe.category.drawableResId)
+                )
+                .load(Uri.fromFile(imageFile))
+                .signature(ObjectKey(System.currentTimeMillis())) // use timestamp to prevent problems with caching
+                .into(holder.binding.recipeImageView)
+        } else {
+            holder.binding.recipeImageView.setImageResource(recipe.category.drawableResId)
+        }
 
         // on long click remove other selection by setting itemSelected and set selection to this item
         holder.binding.itemWrapper.setOnLongClickListener {

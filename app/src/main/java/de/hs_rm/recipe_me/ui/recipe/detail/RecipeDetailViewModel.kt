@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
+import de.hs_rm.recipe_me.service.repository.RecipeImageRepository
 import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import de.hs_rm.recipe_me.service.repository.ShoppingListRepository
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 /**
@@ -18,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RecipeDetailViewModel @Inject constructor(
     private val recipeRepository: RecipeRepository,
-    private val shoppingListRepository: ShoppingListRepository
+    private val imageRepository: RecipeImageRepository,
+    private val shoppingListRepository: ShoppingListRepository,
 ) : ViewModel() {
 
     lateinit var recipe: LiveData<RecipeWithRelations>
@@ -82,6 +85,14 @@ class RecipeDetailViewModel @Inject constructor(
                 ingredient.checked = false
             }
         }
+    }
+
+    /**
+     * Returns file of recipeImage that can be loaded into view via Glide.
+     * If no image is available, null will be returned
+     */
+    fun getRecipeImageFile(recipeId: Long): File? {
+        return imageRepository.getRecipeImageFile(recipeId)
     }
 
     companion object {

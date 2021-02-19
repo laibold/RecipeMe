@@ -1,6 +1,7 @@
 package de.hs_rm.recipe_me.ui.recipe.detail
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -17,11 +18,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeDetailFragmentBinding
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
-import de.hs_rm.recipe_me.service.ImageHandler
+import de.hs_rm.recipe_me.service.GlideApp
 
 @AndroidEntryPoint
 class RecipeDetailFragment : Fragment() {
@@ -198,11 +201,19 @@ class RecipeDetailFragment : Fragment() {
      * Set background image
      */
     private fun setImage(recipeWithRelations: RecipeWithRelations) {
-        ImageHandler.setRecipeImageToView(
-            requireContext(),
-            binding.recipeDetailImage,
-            recipeWithRelations.recipe
-        )
+        val imageFile = viewModel.getRecipeImageFile(recipeWithRelations.recipe.id)
+        if (imageFile != null) {
+            GlideApp.with(requireContext())
+                .setDefaultRequestOptions(
+                    RequestOptions()
+                        .error(recipeWithRelations.recipe.category.drawableResId)
+                )
+                .load(Uri.fromFile(imageFile))
+                .signature(ObjectKey(System.currentTimeMillis())) // use timestamp to prevent problems with caching
+                .into(binding.recipeDetailImage)
+        } else {
+            binding.recipeDetailImage.setImageResource(recipeWithRelations.recipe.category.drawableResId)
+        }
     }
 
     /**

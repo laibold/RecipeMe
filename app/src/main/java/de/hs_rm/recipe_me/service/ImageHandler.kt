@@ -3,9 +3,7 @@ package de.hs_rm.recipe_me.service
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import android.widget.ImageView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import java.io.File
@@ -19,7 +17,6 @@ object ImageHandler {
     private const val PROFILE_PATH = "/profile"
 
     private const val RECIPE_IMAGE_NAME = "/recipe_image.jpg"
-    private const val COOKING_STEP_PATTERN = "/step_%s.jpg"
     private const val PROFILE_IMAGE_NAME = "/profile_image.jpg"
 
     private const val JPEG_QUALITY = 50
@@ -82,14 +79,6 @@ object ImageHandler {
     }
 
     /**
-     * Load recipe image and set it to imageView.
-     * If no custom image is available, the image of the recipe category will be used.
-     */
-    fun setRecipeImageToView(context: Context, imageView: ImageView, recipe: Recipe) {
-        ImageLoader().setRecipeImageToView(context, imageView, recipe)
-    }
-
-    /**
      * Returns image as Bitmap from given Uri
      * Must be called from Dispatchers.IO coroutine scope
      */
@@ -110,6 +99,15 @@ object ImageHandler {
                 RECIPE_IMAGE_WIDTH,
                 RECIPE_IMAGE_HEIGHT
             )
+        } else {
+            null
+        }
+    }
+
+    fun getRecipeImageFile(context: Context, recipeId: Long): File? {
+        val file = File(getRecipeDirPath(context, recipeId) + RECIPE_IMAGE_NAME)
+        return if (file.exists()) {
+            file
         } else {
             null
         }
@@ -158,15 +156,6 @@ object ImageHandler {
     }
 
     /**
-     * Returns absolute path to the image of the CookingStep of given recipe
-     */
-    fun getCookingStepPath(context: Context, recipeId: Long, cookingStepId: Long): String {
-        return getRecipeDirPath(context, recipeId) +
-                "/$cookingStepId" +
-                COOKING_STEP_PATTERN.format(cookingStepId)
-    }
-
-    /**
      * Returns absolute path to the directory where images of the given recipe are stored
      */
     private fun getRecipeDirPath(context: Context, id: Long): String {
@@ -188,30 +177,10 @@ object ImageHandler {
     }
 
     /**
-     * Private class to create an object instance for functions setRecipeImageToView() and getImageFromUri().
+     * Private class to create an object instance for function getImageFromUri().
      * Glide seems to have problems with loading images in a static/singleton based method.
      */
     private class ImageLoader {
-
-        /**
-         * Load recipe image and set it to imageView.
-         * If no custom image is available, the image of the recipe category will be used.
-         */
-        fun setRecipeImageToView(context: Context, imageView: ImageView, recipe: Recipe) {
-            val file = File(getRecipeDirPath(context, recipe.id) + RECIPE_IMAGE_NAME)
-            if (file.exists()) {
-                GlideApp.with(context)
-                    .setDefaultRequestOptions(
-                        RequestOptions()
-                            .error(recipe.category.drawableResId)
-                    )
-                    .load(Uri.fromFile(file))
-                    .signature(ObjectKey(System.currentTimeMillis())) // use timestamp to prevent problems with caching
-                    .into(imageView)
-            } else {
-                imageView.setImageResource(recipe.category.drawableResId)
-            }
-        }
 
         /**
          * Load recipe image to bitmap, return error image if image doesn't exist.

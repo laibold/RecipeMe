@@ -1,5 +1,6 @@
 package de.hs_rm.recipe_me.ui.recipe.home
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -9,12 +10,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeHomeFragmentBinding
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
-import de.hs_rm.recipe_me.service.ImageHandler
+import de.hs_rm.recipe_me.service.GlideApp
 
 @AndroidEntryPoint
 class RecipeHomeFragment : Fragment() {
@@ -84,7 +87,19 @@ class RecipeHomeFragment : Fragment() {
         } else {
             binding.recipeOfTheDayName.text = recipe.name
 
-            ImageHandler.setRecipeImageToView(requireContext(), binding.recipeOfTheDayImage, recipe)
+            val imageFile = viewModel.getRecipeImageFile(recipe.id)
+            if (imageFile != null) {
+                GlideApp.with(requireContext())
+                    .setDefaultRequestOptions(
+                        RequestOptions()
+                            .error(recipe.category.drawableResId)
+                    )
+                    .load(Uri.fromFile(imageFile))
+                    .signature(ObjectKey(System.currentTimeMillis())) // use timestamp to prevent problems with caching
+                    .into(binding.recipeOfTheDayImage)
+            } else {
+                binding.recipeOfTheDayImage.setImageResource(recipe.category.drawableResId)
+            }
 
             // Touch event gets dispatched from ScrollViews dummy view
             binding.recipeOfTheDayButton.setOnTouchListener { view, event ->
