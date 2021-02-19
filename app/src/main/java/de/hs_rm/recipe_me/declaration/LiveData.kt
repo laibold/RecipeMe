@@ -22,7 +22,6 @@ fun <T> MutableLiveData<MutableList<T>>.setValueAt(index: Int, item: T) {
     val items = this.value as ArrayList
     items[index] = item
     this.notifyObservers()
-//    this.postValue(items) //TODO setValue?
 }
 
 /**

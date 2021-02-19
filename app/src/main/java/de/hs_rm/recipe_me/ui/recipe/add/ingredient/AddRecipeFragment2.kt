@@ -31,7 +31,8 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    val direction = AddRecipeFragment2Directions.toAddRecipeNavGraph(clearValues = false)
+                    val direction =
+                        AddRecipeFragment2Directions.toAddRecipeNavGraph(clearValues = false)
                     findNavController().navigate(direction)
                 }
             }
@@ -57,6 +58,11 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
             adapter = viewModel.ingredients.value?.let { list -> ingredientListAdapter(list) }
             binding.ingredientsListView.adapter = adapter
             adapter?.notifyDataSetChanged()
+
+            // Scroll to bottom
+            binding.ingredientsListView.post {
+                binding.ingredientsListView.setSelection(adapter!!.count - 1)
+            }
         })
 
         binding.ingredientsListView.emptyView = binding.addHintText

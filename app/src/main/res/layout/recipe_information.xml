@@ -29,7 +29,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_top"
-                android:gravity="center_vertical"
                 android:includeFontPadding="false"
                 android:text="@string/ingredients"
                 app:layout_constraintStart_toStartOf="parent"
@@ -67,8 +66,7 @@
                     style="@style/small_circle_button"
                     android:layout_marginVertical="@dimen/small_space"
                     android:contentDescription="@string/add_to_shopping_list"
-                    android:paddingBottom="2dp"
-                    android:src="@drawable/ic_clipboards"
+                    android:src="@drawable/ic_baseline_shopping_basket_24"
                     android:tooltipText="@string/add_to_shopping_list"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -109,11 +107,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_below_headline_1"
-                android:gravity="center_vertical"
                 android:text="@string/steps"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/shopping_list_button_wrapper" />
-            <!--TODO why center_vertical?-->
 
             <TextView
                 android:id="@+id/steps"

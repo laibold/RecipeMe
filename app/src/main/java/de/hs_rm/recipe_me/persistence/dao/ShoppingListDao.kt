@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.persistence
+package de.hs_rm.recipe_me.persistence.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -16,12 +16,6 @@ interface ShoppingListDao {
 
     @Update
     suspend fun update(item: ShoppingListItem)
-
-    @Delete
-    suspend fun delete(item: ShoppingListItem)
-
-    @Query("DELETE FROM ShoppingListItem WHERE id = :id")
-    suspend fun delete(id: Long)
 
     @Query("DELETE FROM ShoppingListItem WHERE checked = 1")
     suspend fun deleteChecked()

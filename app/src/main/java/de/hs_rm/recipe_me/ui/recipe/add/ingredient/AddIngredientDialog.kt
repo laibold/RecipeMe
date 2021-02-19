@@ -19,6 +19,8 @@ import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.service.Formatter
 import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
+import java.text.DecimalFormatSymbols
+import java.util.*
 
 class AddIngredientDialog constructor(
     private val activity: Activity,
@@ -61,11 +63,11 @@ class AddIngredientDialog constructor(
                 binding.ingredientUnitSpinner.setSelection(ingredient.unit.ordinal)
             }
 
-            binding.addButton.text = activity.resources.getString(R.string.update)
+            binding.addButton.text = activity.getString(R.string.update)
             binding.addButton.setOnClickListener { updateIngredientAndClose() }
         } else {
             // Add
-            binding.addButton.text = activity.resources.getString(R.string.add)
+            binding.addButton.text = activity.getString(R.string.add)
             binding.addButton.setOnClickListener { addIngredientAndClose() }
         }
 
@@ -87,19 +89,23 @@ class AddIngredientDialog constructor(
     /**
      * Format content of amount field and check for invalid input,
      * fill unit spinner (singular/plural) if input is valid
+     * Ignore formatting if locale decimal separator is '.' and editable is '.'
      */
     private fun afterQuantityTextChanged(editable: Editable?) {
         // spinner will be reset by refill, so save and set selected item here
         val selectedSpinnerItemId = binding.ingredientUnitSpinner.selectedItemId
 
-        if (editable != null && editable.isNotBlank()) { //FIXME
-            try {
-                // allow comma as separator
-                val amount = editable.toString().replace(',', '.').toDouble()
-                setUnitAdapter(amount)
-            } catch (e: NumberFormatException) {
-                // clear if editable cannot be parsed to double
-                editable.clear()
+        if (editable != null && editable.isNotBlank()) {
+            val separator = DecimalFormatSymbols(Locale.getDefault()).decimalSeparator
+            if (!(separator == '.' && editable.toString() == ".")) {
+                try {
+                    // allow comma as separator
+                    val amount = editable.toString().replace(',', '.').toDouble()
+                    setUnitAdapter(amount)
+                } catch (e: NumberFormatException) {
+                    // clear if editable cannot be parsed to double
+                    editable.clear()
+                }
             }
         }
 
@@ -120,8 +126,7 @@ class AddIngredientDialog constructor(
         if (success) {
             dismiss()
         } else {
-            binding.ingredientNameField.error =
-                activity.resources.getString(R.string.err_enter_name)
+            binding.ingredientNameField.error = activity.getString(R.string.err_enter_name)
         }
     }
 
@@ -139,8 +144,7 @@ class AddIngredientDialog constructor(
         if (success) {
             dismiss()
         } else {
-            binding.ingredientNameField.error =
-                activity.resources.getString(R.string.err_enter_name)
+            binding.ingredientNameField.error = activity.getString(R.string.err_enter_name)
         }
     }
 

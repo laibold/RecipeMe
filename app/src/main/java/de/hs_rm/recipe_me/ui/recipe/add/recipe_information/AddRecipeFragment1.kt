@@ -1,32 +1,37 @@
 package de.hs_rm.recipe_me.ui.recipe.add.recipe_information
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.kroegerama.imgpicker.BottomSheetImagePicker
+import com.kroegerama.imgpicker.ButtonType
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddRecipeFragment1Binding
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
+import de.hs_rm.recipe_me.service.ImageHandler
 import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
 
-
 @AndroidEntryPoint
-class AddRecipeFragment1 : Fragment() {
+class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedListener {
 
     private lateinit var binding: AddRecipeFragment1Binding
     private val args: AddRecipeFragment1Args by navArgs()
     private val viewModel: AddRecipeViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
@@ -37,9 +42,8 @@ class AddRecipeFragment1 : Fragment() {
         )
 
         // Pre-set category in spinner depending on navigation source, default none
-        viewModel.recipeCategory = args.recipeCategory
+        viewModel.setCategory(args.recipeCategory)
         binding.recipeCategorySpinner.adapter = spinnerAdapter()
-        binding.recipeCategorySpinner.setSelection(viewModel.recipeCategory.ordinal)
 
         if (args.clearValues) {
             // when user navigates to fragment to create or edit a recipe
@@ -47,6 +51,7 @@ class AddRecipeFragment1 : Fragment() {
         }
 
         // observe recipe in viewModel except user is navigating to fragment to create a new recipe
+        // means: user is editing a recipe or is moving back from fragment 2
         if (!(args.clearValues && args.recipeId == Recipe.DEFAULT_ID)) {
             viewModel.recipe.observe(viewLifecycleOwner, { recipe ->
                 if (recipe != null) {
@@ -61,15 +66,56 @@ class AddRecipeFragment1 : Fragment() {
             })
         }
 
+        // Observe category and set spinner selection and image if no custom image has been set
+        viewModel.category.observe(viewLifecycleOwner, { category ->
+            val ordinal = category.ordinal
+            if (binding.recipeCategorySpinner.selectedItemPosition != ordinal) {
+                binding.recipeCategorySpinner.setSelection(ordinal)
+            }
+
+            setRecipeImageToView(category)
+        })
+
+        viewModel.recipeImage.observe(viewLifecycleOwner, { image ->
+            if (image != null) {
+                binding.recipeImage.setImageBitmap(image)
+            }
+        })
+
+        // On selection changed in spinner set category in viewModel
+        binding.recipeCategorySpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    p: AdapterView<*>?, v: View?, position: Int, i: Long
+                ) {
+                    val category = RecipeCategory.values()[position]
+                    viewModel.setCategory(category)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+
         if (args.recipeId != Recipe.DEFAULT_ID) {
             binding.header.headlineText = getString(R.string.edit_recipe)
         } else {
             binding.header.headlineText = getString(R.string.new_recipe)
         }
 
+        binding.changeImageButton.setOnClickListener { getImage() }
+
         binding.nextButton.setOnClickListener { onNext() }
 
         return binding.root
+    }
+
+    /**
+     * Set bitmap to imageView.
+     * If no custom image is available, the image of the recipe category will be used.
+     */
+    private fun setRecipeImageToView(category: RecipeCategory) {
+        if (viewModel.recipeImage.value == null) {
+            binding.recipeImage.setImageResource(category.drawableResId)
+        }
     }
 
     /**
@@ -105,15 +151,43 @@ class AddRecipeFragment1 : Fragment() {
     private fun validate(): Boolean {
         val nameValid = viewModel.validateName(binding.recipeNameField.text)
         if (nameValid != 0) {
-            binding.recipeNameField.error = requireContext().resources.getString(nameValid)
+            binding.recipeNameField.error = getString(nameValid)
         }
 
         val servingsValid = viewModel.validateServings(binding.recipeServingsField.text)
         if (servingsValid != 0) {
-            binding.recipeServingsField.error = requireContext().resources.getString(servingsValid)
+            binding.recipeServingsField.error = getString(servingsValid)
         }
 
         return nameValid == 0 && servingsValid == 0
     }
 
+    /**
+     * Callback when Image is selected in BottomSheetListener
+     */
+    override fun onImagesSelected(uris: List<Uri>, tag: String?) {
+        if (uris.isNotEmpty()) {
+            val uri = uris[0]
+
+            viewModel.setPickedRecipeImage(
+                uri,
+                ImageHandler.RECIPE_IMAGE_WIDTH,
+                ImageHandler.RECIPE_IMAGE_HEIGHT
+            )
+        }
+    }
+
+    /**
+     * Show BottomSheetImagePicker
+     */
+    private fun getImage() {
+        BottomSheetImagePicker.Builder(getString(R.string.file_provider))
+            .cameraButton(ButtonType.Button)            //style of the camera link (Button in header, Image tile, None)
+            .galleryButton(ButtonType.Button)           //style of the gallery link
+            .singleSelectTitle(R.string.pick_single)    //header text
+            .peekHeight(R.dimen.peekHeight)                          //peek height of the bottom sheet
+            .columnSize(R.dimen.columnSize)                           //size of the columns (will be changed a little to fit)
+            .requestTag("single")            //tag can be used if multiple pickers are used
+            .show(childFragmentManager)
+    }
 }

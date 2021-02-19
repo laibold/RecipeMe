@@ -26,7 +26,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/hummus_default" />
+            tools:src="@drawable/category_baked_goods" />
 
         <View
             android:layout_width="match_parent"
@@ -43,22 +43,17 @@
             android:layout_height="@dimen/scroll_view_offset_low"
             app:layout_constraintTop_toTopOf="parent">
 
-            <!--TODO create class-->
             <ImageButton
                 android:id="@+id/edit_recipe_button"
-                android:layout_width="@dimen/small_button_size"
-                android:layout_height="@dimen/small_button_size"
-                android:layout_marginEnd="5dp"
-                android:background="@null"
-                android:contentDescription="@string/delete"
-                android:padding="@dimen/small_button_padding_big_icon"
-                android:scaleType="centerCrop"
+                style="@style/header_button"
+                android:contentDescription="@string/edit_recipe"
                 android:src="@drawable/ic_baseline_edit_24"
                 android:tint="@color/white"
+                android:tooltipText="@string/edit_recipe"
+                app:layout_constraintBottom_toBottomOf="@id/recipe_detail_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/recipe_detail_name"
-                app:layout_constraintTop_toTopOf="@id/recipe_detail_name"
-                app:layout_constraintBottom_toBottomOf="@id/recipe_detail_name" />
+                app:layout_constraintTop_toTopOf="@id/recipe_detail_name" />
 
             <include
                 android:id="@+id/recipe_detail_name"
@@ -77,6 +72,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/desc_cook_recipe"
             android:src="@drawable/ic_chef_hat"
+            android:tooltipText="@string/desc_cook_recipe"
             app:backgroundTint="@color/dark_red"
             app:borderWidth="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

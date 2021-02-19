@@ -1,6 +1,7 @@
 package de.hs_rm.recipe_me.ui.recipe.detail
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -17,10 +18,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeDetailFragmentBinding
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
+import de.hs_rm.recipe_me.service.GlideApp
 
 @AndroidEntryPoint
 class RecipeDetailFragment : Fragment() {
@@ -46,7 +50,7 @@ class RecipeDetailFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = DataBindingUtil.inflate(
             inflater,
@@ -197,7 +201,19 @@ class RecipeDetailFragment : Fragment() {
      * Set background image
      */
     private fun setImage(recipeWithRelations: RecipeWithRelations) {
-        binding.recipeDetailImage.setImageResource(recipeWithRelations.recipe.category.drawableResId)
+        val imageFile = viewModel.getRecipeImageFile(recipeWithRelations.recipe.id)
+        if (imageFile != null) {
+            GlideApp.with(requireContext())
+                .setDefaultRequestOptions(
+                    RequestOptions()
+                        .error(recipeWithRelations.recipe.category.drawableResId)
+                )
+                .load(Uri.fromFile(imageFile))
+                .signature(ObjectKey(System.currentTimeMillis())) // use timestamp to prevent problems with caching
+                .into(binding.recipeDetailImage)
+        } else {
+            binding.recipeDetailImage.setImageResource(recipeWithRelations.recipe.category.drawableResId)
+        }
     }
 
     /**
@@ -239,11 +255,9 @@ class RecipeDetailFragment : Fragment() {
         binding.recipeInfo.servingsElement.servingsSize.text = servings.toString()
 
         if (servings > 1)
-            binding.recipeInfo.servingsElement.servingsText.text =
-                requireContext().resources.getString(R.string.servings)
+            binding.recipeInfo.servingsElement.servingsText.text = getString(R.string.servings)
         else
-            binding.recipeInfo.servingsElement.servingsText.text =
-                requireContext().resources.getString(R.string.serving)
+            binding.recipeInfo.servingsElement.servingsText.text = getString(R.string.serving)
 
         if (adapter != null) {
             adapter!!.multiplier = viewModel.getServingsMultiplier()
@@ -255,7 +269,7 @@ class RecipeDetailFragment : Fragment() {
      * Zooms into image when ScrollView gets moved upwards and the other way round
      */
     private fun onScroll(scrollY: Int) {
-        if (scrollY < 1500) { // TODO check on tablet
+        if (scrollY < 1600) {
             val scaleVal = (1 + (scrollY.toFloat() / 9000))
             binding.recipeDetailImage.scaleX = scaleVal
             binding.recipeDetailImage.scaleY = scaleVal

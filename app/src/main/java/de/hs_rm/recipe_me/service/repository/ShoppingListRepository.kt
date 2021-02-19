@@ -1,9 +1,9 @@
-package de.hs_rm.recipe_me.service
+package de.hs_rm.recipe_me.service.repository
 
 import androidx.lifecycle.LiveData
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
-import de.hs_rm.recipe_me.persistence.ShoppingListDao
+import de.hs_rm.recipe_me.persistence.dao.ShoppingListDao
 import javax.inject.Inject
 
 /**
@@ -47,13 +47,6 @@ class ShoppingListRepository @Inject constructor(
      */
     suspend fun updateItem(item: ShoppingListItem) {
         shoppingListDao.update(item)
-    }
-
-    /**
-     * Delete item by given id
-     */
-    suspend fun deleteItemById(id: Long) {
-        shoppingListDao.delete(id)
     }
 
     /**

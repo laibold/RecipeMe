@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.persistence
+package de.hs_rm.recipe_me.persistence.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -60,9 +60,6 @@ interface RecipeDao {
     @Query("SELECT * FROM Recipe WHERE id = :id")
     suspend fun getRecipeById(id: Long): Recipe
 
-    @Query("SELECT * FROM Recipe WHERE id = :id")
-    fun getRecipeByIdAsLiveData(id: Long): LiveData<Recipe>
-
     @Query("SELECT COUNT(*) FROM Recipe")
     fun getRecipeCountAsLiveData(): LiveData<Int>
 
@@ -83,4 +80,12 @@ interface RecipeDao {
         ingredientId: Long = Ingredient.DEFAULT_ID,
         cookingStepId: Long = CookingStep.DEFAULT_ID
     )
+
+    @Query("DELETE FROM CookingStepIngredientCrossRef" +
+            " WHERE ingredientId" +
+            " IN (SELECT ingredientId FROM Ingredient WHERE recipeId = :recipeId)" +
+            " OR cookingStepId" +
+            " IN (SELECT cookingStepId FROM CookingStep WHERE recipeId = :recipeId)")
+    suspend fun deleteCookingStepIngredientCrossRefsByRecipeId(recipeId: Long)
+
 }

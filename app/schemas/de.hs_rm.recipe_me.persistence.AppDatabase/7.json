@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "349963ce88473c4c7971561fe93ed73a",
+    "identityHash": "3c646aae08902e2c6138bb3a484aff4f",
     "entities": [
       {
         "tableName": "Recipe",
@@ -263,23 +263,14 @@
           ],
           "autoGenerate": false
         },
-        "indices": [
-          {
-            "name": "index_CookingStepIngredientCrossRef_ingredientId",
-            "unique": false,
-            "columnNames": [
-              "ingredientId"
-            ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_CookingStepIngredientCrossRef_ingredientId` ON `${TABLE_NAME}` (`ingredientId`)"
-          }
-        ],
+        "indices": [],
         "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '349963ce88473c4c7971561fe93ed73a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3c646aae08902e2c6138bb3a484aff4f')"
     ]
   }
 }

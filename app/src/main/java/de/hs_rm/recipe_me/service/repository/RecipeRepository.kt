@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.service
+package de.hs_rm.recipe_me.service.repository
 
 import androidx.lifecycle.LiveData
 import de.hs_rm.recipe_me.model.recipe.CookingStep
@@ -7,12 +7,14 @@ import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
-import de.hs_rm.recipe_me.persistence.RecipeDao
+import de.hs_rm.recipe_me.persistence.dao.RecipeDao
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Single Source of Truth for [Recipe]. Use it with Dependency Injection
  */
+@Singleton
 class RecipeRepository @Inject constructor(
     private val recipeDao: RecipeDao
 ) {
@@ -61,6 +63,9 @@ class RecipeRepository @Inject constructor(
         }
     }
 
+    /**
+     * Insert CookingStepIngredientCrossRef
+     */
     suspend fun insert(cookingStepIngredientCrossRef: CookingStepIngredientCrossRef) {
         recipeDao.insert(cookingStepIngredientCrossRef)
     }
@@ -91,13 +96,6 @@ class RecipeRepository @Inject constructor(
      */
     suspend fun getRecipeById(id: Long): Recipe {
         return recipeDao.getRecipeById(id)
-    }
-
-    /**
-     * Get a Recipe by its id
-     */
-    fun getRecipeByIdAsLiveData(id: Long): LiveData<Recipe> {
-        return recipeDao.getRecipeByIdAsLiveData(id)
     }
 
     /**
@@ -156,7 +154,7 @@ class RecipeRepository @Inject constructor(
     }
 
     /**
-     * Delete recipe and it's belonging Ingredients and CookingSteps
+     * Delete recipe and its belonging Ingredients and CookingSteps
      */
     suspend fun deleteRecipeAndRelations(recipe: Recipe) {
         deleteIngredientsAndCookingSteps(recipe.id)
@@ -167,6 +165,7 @@ class RecipeRepository @Inject constructor(
      * Delete belonging Ingredients and CookingSteps with given recipeId
      */
     suspend fun deleteIngredientsAndCookingSteps(recipeId: Long) {
+        recipeDao.deleteCookingStepIngredientCrossRefsByRecipeId(recipeId)
         recipeDao.deleteIngredients(recipeId)
         recipeDao.deleteCookingSteps(recipeId)
     }
@@ -180,5 +179,4 @@ class RecipeRepository @Inject constructor(
     ) {
         recipeDao.deleteCookingStepIngredientCrossRefs(ingredientId, cookingStepId)
     }
-
 }

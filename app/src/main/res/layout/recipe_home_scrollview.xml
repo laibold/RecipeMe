@@ -21,6 +21,7 @@
             android:divider="@android:color/transparent"
             android:dividerHeight="@dimen/divider_big"
             android:paddingTop="@dimen/divider_big"
+            android:paddingBottom="@dimen/divider_big"
             android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
