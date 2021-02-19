@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.BuildConfig
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.ProfileFragmentBinding
+import de.hs_rm.recipe_me.model.user.User
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -34,17 +34,18 @@ class ProfileFragment : Fragment() {
         )
 
         viewModel.loadRecipeTotal()
+        viewModel.loadUser()
 
         viewModel.total.observe(viewLifecycleOwner, {
             binding.profileQuantityRecipesText.text = getRecipeTotalText(it)
         })
 
-        binding.changeProfilePicButton.setOnClickListener {
-            Toast.makeText(
-                context,
-                "Hier kannst du bald dein Profilbild ändern",
-                Toast.LENGTH_LONG
-            ).show()
+        viewModel.user.observe(viewLifecycleOwner, { user ->
+            binding.profileGreeting.text = getUserGreeting(user)
+        })
+
+        binding.editProfileButton.setOnClickListener {
+            editProfileDialog().show()
         }
 
         binding.toSiteNoticeElement.setOnClickListener {
@@ -67,5 +68,22 @@ class ProfileFragment : Fragment() {
         val firstPart = getString(R.string.recipe_total_text_1)
         val mapStr = getString(R.string.recipe_total_text_map)
         return viewModel.getRecipeTotalText(firstPart, mapStr, total)
+    }
+
+    /**
+     * Create edit dialog
+     */
+    private fun editProfileDialog(): EditProfileDialog {
+        return EditProfileDialog(requireActivity(), viewModel)
+    }
+
+    /**
+     * @return Greeting with name of the user or default greeting
+     */
+    private fun getUserGreeting(user: User?): String {
+        if (user == null) {
+            return getString(R.string.profile_greeting)
+        }
+        return getString(R.string.profile_greeting_name).format(user.name)
     }
 }

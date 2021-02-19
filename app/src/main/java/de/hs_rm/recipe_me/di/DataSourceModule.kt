@@ -6,10 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import de.hs_rm.recipe_me.persistence.AppDatabase
-import de.hs_rm.recipe_me.persistence.RecipeDao
-import de.hs_rm.recipe_me.persistence.RecipeOfTheDayDao
-import de.hs_rm.recipe_me.persistence.ShoppingListDao
+import de.hs_rm.recipe_me.persistence.*
 import javax.inject.Singleton
 
 /**
@@ -38,6 +35,11 @@ object DataSourceModule {
     @Provides
     fun provideRecipeOfTheDayDao(appDatabase: AppDatabase): RecipeOfTheDayDao {
         return appDatabase.recipeOfTheDayDao()
+    }
+
+    @Provides
+    fun providesUserDao(appDatabase: AppDatabase): UserDao {
+        return appDatabase.userDao()
     }
 
 }

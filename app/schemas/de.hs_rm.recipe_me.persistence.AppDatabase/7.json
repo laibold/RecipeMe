@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "dd0e9e5aec2435be94b78a529f6ca3e2",
+    "identityHash": "3c646aae08902e2c6138bb3a484aff4f",
     "entities": [
       {
         "tableName": "Recipe",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `servings` INTEGER NOT NULL, `category` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `servings` INTEGER NOT NULL, `category` INTEGER NOT NULL, `imageUri` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -30,6 +30,12 @@
             "fieldPath": "category",
             "columnName": "category",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUri",
+            "columnName": "imageUri",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -88,7 +94,7 @@
       },
       {
         "tableName": "CookingStep",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cookingStepId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `recipeId` INTEGER NOT NULL, `text` TEXT NOT NULL, `time` INTEGER NOT NULL, `timeUnit` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cookingStepId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `recipeId` INTEGER NOT NULL, `imageUri` TEXT NOT NULL, `text` TEXT NOT NULL, `time` INTEGER NOT NULL, `timeUnit` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "cookingStepId",
@@ -100,6 +106,12 @@
             "fieldPath": "recipeId",
             "columnName": "recipeId",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUri",
+            "columnName": "imageUri",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -251,23 +263,14 @@
           ],
           "autoGenerate": false
         },
-        "indices": [
-          {
-            "name": "index_CookingStepIngredientCrossRef_ingredientId",
-            "unique": false,
-            "columnNames": [
-              "ingredientId"
-            ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_CookingStepIngredientCrossRef_ingredientId` ON `${TABLE_NAME}` (`ingredientId`)"
-          }
-        ],
+        "indices": [],
         "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dd0e9e5aec2435be94b78a529f6ca3e2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3c646aae08902e2c6138bb3a484aff4f')"
     ]
   }
 }

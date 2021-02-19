@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
+import de.hs_rm.recipe_me.model.user.User
+import de.hs_rm.recipe_me.service.UserRepository
 import de.hs_rm.recipe_me.service.repository.ShoppingListRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,16 +17,18 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ShoppingListViewModel @Inject constructor(
-    private val repository: ShoppingListRepository
+    private val shoppingListRepository: ShoppingListRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     lateinit var shoppingListItems: LiveData<List<ShoppingListItem>>
+    lateinit var user: LiveData<User?>
 
     /**
      * Load items from repository and set them to shoppingListItems which can be observed
      */
     fun loadShoppingListItems() {
-        shoppingListItems = repository.getAllItems()
+        shoppingListItems = shoppingListRepository.getAllItems()
     }
 
     /**
@@ -32,7 +36,7 @@ class ShoppingListViewModel @Inject constructor(
      */
     private fun updateItem(item: ShoppingListItem) {
         viewModelScope.launch {
-            repository.updateItem(item)
+            shoppingListRepository.updateItem(item)
         }
     }
 
@@ -41,7 +45,7 @@ class ShoppingListViewModel @Inject constructor(
      */
     fun addShoppingListItem(name: Editable) {
         viewModelScope.launch {
-            repository.addFromString(name.toString().trim())
+            shoppingListRepository.addFromString(name.toString().trim())
         }
     }
 
@@ -61,8 +65,15 @@ class ShoppingListViewModel @Inject constructor(
      */
     fun clearCheckedItems() {
         viewModelScope.launch {
-            repository.clearCheckedItems()
+            shoppingListRepository.clearCheckedItems()
         }
+    }
+
+    /**
+     * Load user from userRepository and save it to ViewModel
+     */
+    fun loadUser() {
+        user = userRepository.getUser()
     }
 
 }

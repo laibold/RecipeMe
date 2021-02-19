@@ -83,7 +83,6 @@
     <string name="new_ingredient">Neue Zutat</string>
     <string name="remove_checked_items">Markierte Elemente entfernen</string>
     <string name="err_enter_text">Text eingeben</string>
-    <string name="shopping_list_export_headline">Sieh, was auf meiner RecipeMe-Einkaufsliste steht:</string>
     <string name="store_link">http://play.google.com/store/apps/details?id=de.hs_rm.recipe_me</string>
     <string name="timer">Timer</string>
     <string name="start_timer">Timer starten</string>
@@ -118,4 +117,9 @@
     <string name="cancel_reset">Abbrechen und zurücksetzen</string>
     <string name="edit_assigned_ingredients">Zugehörige Zutaten bearbeiten</string>
     <string name="related_ingredients">Zugehörige Zutaten</string>
+    <string name="your_name">Dein Name</string>
+    <string name="shopping_list_export_headline">Sieh, was auf %s RecipeMe-Einkaufsliste steht:\n\n</string>
+    <string name="my">meiner</string>
+    <string name="profile_greeting_name">Hallo, %s!</string>
+    <string name="profile_picture">Profilbild</string>
 </resources>

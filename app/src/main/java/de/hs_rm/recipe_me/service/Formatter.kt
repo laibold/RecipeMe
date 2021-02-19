@@ -72,4 +72,16 @@ object Formatter {
         return stringList.joinToString(", ")
     }
 
+    /**
+     * Add 's' or apostrophe to end of name
+     */
+    fun formatNameToGenitive(name: String): String {
+        if (name.endsWith("s", true) ||
+            name.endsWith("x", true) ||
+            name.endsWith("ß", true)) {
+            return "$name'"
+        }
+        return "${name}s"
+    }
+
 }
