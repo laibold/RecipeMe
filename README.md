@@ -1,11 +1,14 @@
 # RecipeMe
 Android app for organizing recipes
 
-<p style="float:left">
-  <img src="https://user-images.githubusercontent.com/39668950/105490666-65b30880-5cb5-11eb-8e51-6f51fad94570.png" width="200" />
-  <img src="https://user-images.githubusercontent.com/39668950/105492099-af045780-5cb7-11eb-9faf-42911ee1c121.png" width="200" />
-  <img src="https://user-images.githubusercontent.com/39668950/105490687-6ba8e980-5cb5-11eb-8c3a-c618a3d59769.png" width="200" /> 
+<p float="left">
+  <img src="https://user-images.githubusercontent.com/39668950/108569379-17bd0f00-730c-11eb-96a4-94d96135cd92.png" width="200" /> 
+  <img src="https://user-images.githubusercontent.com/39668950/108569373-15f34b80-730c-11eb-9dc1-b886ce664c3e.png" width="200" />
+  <img src="https://user-images.githubusercontent.com/39668950/108569377-17247880-730c-11eb-97de-0a8449111499.png" width="200" />
+  <img src="https://user-images.githubusercontent.com/39668950/108569389-1a1f6900-730c-11eb-80b2-f1ceed0ed23a.png" width="200" /> 
+  <img src="https://user-images.githubusercontent.com/39668950/108569378-17bd0f00-730c-11eb-95a2-01eb53fd815e.png" width="200" />
 </p>
+<br/>
 
 #### [Get it on PlayStore](https://play.google.com/store/apps/details?id=de.hs_rm.recipe_me)
 
@@ -15,7 +18,13 @@ Android app for organizing recipes
 * Start cooking step-by-step with timer function
 * Add ingredients from recipes to the shopping list and share them
 * See your cooking progress in the profile view
+* Get a daily inspiration by your recipe of the day
 
-### Coming soon
-* Get your recipe of the day
-* Design update for adding recipes
+### Used libraries
+
+<a href="https://developer.android.com/jetpack/androidx/releases/room">💾 Android Room</a><br/>
+<a href="https://developer.android.com/guide/navigation/navigation-getting-started">🧭 Android Navigation component </a><br/>
+<a href="https://dagger.dev/hilt/">💉 Dagger Hilt</a><br/>
+<a href="https://github.com/bumptech/glide">🖼️️ Glide </a><br/>
+<a href="https://github.com/kroegerama/bottomsheet-imagepicker">📷 BottomSheet Image Picker for Android</a><br/>
+<a href="https://github.com/intuit/sdp">📏 SDP - a scalable size unit</a>
