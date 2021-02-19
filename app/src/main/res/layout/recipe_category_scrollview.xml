@@ -43,7 +43,6 @@
                 android:paddingStart="@dimen/outline_horizontal"
                 android:paddingEnd="100dp"
                 android:text="@string/add_recipe_text"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:visibility="visible" />

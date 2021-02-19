@@ -27,7 +27,6 @@
                     android:layout_marginTop="@dimen/default_space"
                     android:paddingEnd="50dp"
                     android:text="@string/add_items_text"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="RtlSymmetry"
