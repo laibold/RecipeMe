@@ -11,6 +11,7 @@ import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
+import de.hs_rm.recipe_me.model.user.User
 
 /**
  * Room Database for this app. Use Daos with Dependency Injection
@@ -22,15 +23,17 @@ import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
         CookingStep::class,
         ShoppingListItem::class,
         RecipeOfTheDay::class,
-        CookingStepIngredientCrossRef::class
+        CookingStepIngredientCrossRef::class,
+        User::class
     ],
-    version = 7
+    version = 9
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun recipeDao(): RecipeDao
     abstract fun shoppingListDao(): ShoppingListDao
     abstract fun recipeOfTheDayDao(): RecipeOfTheDayDao
+    abstract fun userDao(): UserDao
 
     companion object {
         private const val DATABASE_NAME = "test_db"
@@ -54,7 +57,9 @@ abstract class AppDatabase : RoomDatabase() {
                 .addMigrations(
                     AppMigration.MIGRATION_4_5,
                     AppMigration.MIGRATION_5_6,
-                    AppMigration.MIGRATION_6_7
+                    AppMigration.MIGRATION_6_7,
+                    AppMigration.MIGRATION_7_8,
+                    AppMigration.MIGRATION_8_9
                 )
                 .build()
         }

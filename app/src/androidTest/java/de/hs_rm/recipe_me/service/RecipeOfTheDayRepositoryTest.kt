@@ -10,6 +10,8 @@ import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.persistence.RecipeDao
 import de.hs_rm.recipe_me.persistence.RecipeOfTheDayDao
+import de.hs_rm.recipe_me.service.repository.RecipeOfTheDayRepository
+import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Before
@@ -106,7 +108,7 @@ class RecipeOfTheDayRepositoryTest {
 
     /**
      * Test that when there are 2 recipes in the database, the rotd get's switched every time
-     * the current rotd gets invalid (when it's date doesn't match today's one).
+     * the current rotd gets invalid (when its date doesn't match today's one).
      */
     @Test
     fun switchRotdSuccessful() {

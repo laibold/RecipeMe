@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/round_corners">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="30dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/edit_profile_form_wrapper"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.85">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profile_image_card_view"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                app:cardCornerRadius="70dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:contentDescription="@string/profile_picture"
+                    android:src="@drawable/profile_picture_default" />
+
+            </androidx.cardview.widget.CardView>
+
+            <ImageButton
+                android:id="@+id/change_profile_pic_button"
+                style="@style/small_circle_button"
+                android:layout_marginEnd="3dp"
+                android:layout_marginBottom="3dp"
+                android:contentDescription="@string/change_profile_picture"
+                android:src="@drawable/ic_baseline_edit_24"
+                android:tooltipText="@string/change_profile_picture"
+                app:layout_constraintBottom_toBottomOf="@id/profile_image_card_view"
+                app:layout_constraintEnd_toEndOf="@id/profile_image_card_view" />
+
+            <TextView
+                android:id="@+id/edit_name_label"
+                style="@style/label"
+                android:layout_marginTop="@dimen/default_space"
+                android:labelFor="@id/edit_name_field"
+                android:text="@string/your_name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_image_card_view" />
+
+            <EditText
+                android:id="@+id/edit_name_field"
+                style="@style/edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                android:maxLength="@integer/user_name_max_length"
+                android:maxLines="1"
+                android:minHeight="46dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_name_label" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/save_button"
+            style="@style/primary_button"
+            android:layout_marginTop="@dimen/default_space"
+            android:text="@string/save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_profile_form_wrapper" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel_button"
+            style="@style/invisible_button"
+            android:layout_marginTop="20dp"
+            android:text="@string/cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/save_button" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

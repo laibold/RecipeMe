@@ -26,7 +26,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/hummus_default" />
+            tools:src="@drawable/category_baked_goods" />
 
         <View
             android:id="@+id/gradient_overlay"
@@ -65,7 +65,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/recipe_of_the_day_button"
-                style="@style/tertiary_button_white"
+                style="@style/tertiary_button_transparent"
                 android:layout_marginStart="@dimen/outline_horizontal"
                 android:layout_marginTop="@dimen/small_space"
                 android:stateListAnimator="@null"

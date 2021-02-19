@@ -43,8 +43,6 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="delete_recipe_message">Confirm delete?</string>
-    <string name="name_hint">Name</string>
-    <string name="recipe_example">Hummus with tahini</string>
     <string name="ingredients">Ingredients</string>
     <string name="serving">serving</string>
     <string name="servings">servings</string>
@@ -72,7 +70,7 @@
     <string name="minute_pl">minutes</string>
     <string name="update">Update</string>
     <string name="hint_recipe_servings">e.g. 2</string>
-    <string name="label_recipe_servings">Number of servings</string>
+    <string name="label_recipe_servings">Servings</string>
     <string name="err_enter_name">Enter name</string>
     <string name="err_enter_servings">Enter servings</string>
     <string name="err_servings_greater_than_zero">Enter value greater than 0</string>
@@ -100,7 +98,7 @@
     <string name="version">Version</string>
     <string name="recipe_of_the_day">Recipe of the day</string>
     <string name="open">Open</string>
-    <string name="shopping_list_export_headline">See what\'s on my RecipeMe shopping list:</string>
+    <string name="shopping_list_export_headline">See what\'s on %s RecipeMe shopping list:</string>
     <string name="my">my</string>
     <string name="save">Save</string>
     <string name="your_name">Your name</string>
@@ -114,4 +112,8 @@
     <string name="edit_assigned_ingredients">Edit assigned ingredients</string>
     <string name="related_ingredients">Required ingredients</string>
     <string name="recipe_total_text_map">{\"1\":\"recipe so far - you can do better!\",\"10\":\"recipes so far - you can do better!\",\"20\":\"recipes so far - you\'re on the right track.\",\"30\":\"recipes so far - you can almost start a restaurant.\",\"40\":\"recipes so far - not bad at all!\",\"50\":\"recipes so far - that poor scale!\",\"60\":\"recipes so far - who\'s supposed to eat all that?\",\"61\":\"recipes so far - you\'re a true master chef!\"}</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="image_of_the_recipe">Image of the recipe</string>
+    <string name="change_image">Change image</string>
+    <string name="pick_single">Select an image</string>
 </resources>

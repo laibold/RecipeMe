@@ -61,11 +61,11 @@ class AddIngredientDialog constructor(
                 binding.ingredientUnitSpinner.setSelection(ingredient.unit.ordinal)
             }
 
-            binding.addButton.text = activity.resources.getString(R.string.update)
+            binding.addButton.text = activity.getString(R.string.update)
             binding.addButton.setOnClickListener { updateIngredientAndClose() }
         } else {
             // Add
-            binding.addButton.text = activity.resources.getString(R.string.add)
+            binding.addButton.text = activity.getString(R.string.add)
             binding.addButton.setOnClickListener { addIngredientAndClose() }
         }
 
@@ -120,8 +120,7 @@ class AddIngredientDialog constructor(
         if (success) {
             dismiss()
         } else {
-            binding.ingredientNameField.error =
-                activity.resources.getString(R.string.err_enter_name)
+            binding.ingredientNameField.error = activity.getString(R.string.err_enter_name)
         }
     }
 
@@ -139,8 +138,7 @@ class AddIngredientDialog constructor(
         if (success) {
             dismiss()
         } else {
-            binding.ingredientNameField.error =
-                activity.resources.getString(R.string.err_enter_name)
+            binding.ingredientNameField.error = activity.getString(R.string.err_enter_name)
         }
     }
 
