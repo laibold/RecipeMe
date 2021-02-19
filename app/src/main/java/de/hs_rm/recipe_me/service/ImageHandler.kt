@@ -99,7 +99,7 @@ object ImageHandler {
 
     /**
      * Returns Bitmap with recipe image if available, otherwise null.
-     * This function should be called from a repository.
+     * This function should be called from Dispatchers.IO coroutine scope in a repository.
      */
     fun getRecipeImage(context: Context, recipe: Recipe): Bitmap? {
         val file = File(getRecipeDirPath(context, recipe.id) + RECIPE_IMAGE_NAME)

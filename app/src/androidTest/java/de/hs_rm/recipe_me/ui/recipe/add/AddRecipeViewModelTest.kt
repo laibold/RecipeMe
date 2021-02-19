@@ -389,9 +389,6 @@ class AddRecipeViewModelTest {
         assertEquals(numberOfChildren, recipeWithRelations2.ingredients.size)
         assertEquals(numberOfChildren, recipeWithRelations2.cookingStepsWithIngredients.size)
 
-        // Initialize ViewModel with id TODO doesn't happen in application
-//        viewModel =
-//            AddRecipeViewModel(recipeRepository, appContext.applicationContext as Application)
         GlobalScope.launch(Dispatchers.Main) {
             delay(1000)
             viewModel.initRecipe(1)

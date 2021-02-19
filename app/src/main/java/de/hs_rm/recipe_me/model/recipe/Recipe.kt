@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey
 data class Recipe(
     var name: String,
     var servings: Int,
-    var category: RecipeCategory,
+    var category: RecipeCategory
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = DEFAULT_ID
