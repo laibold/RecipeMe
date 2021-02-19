@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profile_layout"
@@ -18,11 +19,12 @@
             android:layout_height="@dimen/header_button_size"
             android:layout_marginEnd="@dimen/outline_horizontal"
             android:background="@null"
-            android:contentDescription="@string/delete"
+            android:contentDescription="@string/edit_profile"
             android:elevation="@dimen/elevation_low"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_baseline_edit_24"
             android:tint="@color/dark_red"
+            android:tooltipText="@string/edit_profile"
             app:layout_constraintBottom_toBottomOf="@id/header"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/header" />
@@ -35,7 +37,8 @@
             android:background="@drawable/profile_picture_default"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/header" />
+            app:layout_constraintTop_toBottomOf="@+id/header"
+            android:contentDescription="@string/profile_picture" />
 
         <TextView
             android:id="@+id/profile_greeting"
@@ -88,7 +91,8 @@
                 android:focusable="false"
                 app:layout_constraintBottom_toBottomOf="@id/to_site_notice_headline"
                 app:layout_constraintStart_toEndOf="@id/to_site_notice_headline"
-                app:layout_constraintTop_toTopOf="@id/to_site_notice_headline" />
+                app:layout_constraintTop_toTopOf="@id/to_site_notice_headline"
+                android:contentDescription="@string/to_site_notice" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -100,14 +104,15 @@
             android:layout_marginBottom="@dimen/default_space_button"
             android:background="@drawable/ic_baseline_access_time_24"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="@null" />
 
         <TextView
             android:id="@+id/version_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_button_text"
-            android:text="Version"
+            tools:text="@string/version"
             app:layout_constraintBottom_toBottomOf="@id/version_icon"
             app:layout_constraintStart_toEndOf="@+id/version_icon"
             app:layout_constraintTop_toTopOf="@+id/version_icon" />

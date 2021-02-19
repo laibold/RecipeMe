@@ -23,10 +23,10 @@
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 android:background="@drawable/profile_picture_default"
+                android:contentDescription="@string/profile_picture"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/profile_picture" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
                 android:id="@+id/change_profile_pic_button"

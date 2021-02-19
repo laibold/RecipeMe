@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@android:color/white"
-            android:contentDescription="@string/recipe_image"
+            android:contentDescription="@string/rotd_picture"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toTopOf="@+id/guideline_imageview"
             app:layout_constraintEnd_toEndOf="parent"

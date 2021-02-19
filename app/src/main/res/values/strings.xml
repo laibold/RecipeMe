@@ -118,4 +118,16 @@
     <string name="my">meiner</string>
     <string name="profile_greeting_name">Hallo, %s!</string>
     <string name="profile_picture">Profilbild</string>
+    <string name="add_cooking_step">Schritt hinzufügen</string>
+    <string name="edit_cooking_step">Schritt bearbeiten</string>
+    <string name="delete_cooking_step">Schritt löschen</string>
+    <string name="add_ingredient">Zutat hinzufügen</string>
+    <string name="edit_ingredient">Zutat bearbeiten</string>
+    <string name="delete_ingredient">Zutat löschen</string>
+    <string name="set_timer">Timer starten</string>
+    <string name="delete_recipe">Rezept löschen</string>
+    <string name="edit_profile">Profil bearbeiten</string>
+    <string name="to_site_notice">Zum Impressum</string>
+    <string name="category_picture">Kategorie-Bild</string>
+    <string name="rotd_picture">Rezept des Tages-Bild</string>
 </resources>

@@ -99,12 +99,13 @@
             android:id="@+id/edit_ingredients_button"
             android:layout_width="@dimen/small_button_size"
             android:layout_height="@dimen/small_button_size"
-            android:padding="@dimen/small_button_padding_small_icon"
-            android:scaleType="centerCrop"
             android:background="@android:color/transparent"
             android:contentDescription="@string/edit_assigned_ingredients"
+            android:padding="@dimen/small_button_padding_small_icon"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_baseline_edit_24"
             android:tint="@color/black"
+            android:tooltipText="@string/edit_assigned_ingredients"
             app:layout_constraintBottom_toBottomOf="@id/ingredients_text_view"
             app:layout_constraintEnd_toEndOf="parent" />
 
