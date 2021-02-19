@@ -43,7 +43,6 @@
             android:layout_height="@dimen/scroll_view_offset_low"
             app:layout_constraintTop_toTopOf="parent">
 
-            <!--TODO create class-->
             <ImageButton
                 android:id="@+id/edit_recipe_button"
                 style="@style/header_button"

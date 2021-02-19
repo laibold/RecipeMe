@@ -23,7 +23,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <!--TODO to class-->
             <ImageButton
                 android:id="@+id/edit_button"
                 android:layout_width="@dimen/small_button_size"

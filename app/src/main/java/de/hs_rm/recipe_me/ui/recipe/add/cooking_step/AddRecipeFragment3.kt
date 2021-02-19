@@ -49,7 +49,6 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
             binding.cookingStepListView.adapter = adapter
 
             adapter?.notifyDataSetChanged()
-            // Scroll to bottom //TODO evaluieren
             binding.cookingStepListView.post {
                 binding.cookingStepListView.setSelection(adapter!!.count - 1)
             }
