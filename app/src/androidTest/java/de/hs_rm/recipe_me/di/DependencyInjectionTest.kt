@@ -7,10 +7,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.persistence.RecipeDao
 import de.hs_rm.recipe_me.persistence.ShoppingListDao
 import de.hs_rm.recipe_me.persistence.UserDao
-import de.hs_rm.recipe_me.service.repository.RecipeImageRepository
-import de.hs_rm.recipe_me.service.repository.RecipeOfTheDayRepository
-import de.hs_rm.recipe_me.service.repository.RecipeRepository
-import de.hs_rm.recipe_me.service.repository.ShoppingListRepository
+import de.hs_rm.recipe_me.service.repository.*
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
@@ -45,6 +42,12 @@ class DependencyInjectionTest {
     lateinit var shoppingListRepository: ShoppingListRepository
 
     @Inject
+    lateinit var userRepository: UserRepository
+
+    @Inject
+    lateinit var userImageRepository: UserImageRepository
+
+    @Inject
     lateinit var recipeDao: RecipeDao
 
     @Inject
@@ -67,6 +70,8 @@ class DependencyInjectionTest {
         assertNotNull(recipeRepository)
         assertNotNull(shoppingListRepository)
         assertNotNull(recipeImageRepository)
+        assertNotNull(userRepository)
+        assertNotNull(userImageRepository)
     }
 
     @Test
