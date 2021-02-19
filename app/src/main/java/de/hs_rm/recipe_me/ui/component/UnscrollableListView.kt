@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.widget.ListView
 
 /**
- * ListView that extends itself based on it's content. For usage in ScrollViews
+ * ListView that extends itself based on its content. For usage in ScrollViews
  */
 class UnscrollableListView : ListView {
 

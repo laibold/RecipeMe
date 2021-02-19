@@ -10,7 +10,6 @@ import androidx.room.PrimaryKey
 @Entity
 data class CookingStep(
     var recipeId: Long,
-    var imageUri: String,
     var text: String,
     var time: Int,
     var timeUnit: TimeUnit
@@ -20,7 +19,6 @@ data class CookingStep(
 
     constructor(text: String, time: Int, timeUnit: TimeUnit) : this(
         -1,
-        "",
         text,
         time,
         timeUnit
@@ -38,7 +36,7 @@ data class CookingStep(
     }
 
     /**
-     * Return if imageUri, text, time and timeUnit are equal
+     * Return if text, time and timeUnit are equal
      */
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -46,7 +44,6 @@ data class CookingStep(
 
         other as CookingStep
 
-        if (imageUri != other.imageUri) return false
         if (text != other.text) return false
         if (time != other.time) return false
         if (timeUnit != other.timeUnit) return false
@@ -55,15 +52,10 @@ data class CookingStep(
     }
 
     override fun hashCode(): Int {
-        var result = imageUri.hashCode()
-        result = 31 * result + text.hashCode()
+        var result = 31 * text.hashCode()
         result = 31 * result + time
         result = 31 * result + timeUnit.hashCode()
         return result
-    }
-
-    fun clone(): CookingStep {
-        return CookingStep(recipeId, imageUri, text, time, timeUnit)
     }
 
     companion object {

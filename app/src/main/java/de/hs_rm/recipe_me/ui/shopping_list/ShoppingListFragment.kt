@@ -8,7 +8,6 @@ import android.view.inputmethod.EditorInfo
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.ShoppingListFragmentBinding
@@ -39,9 +38,9 @@ class ShoppingListFragment : Fragment() {
         viewModel.loadShoppingListItems()
         viewModel.loadUser()
 
-        viewModel.shoppingListItems.observe(viewLifecycleOwner, {
+        viewModel.shoppingListItems.observe(viewLifecycleOwner) {
             onShoppingListItemsChanged(it)
-        })
+        }
 
         binding.shoppingListListLayout.listView.emptyView =
             binding.shoppingListListLayout.addHintText
@@ -62,11 +61,11 @@ class ShoppingListFragment : Fragment() {
             viewModel.clearCheckedItems()
         }
 
-        viewModel.user.observe(viewLifecycleOwner, { user ->
+        viewModel.user.observe(viewLifecycleOwner) { user ->
             binding.shareButton.setOnClickListener {
                 TextSharer.share(requireContext(), getShareText(user))
             }
-        })
+        }
 
 
         return binding.root
@@ -124,8 +123,7 @@ class ShoppingListFragment : Fragment() {
     private fun onAddItem() {
         if (binding.addItemEditText.text.isBlank()) {
             binding.addItemEditText.text.clear()
-            binding.addItemEditText.error =
-                requireContext().resources.getString(R.string.err_enter_text)
+            binding.addItemEditText.error = getString(R.string.err_enter_text)
         } else {
             viewModel.addShoppingListItem(binding.addItemEditText.text)
             binding.shoppingListListLayout.scrollView.smoothScrollTo(0, 0)
@@ -143,7 +141,6 @@ class ShoppingListFragment : Fragment() {
             Formatter.formatNameToGenitive(user.name)
         }
         var s = getString(R.string.shopping_list_export_headline).format(username)
-
         viewModel.shoppingListItems.value?.let {
             for (item in it) {
                 if (!item.checked) {
@@ -156,7 +153,7 @@ class ShoppingListFragment : Fragment() {
                 }
             }
         }
-        s += "\n" + requireContext().resources.getString(R.string.store_link)
+        s += "\n" + getString(R.string.store_link)
         return s
     }
 

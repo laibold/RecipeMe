@@ -70,7 +70,7 @@
     <string name="hour_pl">Stunden</string>
     <string name="minute_pl">Minuten</string>
     <string name="update">Speichern</string>
-    <string name="label_recipe_servings">Anzahl Portionen</string>
+    <string name="label_recipe_servings">Portionen</string>
     <string name="hint_recipe_servings">z.B. 2</string>
     <string name="err_enter_name">Namen eingeben</string>
     <string name="err_enter_servings">Portionen angeben</string>
@@ -105,6 +105,10 @@
     <string name="recipe_of_the_day">Rezept des Tages</string>
     <string name="open">Öffnen</string>
     <string name="no_recipe_otd">Füge Rezepte hinzu, um dich hier täglich neu inspirieren zu lassen.</string>
+    <string name="image_of_the_recipe">Bild des Rezepts</string>
+    <string name="change_image">Bild ändern</string>
+    <string name="file_provider" translatable="false">com.kroegerama.imgpicker.demo.fileprovider</string>
+    <string name="pick_single">Wähle ein Bild aus</string>
     <string name="edit_recipe">Rezept bearbeiten</string>
     <string name="err_recipe_not_found">Fehler: Rezept konnte nicht gefunden werden.</string>
     <string name="add_cooking_step_select_ingredients">Wähle alle Zutaten aus, die in diesem Schritt benötigt werden.</string>

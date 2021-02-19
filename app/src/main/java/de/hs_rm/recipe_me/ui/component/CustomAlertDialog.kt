@@ -101,12 +101,12 @@ class CustomAlertDialog private constructor(
         /**
          * Headline of the dialog
          */
-        fun title(id: Int) = apply { this.title = activity.resources.getString(id) }
+        fun title(id: Int) = apply { this.title = activity.getString(id) }
 
         /**
          * Message of the dialog
          */
-        fun message(id: Int) = apply { this.message = activity.resources.getString(id) }
+        fun message(id: Int) = apply { this.message = activity.getString(id) }
 
         /**
          * Icon of the dialog
@@ -117,7 +117,7 @@ class CustomAlertDialog private constructor(
          * Button Text and Listener for the positive button (action button)
          */
         fun positiveButton(textId: Int, listener: OnClickListener) = apply {
-            this.positiveButtonText = activity.resources.getString(textId)
+            this.positiveButtonText = activity.getString(textId)
             this.positiveButtonListener = listener
         }
 
@@ -125,7 +125,7 @@ class CustomAlertDialog private constructor(
          * Button Text and Listener for the negative button (cancel button)
          */
         fun negativeButton(textId: Int, listener: OnClickListener) = apply {
-            this.negativeButtonText = activity.resources.getString(textId)
+            this.negativeButtonText = activity.getString(textId)
             this.negativeButtonListener = listener
         }
 

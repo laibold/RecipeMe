@@ -1,10 +1,9 @@
-package de.hs_rm.recipe_me.service
+package de.hs_rm.recipe_me.service.repository
 
 import androidx.lifecycle.LiveData
 import de.hs_rm.recipe_me.model.user.User
 import de.hs_rm.recipe_me.persistence.UserDao
 import javax.inject.Inject
-
 
 /**
  * Single Source of Truth for [User]. Use it with Dependency Injection
@@ -41,6 +40,5 @@ class UserRepository @Inject constructor(
     fun getUser(): LiveData<User?> {
         return userDao.getUserAsLiveData()
     }
-
 
 }

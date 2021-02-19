@@ -3,14 +3,17 @@ package de.hs_rm.recipe_me.ui.recipe.add.cooking_step
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.declaration.notifyObservers
 import de.hs_rm.recipe_me.model.recipe.Ingredient
+import javax.inject.Inject
 
 /**
  * Holds a List of the ingredients that have been assigned to the cooking step.
  * Important: Never reassign the ingredient list, just add or remove items or use clear()
  */
-class AddCookingStepViewModel : ViewModel() {
+@HiltViewModel
+class AddCookingStepViewModel @Inject constructor() : ViewModel() {
 
     private val _assignedIngredients = MutableLiveData(mutableListOf<Ingredient>())
     val assignedIngredients: LiveData<MutableList<Ingredient>>

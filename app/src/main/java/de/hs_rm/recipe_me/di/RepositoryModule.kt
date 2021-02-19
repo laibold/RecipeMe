@@ -1,46 +1,56 @@
 package de.hs_rm.recipe_me.di
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import de.hs_rm.recipe_me.persistence.RecipeDao
 import de.hs_rm.recipe_me.persistence.RecipeOfTheDayDao
 import de.hs_rm.recipe_me.persistence.ShoppingListDao
 import de.hs_rm.recipe_me.persistence.UserDao
-import de.hs_rm.recipe_me.service.RecipeOfTheDayRepository
-import de.hs_rm.recipe_me.service.RecipeRepository
-import de.hs_rm.recipe_me.service.ShoppingListRepository
-import de.hs_rm.recipe_me.service.UserRepository
+import de.hs_rm.recipe_me.service.repository.*
 import javax.inject.Singleton
 
 /**
  * Dependency Injection Module for repositories working as Single Source of Truth
  */
+@InstallIn(SingletonComponent::class)
 @Module
-@InstallIn(ApplicationComponent::class)
 object RepositoryModule {
 
-    @Provides
     @Singleton
-    fun providesRecipeRepository(recipeDataSource: RecipeDao) =
+    @Provides
+    fun provideRecipeRepository(recipeDataSource: RecipeDao) =
         RecipeRepository(recipeDataSource)
 
-    @Provides
     @Singleton
-    fun providesShoppingListRepository(shoppingListDataSource: ShoppingListDao) =
+    @Provides
+    fun provideRecipeImageRepository(@ApplicationContext context: Context) =
+        RecipeImageRepository(context)
+
+    @Singleton
+    @Provides
+    fun provideShoppingListRepository(shoppingListDataSource: ShoppingListDao) =
         ShoppingListRepository(shoppingListDataSource)
 
-    @Provides
     @Singleton
-    fun providesRecipeOfTheDayRepository(
+    @Provides
+    fun provideRecipeOfTheDayRepository(
         rotdDataSource: RecipeOfTheDayDao,
         recipeDataSource: RecipeDao
     ) = RecipeOfTheDayRepository(rotdDataSource, recipeDataSource)
 
-    @Provides
     @Singleton
-    fun providesUserRepository(userDataSource: UserDao) =
-        UserRepository(userDataSource)
-    
+    @Provides
+    fun provideUserRepository(
+        userDataSource: UserDao
+    ) = UserRepository(userDataSource)
+
+    @Singleton
+    @Provides
+    fun provideUserImageRepository(@ApplicationContext context: Context) =
+        UserImageRepository(context)
+
 }

@@ -83,4 +83,12 @@ interface RecipeDao {
         ingredientId: Long = Ingredient.DEFAULT_ID,
         cookingStepId: Long = CookingStep.DEFAULT_ID
     )
+
+    @Query("DELETE FROM CookingStepIngredientCrossRef" +
+            " WHERE ingredientId" +
+            " IN (SELECT ingredientId FROM Ingredient WHERE recipeId = :recipeId)" +
+            " OR cookingStepId" +
+            " IN (SELECT cookingStepId FROM CookingStep WHERE recipeId = :recipeId)")
+    suspend fun deleteCookingStepIngredientCrossRefsByRecipeId(recipeId: Long)
+
 }

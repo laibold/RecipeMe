@@ -42,4 +42,7 @@
     <!--divider size-->
     <dimen name="divider_big">35dp</dimen>
 
+    <dimen name="peekHeight">260dp</dimen>
+    <dimen name="columnSize">92dp</dimen>
+
 </resources>

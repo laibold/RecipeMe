@@ -46,11 +46,8 @@ class CookingStepListAdapter(
         val cookingStepWithIngredients = objects[position]
         val cookingStep = cookingStepWithIngredients.cookingStep
 
-        if (cookingStep.imageUri != "") {
-            // set image here
-        } else {
-            holder.binding.cookingStepImage.visibility = View.GONE
-        }
+        // set image here
+        holder.binding.cookingStepImage.visibility = View.GONE
 
         holder.binding.cookingStepNumber.text = (position + 1).toString()
         holder.binding.cookingStepText.text = cookingStep.text

@@ -18,15 +18,24 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.85">
 
-            <ImageView
-                android:id="@+id/profile_picture"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profile_image_card_view"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
-                android:background="@drawable/profile_picture_default"
+                app:cardCornerRadius="70dp"
+                app:cardElevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/profile_picture" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:contentDescription="@string/profile_picture"
+                    android:src="@drawable/profile_picture_default" />
+
+            </androidx.cardview.widget.CardView>
 
             <ImageButton
                 android:id="@+id/change_profile_pic_button"
@@ -36,8 +45,8 @@
                 android:contentDescription="@string/change_profile_picture"
                 android:src="@drawable/ic_baseline_edit_24"
                 android:tooltipText="@string/change_profile_picture"
-                app:layout_constraintBottom_toBottomOf="@id/profile_picture"
-                app:layout_constraintEnd_toEndOf="@id/profile_picture" />
+                app:layout_constraintBottom_toBottomOf="@id/profile_image_card_view"
+                app:layout_constraintEnd_toEndOf="@id/profile_image_card_view" />
 
             <TextView
                 android:id="@+id/edit_name_label"
@@ -46,7 +55,7 @@
                 android:labelFor="@id/edit_name_field"
                 android:text="@string/your_name"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/profile_picture" />
+                app:layout_constraintTop_toBottomOf="@id/profile_image_card_view" />
 
             <EditText
                 android:id="@+id/edit_name_field"
@@ -80,7 +89,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/save_button" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

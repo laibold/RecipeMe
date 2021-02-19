@@ -9,13 +9,17 @@ import android.view.LayoutInflater
 import android.view.Window
 import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LifecycleOwner
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.EditProfileDialogBinding
+import de.hs_rm.recipe_me.declaration.ui.fragments.BottomSheetImageProvider
 
 class EditProfileDialog constructor(
     private val activity: Activity,
-    private val viewModel: ProfileViewModel
+    private val viewModel: ProfileViewModel,
+    private val bottomSheetImageProvider: BottomSheetImageProvider
 ) : Dialog(activity) {
+
     lateinit var binding: EditProfileDialogBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +36,20 @@ class EditProfileDialog constructor(
         val width = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
         window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
 
+        viewModel.editProfileImage.observe(activity as LifecycleOwner) { image ->
+            if (image != null) {
+                binding.profileImage.setImageBitmap(image)
+            }
+        }
+
+        viewModel.profileImage.observe(activity as LifecycleOwner) { image ->
+            if (image != null && viewModel.editProfileImage.value == null) {
+                binding.profileImage.setImageBitmap(image)
+            }
+        }
+
+        binding.changeProfilePicButton.setOnClickListener { bottomSheetImageProvider.onGetImage() }
+
         binding.editNameField.setText(viewModel.user.value?.name)
 
         binding.saveButton.setOnClickListener {
@@ -43,4 +61,10 @@ class EditProfileDialog constructor(
             dismiss()
         }
     }
+
+    override fun dismiss() {
+        viewModel.clearEditProfileImage()
+        super.dismiss()
+    }
+
 }

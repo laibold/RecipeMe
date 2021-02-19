@@ -1,19 +1,24 @@
 package de.hs_rm.recipe_me.ui.recipe.category
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
-import de.hs_rm.recipe_me.service.RecipeRepository
+import de.hs_rm.recipe_me.service.repository.RecipeImageRepository
+import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import kotlinx.coroutines.launch
+import java.io.File
+import javax.inject.Inject
 
 /**
  * ViewModel for [RecipeCategoryFragment]
  */
-class RecipeCategoryViewModel @ViewModelInject constructor(
-    private val repository: RecipeRepository
+@HiltViewModel
+class RecipeCategoryViewModel @Inject constructor(
+    private val recipeRepository: RecipeRepository,
+    private val imageRepository: RecipeImageRepository
 ) : ViewModel() {
 
     lateinit var category: RecipeCategory
@@ -22,15 +27,24 @@ class RecipeCategoryViewModel @ViewModelInject constructor(
      * Returns LiveData with list of recipes that match the given [RecipeCategory]
      */
     fun getRecipesByCategory(recipeCategory: RecipeCategory): LiveData<List<Recipe>> {
-        return repository.getRecipesByCategory(recipeCategory)
+        return recipeRepository.getRecipesByCategory(recipeCategory)
     }
 
     /**
-     * Delete recipe and it's belonging Ingredients and CookingSteps
+     * Returns file of recipeImage that can be loaded into view via Glide.
+     * If no image is available, null will be returned
+     */
+    fun getRecipeImageFile(recipeId: Long): File? {
+        return imageRepository.getRecipeImageFile(recipeId)
+    }
+
+    /**
+     * Delete recipe and its belonging Ingredients and CookingSteps
      */
     fun deleteRecipeAndRelations(recipe: Recipe) {
+        imageRepository.deleteRecipeImage(recipe.id)
         viewModelScope.launch {
-            repository.deleteRecipeAndRelations(recipe)
+            recipeRepository.deleteRecipeAndRelations(recipe)
         }
     }
 

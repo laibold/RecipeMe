@@ -38,7 +38,7 @@ class CategoryListAdapter(
         }
 
         val category = objects[position]
-        holder.binding.categoryName.text = context.resources.getString(category.nameResId)
+        holder.binding.categoryName.text = context.getString(category.nameResId)
         holder.binding.imageView.setImageResource(category.drawableResId)
 
         holder.binding.root.setOnClickListener {
