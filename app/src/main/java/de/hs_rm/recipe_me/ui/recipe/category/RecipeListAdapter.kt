@@ -120,10 +120,10 @@ class RecipeListAdapter(
         val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE));
+            vibrator.vibrate(VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE))
         } else {
             //deprecated in API 26
-            vibrator.vibrate(20);
+            vibrator.vibrate(20)
         }
 
         itemSelected.set(true)

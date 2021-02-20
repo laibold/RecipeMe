@@ -1,68 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/servings_element"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageButton
-        android:id="@+id/minus_button"
-        android:layout_width="@dimen/small_button_size"
-        android:layout_height="@dimen/small_button_size"
-        android:background="@null"
-        android:contentDescription="@string/decrease_servings"
-        android:padding="@dimen/small_button_padding_small_icon"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_outline_remove_circle_outline_24"
-        android:tooltipText="@string/decrease_servings"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/servings_element"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/plus_button"
-        app:layout_constraintStart_toEndOf="@+id/minus_button"
-        app:layout_constraintTop_toTopOf="parent">
+        <ImageButton
+            android:id="@+id/minus_button"
+            android:layout_width="@dimen/small_button_size"
+            android:layout_height="@dimen/small_button_size"
+            android:background="@null"
+            android:contentDescription="@string/decrease_servings"
+            android:padding="@dimen/small_button_padding_small_icon"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_outline_remove_circle_outline_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tooltipTextCompat="@{@string/decrease_servings}" />
 
-        <TextView
-            android:id="@+id/servings_size"
-            style="@style/text"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/minus_button"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/plus_button"
+            app:layout_constraintStart_toEndOf="@+id/minus_button"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/servings_size"
+                style="@style/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/minus_button"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="2" />
+
+            <TextView
+                android:id="@+id/servings_text"
+                style="@style/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                app:layout_constraintStart_toEndOf="@id/servings_size"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/servings" />
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/plus_button"
+            android:layout_width="@dimen/small_button_size"
+            android:layout_height="@dimen/small_button_size"
+            android:layout_marginStart="@dimen/space_button_text"
+            android:background="@null"
+            android:contentDescription="@string/increase_servings"
+            android:padding="@dimen/small_button_padding_small_icon"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_baseline_add_circle_outline_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="2" />
+            app:tooltipTextCompat="@{@string/increase_servings}" />
 
-        <TextView
-            android:id="@+id/servings_text"
-            style="@style/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            app:layout_constraintStart_toEndOf="@id/servings_size"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/servings" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/plus_button"
-        android:layout_width="@dimen/small_button_size"
-        android:layout_height="@dimen/small_button_size"
-        android:layout_marginStart="@dimen/space_button_text"
-        android:background="@null"
-        android:contentDescription="@string/increase_servings"
-        android:padding="@dimen/small_button_padding_small_icon"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_baseline_add_circle_outline_24"
-        android:tooltipText="@string/increase_servings"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

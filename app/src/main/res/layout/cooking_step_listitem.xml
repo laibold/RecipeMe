@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/outline_horizontal"
             android:layout_marginTop="@dimen/space_button_text"
-            android:tooltipText="@string/start_timer"
+            app:tooltipTextCompat="@{@string/start_timer}"
             android:visibility="gone"
             tools:visibility="visible">
 
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/set_timer"
                 android:src="@drawable/ic_baseline_timer_24"
-                android:tooltipText="@string/set_timer"
+                app:tooltipTextCompat="@{@string/set_timer}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

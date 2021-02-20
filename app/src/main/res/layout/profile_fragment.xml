@@ -19,7 +19,7 @@
             android:contentDescription="@string/edit_profile"
             android:src="@drawable/ic_baseline_edit_24"
             android:tint="@color/dark_red"
-            android:tooltipText="@string/edit_profile"
+            app:tooltipTextCompat="@{@string/edit_recipe}"
             app:layout_constraintBottom_toBottomOf="@id/header"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/header" />

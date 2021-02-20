@@ -82,7 +82,7 @@
             android:backgroundTint="@color/white"
             android:contentDescription="@string/desc_add_recipe"
             android:src="@drawable/ic_baseline_add_24"
-            android:tooltipText="@string/desc_add_recipe"
+            app:tooltipTextCompat="@{@string/desc_add_recipe}"
             app:borderWidth="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

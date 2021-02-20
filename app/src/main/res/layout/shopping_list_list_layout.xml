@@ -54,7 +54,7 @@
                     android:contentDescription="@string/remove_checked_items"
                     android:paddingBottom="2dp"
                     android:src="@drawable/ic_baseline_clear_all_24"
-                    android:tooltipText="@string/remove_checked_items"
+                    app:tooltipTextCompat="@{@string/remove_checked_items}"
                     android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/list_view"
