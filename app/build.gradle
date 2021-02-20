@@ -13,10 +13,10 @@ android {
 
     defaultConfig {
         applicationId "de.hs_rm.recipe_me"
-        minSdkVersion 26
+        minSdkVersion 24
         targetSdkVersion 30
-        versionCode 7
-        versionName '2.1.0'
+        versionCode 8
+        versionName '2.1.1'
 
         testInstrumentationRunner "de.hs_rm.recipe_me.CustomTestRunner"
 
@@ -36,6 +36,8 @@ android {
         }
     }
     compileOptions {
+        // Flag to enable Java 8 support in Sdk < 26
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -82,6 +84,9 @@ dependencies {
 
     // Activity Ktx for injecting View Models with viewModels()
     implementation "androidx.activity:activity-ktx:$activity_version"
+
+    // Java 8 support in Sdk < 26
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
 
     // Dagger Hilt – at upgrade don't forget ext.hilt_version at top-level build.gradle
     implementation "com.google.dagger:hilt-android:$hilt_version"
