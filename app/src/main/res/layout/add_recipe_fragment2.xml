@@ -22,7 +22,7 @@
             android:backgroundTint="?attr/colorPrimaryVariant"
             android:contentDescription="@string/add_ingredient"
             android:src="@drawable/ic_baseline_add_24"
-            android:tooltipText="@string/add_ingredient"
+            app:tooltipTextCompat="@{@string/add_ingredient}"
             app:fabSize="mini"
             app:layout_constraintBottom_toBottomOf="@id/header"
             app:layout_constraintEnd_toEndOf="parent"

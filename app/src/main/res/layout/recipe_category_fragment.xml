@@ -77,6 +77,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
             android:contentDescription="@string/desc_add_recipe"
+            app:tooltipTextCompat="@{@string/desc_add_recipe}"
             android:src="@drawable/ic_baseline_add_24"
             app:borderWidth="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

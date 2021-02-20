@@ -105,7 +105,7 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_baseline_edit_24"
             android:tint="@color/black"
-            android:tooltipText="@string/edit_assigned_ingredients"
+            app:tooltipTextCompat="@{@string/edit_assigned_ingredients}"
             app:layout_constraintBottom_toBottomOf="@id/ingredients_text_view"
             app:layout_constraintEnd_toEndOf="parent" />
 

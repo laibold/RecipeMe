@@ -2,6 +2,7 @@ package de.hs_rm.recipe_me.ui.recipe.category
 
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.LayoutInflater
@@ -117,9 +118,13 @@ class RecipeListAdapter(
     private fun showOverlay(binding: RecipeListitemBinding) {
         itemSelected.set(false)
         val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        vibrator.vibrate(
-            VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE)
-        )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            //deprecated in API 26
+            vibrator.vibrate(20)
+        }
 
         itemSelected.set(true)
         binding.editOverlay.overlayWrapper.visibility = View.VISIBLE

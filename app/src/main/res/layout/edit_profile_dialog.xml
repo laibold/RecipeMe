@@ -45,7 +45,7 @@
                 android:layout_marginBottom="3dp"
                 android:contentDescription="@string/change_profile_picture"
                 android:src="@drawable/ic_baseline_edit_24"
-                android:tooltipText="@string/change_profile_picture"
+                app:tooltipTextCompat="@{@string/change_profile_picture}"
                 app:layout_constraintBottom_toBottomOf="@id/profile_image_card_view"
                 app:layout_constraintEnd_toEndOf="@id/profile_image_card_view" />
 
