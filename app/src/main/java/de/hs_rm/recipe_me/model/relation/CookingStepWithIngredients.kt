@@ -16,11 +16,11 @@ data class CookingStepWithIngredients(
         entityColumn = "ingredientId",
         associateBy = Junction(CookingStepIngredientCrossRef::class)
     )
-    var ingredients: List<Ingredient>
+    var ingredients: MutableList<Ingredient>
 ) {
     constructor(cookingStep: CookingStep) : this(
         cookingStep,
-        listOf()
+        mutableListOf()
     )
 
 }
