@@ -98,6 +98,13 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
      * Gets called from Adapter when edit was pressed for a CookingStep item
      */
     override fun onCallback(cookingStepWithIngredients: CookingStepWithIngredients, position: Int) {
+        // remove ingredients that have been deleted in last fragment
+        for (ingredient in cookingStepWithIngredients.ingredients) {
+            if (viewModel.ingredients.value?.contains(ingredient) == false) {
+                cookingStepWithIngredients.ingredients.remove(ingredient)
+            }
+        }
+
         addCookingStepDialog(cookingStepWithIngredients).show()
         viewModel.prepareCookingStepUpdate(position)
     }
