@@ -129,4 +129,5 @@
     <string name="category_picture">Category\'s image</string>
     <string name="rotd_picture">Recipe of the day\'s image</string>
     <string name="image_of_the_recipe">Recipe\'s image</string>
+    <string name="check_items_to_be_removed">Check elements to be removed.</string>
 </resources>

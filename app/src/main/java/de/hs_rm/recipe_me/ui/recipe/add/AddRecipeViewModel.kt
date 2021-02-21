@@ -322,10 +322,25 @@ class AddRecipeViewModel @Inject constructor(
     }
 
     /**
-     * Switch internal states to update cooking steps instead of adding
+     * Switch internal states to update cooking steps instead of adding.
+     * Removes assigned ingredients from CookingStep that have been deleted in viewModel scope earlier
      * @param position Index of [CookingStep] in [AddCookingStepListAdapter] to be updated
      */
     fun prepareCookingStepUpdate(position: Int) {
+        // remove ingredients that have been deleted in last fragment
+        val cookingStepWithIngredients = _cookingStepsWithIngredients.value?.get(position)
+        val assignedIngredients = cookingStepWithIngredients?.ingredients
+
+        if (!assignedIngredients.isNullOrEmpty()) {
+            val cleanList = assignedIngredients.toMutableList()
+            for (ingredient in assignedIngredients) {
+                if (_ingredients.value?.contains(ingredient) == false) {
+                    cleanList.remove(ingredient)
+                }
+            }
+            cookingStepWithIngredients.ingredients = cleanList
+        }
+
         updatingCookingStepIndex = position
     }
 

@@ -135,4 +135,5 @@
     <string name="to_site_notice">Zum Impressum</string>
     <string name="category_picture">Kategorie-Bild</string>
     <string name="rotd_picture">Rezept des Tages-Bild</string>
+    <string name="check_items_to_be_removed">Markiere zu entfernende Elemente.</string>
 </resources>

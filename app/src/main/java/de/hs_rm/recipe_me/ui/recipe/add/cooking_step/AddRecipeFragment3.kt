@@ -98,8 +98,8 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
      * Gets called from Adapter when edit was pressed for a CookingStep item
      */
     override fun onCallback(cookingStepWithIngredients: CookingStepWithIngredients, position: Int) {
-        addCookingStepDialog(cookingStepWithIngredients).show()
         viewModel.prepareCookingStepUpdate(position)
+        addCookingStepDialog(cookingStepWithIngredients).show()
     }
 
 }
