@@ -207,6 +207,40 @@ class AddRecipeViewModelTest {
     }
 
     /**
+     * Test that if an ingredients gets removed in viewModel scope, it wont be assigned to a
+     * CookingStep in viewModel scope anymore
+     */
+    @Test
+    fun deleteAssignedIngredientSuccessful() {
+        beforeEach()
+
+        viewModel.addIngredient(getEditable("Delete"), getEditable("1.0"), IngredientUnit.NONE)
+        viewModel.addIngredient(getEditable("Keep"), getEditable("1.0"), IngredientUnit.NONE)
+
+        val deleteIngredient = viewModel.ingredients.value!![0]
+        val keepIngredient = viewModel.ingredients.value!![1]
+
+        viewModel.addCookingStepWithIngredients(
+            getEditable("Text"),
+            getEditable("0"),
+            TimeUnit.SECOND,
+            mutableListOf(deleteIngredient, keepIngredient)
+        )
+
+        val ingredientsBefore = viewModel.cookingStepsWithIngredients.value?.get(0)!!.ingredients
+        val beforeCountList = ArrayList<Ingredient>(ingredientsBefore)
+        assertEquals(2, beforeCountList.size)
+
+        viewModel.ingredients.value!!.remove(deleteIngredient)
+        Thread.sleep(1000)
+        viewModel.prepareCookingStepUpdate(0)
+
+        val ingredientsAfter = viewModel.cookingStepsWithIngredients.value?.get(0)!!.ingredients
+        val afterCountList = ArrayList<Ingredient>(ingredientsAfter)
+        assertEquals(1, afterCountList.size)
+    }
+
+    /**
      * Add CookingStepsWithIngredients with valid values, check return values and amount of cooking steps.
      */
     @Test
