@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.service
+package de.hs_rm.recipe_me.service.repository
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -11,7 +11,6 @@ import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.persistence.dao.ShoppingListDao
-import de.hs_rm.recipe_me.service.repository.ShoppingListRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -30,7 +29,6 @@ class ShoppingListRepositoryTest {
     private lateinit var repository: ShoppingListRepository
 
     private lateinit var appContext: Context
-    private val testIds = mutableListOf<Long>()
 
     @Before
     fun init() {
@@ -84,7 +82,7 @@ class ShoppingListRepositoryTest {
 
     private fun insertTestItems() {
         runBlocking {
-            testIds.add(repository.insertItem(ShoppingListItem("Item", 3.0, IngredientUnit.GRAM)))
+            repository.insertItem(ShoppingListItem("Item", 3.0, IngredientUnit.GRAM))
         }
     }
 

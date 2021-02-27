@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.service
+package de.hs_rm.recipe_me.service.repository
 
 import android.content.Context
 import androidx.room.Room
@@ -10,8 +10,6 @@ import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.persistence.dao.RecipeDao
 import de.hs_rm.recipe_me.persistence.dao.RecipeOfTheDayDao
-import de.hs_rm.recipe_me.service.repository.RecipeOfTheDayRepository
-import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Before
