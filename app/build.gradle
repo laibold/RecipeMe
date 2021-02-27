@@ -15,8 +15,8 @@ android {
         applicationId "de.hs_rm.recipe_me"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 8
-        versionName '2.1.1'
+        versionCode 9
+        versionName '2.1.2'
 
         testInstrumentationRunner "de.hs_rm.recipe_me.CustomTestRunner"
 

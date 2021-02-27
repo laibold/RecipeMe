@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 import de.hs_rm.recipe_me.model.user.User
-import de.hs_rm.recipe_me.service.repository.UserRepository
 import de.hs_rm.recipe_me.service.repository.ShoppingListRepository
+import de.hs_rm.recipe_me.service.repository.UserRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +32,23 @@ class ShoppingListViewModel @Inject constructor(
     }
 
     /**
-     * Update given item
+     * Returns if one or more items are checked
+     */
+    fun isItemChecked(): Boolean? {
+        return shoppingListItems.value?.map { it.checked }?.contains(true)
+    }
+
+    /**
+     * Returns if all items are checked
+     */
+    fun allItemsChecked(): Boolean {
+        val countItems = shoppingListItems.value?.size
+        val countChecked = shoppingListItems.value?.filter { it.checked }?.size
+        return countItems ==  countChecked
+    }
+
+    /**
+     * Updates given item in database
      */
     private fun updateItem(item: ShoppingListItem) {
         viewModelScope.launch {

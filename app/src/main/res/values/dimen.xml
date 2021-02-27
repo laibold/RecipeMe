@@ -28,7 +28,7 @@
     <dimen name="small_button_padding_small_icon">12dp</dimen>
     <dimen name="small_circle_button_size">40dp</dimen>
     <dimen name="small_arrow_button">14dp</dimen>
-    <dimen name="invisible_button_height">35sp</dimen>
+    <dimen name="invisible_button_height">35dp</dimen>
 
     <!--text size-->
     <dimen name="font_size_headline_1">35dp</dimen>

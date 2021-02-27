@@ -44,7 +44,6 @@ class AddRecipeViewModelTest {
     @Before
     fun init() {
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
-
     }
 
     @After
@@ -66,8 +65,7 @@ class AddRecipeViewModelTest {
         recipeImageRepository = RecipeImageRepository(appContext)
 
         db.clearAllTables()
-        viewModel =
-            AddRecipeViewModel(recipeRepository, recipeImageRepository)
+        viewModel = AddRecipeViewModel(recipeRepository, recipeImageRepository)
         viewModel.setCategory(RecipeCategory.MAIN_DISHES)
         GlobalScope.launch(Dispatchers.Main) {
             delay(1000)
@@ -207,6 +205,40 @@ class AddRecipeViewModelTest {
     }
 
     /**
+     * Test that if an ingredients gets removed in viewModel scope, it wont be assigned to a
+     * CookingStep in viewModel scope anymore
+     */
+    @Test
+    fun deleteAssignedIngredientSuccessful() {
+        beforeEach()
+
+        viewModel.addIngredient(getEditable("Delete"), getEditable("1.0"), IngredientUnit.NONE)
+        viewModel.addIngredient(getEditable("Keep"), getEditable("1.0"), IngredientUnit.NONE)
+
+        val deleteIngredient = viewModel.ingredients.value!![0]
+        val keepIngredient = viewModel.ingredients.value!![1]
+
+        viewModel.addCookingStepWithIngredients(
+            getEditable("Text"),
+            getEditable("0"),
+            TimeUnit.SECOND,
+            mutableListOf(deleteIngredient, keepIngredient)
+        )
+
+        val ingredientsBefore = viewModel.cookingStepsWithIngredients.value?.get(0)!!.ingredients
+        val beforeCountList = ArrayList<Ingredient>(ingredientsBefore)
+        assertEquals(2, beforeCountList.size)
+
+        viewModel.ingredients.value!!.remove(deleteIngredient)
+        Thread.sleep(1000)
+        viewModel.prepareCookingStepUpdate(0)
+
+        val ingredientsAfter = viewModel.cookingStepsWithIngredients.value?.get(0)!!.ingredients
+        val afterCountList = ArrayList<Ingredient>(ingredientsAfter)
+        assertEquals(1, afterCountList.size)
+    }
+
+    /**
      * Add CookingStepsWithIngredients with valid values, check return values and amount of cooking steps.
      */
     @Test
@@ -299,17 +331,17 @@ class AddRecipeViewModelTest {
     @Test
     fun updateCookingStepUnsuccessful() {
         beforeEach()
-        insertTestData(0, 3)
+        insertTestData(2, 3)
         val position = 1
         val text = ""
         val time = 0
         val unit = TimeUnit.MINUTE
-        val ingredient = Ingredient("", 0.0, IngredientUnit.PACK)
+        val ingredient = viewModel.ingredients.getOrAwaitValue()[0]
         val ingredients = mutableListOf(ingredient)
 
         viewModel.prepareCookingStepUpdate(position)
 
-        val countBefore = viewModel.cookingStepsWithIngredients.value?.size!!
+        val countBefore = viewModel.cookingStepsWithIngredients.getOrAwaitValue().size
 
         val success = viewModel.updateCookingStepWithIngredients(
             getEditable(text),
@@ -319,7 +351,9 @@ class AddRecipeViewModelTest {
         )
         assertFalse(success)
 
-        val countAfter = viewModel.cookingStepsWithIngredients.value?.size!!
+        val countAfter = viewModel.cookingStepsWithIngredients.getOrAwaitValue().size
+
+        assertEquals(countBefore, countAfter)
 
         assertNotEquals(
             text,
@@ -333,12 +367,6 @@ class AddRecipeViewModelTest {
             unit,
             viewModel.cookingStepsWithIngredients.value!![position].cookingStep.timeUnit
         )
-        assertNotEquals(
-            ingredient,
-            viewModel.cookingStepsWithIngredients.value!![position].ingredients[0]
-        )
-
-        assertEquals(countBefore, countAfter)
     }
 
     /**
@@ -583,12 +611,11 @@ class AddRecipeViewModelTest {
                 )
             }
             for (j in 1..cookingSteps) {
-                val ingredientList = mutableListOf(TestDataProvider.getRandomIngredient(0))
                 viewModel.addCookingStepWithIngredients(
                     getEditable("Inserted text"),
                     getEditable("9"),
                     TimeUnit.HOUR,
-                    ingredientList
+                    mutableListOf()
                 )
             }
         }

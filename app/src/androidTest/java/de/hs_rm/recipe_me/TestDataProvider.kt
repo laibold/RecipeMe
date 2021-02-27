@@ -1,6 +1,7 @@
 package de.hs_rm.recipe_me
 
 import de.hs_rm.recipe_me.model.recipe.*
+import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 import kotlin.random.Random
 
 object TestDataProvider {
@@ -27,6 +28,14 @@ object TestDataProvider {
         val unit = getRandomTimeUnit()
 
         return CookingStep(recipeId, description, time, unit)
+    }
+
+    fun getRandomShoppingListItem(): ShoppingListItem {
+        val name = getRandomString(10)
+        val quantity = getRandomDouble(100.0)
+        val ingredientUnit = getRandomIngredientUnit()
+
+        return ShoppingListItem(name, quantity, ingredientUnit)
     }
 
     private fun getRandomString(length: Int): String {

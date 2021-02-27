@@ -1,12 +1,18 @@
 package de.hs_rm.recipe_me.ui.recipe.home
 
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy.ALL
+import com.bumptech.glide.request.RequestOptions
 import de.hs_rm.recipe_me.databinding.CategoryListitemBinding
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 
@@ -39,7 +45,11 @@ class CategoryListAdapter(
 
         val category = objects[position]
         holder.binding.categoryName.text = context.getString(category.nameResId)
-        holder.binding.imageView.setImageResource(category.drawableResId)
+
+        Glide.with(context)
+            .load(category.drawableResId)
+            .diskCacheStrategy(ALL)
+            .into(holder.binding.imageView)
 
         holder.binding.root.setOnClickListener {
             val direction = RecipeHomeFragmentDirections.toRecipeCategoryFragment(category)

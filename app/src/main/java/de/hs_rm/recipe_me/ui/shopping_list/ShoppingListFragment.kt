@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -58,7 +59,7 @@ class ShoppingListFragment : Fragment() {
         }
 
         binding.shoppingListListLayout.clearListButton.setOnClickListener {
-            viewModel.clearCheckedItems()
+            onClearButtonPressed()
         }
 
         viewModel.user.observe(viewLifecycleOwner) { user ->
@@ -66,7 +67,6 @@ class ShoppingListFragment : Fragment() {
                 TextSharer.share(requireContext(), getShareText(user))
             }
         }
-
 
         return binding.root
     }
@@ -82,7 +82,7 @@ class ShoppingListFragment : Fragment() {
             binding.contentWrapper.visibility = View.VISIBLE
         }
         setAdapter(list)
-        toggleButtonVisibility(list.isNotEmpty())
+        toggleButtonsVisibility(list.isNotEmpty())
     }
 
     /**
@@ -107,14 +107,20 @@ class ShoppingListFragment : Fragment() {
      * Toggle visibility of clear list button. Button should be displayed if list is not empty
      * @param listNotEmpty true if list is not empty
      */
-    private fun toggleButtonVisibility(listNotEmpty: Boolean) {
+    private fun toggleButtonsVisibility(listNotEmpty: Boolean) {
         if (listNotEmpty) {
             binding.shoppingListListLayout.clearListButton.visibility = View.VISIBLE
-            binding.shareButton.visibility = View.VISIBLE
+
+            if (viewModel.allItemsChecked()) {
+                binding.shareButton.visibility = View.GONE
+            } else {
+                binding.shareButton.visibility = View.VISIBLE
+            }
         } else {
             binding.shoppingListListLayout.clearListButton.visibility = View.GONE
             binding.shareButton.visibility = View.GONE
         }
+
     }
 
     /**
@@ -128,6 +134,18 @@ class ShoppingListFragment : Fragment() {
             viewModel.addShoppingListItem(binding.addItemEditText.text)
             binding.shoppingListListLayout.scrollView.smoothScrollTo(0, 0)
             binding.addItemEditText.text.clear()
+        }
+    }
+
+    /**
+     * If items are checked, remove them. Show toast if no item is checked
+     */
+    private fun onClearButtonPressed() {
+        if (viewModel.isItemChecked() == true) {
+            viewModel.clearCheckedItems()
+        } else {
+            val message = getString(R.string.check_items_to_be_removed)
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
         }
     }
 

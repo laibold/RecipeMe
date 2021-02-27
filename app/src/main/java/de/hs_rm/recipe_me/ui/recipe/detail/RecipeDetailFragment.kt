@@ -269,7 +269,8 @@ class RecipeDetailFragment : Fragment() {
      * Zooms into image when ScrollView gets moved upwards and the other way round
      */
     private fun onScroll(scrollY: Int) {
-        if (scrollY < 1600) {
+        // For performance improvement: just scroll if image is visible and only on straight scrollY values
+        if (scrollY < 1600 && scrollY % 1 == 0) {
             val scaleVal = (1 + (scrollY.toFloat() / 9000))
             binding.recipeDetailImage.scaleX = scaleVal
             binding.recipeDetailImage.scaleY = scaleVal

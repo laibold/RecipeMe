@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.service
+package de.hs_rm.recipe_me.service.repository
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -10,7 +10,6 @@ import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
 import de.hs_rm.recipe_me.persistence.AppDatabase
-import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before

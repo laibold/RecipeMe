@@ -180,11 +180,15 @@ class AddRecipeViewModel @Inject constructor(
         ingredientUnit: IngredientUnit,
     ): Boolean {
         val ingredientToUpdate = _ingredients.value!![updatingIngredientIndex]
-        val ingredient =
-            getIngredient(name, quantity, ingredientUnit, ingredientToUpdate.ingredientId)
+        val tempIngredient =
+            getIngredient(name, quantity, ingredientUnit)
 
-        if (ingredient != null) {
-            _ingredients.setValueAt(this.updatingIngredientIndex, ingredient)
+        if (tempIngredient != null) {
+            ingredientToUpdate.name = tempIngredient.name
+            ingredientToUpdate.quantity = tempIngredient.quantity
+            ingredientToUpdate.unit = tempIngredient.unit
+
+            _ingredients.setValueAt(this.updatingIngredientIndex, ingredientToUpdate)
             return true
         }
 
@@ -193,18 +197,15 @@ class AddRecipeViewModel @Inject constructor(
 
     /**
      * Create ingredient from given parameters, return null if name is empty.
-     * If ingredientId is provided, it will be inserted into the created Ingredient
      * @param name Name of ingredient (won't get created without it)
      * @param quantity Quantity as String
      * @param ingredientUnit IngredientUnit
-     * @param ingredientId Id of ingredient if it already has one (on update)
      * @return true if cooking step could be created
      */
     private fun getIngredient(
         name: Editable,
         quantity: Editable,
-        ingredientUnit: IngredientUnit,
-        ingredientId: Long = Ingredient.DEFAULT_ID,
+        ingredientUnit: IngredientUnit
     ): Ingredient? {
         var quantityDouble = Ingredient.DEFAULT_QUANTITY
 
@@ -212,11 +213,8 @@ class AddRecipeViewModel @Inject constructor(
             if (quantity.isNotBlank()) {
                 quantityDouble = quantity.toString().replace(',', '.').toDouble()
             }
-            val ingredient = Ingredient(name.toString().trim(), quantityDouble, ingredientUnit)
-            if (ingredientId != Ingredient.DEFAULT_ID) {
-                ingredient.ingredientId = ingredientId
-            }
-            return ingredient
+
+            return Ingredient(name.toString().trim(), quantityDouble, ingredientUnit)
         }
         return null
     }
@@ -267,20 +265,26 @@ class AddRecipeViewModel @Inject constructor(
         ingredients: MutableList<Ingredient>,
     ): Boolean {
         val objectToUpdate =
-            _cookingStepsWithIngredients.value!![updatingCookingStepIndex].cookingStep
-        val cookingStepWithIngredients =
+            _cookingStepsWithIngredients.value!![updatingCookingStepIndex]
+        val cookingStepToUpdate = objectToUpdate.cookingStep
+        val tempCookingStepWithIngredients =
             getCookingStepWithIngredients(
                 text,
                 time,
                 timeUnit,
-                ingredients,
-                objectToUpdate.cookingStepId
+                ingredients
             )
 
-        if (cookingStepWithIngredients != null) {
+        if (tempCookingStepWithIngredients != null) {
+            cookingStepToUpdate.text = tempCookingStepWithIngredients.cookingStep.text
+            cookingStepToUpdate.time = tempCookingStepWithIngredients.cookingStep.time
+            cookingStepToUpdate.timeUnit = tempCookingStepWithIngredients.cookingStep.timeUnit
+
+            objectToUpdate.ingredients = tempCookingStepWithIngredients.ingredients
+
             _cookingStepsWithIngredients.setValueAt(
                 this.updatingCookingStepIndex,
-                cookingStepWithIngredients
+                objectToUpdate
             )
             return true
         }
@@ -289,19 +293,16 @@ class AddRecipeViewModel @Inject constructor(
 
     /**
      * Create cooking step from given parameters, return null if text is empty.
-     * If cookingStepId is provided, it will be inserted into the created CookingStepWithIngredients
      * @param text Text of cooking step (won't get created without it)
      * @param time Time as String
      * @param timeUnit TimeUnit
-     * @param cookingStepId Id of cookingStep if it already has one (on update)
      * @return true if cooking step could be created
      */
     private fun getCookingStepWithIngredients(
         text: Editable,
         time: Editable,
         timeUnit: TimeUnit,
-        ingredients: MutableList<Ingredient>,
-        cookingStepId: Long = CookingStep.DEFAULT_ID,
+        ingredients: MutableList<Ingredient>
     ): CookingStepWithIngredients? {
         var timeInt = CookingStep.DEFAULT_TIME
 
@@ -309,23 +310,35 @@ class AddRecipeViewModel @Inject constructor(
             if (time.isNotBlank()) {
                 timeInt = time.toString().toInt()
             }
-            val cookingStepWithIngredients = CookingStepWithIngredients(
+
+            return CookingStepWithIngredients(
                 CookingStep(text.toString().trim(), timeInt, timeUnit),
                 ingredients
             )
-            if (cookingStepId != CookingStep.DEFAULT_ID) {
-                cookingStepWithIngredients.cookingStep.cookingStepId = cookingStepId
-            }
-            return cookingStepWithIngredients
         }
         return null
     }
 
     /**
-     * Switch internal states to update cooking steps instead of adding
+     * Switch internal states to update cooking steps instead of adding.
+     * Removes assigned ingredients from CookingStep that have been deleted in viewModel scope earlier
      * @param position Index of [CookingStep] in [AddCookingStepListAdapter] to be updated
      */
     fun prepareCookingStepUpdate(position: Int) {
+        // remove ingredients that have been deleted in last fragment
+        val cookingStepWithIngredients = _cookingStepsWithIngredients.value?.get(position)
+        val assignedIngredients = cookingStepWithIngredients?.ingredients
+
+        if (!assignedIngredients.isNullOrEmpty()) {
+            val cleanList = assignedIngredients.toMutableList()
+            for (ingredient in assignedIngredients) {
+                if (_ingredients.value?.contains(ingredient) == false) {
+                    cleanList.remove(ingredient)
+                }
+            }
+            cookingStepWithIngredients.ingredients = cleanList
+        }
+
         updatingCookingStepIndex = position
     }
 
