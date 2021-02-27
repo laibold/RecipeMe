@@ -44,7 +44,6 @@ class AddRecipeViewModelTest {
     @Before
     fun init() {
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
-
     }
 
     @After

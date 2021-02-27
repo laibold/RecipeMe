@@ -14,7 +14,7 @@ import de.hs_rm.recipe_me.persistence.dao.UserDao
 import javax.inject.Singleton
 
 /**
- * Dependency Injection Module for data sources like Dao
+ * Dependency Injection Module for room data sources
  */
 @InstallIn(SingletonComponent::class)
 @Module

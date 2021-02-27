@@ -49,7 +49,7 @@ class FormatterTest {
     }
 
     @Test
-    fun formatIngredientListSuccessful() {
+    fun formatIngredientListWithMultipleItems() {
         val ingredients = listOf(
             Ingredient("Bananas", 3.0, IngredientUnit.NONE),
             Ingredient("Chickpeas", 1.5, IngredientUnit.CAN),
@@ -58,6 +58,16 @@ class FormatterTest {
         val str = Formatter.formatIngredientList(context, ingredients)
 
         assertEquals("3 Bananas, 1,5 Dosen Chickpeas, Curcuma", str)
+    }
+
+    @Test
+    fun formatIngredientListWithSingleItem() {
+        val ingredients = listOf(
+            Ingredient("Bananas", 3.0, IngredientUnit.GRAM)
+        )
+        val str = Formatter.formatIngredientList(context, ingredients)
+
+        assertEquals("3 g Bananas", str)
     }
 
 }

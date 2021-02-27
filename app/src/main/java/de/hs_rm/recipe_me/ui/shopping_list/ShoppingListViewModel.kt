@@ -39,7 +39,16 @@ class ShoppingListViewModel @Inject constructor(
     }
 
     /**
-     * Update given item
+     * Returns if all items are checked
+     */
+    fun allItemsChecked(): Boolean {
+        val countItems = shoppingListItems.value?.size
+        val countChecked = shoppingListItems.value?.filter { it.checked }?.size
+        return countItems ==  countChecked
+    }
+
+    /**
+     * Updates given item in database
      */
     private fun updateItem(item: ShoppingListItem) {
         viewModelScope.launch {
