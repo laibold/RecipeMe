@@ -33,7 +33,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:listitem="@layout/recipe_listitem"
                 app:layoutManager="LinearLayoutManager"
-                 />
+                android:nestedScrollingEnabled="false" />
 
             <TextView
                 android:id="@+id/add_hint_text"
