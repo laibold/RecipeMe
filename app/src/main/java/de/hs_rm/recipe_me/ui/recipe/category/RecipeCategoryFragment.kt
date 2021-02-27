@@ -82,7 +82,8 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
      * Zooms into image when ScrollView gets moved upwards and the other way round
      */
     private fun onScroll(scrollY: Int) {
-        if (scrollY < 1100) {
+        // For performance improvement: just scroll if image is visible and only on straight scrollY values
+        if (scrollY < 1100 && scrollY % 1 == 0) {
             val scaleVal = (1 + (scrollY.toFloat() / 9000))
             binding.categoryImage.scaleX = scaleVal
             binding.categoryImage.scaleY = scaleVal
