@@ -13,13 +13,11 @@ import de.hs_rm.recipe_me.persistence.dao.UserDao
 import de.hs_rm.recipe_me.service.repository.ShoppingListRepository
 import de.hs_rm.recipe_me.service.repository.UserRepository
 import kotlinx.coroutines.runBlocking
-import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
 import java.util.concurrent.Executors
 
 @RunWith(AndroidJUnit4::class)
@@ -43,12 +41,6 @@ class ShoppingListViewModelTest {
     @Before
     fun init() {
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
-    }
-
-    @After
-    @Throws(IOException::class)
-    fun closeDb() {
-        db.close()
     }
 
     /**

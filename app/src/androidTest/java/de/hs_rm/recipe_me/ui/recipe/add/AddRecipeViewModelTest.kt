@@ -65,8 +65,7 @@ class AddRecipeViewModelTest {
         recipeImageRepository = RecipeImageRepository(appContext)
 
         db.clearAllTables()
-        viewModel =
-            AddRecipeViewModel(recipeRepository, recipeImageRepository)
+        viewModel = AddRecipeViewModel(recipeRepository, recipeImageRepository)
         viewModel.setCategory(RecipeCategory.MAIN_DISHES)
         GlobalScope.launch(Dispatchers.Main) {
             delay(1000)
@@ -332,17 +331,17 @@ class AddRecipeViewModelTest {
     @Test
     fun updateCookingStepUnsuccessful() {
         beforeEach()
-        insertTestData(0, 3)
+        insertTestData(2, 3)
         val position = 1
         val text = ""
         val time = 0
         val unit = TimeUnit.MINUTE
-        val ingredient = Ingredient("", 0.0, IngredientUnit.PACK)
+        val ingredient = viewModel.ingredients.getOrAwaitValue()[0]
         val ingredients = mutableListOf(ingredient)
 
         viewModel.prepareCookingStepUpdate(position)
 
-        val countBefore = viewModel.cookingStepsWithIngredients.value?.size!!
+        val countBefore = viewModel.cookingStepsWithIngredients.getOrAwaitValue().size
 
         val success = viewModel.updateCookingStepWithIngredients(
             getEditable(text),
@@ -352,7 +351,9 @@ class AddRecipeViewModelTest {
         )
         assertFalse(success)
 
-        val countAfter = viewModel.cookingStepsWithIngredients.value?.size!!
+        val countAfter = viewModel.cookingStepsWithIngredients.getOrAwaitValue().size
+
+        assertEquals(countBefore, countAfter)
 
         assertNotEquals(
             text,
@@ -366,12 +367,6 @@ class AddRecipeViewModelTest {
             unit,
             viewModel.cookingStepsWithIngredients.value!![position].cookingStep.timeUnit
         )
-        assertNotEquals(
-            ingredient,
-            viewModel.cookingStepsWithIngredients.value!![position].ingredients[0]
-        )
-
-        assertEquals(countBefore, countAfter)
     }
 
     /**
@@ -616,12 +611,11 @@ class AddRecipeViewModelTest {
                 )
             }
             for (j in 1..cookingSteps) {
-                val ingredientList = mutableListOf(TestDataProvider.getRandomIngredient(0))
                 viewModel.addCookingStepWithIngredients(
                     getEditable("Inserted text"),
                     getEditable("9"),
                     TimeUnit.HOUR,
-                    ingredientList
+                    mutableListOf()
                 )
             }
         }
