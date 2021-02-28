@@ -56,7 +56,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_space"
-            android:backgroundTint="@color/red"
             android:paddingHorizontal="@dimen/outline_horizontal">
 
             <TextView
