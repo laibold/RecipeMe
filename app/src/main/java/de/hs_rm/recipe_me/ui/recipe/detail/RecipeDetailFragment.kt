@@ -108,7 +108,6 @@ class RecipeDetailFragment : Fragment() {
         viewModel.recipe.observe(viewLifecycleOwner, { recipeWithRelations ->
             if (recipeWithRelations != null) {
                 onRecipeChanged(recipeWithRelations)
-                viewModel.servings.set(recipeWithRelations.recipe.servings)
             } else {
                 Toast.makeText(context, getString(R.string.err_recipe_not_found), Toast.LENGTH_LONG)
                     .show()
