@@ -20,8 +20,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/outline_horizontal"
             android:backgroundTint="?attr/colorPrimaryVariant"
-            android:contentDescription="@string/add"
+            android:contentDescription="@string/add_cooking_step"
             android:src="@drawable/ic_baseline_add_24"
+            app:tooltipTextCompat="@{@string/add_cooking_step}"
             app:fabSize="mini"
             app:layout_constraintBottom_toBottomOf="@id/header"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +36,6 @@
             android:paddingStart="@dimen/outline_horizontal"
             android:paddingEnd="100dp"
             android:text="@string/add_cooking_steps_text"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header"
             tools:visibility="gone" />
@@ -74,6 +74,15 @@
             android:text="@string/done"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <include
+            android:id="@+id/loading_spinner"
+            layout="@layout/loading_spinner_overlay"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

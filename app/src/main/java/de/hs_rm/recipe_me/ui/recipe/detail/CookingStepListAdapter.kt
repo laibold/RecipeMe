@@ -10,6 +10,8 @@ import androidx.databinding.DataBindingUtil
 import de.hs_rm.recipe_me.databinding.CookingStepListitemBinding
 import de.hs_rm.recipe_me.declaration.ui.fragments.CookingStepCallbackAdapter
 import de.hs_rm.recipe_me.model.recipe.CookingStep
+import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
+import de.hs_rm.recipe_me.service.Formatter
 
 /**
  * Adapter to show CookingSteps in [CookingStepFragment]]
@@ -17,10 +19,11 @@ import de.hs_rm.recipe_me.model.recipe.CookingStep
 class CookingStepListAdapter(
     context: Context,
     private val resource: Int,
-    private val objects: List<CookingStep>,
+    private val objects: List<CookingStepWithIngredients>,
+    private val multiplier: Double,
     private val callbackListener: CookingStepCallbackAdapter,
 ) :
-    ArrayAdapter<CookingStep>(context, resource, objects) {
+    ArrayAdapter<CookingStepWithIngredients>(context, resource, objects) {
 
     @SuppressLint("SetTextI18n")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -40,16 +43,26 @@ class CookingStepListAdapter(
             holder = convertView.tag as CookingStepViewHolder
         }
 
-        val cookingStep = objects[position]
+        val cookingStepWithIngredients = objects[position]
+        val cookingStep = cookingStepWithIngredients.cookingStep
 
-        if (cookingStep.imageUri != "") {
-            // set image here
-        } else {
-            holder.binding.cookingStepImage.visibility = View.GONE
-        }
+        // set image here
+        holder.binding.cookingStepImage.visibility = View.GONE
 
         holder.binding.cookingStepNumber.text = (position + 1).toString()
         holder.binding.cookingStepText.text = cookingStep.text
+
+        if (cookingStepWithIngredients.ingredients.isNotEmpty()) {
+            holder.binding.assignedIngredientsTextView.visibility = View.VISIBLE
+            holder.binding.assignedIngredientsTextView.text =
+                Formatter.formatIngredientList(
+                    context,
+                    cookingStepWithIngredients.ingredients,
+                    multiplier
+                )
+        } else {
+            holder.binding.assignedIngredientsTextView.visibility = View.GONE
+        }
 
         if (cookingStep.time != CookingStep.DEFAULT_TIME) {
             holder.binding.timerElement.visibility = View.VISIBLE
@@ -65,7 +78,7 @@ class CookingStepListAdapter(
         }
 
         holder.binding.timerElement.setOnClickListener {
-            callbackListener.onCallback(objects[position])
+            callbackListener.onCallback(cookingStep)
         }
 
         return holder.view

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.ShoppingListFragmentBinding
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
+import de.hs_rm.recipe_me.model.user.User
 import de.hs_rm.recipe_me.service.Formatter
 import de.hs_rm.recipe_me.service.TextSharer
 
@@ -35,10 +37,11 @@ class ShoppingListFragment : Fragment() {
         )
 
         viewModel.loadShoppingListItems()
+        viewModel.loadUser()
 
-        viewModel.shoppingListItems.observe(viewLifecycleOwner, {
+        viewModel.shoppingListItems.observe(viewLifecycleOwner) {
             onShoppingListItemsChanged(it)
-        })
+        }
 
         binding.shoppingListListLayout.listView.emptyView =
             binding.shoppingListListLayout.addHintText
@@ -56,11 +59,13 @@ class ShoppingListFragment : Fragment() {
         }
 
         binding.shoppingListListLayout.clearListButton.setOnClickListener {
-            viewModel.clearCheckedItems()
+            onClearButtonPressed()
         }
 
-        binding.shareButton.setOnClickListener {
-            TextSharer.share(requireContext(), getShareText())
+        viewModel.user.observe(viewLifecycleOwner) { user ->
+            binding.shareButton.setOnClickListener {
+                TextSharer.share(requireContext(), getShareText(user))
+            }
         }
 
         return binding.root
@@ -77,7 +82,7 @@ class ShoppingListFragment : Fragment() {
             binding.contentWrapper.visibility = View.VISIBLE
         }
         setAdapter(list)
-        toggleButtonVisibility(list.isNotEmpty())
+        toggleButtonsVisibility(list.isNotEmpty())
     }
 
     /**
@@ -102,14 +107,20 @@ class ShoppingListFragment : Fragment() {
      * Toggle visibility of clear list button. Button should be displayed if list is not empty
      * @param listNotEmpty true if list is not empty
      */
-    private fun toggleButtonVisibility(listNotEmpty: Boolean) {
+    private fun toggleButtonsVisibility(listNotEmpty: Boolean) {
         if (listNotEmpty) {
             binding.shoppingListListLayout.clearListButton.visibility = View.VISIBLE
-            binding.shareButton.visibility = View.VISIBLE
+
+            if (viewModel.allItemsChecked()) {
+                binding.shareButton.visibility = View.GONE
+            } else {
+                binding.shareButton.visibility = View.VISIBLE
+            }
         } else {
             binding.shoppingListListLayout.clearListButton.visibility = View.GONE
             binding.shareButton.visibility = View.GONE
         }
+
     }
 
     /**
@@ -118,8 +129,7 @@ class ShoppingListFragment : Fragment() {
     private fun onAddItem() {
         if (binding.addItemEditText.text.isBlank()) {
             binding.addItemEditText.text.clear()
-            binding.addItemEditText.error =
-                requireContext().resources.getString(R.string.err_enter_text)
+            binding.addItemEditText.error = getString(R.string.err_enter_text)
         } else {
             viewModel.addShoppingListItem(binding.addItemEditText.text)
             binding.shoppingListListLayout.scrollView.smoothScrollTo(0, 0)
@@ -128,11 +138,27 @@ class ShoppingListFragment : Fragment() {
     }
 
     /**
+     * If items are checked, remove them. Show toast if no item is checked
+     */
+    private fun onClearButtonPressed() {
+        if (viewModel.isItemChecked() == true) {
+            viewModel.clearCheckedItems()
+        } else {
+            val message = getString(R.string.check_items_to_be_removed)
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    /**
      * @return Text for sharing list items to other apps
      */
-    private fun getShareText(): String {
-        var s =
-            requireContext().resources.getString(R.string.shopping_list_export_headline) + "\n\n"
+    private fun getShareText(user: User?): String {
+        val username = if (user == null) {
+            getString(R.string.my)
+        } else {
+            Formatter.formatNameToGenitive(user.name)
+        }
+        var s = getString(R.string.shopping_list_export_headline).format(username)
         viewModel.shoppingListItems.value?.let {
             for (item in it) {
                 if (!item.checked) {
@@ -145,7 +171,7 @@ class ShoppingListFragment : Fragment() {
                 }
             }
         }
-        s += "\n" + requireContext().resources.getString(R.string.store_link)
+        s += "\n" + getString(R.string.store_link)
         return s
     }
 

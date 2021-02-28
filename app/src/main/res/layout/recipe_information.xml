@@ -14,13 +14,7 @@
         android:paddingTop="15dp"
         android:paddingBottom="@dimen/default_space">
 
-        <View
-            android:layout_width="27dp"
-            android:layout_height="2dp"
-            android:background="#BCBCBC"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <include layout="@layout/grabber_view" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/wrapper"
@@ -35,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_top"
-                android:gravity="center_vertical"
+                android:includeFontPadding="false"
                 android:text="@string/ingredients"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -43,10 +37,9 @@
             <include
                 android:id="@+id/servings_element"
                 layout="@layout/servings"
-                android:layout_width="160sp"
+                android:layout_width="180sp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_top"
-                android:layout_marginEnd="@dimen/outline_horizontal"
+                app:layout_constraintTop_toTopOf="@id/recipe_info_headline"
                 app:layout_constraintBottom_toBottomOf="@id/recipe_info_headline"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -58,10 +51,8 @@
                 android:divider="@android:color/transparent"
                 android:dividerHeight="0dp"
                 android:listSelector="@android:color/transparent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recipe_info_headline"
                 tools:listitem="@layout/ingredient_listitem" />
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/shopping_list_button_wrapper"
@@ -75,9 +66,8 @@
                     style="@style/small_circle_button"
                     android:layout_marginVertical="@dimen/small_space"
                     android:contentDescription="@string/add_to_shopping_list"
-                    android:paddingBottom="2dp"
-                    android:src="@drawable/ic_clipboards"
-                    android:tooltipText="@string/add_to_shopping_list"
+                    android:src="@drawable/ic_baseline_shopping_basket_24"
+                    app:tooltipTextCompat="@{@string/add_to_shopping_list}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:visibility="gone" />
@@ -90,7 +80,7 @@
                     android:contentDescription="@string/cancel"
                     android:src="@drawable/ic_baseline_clear_24"
                     android:tint="?attr/colorPrimaryVariant"
-                    android:tooltipText="@string/cancel"
+                    app:tooltipTextCompat="@{@string/cancel}"
                     android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -103,7 +93,7 @@
                     android:layout_marginStart="@dimen/default_space"
                     android:contentDescription="@string/add_to_shopping_list"
                     android:src="@drawable/ic_baseline_check_24"
-                    android:tooltipText="@string/add_to_shopping_list"
+                    app:tooltipTextCompat="@{@string/add_to_shopping_list}"
                     android:visibility="gone"
                     app:layout_constraintStart_toEndOf="@id/to_shopping_list_cancel_button"
                     app:layout_constraintTop_toTopOf="parent"
@@ -117,11 +107,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_below_headline_1"
-                android:gravity="center_vertical"
                 android:text="@string/steps"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/shopping_list_button_wrapper" />
-            <!--TODO why center_vertical?-->
 
             <TextView
                 android:id="@+id/steps"

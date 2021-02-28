@@ -35,14 +35,27 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="1." />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/assigned_ingredients_text_view"
+            style="@style/small_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingHorizontal="@dimen/outline_horizontal"
+            android:textColor="@color/dark_gray"
+            android:visibility="gone"
+            tools:maxLines="1"
+            tools:text="@tools:sample/lorem/random"
+            tools:visibility="visible" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cooking_step_text_element"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="@color/red"
+            android:layout_marginTop="@dimen/small_space"
             android:paddingHorizontal="@dimen/outline_horizontal">
 
             <TextView
@@ -51,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:lines="5"
+                tools:lines="3"
                 tools:text="@tools:sample/lorem/random" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -62,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/outline_horizontal"
             android:layout_marginTop="@dimen/space_button_text"
-            android:tooltipText="@string/start_timer"
+            app:tooltipTextCompat="@{@string/start_timer}"
             android:visibility="gone"
             tools:visibility="visible">
 
@@ -70,8 +83,9 @@
                 android:id="@+id/timer_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/timer"
+                android:contentDescription="@string/set_timer"
                 android:src="@drawable/ic_baseline_timer_24"
+                app:tooltipTextCompat="@{@string/set_timer}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

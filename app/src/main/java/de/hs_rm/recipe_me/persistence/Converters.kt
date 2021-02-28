@@ -1,12 +1,11 @@
 package de.hs_rm.recipe_me.persistence
 
 import androidx.room.TypeConverter
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.model.recipe.TimeUnit
+import java.time.LocalDate
+import java.util.*
 
 /**
  * Converters for [AppDatabase]
@@ -62,19 +61,19 @@ class Converters {
     }
 
     /**
-     * [Ingredient] -> [String]
+     * [LocalDate] -> [String]
      */
     @TypeConverter
-    fun ingredientToString(ingredients: MutableList<Ingredient>): String {
-        return Gson().toJson(ingredients)
+    fun localDateToString(date: LocalDate): String {
+        return date.toString()
     }
 
     /**
-     * [Int] -> [TimeUnit]
+     * [String] -> [Date]
      */
     @TypeConverter
-    fun stringToIngredient(str: String): MutableList<Ingredient> {
-        return Gson().fromJson(str, object : TypeToken<List<Ingredient>>() {}.type)
+    fun stringToDate(dateStr: String): LocalDate {
+        return LocalDate.parse(dateStr)
     }
 
 }

@@ -1,25 +1,43 @@
 package de.hs_rm.recipe_me.persistence
 
 import android.content.Context
-import androidx.room.*
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import de.hs_rm.recipe_me.model.RecipeOfTheDay
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.Recipe
+import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
+import de.hs_rm.recipe_me.model.user.User
+import de.hs_rm.recipe_me.persistence.dao.RecipeDao
+import de.hs_rm.recipe_me.persistence.dao.RecipeOfTheDayDao
+import de.hs_rm.recipe_me.persistence.dao.ShoppingListDao
+import de.hs_rm.recipe_me.persistence.dao.UserDao
 
 /**
  * Room Database for this app. Use Daos with Dependency Injection
  */
 @Database(
-    entities = [Recipe::class, Ingredient::class, CookingStep::class, ShoppingListItem::class],
-    version = 5
+    entities = [
+        Recipe::class,
+        Ingredient::class,
+        CookingStep::class,
+        ShoppingListItem::class,
+        RecipeOfTheDay::class,
+        CookingStepIngredientCrossRef::class,
+        User::class
+    ],
+    version = 9
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun recipeDao(): RecipeDao
     abstract fun shoppingListDao(): ShoppingListDao
+    abstract fun recipeOfTheDayDao(): RecipeOfTheDayDao
+    abstract fun userDao(): UserDao
 
     companion object {
         private const val DATABASE_NAME = "test_db"
@@ -40,21 +58,15 @@ abstract class AppDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
 //                .createFromAsset(ASSET_NAME).fallbackToDestructiveMigration()
-                .addMigrations(MIGRATION_4_5)
+                .addMigrations(
+                    AppMigration.MIGRATION_4_5,
+                    AppMigration.MIGRATION_5_6,
+                    AppMigration.MIGRATION_6_7,
+                    AppMigration.MIGRATION_7_8,
+                    AppMigration.MIGRATION_8_9
+                )
                 .build()
         }
 
-        private val MIGRATION_4_5 = object : Migration(4, 5) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL(
-                    "CREATE TABLE IF NOT EXISTS `ShoppingListItem`" +
-                            " (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                            " `checked` INTEGER NOT NULL," +
-                            " `name` TEXT NOT NULL," +
-                            " `quantity` REAL NOT NULL," +
-                            " `unit` INTEGER NOT NULL)"
-                )
-            }
-        }
     }
 }

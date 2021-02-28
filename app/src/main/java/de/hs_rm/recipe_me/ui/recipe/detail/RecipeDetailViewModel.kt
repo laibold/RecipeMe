@@ -2,21 +2,26 @@ package de.hs_rm.recipe_me.ui.recipe.detail
 
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
-import de.hs_rm.recipe_me.service.RecipeRepository
-import de.hs_rm.recipe_me.service.ShoppingListRepository
+import de.hs_rm.recipe_me.service.repository.RecipeImageRepository
+import de.hs_rm.recipe_me.service.repository.RecipeRepository
+import de.hs_rm.recipe_me.service.repository.ShoppingListRepository
 import kotlinx.coroutines.launch
+import java.io.File
+import javax.inject.Inject
 
 /**
  * Shared ViewModel for [RecipeDetailFragment] and [CookingStepFragment]
  */
-class RecipeDetailViewModel @ViewModelInject constructor(
+@HiltViewModel
+class RecipeDetailViewModel @Inject constructor(
     private val recipeRepository: RecipeRepository,
-    private val shoppingListRepository: ShoppingListRepository
+    private val imageRepository: RecipeImageRepository,
+    private val shoppingListRepository: ShoppingListRepository,
 ) : ViewModel() {
 
     lateinit var recipe: LiveData<RecipeWithRelations>
@@ -27,7 +32,7 @@ class RecipeDetailViewModel @ViewModelInject constructor(
      * Get [RecipeWithRelations] from repository and save it to ViewModel
      */
     fun loadRecipe(id: Long) {
-        recipe = recipeRepository.getRecipeById(id)
+        recipe = recipeRepository.getRecipeWithRelationsById(id)
     }
 
     /**
@@ -80,6 +85,14 @@ class RecipeDetailViewModel @ViewModelInject constructor(
                 ingredient.checked = false
             }
         }
+    }
+
+    /**
+     * Returns file of recipeImage that can be loaded into view via Glide.
+     * If no image is available, null will be returned
+     */
+    fun getRecipeImageFile(recipeId: Long): File? {
+        return imageRepository.getRecipeImageFile(recipeId)
     }
 
     companion object {

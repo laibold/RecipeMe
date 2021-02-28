@@ -1,9 +1,7 @@
 package de.hs_rm.recipe_me.model.shopping_list
 
 import android.content.Context
-import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit

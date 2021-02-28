@@ -4,30 +4,46 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import de.hs_rm.recipe_me.persistence.AppDatabase
-import de.hs_rm.recipe_me.persistence.RecipeDao
-import de.hs_rm.recipe_me.persistence.ShoppingListDao
+import dagger.hilt.components.SingletonComponent
+import de.hs_rm.recipe_me.persistence.*
+import de.hs_rm.recipe_me.persistence.dao.RecipeDao
+import de.hs_rm.recipe_me.persistence.dao.RecipeOfTheDayDao
+import de.hs_rm.recipe_me.persistence.dao.ShoppingListDao
+import de.hs_rm.recipe_me.persistence.dao.UserDao
 import javax.inject.Singleton
 
 /**
- * Dependency Injection Module for data sources like Dao
+ * Dependency Injection Module for room data sources
  */
+@InstallIn(SingletonComponent::class)
 @Module
-@InstallIn(ApplicationComponent::class)
 object DataSourceModule {
 
-    @Provides
     @Singleton
-    fun providesRecipeDao(@ApplicationContext context: Context): RecipeDao {
-        return AppDatabase.getInstance(context).recipeDao()
+    @Provides
+    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
+        return AppDatabase.getInstance(context)
     }
 
     @Provides
-    @Singleton
-    fun providesShoppingListDao(@ApplicationContext context: Context): ShoppingListDao {
-        return AppDatabase.getInstance(context).shoppingListDao()
+    fun provideRecipeDao(appDatabase: AppDatabase): RecipeDao {
+        return appDatabase.recipeDao()
+    }
+
+    @Provides
+    fun provideShoppingListDao(appDatabase: AppDatabase): ShoppingListDao {
+        return appDatabase.shoppingListDao()
+    }
+
+    @Provides
+    fun provideRecipeOfTheDayDao(appDatabase: AppDatabase): RecipeOfTheDayDao {
+        return appDatabase.recipeOfTheDayDao()
+    }
+
+    @Provides
+    fun provideUserDao(appDatabase: AppDatabase): UserDao {
+        return appDatabase.userDao()
     }
 
 }

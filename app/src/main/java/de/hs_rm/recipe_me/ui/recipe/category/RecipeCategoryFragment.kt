@@ -24,7 +24,6 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
     private val args: RecipeCategoryFragmentArgs by navArgs()
     private lateinit var binding: RecipeCategoryFragmentBinding
     private lateinit var adapter: RecipeListAdapter
-    private var isInitialized = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,7 +38,7 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
         )
 
         viewModel.category = args.recipeCategory
-        val name = context?.resources?.getString(viewModel.category.nameResId)
+        val name = getString(viewModel.category.nameResId)
         binding.header.headlineText = name
         binding.categoryImage.setImageResource(viewModel.category.drawableResId)
 
@@ -48,12 +47,14 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
         }
 
         binding.addButton.setOnClickListener {
-            val direction = RecipeCategoryFragmentDirections.toAddRecipeNavGraph(viewModel.category)
+            val direction = RecipeCategoryFragmentDirections.toAddRecipeNavGraph(
+                viewModel.category,
+                clearValues = true
+            )
             findNavController().navigate(direction)
         }
 
         setAdapter()
-        binding.recipeScrollview.recipeList.emptyView = binding.recipeScrollview.addHintText
 
         return binding.root
     }
@@ -81,7 +82,8 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
      * Zooms into image when ScrollView gets moved upwards and the other way round
      */
     private fun onScroll(scrollY: Int) {
-        if (scrollY < 800) { // TODO check on tablet
+        // For performance improvement: just scroll if image is visible and only on straight scrollY values
+        if (scrollY < 1100 && scrollY % 1 == 0) {
             val scaleVal = (1 + (scrollY.toFloat() / 9000))
             binding.categoryImage.scaleX = scaleVal
             binding.categoryImage.scaleY = scaleVal
@@ -95,12 +97,15 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
     private fun setAdapter() {
         val list = binding.recipeScrollview.recipeList
         viewModel.getRecipesByCategory(viewModel.category).observe(this.viewLifecycleOwner, {
-            if (!isInitialized) {
-                binding.recipeScrollview.contentWrapper.visibility = View.VISIBLE
+            if (it.isEmpty()) {
+                binding.recipeScrollview.addHintText.visibility = View.VISIBLE
+            } else {
+                binding.recipeScrollview.addHintText.visibility = View.GONE
             }
-            adapter = RecipeListAdapter(requireContext(), R.layout.recipe_listitem, it, this)
+
+            binding.recipeScrollview.contentWrapper.visibility = View.VISIBLE
+            adapter = RecipeListAdapter(requireContext(), R.layout.recipe_listitem, it, viewModel, this)
             list.adapter = adapter
-            adapter.notifyDataSetChanged()
         })
     }
 
@@ -113,7 +118,6 @@ class RecipeCategoryFragment : Fragment(), DeleteRecipeCallbackAdapter {
             .message(R.string.delete_recipe_message)
             .positiveButton(R.string.delete) {
                 viewModel.deleteRecipeAndRelations(recipe)
-                adapter.notifyDataSetChanged()
             }
             .negativeButton(
                 R.string.cancel

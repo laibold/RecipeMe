@@ -12,9 +12,7 @@ import android.view.View.*
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.button.MaterialButton
 import de.hs_rm.recipe_me.R
@@ -46,7 +44,7 @@ class CustomAlertDialog private constructor(
         val width = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
         window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
 
-        if (customIcon != Companion.DEFAULT_ICON_VALUE) {
+        if (customIcon != DEFAULT_ICON_VALUE) {
             val iconView = findViewById<ImageButton>(R.id.delete_icon)
             iconView.background = ResourcesCompat.getDrawable(activity.resources, customIcon, null)
         }
@@ -103,12 +101,12 @@ class CustomAlertDialog private constructor(
         /**
          * Headline of the dialog
          */
-        fun title(id: Int) = apply { this.title = activity.resources.getString(id) }
+        fun title(id: Int) = apply { this.title = activity.getString(id) }
 
         /**
          * Message of the dialog
          */
-        fun message(id: Int) = apply { this.message = activity.resources.getString(id) }
+        fun message(id: Int) = apply { this.message = activity.getString(id) }
 
         /**
          * Icon of the dialog
@@ -119,7 +117,7 @@ class CustomAlertDialog private constructor(
          * Button Text and Listener for the positive button (action button)
          */
         fun positiveButton(textId: Int, listener: OnClickListener) = apply {
-            this.positiveButtonText = activity.resources.getString(textId)
+            this.positiveButtonText = activity.getString(textId)
             this.positiveButtonListener = listener
         }
 
@@ -127,7 +125,7 @@ class CustomAlertDialog private constructor(
          * Button Text and Listener for the negative button (cancel button)
          */
         fun negativeButton(textId: Int, listener: OnClickListener) = apply {
-            this.negativeButtonText = activity.resources.getString(textId)
+            this.negativeButtonText = activity.getString(textId)
             this.negativeButtonListener = listener
         }
 

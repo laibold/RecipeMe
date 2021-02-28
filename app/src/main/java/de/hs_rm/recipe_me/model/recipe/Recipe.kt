@@ -10,23 +10,25 @@ import androidx.room.PrimaryKey
 data class Recipe(
     var name: String,
     var servings: Int,
-    var category: RecipeCategory,
-    var imageUri: String,
+    var category: RecipeCategory
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
+    var id: Long = DEFAULT_ID
 
     constructor() : this(
         "",
         0,
-        RecipeCategory.values()[0],
-        ""
+        RecipeCategory.values()[0]
     )
 
     constructor(recipeCategory: RecipeCategory) : this(
         "",
         0,
-        recipeCategory,
-        ""
+        recipeCategory
     )
+
+    companion object {
+        /** id a Recipe has by default (when it has not been persisted) */
+        const val DEFAULT_ID = 0L
+    }
 }

@@ -13,14 +13,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="300dp" />
+            app:layout_constraintGuide_begin="@dimen/scroll_view_image_offset_high" />
 
         <ImageView
             android:id="@+id/category_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@android:color/white"
-            android:contentDescription="@string/recipe_image"
+            android:contentDescription="@string/category_picture"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toTopOf="@+id/guideline_imageview"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +31,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@drawable/gradient_overlay"
+            android:background="@drawable/gradient_overlay_dark"
             app:layout_constraintBottom_toTopOf="@+id/guideline_imageview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,10 +58,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!--Dummy to let proper view start at 260dp-->
+                <!--Dummy to let proper view start with offset-->
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="260dp" />
+                    android:layout_height="@dimen/scroll_view_offset_high" />
 
                 <include
                     android:id="@+id/recipe_scrollview"
@@ -77,6 +77,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
             android:contentDescription="@string/desc_add_recipe"
+            app:tooltipTextCompat="@{@string/desc_add_recipe}"
             android:src="@drawable/ic_baseline_add_24"
             app:borderWidth="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -1,9 +1,13 @@
 package de.hs_rm.recipe_me.ui.recipe.detail
 
+import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
@@ -11,12 +15,16 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeDetailFragmentBinding
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
+import de.hs_rm.recipe_me.service.GlideApp
 
 @AndroidEntryPoint
 class RecipeDetailFragment : Fragment() {
@@ -39,9 +47,10 @@ class RecipeDetailFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = DataBindingUtil.inflate(
             inflater,
@@ -53,8 +62,58 @@ class RecipeDetailFragment : Fragment() {
         val recipeId = args.recipeId
         viewModel.loadRecipe(recipeId)
 
+        // Disable right padding for headline
+        binding.recipeDetailName.headline.setPadding(
+            binding.recipeDetailName.headline.paddingLeft,
+            binding.recipeDetailName.headline.paddingTop,
+            0,
+            binding.recipeDetailName.headline.paddingBottom,
+        )
+
+        // Dispatch touch events from dummyView to topElementsWrapper
+        // Subtract scroll position, because dummy view will move, but wrapper won't
+        binding.dummyView.setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    event.offsetLocation(
+                        (-binding.scrollView.scrollX).toFloat(),
+                        (-binding.scrollView.scrollY).toFloat()
+                    )
+                    binding.topElementsWrapper.dispatchTouchEvent(event)
+                }
+                MotionEvent.ACTION_UP -> {
+                    view.performClick()
+                }
+            }
+            true
+        }
+
+        // Navigate to edit recipe
+        binding.editRecipeButton.setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    val direction = RecipeDetailFragmentDirections.toAddRecipeNavGraph(
+                        recipeId = viewModel.recipe.value?.recipe!!.id,
+                        clearValues = true
+                    )
+                    view.findNavController().navigate(direction)
+                }
+                MotionEvent.ACTION_UP -> {
+                    view.performClick()
+                }
+            }
+            true
+        }
+
         viewModel.recipe.observe(viewLifecycleOwner, { recipeWithRelations ->
-            onRecipeChanged(recipeWithRelations)
+            if (recipeWithRelations != null) {
+                onRecipeChanged(recipeWithRelations)
+                viewModel.servings.set(recipeWithRelations.recipe.servings)
+            } else {
+                Toast.makeText(context, getString(R.string.err_recipe_not_found), Toast.LENGTH_LONG)
+                    .show()
+                onBackPressed()
+            }
         })
 
         viewModel.servings.addOnPropertyChangedCallback(object :
@@ -117,6 +176,7 @@ class RecipeDetailFragment : Fragment() {
 
     /**
      * Set recipe name, servings, ingredients and cooking steps to view
+     * Hide cooking step elements when recipe has no cooking steps
      */
     private fun onRecipeChanged(recipeWithRelations: RecipeWithRelations) {
         binding.recipeDetailName.headlineText = recipeWithRelations.recipe.name
@@ -126,7 +186,13 @@ class RecipeDetailFragment : Fragment() {
         } else {
             onServingsChanged(viewModel.servings.get())
         }
-        setCookingSteps(recipeWithRelations)
+
+        if (recipeWithRelations.cookingStepsWithIngredients.isEmpty()) {
+            binding.forwardButton.visibility = View.GONE
+            binding.recipeInfo.cookingStepsHeadline.visibility = View.GONE
+        } else {
+            setCookingSteps(recipeWithRelations)
+        }
         setImage(recipeWithRelations)
         binding.recipeInfo.wrapper.visibility = View.VISIBLE
     }
@@ -135,7 +201,19 @@ class RecipeDetailFragment : Fragment() {
      * Set background image
      */
     private fun setImage(recipeWithRelations: RecipeWithRelations) {
-        binding.recipeDetailImage.setImageResource(recipeWithRelations.recipe.category.drawableResId)
+        val imageFile = viewModel.getRecipeImageFile(recipeWithRelations.recipe.id)
+        if (imageFile != null) {
+            GlideApp.with(requireContext())
+                .setDefaultRequestOptions(
+                    RequestOptions()
+                        .error(recipeWithRelations.recipe.category.drawableResId)
+                )
+                .load(Uri.fromFile(imageFile))
+                .signature(ObjectKey(System.currentTimeMillis())) // use timestamp to prevent problems with caching
+                .into(binding.recipeDetailImage)
+        } else {
+            binding.recipeDetailImage.setImageResource(recipeWithRelations.recipe.category.drawableResId)
+        }
     }
 
     /**
@@ -153,8 +231,8 @@ class RecipeDetailFragment : Fragment() {
 
         list.setOnItemClickListener { _, _, _, id ->
             if (viewModel.ingredientSelectionActive.get()) {
-                val recipe = viewModel.recipe.value!!.ingredients[id.toInt()]
-                recipe.checked = !recipe.checked
+                val ingredient = viewModel.recipe.value!!.ingredients[id.toInt()]
+                ingredient.checked = !ingredient.checked
                 adapter!!.notifyDataSetChanged()
             }
         }
@@ -165,8 +243,8 @@ class RecipeDetailFragment : Fragment() {
      */
     private fun setCookingSteps(recipeWithRelations: RecipeWithRelations) {
         var allCookingSteps = ""
-        for (cookingStep in recipeWithRelations.cookingSteps)
-            allCookingSteps += cookingStep.text + "\n\n"
+        for (cookingStep in recipeWithRelations.cookingStepsWithIngredients)
+            allCookingSteps += cookingStep.cookingStep.text + "\n\n"
         binding.recipeInfo.steps.text = allCookingSteps
     }
 
@@ -177,11 +255,9 @@ class RecipeDetailFragment : Fragment() {
         binding.recipeInfo.servingsElement.servingsSize.text = servings.toString()
 
         if (servings > 1)
-            binding.recipeInfo.servingsElement.servingsText.text =
-                requireContext().resources.getString(R.string.servings)
+            binding.recipeInfo.servingsElement.servingsText.text = getString(R.string.servings)
         else
-            binding.recipeInfo.servingsElement.servingsText.text =
-                requireContext().resources.getString(R.string.serving)
+            binding.recipeInfo.servingsElement.servingsText.text = getString(R.string.serving)
 
         if (adapter != null) {
             adapter!!.multiplier = viewModel.getServingsMultiplier()
@@ -193,7 +269,8 @@ class RecipeDetailFragment : Fragment() {
      * Zooms into image when ScrollView gets moved upwards and the other way round
      */
     private fun onScroll(scrollY: Int) {
-        if (scrollY < 1500) { // TODO check on tablet
+        // For performance improvement: just scroll if image is visible and only on straight scrollY values
+        if (scrollY < 1600 && scrollY % 1 == 0) {
             val scaleVal = (1 + (scrollY.toFloat() / 9000))
             binding.recipeDetailImage.scaleX = scaleVal
             binding.recipeDetailImage.scaleY = scaleVal
@@ -231,8 +308,11 @@ class RecipeDetailFragment : Fragment() {
         // to prevent servingsElement from showing -1
         binding.recipeInfo.wrapper.visibility = View.GONE
         viewModel.servings.set(RecipeDetailViewModel.NOT_INITIALIZED)
-        val direction =
+        val direction = if (args.navigateBackToHome || viewModel.recipe.value == null) {
+            RecipeDetailFragmentDirections.toRecipeHomeFragment()
+        } else {
             RecipeDetailFragmentDirections.toRecipeCategoryFragment(viewModel.recipe.value!!.recipe.category)
+        }
         findNavController().navigate(direction)
     }
 

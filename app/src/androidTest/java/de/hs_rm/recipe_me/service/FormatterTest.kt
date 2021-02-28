@@ -13,7 +13,7 @@ import org.junit.Assert.*
 @RunWith(AndroidJUnit4::class)
 class FormatterTest {
 
-    lateinit var context: Context
+    private lateinit var context: Context
 
     @Before
     fun initContext() {
@@ -46,6 +46,28 @@ class FormatterTest {
         val ingredient = Ingredient("Chickpeas", 1.5, IngredientUnit.CAN)
         val str = Formatter.formatIngredient(context, ingredient, 3.0)
         assertEquals(str, "4,5 Dosen Chickpeas")
+    }
+
+    @Test
+    fun formatIngredientListWithMultipleItems() {
+        val ingredients = listOf(
+            Ingredient("Bananas", 3.0, IngredientUnit.NONE),
+            Ingredient("Chickpeas", 1.5, IngredientUnit.CAN),
+            Ingredient("Curcuma", 0.0, IngredientUnit.NONE)
+        )
+        val str = Formatter.formatIngredientList(context, ingredients)
+
+        assertEquals("3 Bananas, 1,5 Dosen Chickpeas, Curcuma", str)
+    }
+
+    @Test
+    fun formatIngredientListWithSingleItem() {
+        val ingredients = listOf(
+            Ingredient("Bananas", 3.0, IngredientUnit.GRAM)
+        )
+        val str = Formatter.formatIngredientList(context, ingredients)
+
+        assertEquals("3 g Bananas", str)
     }
 
 }

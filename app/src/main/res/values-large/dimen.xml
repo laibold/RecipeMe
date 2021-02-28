@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--layout-->
+    <dimen name="outline_horizontal">35dp</dimen>
+    <dimen name="space_top">35dp</dimen>
+    <dimen name="space_below_headline_1">60dp</dimen>
+    <dimen name="space_below_headline_2">26dp</dimen>
+    <dimen name="space_button_text">17dp</dimen>
+    <dimen name="default_space">52dp</dimen>
+    <dimen name="default_space_button">35dp</dimen>
+    <dimen name="small_space">35dp</dimen>
+    <dimen name="header_min_height">130dp</dimen>
+
+    <!--button size-->
+    <dimen name="wide_small_button_height">48dp</dimen>
+
+    <!--text size-->
+    <dimen name="font_size_headline_1">40dp</dimen>
+    <dimen name="font_size_headline_2">30dp</dimen>
+    <dimen name="font_size_headline_3">25dp</dimen>
+    <dimen name="font_size_text">18sp</dimen>
+    <dimen name="font_size_text_small">15sp</dimen>
+</resources>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginBottom="@dimen/divider_big">
+    <!--marginBottom replaces divider because RecyclerView doesn't support a good working one-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_wrapper"
@@ -12,26 +14,26 @@
             android:id="@+id/recipeImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@null"
             android:scaleType="centerCrop"
-            android:src="@drawable/hummus_default"
+            android:src="@color/dark_gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/recipeName"
             style="@style/headline_image_2"
             android:layout_marginBottom="10dp"
-            android:paddingHorizontal="15dp"
-            tools:text="@tools:sample/lorem/random"
-            tools:maxLength="100"
             android:maxLines="4"
+            android:paddingHorizontal="@dimen/outline_horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"/>
+            app:layout_constraintVertical_bias="1.0"
+            tools:maxLength="100"
+            tools:text="@tools:sample/lorem/random" />
 
         <include
             android:id="@+id/edit_overlay"

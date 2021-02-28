@@ -1,36 +1,58 @@
 package de.hs_rm.recipe_me.ui.shopping_list
 
 import android.text.Editable
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
-import de.hs_rm.recipe_me.service.ShoppingListRepository
+import de.hs_rm.recipe_me.model.user.User
+import de.hs_rm.recipe_me.service.repository.ShoppingListRepository
+import de.hs_rm.recipe_me.service.repository.UserRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * ViewModel for [ShoppingListFragment]
  */
-class ShoppingListViewModel @ViewModelInject constructor(
-    private val repository: ShoppingListRepository
+@HiltViewModel
+class ShoppingListViewModel @Inject constructor(
+    private val shoppingListRepository: ShoppingListRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     lateinit var shoppingListItems: LiveData<List<ShoppingListItem>>
+    lateinit var user: LiveData<User?>
 
     /**
      * Load items from repository and set them to shoppingListItems which can be observed
      */
     fun loadShoppingListItems() {
-        shoppingListItems = repository.getAllItems()
+        shoppingListItems = shoppingListRepository.getAllItems()
     }
 
     /**
-     * Update given item
+     * Returns if one or more items are checked
+     */
+    fun isItemChecked(): Boolean? {
+        return shoppingListItems.value?.map { it.checked }?.contains(true)
+    }
+
+    /**
+     * Returns if all items are checked
+     */
+    fun allItemsChecked(): Boolean {
+        val countItems = shoppingListItems.value?.size
+        val countChecked = shoppingListItems.value?.filter { it.checked }?.size
+        return countItems ==  countChecked
+    }
+
+    /**
+     * Updates given item in database
      */
     private fun updateItem(item: ShoppingListItem) {
         viewModelScope.launch {
-            repository.updateItem(item)
+            shoppingListRepository.updateItem(item)
         }
     }
 
@@ -39,7 +61,7 @@ class ShoppingListViewModel @ViewModelInject constructor(
      */
     fun addShoppingListItem(name: Editable) {
         viewModelScope.launch {
-            repository.addFromString(name.toString().trim())
+            shoppingListRepository.addFromString(name.toString().trim())
         }
     }
 
@@ -59,8 +81,15 @@ class ShoppingListViewModel @ViewModelInject constructor(
      */
     fun clearCheckedItems() {
         viewModelScope.launch {
-            repository.clearCheckedItems()
+            shoppingListRepository.clearCheckedItems()
         }
+    }
+
+    /**
+     * Load user from userRepository and save it to ViewModel
+     */
+    fun loadUser() {
+        user = userRepository.getUser()
     }
 
 }

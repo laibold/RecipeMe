@@ -1,31 +1,32 @@
 package de.hs_rm.recipe_me.ui.recipe.category
 
 import android.content.Context
+import android.net.Uri
+import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
 import androidx.databinding.ObservableBoolean
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import de.hs_rm.recipe_me.databinding.RecipeListitemBinding
 import de.hs_rm.recipe_me.declaration.ui.fragments.DeleteRecipeCallbackAdapter
 import de.hs_rm.recipe_me.model.recipe.Recipe
-import java.util.*
+import de.hs_rm.recipe_me.service.GlideApp
 
-/**
- * Adapter for View of Recipes by RecipeCategory. Layout: recipe_listitem in ListView
- */
 class RecipeListAdapter(
-    context: Context,
+    private val context: Context,
     private val resource: Int,
     private val objects: List<Recipe>,
+    private val viewModel: RecipeCategoryViewModel,
     private val callbackListener: DeleteRecipeCallbackAdapter
-) :
-    ArrayAdapter<Recipe>(context, resource, objects) {
+) : RecyclerView.Adapter<RecipeListAdapter.RecipeViewHolder>() {
 
     /**
      * Indicates whether a recipe list item is selected. Other items will observe this value
@@ -35,26 +36,38 @@ class RecipeListAdapter(
      */
     var itemSelected = ObservableBoolean(false)
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val holder: RecipeViewHolder
+    class RecipeViewHolder(val binding: RecipeListitemBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
-        if (convertView == null) {
-            val viewBinding = DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                resource,
-                parent,
-                false
-            ) as RecipeListitemBinding
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
+        val viewBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(parent.context),
+            resource,
+            parent,
+            false
+        ) as RecipeListitemBinding
 
-            holder = RecipeViewHolder(viewBinding)
-            holder.view.tag = holder
-        } else {
-            holder = convertView.tag as RecipeViewHolder
-        }
+        return RecipeViewHolder(viewBinding)
+    }
 
+    override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {
         val recipe = objects[position]
+
         holder.binding.recipeName.text = recipe.name
-        holder.binding.recipeImageView.setImageResource(recipe.category.drawableResId)
+
+        val imageFile = viewModel.getRecipeImageFile(recipe.id)
+        if (imageFile != null) {
+            GlideApp.with(context)
+                .setDefaultRequestOptions(
+                    RequestOptions()
+                        .error(recipe.category.drawableResId)
+                )
+                .load(Uri.fromFile(imageFile))
+                .signature(ObjectKey(System.currentTimeMillis())) // use timestamp to prevent problems with caching
+                .into(holder.binding.recipeImageView)
+        } else {
+            holder.binding.recipeImageView.setImageResource(recipe.category.drawableResId)
+        }
 
         // on long click remove other selection by setting itemSelected and set selection to this item
         holder.binding.itemWrapper.setOnLongClickListener {
@@ -82,13 +95,22 @@ class RecipeListAdapter(
             }
         }
 
+        // Navigate to AddRecipeNavGraph with recipeId to edit the recipe
+        holder.binding.editOverlay.editButton.setOnClickListener {
+            val direction = RecipeCategoryFragmentDirections.toAddRecipeNavGraph(
+                recipeId = recipe.id,
+                clearValues = true
+            )
+            it.findNavController().navigate(direction)
+        }
+
         // Call fragment if delete button is clicked. It will remove the recipe and refresh the list
         holder.binding.editOverlay.deleteButton.setOnClickListener {
             callbackListener.onCallback(objects[position])
         }
-
-        return holder.view
     }
+
+    override fun getItemCount() = objects.size
 
     /**
      * Remove other selection, vibrate and show new selection
@@ -96,9 +118,13 @@ class RecipeListAdapter(
     private fun showOverlay(binding: RecipeListitemBinding) {
         itemSelected.set(false)
         val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        vibrator.vibrate(
-            VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE)
-        )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            //deprecated in API 26
+            vibrator.vibrate(20)
+        }
 
         itemSelected.set(true)
         binding.editOverlay.overlayWrapper.visibility = View.VISIBLE
@@ -119,9 +145,4 @@ class RecipeListAdapter(
         itemSelected.set(false)
     }
 
-    // https://www.spreys.com/view-holder-design-pattern-for-android/
-    // https://stackoverflow.com/questions/43973490/how-to-do-android-data-binding-a-customadapter-inherited-from-baseadapter-for-sp
-    private class RecipeViewHolder(val binding: RecipeListitemBinding) {
-        val view: View = binding.root
-    }
 }

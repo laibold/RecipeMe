@@ -1,7 +1,8 @@
 package de.hs_rm.recipe_me
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -12,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
@@ -31,4 +33,10 @@ class MainActivity : AppCompatActivity() {
             )
         }
     }
+
+    /**
+     * This function can be used in layouts to let a view block all clicks.
+     * Just add android:onClick="preventClicks" to the xml attributes
+     */
+    fun preventClicks(view: View) {}
 }

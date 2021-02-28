@@ -53,14 +53,15 @@
 
                 <ImageButton
                     android:id="@+id/add_item_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_button_text"
-                    android:layout_marginBottom="12dp"
+                    android:layout_width="@dimen/small_button_size"
+                    android:layout_height="@dimen/small_button_size"
                     android:background="@null"
                     android:contentDescription="@string/add_to_shopping_list"
-                    android:src="@drawable/ic_baseline_add_circle_outline_24"
-                    android:tooltipText="@string/add_to_shopping_list"
+                    android:padding="@dimen/small_button_padding_small_icon"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_baseline_add_circle_24"
+                    android:tint="?attr/colorPrimaryVariant"
+                    app:tooltipTextCompat="@{@string/add_to_shopping_list}"
                     app:layout_constraintBottom_toBottomOf="@id/add_item_edit_text"
                     app:layout_constraintStart_toEndOf="@id/add_item_edit_text" />
 
@@ -84,7 +85,7 @@
             style="@style/custom_floating_action_button"
             android:contentDescription="@string/share"
             android:src="@drawable/ic_baseline_share_24"
-            android:tooltipText="@string/share"
+            app:tooltipTextCompat="@{@string/share}"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
