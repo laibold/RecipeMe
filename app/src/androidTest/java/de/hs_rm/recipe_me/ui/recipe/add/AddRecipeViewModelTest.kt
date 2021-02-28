@@ -370,6 +370,79 @@ class AddRecipeViewModelTest {
     }
 
     /**
+     * Test scenario:
+     * Recipe with 3 Ingredients as been persisted. All 3 Ingredients are assigned to a CookingStep.
+     * One Ingredient gets removed, one updated, one unchanged; User moves to CookingStep Fragment to edit the CookingStep.
+     * Check if the ingredients assigned to the CookingStep are up-to-date
+     */
+    @Test
+    fun updateAssignedIngredientsSuccessful() {
+        val numberOfChildren = 3
+        val cookingStepIndex = 0
+        val updateIndex = 0
+        beforeEach()
+        insertTestData(numberOfChildren, numberOfChildren)
+
+        viewModel.prepareCookingStepUpdate(cookingStepIndex)
+
+        // Assign all 3 ingredients to CookingStep
+        val ingredient0 = viewModel.ingredients.value!![0]
+        val ingredient1 = viewModel.ingredients.value!![1]
+        val ingredient2 = viewModel.ingredients.value!![2]
+        val assignedIngredients = mutableListOf(ingredient0, ingredient1, ingredient2)
+
+        viewModel.updateCookingStepWithIngredients(
+            getEditable("CookingStepName"),
+            getEditable("0"),
+            TimeUnit.SECOND,
+            assignedIngredients
+        )
+
+        // Persist recipe
+        val id = viewModel.persistEntities().getOrAwaitValue()
+
+        GlobalScope.launch(Dispatchers.Main) {
+            delay(1000)
+            viewModel.initRecipe(id)
+        }
+
+        viewModel.recipe.getOrAwaitValue()
+        viewModel.ingredients.getOrAwaitValue()
+        viewModel.cookingStepsWithIngredients.getOrAwaitValue()
+
+        val newName = "New Name"
+        val newQuantity = 6.0
+        val newIngredientUnit = IngredientUnit.DASH
+
+        // Update ingredient at index 0
+        viewModel.prepareIngredientUpdate(updateIndex)
+        viewModel.updateIngredient(
+            getEditable(newName),
+            getEditable(newQuantity.toString()),
+            newIngredientUnit
+        )
+
+        //Remove ingredient at index 2
+        viewModel.ingredients.value!!.removeAt(2)
+
+        // This happens when CookingStepDialog gets opened - Assigned ingredients will be refreshed
+        viewModel.prepareCookingStepUpdate(cookingStepIndex)
+
+        val cookingStepWithIngredients =
+            viewModel.cookingStepsWithIngredients.value!![cookingStepIndex]
+
+        assertEquals(2, cookingStepWithIngredients.ingredients.size)
+
+        val updatedAssignedIngredient = cookingStepWithIngredients.ingredients[updateIndex]
+        assertEquals(newName, updatedAssignedIngredient.name)
+        assertEquals(newQuantity, updatedAssignedIngredient.quantity, 0.0)
+        assertEquals(newIngredientUnit, updatedAssignedIngredient.unit)
+
+        val unchangedIngredient = cookingStepWithIngredients.ingredients[1]
+        assertTrue(unchangedIngredient == ingredient1)
+    }
+
+    /**
      * Test persisting of entities and count them
      * https://stackoverflow.com/questions/51810330/testing-livedata-transformations
      */
@@ -605,15 +678,15 @@ class AddRecipeViewModelTest {
         runBlocking {
             for (j in 1..ingredients) {
                 viewModel.addIngredient(
-                    getEditable("Inserted name"),
-                    getEditable("99"),
+                    getEditable("Inserted name $j"),
+                    getEditable("$j"),
                     IngredientUnit.PINCH
                 )
             }
             for (j in 1..cookingSteps) {
                 viewModel.addCookingStepWithIngredients(
-                    getEditable("Inserted text"),
-                    getEditable("9"),
+                    getEditable("Inserted text $j"),
+                    getEditable("$j"),
                     TimeUnit.HOUR,
                     mutableListOf()
                 )

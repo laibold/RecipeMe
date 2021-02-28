@@ -7,7 +7,7 @@ import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.declaration.addToValue
-import de.hs_rm.recipe_me.declaration.setValueAt
+import de.hs_rm.recipe_me.declaration.notifyObservers
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
@@ -188,7 +188,7 @@ class AddRecipeViewModel @Inject constructor(
             ingredientToUpdate.quantity = tempIngredient.quantity
             ingredientToUpdate.unit = tempIngredient.unit
 
-            _ingredients.setValueAt(this.updatingIngredientIndex, ingredientToUpdate)
+            _ingredients.notifyObservers()
             return true
         }
 
@@ -282,10 +282,7 @@ class AddRecipeViewModel @Inject constructor(
 
             objectToUpdate.ingredients = tempCookingStepWithIngredients.ingredients
 
-            _cookingStepsWithIngredients.setValueAt(
-                this.updatingCookingStepIndex,
-                objectToUpdate
-            )
+            _cookingStepsWithIngredients.notifyObservers()
             return true
         }
         return false
@@ -332,8 +329,24 @@ class AddRecipeViewModel @Inject constructor(
         if (!assignedIngredients.isNullOrEmpty()) {
             val cleanList = assignedIngredients.toMutableList()
             for (ingredient in assignedIngredients) {
-                if (_ingredients.value?.contains(ingredient) == false) {
+                val containsId = if (ingredient.ingredientId == Ingredient.DEFAULT_ID) {
+                    false
+                } else {
+                    _ingredients.value!!.stream()
+                        .anyMatch { it.ingredientId == ingredient.ingredientId }
+                }
+
+                val containsReference = _ingredients.value!!.contains(ingredient)
+                if (!containsId && !containsReference) {
                     cleanList.remove(ingredient)
+                } else if (!containsReference && containsId) {
+                    // update ingredient manually
+                    // TODO containsId is not a great solution, but otherwise the ingredients won't get updated (bizarrely it works for non persisted ingredients)
+                    val updatedIngredient =
+                        _ingredients.value!!.filter { it.ingredientId == ingredient.ingredientId }[0]
+                    ingredient.name = updatedIngredient.name
+                    ingredient.quantity = updatedIngredient.quantity
+                    ingredient.unit = updatedIngredient.unit
                 }
             }
             cookingStepWithIngredients.ingredients = cleanList
