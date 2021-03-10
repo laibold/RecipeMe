@@ -10,7 +10,7 @@
     <dimen name="default_space">30dp</dimen>
     <dimen name="default_space_button">20dp</dimen>
     <dimen name="small_space">20dp</dimen>
-    <dimen name="header_min_height">100dp</dimen>
+    <dimen name="header_min_height">@dimen/_70sdp</dimen>
     <dimen name="elevation_low">3dp</dimen>
     <!--sdp to make dummy view for scrolling adjust itself to different screen sizes-->
     <dimen name="scroll_view_offset_high">@dimen/_210sdp</dimen>
