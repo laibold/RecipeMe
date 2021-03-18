@@ -37,7 +37,7 @@
             <include
                 android:id="@+id/servings_element"
                 layout="@layout/servings"
-                android:layout_width="180sp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="@id/recipe_info_headline"
                 app:layout_constraintBottom_toBottomOf="@id/recipe_info_headline"
@@ -67,9 +67,9 @@
                     android:layout_marginVertical="@dimen/small_space"
                     android:contentDescription="@string/add_to_shopping_list"
                     android:src="@drawable/ic_baseline_shopping_basket_24"
-                    app:tooltipTextCompat="@{@string/add_to_shopping_list}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:tooltipTextCompat="@{@string/add_to_shopping_list}"
                     tools:visibility="gone" />
 
                 <ImageButton
@@ -80,10 +80,10 @@
                     android:contentDescription="@string/cancel"
                     android:src="@drawable/ic_baseline_clear_24"
                     android:tint="?attr/colorPrimaryVariant"
-                    app:tooltipTextCompat="@{@string/cancel}"
                     android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:tooltipTextCompat="@{@string/cancel}"
                     tools:visibility="visible" />
 
                 <ImageButton
@@ -93,10 +93,10 @@
                     android:layout_marginStart="@dimen/default_space"
                     android:contentDescription="@string/add_to_shopping_list"
                     android:src="@drawable/ic_baseline_check_24"
-                    app:tooltipTextCompat="@{@string/add_to_shopping_list}"
                     android:visibility="gone"
                     app:layout_constraintStart_toEndOf="@id/to_shopping_list_cancel_button"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:tooltipTextCompat="@{@string/add_to_shopping_list}"
                     tools:visibility="visible" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
