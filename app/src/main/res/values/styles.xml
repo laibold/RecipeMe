@@ -155,4 +155,9 @@
         <item name="useCompatPadding">true</item>
     </style>
 
+    <style name="rounded_image_view">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">49%</item>
+    </style>
+
 </resources>

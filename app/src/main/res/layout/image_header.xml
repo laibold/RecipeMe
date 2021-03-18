@@ -16,6 +16,8 @@
         android:layout_width="match_parent"
         android:gravity="center_vertical"
         android:includeFontPadding="false"
+        android:hyphenationFrequency="full"
+        android:breakStrategy="simple"
         android:minHeight="@dimen/header_min_height"
         android:paddingHorizontal="@dimen/outline_horizontal"
         android:paddingTop="@dimen/space_top"

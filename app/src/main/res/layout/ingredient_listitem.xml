@@ -37,13 +37,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
+            android:ellipsize="end"
             android:maxLines="1"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/item_checkbox"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="200g Kichererbsen aus dem Glas" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </layout>

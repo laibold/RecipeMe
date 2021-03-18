@@ -50,6 +50,10 @@ data class Ingredient(
         return result
     }
 
+    fun clone(): Ingredient {
+        return Ingredient(recipeId, name, quantity, unit)
+    }
+
     companion object {
         /** id an Ingredient has by default (when it has not been persisted) */
         @Ignore

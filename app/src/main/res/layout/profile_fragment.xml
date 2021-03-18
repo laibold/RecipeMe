@@ -19,33 +19,37 @@
             android:contentDescription="@string/edit_profile"
             android:src="@drawable/ic_baseline_edit_24"
             android:tint="@color/dark_red"
-            app:tooltipTextCompat="@{@string/edit_recipe}"
             app:layout_constraintBottom_toBottomOf="@id/header"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/header" />
+            app:layout_constraintTop_toTopOf="@id/header"
+            app:tooltipTextCompat="@{@string/edit_recipe}" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/profile_image_card_view"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profile_image_dummy"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginTop="@dimen/space_below_headline_1"
-            android:contentDescription="@string/profile_picture"
-            app:cardBackgroundColor="@color/light_gray"
-            app:cardCornerRadius="90dp"
-            app:cardElevation="0dp"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/header">
+            app:layout_constraintTop_toBottomOf="@id/header"
+            android:background="@color/gray"
+            app:layout_constraintWidth_percent="0.4"
+            app:shapeAppearanceOverlay="@style/rounded_image_view" />
 
-            <ImageView
-                android:id="@+id/profile_image"
-                android:layout_width="180dp"
-                android:layout_height="180dp"
-                android:contentDescription="@string/profile_picture"
-                android:src="@drawable/profile_picture_default"
-                android:visibility="invisible" />
-
-        </androidx.cardview.widget.CardView>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profile_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/space_below_headline_1"
+            android:src="@drawable/profile_picture_default"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/header"
+            app:layout_constraintWidth_percent="0.4"
+            app:shapeAppearanceOverlay="@style/rounded_image_view"
+            android:visibility="invisible"/>
 
         <TextView
             android:id="@+id/profile_greeting"
@@ -56,7 +60,7 @@
             android:layout_marginTop="@dimen/default_space"
             android:text="@string/profile_greeting"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profile_image_card_view" />
+            app:layout_constraintTop_toBottomOf="@id/profile_image" />
 
         <TextView
             android:id="@+id/profile_quantity_recipes_text"

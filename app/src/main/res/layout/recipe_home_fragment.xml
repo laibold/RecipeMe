@@ -88,12 +88,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:useCompatPadding="true" />
 
+        <!--Focusability must be manipulated to fix wrong start position at API<28-->
         <ScrollView
             android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:overScrollMode="never"
             android:scrollbars="none"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

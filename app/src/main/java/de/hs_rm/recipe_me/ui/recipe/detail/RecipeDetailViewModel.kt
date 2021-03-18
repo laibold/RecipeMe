@@ -67,7 +67,7 @@ class RecipeDetailViewModel @Inject constructor(
                 if (ingredient.checked) {
                     viewModelScope.launch {
                         shoppingListRepository.addOrUpdateFromIngredient(
-                            ingredient,
+                            ingredient.copy(),
                             getServingsMultiplier()
                         )
                     }

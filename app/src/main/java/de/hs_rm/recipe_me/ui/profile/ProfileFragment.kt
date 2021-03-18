@@ -124,10 +124,9 @@ class ProfileFragment : Fragment(), BottomSheetImagePicker.OnImagesSelectedListe
             .cameraButton(ButtonType.Button)                 //style of the camera link (Button in header, Image tile, None)
             .galleryButton(ButtonType.Button)                //style of the gallery link
             .singleSelectTitle(R.string.pick_single)         //header text
-            .peekHeight(R.dimen.peekHeight)                               //peek height of the bottom sheet
-            .columnSize(R.dimen.columnSize)                                //size of the columns (will be changed a little to fit)
-            .requestTag("single")                 //tag can be used if multiple pickers are used
+            .peekHeight(R.dimen.peekHeight)                  //peek height of the bottom sheet
+            .columnSize(R.dimen.columnSize)                  //size of the columns (will be changed a little to fit)
+            .requestTag("single")                            //tag can be used if multiple pickers are used
             .show(childFragmentManager)
     }
-
 }

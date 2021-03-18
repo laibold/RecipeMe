@@ -26,6 +26,8 @@
             android:layout_marginTop="0dp"
             android:gravity="center_vertical"
             android:includeFontPadding="false"
+            android:hyphenationFrequency="full"
+            android:breakStrategy="simple"
             android:paddingHorizontal="@dimen/outline_horizontal"
             android:paddingTop="@dimen/space_top"
             android:paddingBottom="@dimen/space_top"
@@ -36,6 +38,5 @@
             tools:text="@tools:sample/lorem/random" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </layout>
