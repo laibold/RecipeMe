@@ -18,7 +18,7 @@
         <ListView
             android:id="@+id/ingredients_list_view"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="270dp"
             android:layout_marginTop="@dimen/small_space"
             android:divider="@android:color/transparent"
             android:listSelector="@android:color/transparent"
