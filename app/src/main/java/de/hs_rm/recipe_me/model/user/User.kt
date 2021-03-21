@@ -9,5 +9,4 @@ data class User(
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
-
 }
