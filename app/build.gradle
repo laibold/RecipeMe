@@ -82,7 +82,7 @@ dependencies {
     implementation "androidx.activity:activity-ktx:$activity_version"
 
     // Java 8 support in Sdk < 26
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
     // Dagger Hilt – at upgrade don't forget ext.hilt_version at top-level build.gradle
     implementation "com.google.dagger:hilt-android:$hilt_version"
