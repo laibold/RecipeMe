@@ -3,6 +3,7 @@ package de.hs_rm.recipe_me.model.recipe
 import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import de.hs_rm.recipe_me.LocaleContextProvider
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -24,7 +25,8 @@ class IngredientUnitTest {
      */
     @Test
     fun testNumberStringList() {
-        setLocale(Locale.US)
+        context = LocaleContextProvider.createLocaleContext(Locale.US, context)
+
         val singularList = IngredientUnit.getNumberStringList(context.resources, 1.0)
         assertEquals(IngredientUnit.values().size, singularList.size)
         assertEquals("package", singularList[6])
@@ -39,7 +41,8 @@ class IngredientUnitTest {
      */
     @Test
     fun testNumberStringUS() {
-        setLocale(Locale.US)
+        context = LocaleContextProvider.createLocaleContext(Locale.US, context)
+
         val singularString1 = IngredientUnit.STICK.getNumberString(context.resources, 1.0)
         val singularString2 = IngredientUnit.STICK.getNumberString(context.resources, null)
 
@@ -57,7 +60,8 @@ class IngredientUnitTest {
      */
     @Test
     fun testNumberStringDE() {
-        setLocale(Locale.GERMANY)
+        context = LocaleContextProvider.createLocaleContext(Locale.GERMANY, context)
+
         val singularString1 = IngredientUnit.STICK.getNumberString(context.resources, 1.0)
         val singularString2 = IngredientUnit.STICK.getNumberString(context.resources, null)
 
@@ -68,15 +72,5 @@ class IngredientUnitTest {
         val pluralString2 = IngredientUnit.STICK.getNumberString(context.resources, 2.0)
         assertEquals("Stangen", pluralString1)
         assertEquals("Stangen", pluralString2)
-    }
-
-    /**
-     * Set Locale to context
-     */
-    private fun setLocale(locale: Locale) {
-        Locale.setDefault(locale)
-        val config = context.resources.configuration
-        config.setLocale(locale)
-        context = context.createConfigurationContext(config)
     }
 }
