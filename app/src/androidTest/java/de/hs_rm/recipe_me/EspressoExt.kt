@@ -56,19 +56,6 @@ fun waitForView(viewId: Int, timeout: Long = 2000): ViewAction {
     }
 }
 
-
-// View Assertions
-
-fun ViewInteraction.checkIsGone() = getViewAssertion(ViewMatchers.Visibility.GONE)
-fun ViewInteraction.checkIsVisible() = getViewAssertion(ViewMatchers.Visibility.VISIBLE)
-fun ViewInteraction.checkIsInvisible() = getViewAssertion(ViewMatchers.Visibility.INVISIBLE)
-
-private fun getViewAssertion(visibility: ViewMatchers.Visibility): ViewAssertion? {
-    return ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(visibility))
-}
-
-//
-
 fun withListSize(size: Int): Matcher<View?>? {
     return object : TypeSafeMatcher<View?>() {
         override fun matchesSafely(item: View?): Boolean {

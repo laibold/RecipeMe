@@ -12,7 +12,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.R
-import de.hs_rm.recipe_me.checkIsGone
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.persistence.AppDatabase
@@ -124,7 +123,9 @@ class RecipeHomeFragmentTest {
         val emptyStateText = context.getString(R.string.no_recipe_otd)
         onView(isRoot()).perform(waitForView(R.id.recipe_of_the_day_name))
         onView(withId(R.id.recipe_of_the_day_name)).check(matches(withText(emptyStateText)))
-        onView(withId(R.id.recipe_of_the_day_button)).checkIsGone()
+        onView(withId(R.id.recipe_of_the_day_button)).check(
+            matches(withEffectiveVisibility(Visibility.GONE))
+        )
     }
 
     /**
