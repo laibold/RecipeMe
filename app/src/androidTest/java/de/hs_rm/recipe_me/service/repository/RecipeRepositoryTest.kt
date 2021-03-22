@@ -49,7 +49,7 @@ class RecipeRepositoryTest {
         val recipeName = "TestRecipe"
         val servings = 2
         val category = RecipeCategory.SNACKS
-        var id = -1L
+        var id: Long
 
         runBlocking {
             id = repository.insert(Recipe(recipeName, servings, category))
@@ -82,7 +82,7 @@ class RecipeRepositoryTest {
         val recipeName = "TestRecipe"
         val servings = 2
         val category = RecipeCategory.SNACKS
-        var id = -1L
+        var id: Long
 
         runBlocking {
             id = repository.insert(Recipe(recipeName, servings, category))
@@ -106,7 +106,7 @@ class RecipeRepositoryTest {
         var recipes = repository.getRecipes().getOrAwaitValue()
         val sizeBefore = recipes.size
 
-        var id = -1L
+        var id: Long
 
         runBlocking {
             id = repository.insert(Recipe(recipeName, servings, category))
@@ -155,7 +155,7 @@ class RecipeRepositoryTest {
         val ingredient2 = Ingredient("Ingredient2", 2.2, IngredientUnit.GRAM)
         val cookingStep = CookingStep("StepText", 2, TimeUnit.MINUTE)
 
-        var recipeId = 0L
+        var recipeId: Long
 
         runBlocking {
             recipeId = repository.insert(Recipe())
@@ -186,7 +186,7 @@ class RecipeRepositoryTest {
      */
     @Test
     fun deleteIngredientsAndCookingStepsSuccessful() {
-        var recipeId = 0L
+        var recipeId: Long
 
         runBlocking {
             recipeId = repository.insert(Recipe())

@@ -20,7 +20,7 @@
             tools:src="@tools:sample/backgrounds/scenic" />
 
         <TextView
-            android:id="@+id/categoryName"
+            android:id="@+id/category_name"
             style="@style/headline_image_1"
             android:layout_marginBottom="10dp"
             android:paddingHorizontal="@dimen/outline_horizontal"

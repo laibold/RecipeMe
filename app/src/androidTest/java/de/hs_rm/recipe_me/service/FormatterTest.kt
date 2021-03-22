@@ -3,6 +3,7 @@ package de.hs_rm.recipe_me.service
 import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import de.hs_rm.recipe_me.LocaleContextProvider
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import org.junit.Assert.assertEquals
@@ -46,7 +47,8 @@ class FormatterTest {
      */
     @Test
     fun formatIngredientWithQuantityAndUnit() {
-        setLocale(Locale.US)
+        context = LocaleContextProvider.createLocaleContext(Locale.US, context)
+
         val ingredient = Ingredient("chickpeas", 1.0, IngredientUnit.CAN)
         val str = Formatter.formatIngredient(context, ingredient)
         assertEquals("1 can chickpeas", str)
@@ -57,7 +59,8 @@ class FormatterTest {
      */
     @Test
     fun formatIngredientWithQuantityAndUnitAndMultiplier() {
-        setLocale(Locale.US)
+        context = LocaleContextProvider.createLocaleContext(Locale.US, context)
+
         val ingredient = Ingredient("Chickpeas", 1.5, IngredientUnit.CAN)
         val str = Formatter.formatIngredient(context, ingredient, 3.0)
         assertEquals("4.5 cans Chickpeas", str)
@@ -68,7 +71,8 @@ class FormatterTest {
      */
     @Test
     fun formatIngredientListWithMultipleItemsUS() {
-        setLocale(Locale.US)
+        context = LocaleContextProvider.createLocaleContext(Locale.US, context)
+
         val ingredients = listOf(
             Ingredient("Bananas", 3.0, IngredientUnit.NONE),
             Ingredient("Chickpeas", 1.5, IngredientUnit.CAN),
@@ -84,7 +88,8 @@ class FormatterTest {
      */
     @Test
     fun formatIngredientListWithMultipleItemsDE() {
-        setLocale(Locale.GERMANY)
+        context = LocaleContextProvider.createLocaleContext(Locale.GERMANY, context)
+
         val ingredients = listOf(
             Ingredient("Bananen", 3.0, IngredientUnit.NONE),
             Ingredient("Kichererbsen", 1.5, IngredientUnit.CAN),
@@ -108,13 +113,4 @@ class FormatterTest {
         assertEquals("3 g Bananas", str)
     }
 
-    /**
-     * Set Locale to context
-     */
-    private fun setLocale(locale: Locale) {
-        Locale.setDefault(locale)
-        val config = context.resources.configuration
-        config.setLocale(locale)
-        context = context.createConfigurationContext(config)
-    }
 }

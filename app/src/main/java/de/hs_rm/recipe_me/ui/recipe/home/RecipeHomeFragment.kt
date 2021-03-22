@@ -122,7 +122,7 @@ class RecipeHomeFragment : Fragment() {
      * Set categories to CategoryListAdapter
      */
     private fun setAdapter() {
-        val list = binding.homeScrollview.list
+        val list = binding.homeScrollview.categoryList
         val categories = RecipeCategory.values()
         list.adapter = CategoryListAdapter(requireContext(), R.layout.category_listitem, categories)
     }

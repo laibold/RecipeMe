@@ -84,8 +84,8 @@ class RecipeOfTheDayRepositoryTest {
     fun createRotdWithOneRecipeSuccessful() {
         db.clearAllTables()
         insertTestData(1)
-        var oldRotd: Recipe? = null
-        var newRotd: Recipe? = null
+        var oldRotd: Recipe?
+        var newRotd: Recipe?
 
         runBlocking {
             // Set current rotd's date to yesterday
@@ -112,7 +112,7 @@ class RecipeOfTheDayRepositoryTest {
     fun switchRotdSuccessful() {
         db.clearAllTables()
         insertTestData(2)
-        var oldRotd: Recipe? = null
+        var oldRotd: Recipe?
         var newRotd: Recipe?
 
         for (i in 0..100) {
@@ -169,8 +169,8 @@ class RecipeOfTheDayRepositoryTest {
     fun rotdWithOneRecipeSuccessful() {
         db.clearAllTables()
         insertTestData(1)
-        var oldRotd: Recipe? = null
-        var newRotd: Recipe? = null
+        var oldRotd: Recipe?
+        var newRotd: Recipe?
 
         runBlocking {
             oldRotd = updateAndGetRotd()
@@ -208,7 +208,7 @@ class RecipeOfTheDayRepositoryTest {
      * Updates recipe of the day and returns the new [Recipe]
      */
     private fun updateAndGetRotd(): Recipe? {
-        var recipe: Recipe? = null
+        var recipe: Recipe?
         runBlocking {
             rotdRepository.updateRecipeOfTheDay()
             val rotdId = rotdRepository.getRecipeOfTheDayId()
