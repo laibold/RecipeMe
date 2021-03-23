@@ -13,6 +13,9 @@ import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.*
+import de.hs_rm.recipe_me.declaration.touch
+import de.hs_rm.recipe_me.declaration.waitForView
+import de.hs_rm.recipe_me.declaration.withListSize
 import de.hs_rm.recipe_me.model.RecipeOfTheDay
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
@@ -20,11 +23,15 @@ import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.ui.launchFragmentInHiltContainer
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.hasToString
-import org.junit.*
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import java.time.LocalDate
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltAndroidTest
 class RecipeHomeFragmentTest {
@@ -33,24 +40,18 @@ class RecipeHomeFragmentTest {
     val hiltRule = HiltAndroidRule(this)
 
     @Inject
+    @Named(Constants.TEST_NAME)
     lateinit var db: AppDatabase
 
     lateinit var context: Context
 
     @Before
-    fun init() {
-        Config.env = Config.Environments.TEST
+    fun beforeEach() {
         hiltRule.inject()
-        context = getInstrumentation().targetContext
-    }
+        Assert.assertEquals(AppDatabase.Environment.TEST.dbName, db.openHelper.databaseName)
 
-    /**
-     * Clear Tables and take a nap to prevent database problems
-     */
-    private fun beforeEach() {
-        Assert.assertEquals(Config.DATABASE_TEST, db.openHelper.databaseName)
+        context = getInstrumentation().targetContext
         db.clearAllTables()
-        Thread.sleep(500)
     }
 
     /**
@@ -58,8 +59,6 @@ class RecipeHomeFragmentTest {
      */
     @Test
     fun testAddRecipeNavigation() {
-        beforeEach()
-
         val navController = mock(NavController::class.java)
         launchFragmentInHiltContainer<RecipeHomeFragment> {
             Navigation.setViewNavController(requireView(), navController)
@@ -81,8 +80,6 @@ class RecipeHomeFragmentTest {
      */
     @Test
     fun testCategoryNavigation() {
-        beforeEach()
-
         val category = RecipeCategory.SALADS
 
         val navController = mock(NavController::class.java)
@@ -102,8 +99,6 @@ class RecipeHomeFragmentTest {
      */
     @Test
     fun testCountCategories() {
-        beforeEach()
-
         val navController = mock(NavController::class.java)
         launchFragmentInHiltContainer<RecipeHomeFragment> {
             Navigation.setViewNavController(requireView(), navController)
@@ -119,8 +114,6 @@ class RecipeHomeFragmentTest {
      */
     @Test
     fun testRecipeOfTheDayEmptyState() {
-        beforeEach()
-
         val navController = mock(NavController::class.java)
         launchFragmentInHiltContainer<RecipeHomeFragment> {
             Navigation.setViewNavController(requireView(), navController)
@@ -141,8 +134,6 @@ class RecipeHomeFragmentTest {
      */
     @Test
     fun testRecipeOfTheDayNavigation() {
-        beforeEach()
-
         val id: Long
         runBlocking {
             id = db.recipeDao().insert(Recipe("Test Recipe", 1, RecipeCategory.SALADS))

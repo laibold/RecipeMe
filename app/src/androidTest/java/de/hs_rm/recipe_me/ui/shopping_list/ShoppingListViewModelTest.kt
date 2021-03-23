@@ -3,9 +3,10 @@ package de.hs_rm.recipe_me.ui.shopping_list
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import de.hs_rm.recipe_me.Config
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import de.hs_rm.recipe_me.Constants
 import de.hs_rm.recipe_me.TestDataProvider
 import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.persistence.AppDatabase
@@ -18,20 +19,39 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import java.util.concurrent.Executors
+import javax.inject.Inject
+import javax.inject.Named
 
-@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class ShoppingListViewModelTest {
+
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var db: AppDatabase
-    private lateinit var shoppingListRepository: ShoppingListRepository
-    private lateinit var userRepository: UserRepository
-    private lateinit var shoppingListDao: ShoppingListDao
-    private lateinit var userDao: UserDao
+    @Inject
+    @Named(Constants.TEST_NAME)
+    lateinit var db: AppDatabase
+
+    @Inject
+    @Named(Constants.TEST_NAME)
+    lateinit var shoppingListRepository: ShoppingListRepository
+
+    @Inject
+    @Named(Constants.TEST_NAME)
+    lateinit var userRepository: UserRepository
+
+    @Inject
+    @Named(Constants.TEST_NAME)
+    lateinit var shoppingListDao: ShoppingListDao
+
+    @Inject
+    @Named(Constants.TEST_NAME)
+    lateinit var userDao: UserDao
+
     private lateinit var viewModel: ShoppingListViewModel
 
     private lateinit var appContext: Context
@@ -40,31 +60,17 @@ class ShoppingListViewModelTest {
      * Build inMemory database and create ViewModel
      */
     @Before
-    fun init() {
-        appContext = InstrumentationRegistry.getInstrumentation().targetContext
-    }
+    fun beforeEach() {
+        hiltRule.inject()
+        assertEquals(AppDatabase.Environment.TEST.dbName, db.openHelper.databaseName)
 
-    /**
-     * Clear all database tables and re-initialize ViewModel and its recipe
-     */
-    private fun beforeEach() {
-        Config.env = Config.Environments.TEST
-        db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java)
-            .setTransactionExecutor(Executors.newSingleThreadExecutor())
-            .build()
-
-        shoppingListDao = db.shoppingListDao()
-        userDao = db.userDao()
-        shoppingListRepository = ShoppingListRepository(shoppingListDao)
-        userRepository = UserRepository(userDao)
-
-        db.clearAllTables()
         viewModel = ShoppingListViewModel(shoppingListRepository, userRepository)
+        appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        db.clearAllTables()
     }
 
     @Test
     fun testIsItemChecked() {
-        beforeEach()
         insertTestItems(5)
         viewModel.loadShoppingListItems()
         viewModel.shoppingListItems.getOrAwaitValue()
@@ -79,7 +85,6 @@ class ShoppingListViewModelTest {
 
     @Test
     fun testCountCheckedItems() {
-        beforeEach()
         insertTestItems(2)
         viewModel.loadShoppingListItems()
         viewModel.shoppingListItems.getOrAwaitValue()

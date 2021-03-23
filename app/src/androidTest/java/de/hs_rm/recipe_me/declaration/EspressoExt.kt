@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me
+package de.hs_rm.recipe_me.declaration
 
 import android.view.View
 import android.widget.ListView
@@ -13,7 +13,6 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 import java.util.concurrent.TimeoutException
-
 
 /**
  * This ViewAction tells espresso to wait till a certain view is found in the view hierarchy.

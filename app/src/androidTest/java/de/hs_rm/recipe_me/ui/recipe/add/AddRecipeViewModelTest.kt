@@ -4,10 +4,11 @@ import android.content.Context
 import android.text.Editable
 import android.widget.EditText
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import de.hs_rm.recipe_me.Config
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import de.hs_rm.recipe_me.Constants
 import de.hs_rm.recipe_me.TestDataProvider
 import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.model.recipe.*
@@ -22,19 +23,30 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
-import java.util.concurrent.Executors
+import javax.inject.Inject
+import javax.inject.Named
 
-@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class AddRecipeViewModelTest {
+
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var db: AppDatabase
-    private lateinit var recipeRepository: RecipeRepository
-    private lateinit var recipeImageRepository: RecipeImageRepository
-    private lateinit var recipeDao: RecipeDao
+    @Inject
+    @Named(Constants.TEST_NAME)
+    lateinit var db: AppDatabase
+
+    @Inject
+    @Named(Constants.TEST_NAME)
+    lateinit var recipeRepository: RecipeRepository
+
+    @Inject
+    @Named(Constants.TEST_NAME)
+    lateinit var recipeImageRepository: RecipeImageRepository
+
     private lateinit var viewModel: AddRecipeViewModel
 
     private lateinit var appContext: Context
@@ -43,33 +55,16 @@ class AddRecipeViewModelTest {
      * Build inMemory database and create ViewModel
      */
     @Before
-    fun init() {
+    fun beforeEach() {
+        hiltRule.inject()
+        assertEquals(AppDatabase.Environment.TEST.dbName, db.openHelper.databaseName)
+
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
-    }
-
-    @After
-    fun closeDb() {
-        db.close()
-    }
-
-    /**
-     * Clear all database tables and re-initialize ViewModel and its recipe
-     */
-    private fun beforeEach() {
-        Config.env = Config.Environments.TEST
-        db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java)
-            .setTransactionExecutor(Executors.newSingleThreadExecutor())
-            .build()
-
-        recipeDao = db.recipeDao()
-        recipeRepository = RecipeRepository(recipeDao)
-        recipeImageRepository = RecipeImageRepository(appContext)
-
         db.clearAllTables()
         viewModel = AddRecipeViewModel(recipeRepository, recipeImageRepository)
         viewModel.setCategory(RecipeCategory.MAIN_DISHES)
         GlobalScope.launch(Dispatchers.Main) {
-            delay(1000)
+            delay(1000) // TODO notwendig?
             viewModel.initRecipe(Recipe.DEFAULT_ID)
         }
 
@@ -83,7 +78,6 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun setRecipeAttributesUnsuccessful() {
-        beforeEach()
         assertFalse(viewModel.setRecipeAttributes("", "", RecipeCategory.SNACKS))
         assertFalse(viewModel.setRecipeAttributes("", "1", RecipeCategory.SNACKS))
         assertFalse(viewModel.setRecipeAttributes("name", "", RecipeCategory.SNACKS))
@@ -95,7 +89,6 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun setRecipeAttributesSuccessful() {
-        beforeEach()
         assertTrue(viewModel.setRecipeAttributes("n", "1", RecipeCategory.SNACKS))
     }
 
@@ -104,7 +97,6 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun addIngredientSuccessful() {
-        beforeEach()
         val name = getEditable("Valid Name")
         val quantity1 = getEditable("1.5")
         val quantity2 = getEditable("1,5")
@@ -127,7 +119,6 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun addIngredientUnsuccessful() {
-        beforeEach()
         val nameInvalid = getEditable("")
         val quantityValid = getEditable("1.5")
         val unit = IngredientUnit.NONE
@@ -146,7 +137,6 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun updateIngredientSuccessful() {
-        beforeEach()
         insertTestData(3, 0)
         val position = 1
         val name = "new name"
@@ -178,7 +168,6 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun updateIngredientUnsuccessful() {
-        beforeEach()
         insertTestData(3, 0)
         val position = 1
         val name = ""
@@ -211,8 +200,6 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun deleteAssignedIngredientSuccessful() {
-        beforeEach()
-
         viewModel.addIngredient(getEditable("Delete"), getEditable("1.0"), IngredientUnit.NONE)
         viewModel.addIngredient(getEditable("Keep"), getEditable("1.0"), IngredientUnit.NONE)
 
@@ -244,7 +231,6 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun addCookingStepSuccessful() {
-        beforeEach()
         val text = getEditable("Valid Text")
         val time1 = getEditable("1")
         val time2 = getEditable("")
@@ -266,7 +252,6 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun addCookingStepUnsuccessful() {
-        beforeEach()
         val textInvalid = getEditable("")
         val timeValid = getEditable("3")
         val unit = TimeUnit.MINUTE
@@ -293,7 +278,6 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun updateCookingStepSuccessful() {
-        beforeEach()
         insertTestData(0, 3)
         val position = 1
         val text = "new text"
@@ -331,7 +315,6 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun updateCookingStepUnsuccessful() {
-        beforeEach()
         insertTestData(2, 3)
         val position = 1
         val text = ""
@@ -381,7 +364,7 @@ class AddRecipeViewModelTest {
         val numberOfChildren = 3
         val cookingStepIndex = 0
         val updateIndex = 0
-        beforeEach()
+
         insertTestData(numberOfChildren, numberOfChildren)
 
         viewModel.prepareCookingStepUpdate(cookingStepIndex)
@@ -451,7 +434,6 @@ class AddRecipeViewModelTest {
     fun persistEntitiesSuccessful() {
         val numberOfChildren = 3
 
-        beforeEach()
         insertTestData(numberOfChildren, numberOfChildren)
 
         val recipe = viewModel.recipe.getOrAwaitValue()
@@ -480,7 +462,6 @@ class AddRecipeViewModelTest {
         val servings = "6"
         val category = RecipeCategory.BREAKFAST
 
-        beforeEach()
         insertTestData(numberOfChildren, numberOfChildren)
 
         val recipeId = viewModel.persistEntities().getOrAwaitValue(10)
@@ -562,7 +543,6 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun validateNameSuccessful() {
-        beforeEach()
         assertEquals(0, viewModel.validateName(getEditable("n")))
     }
 
@@ -571,7 +551,6 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun validateNameUnsuccessful() {
-        beforeEach()
         assertNotEquals(0, viewModel.validateName(getEditable("")))
     }
 
@@ -580,7 +559,6 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun validateServingsSuccessful() {
-        beforeEach()
         assertEquals(0, viewModel.validateServings(getEditable("1")))
     }
 
@@ -589,7 +567,6 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun validateServingsUnsuccessful() {
-        beforeEach()
         assertNotEquals(0, viewModel.validateServings(getEditable("0")))
         assertNotEquals(0, viewModel.validateServings(getEditable("")))
     }
@@ -599,7 +576,6 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun clearValuesSuccessful() {
-        beforeEach()
         insertTestData(1, 1)
         viewModel.setRecipeAttributes("Name", "1", RecipeCategory.BREAKFAST)
         viewModel.initRecipe(Recipe.DEFAULT_ID)
@@ -622,7 +598,6 @@ class AddRecipeViewModelTest {
      */
 //    @Test
     fun updateAndCreateRecipeSuccessful() {
-        beforeEach()
 //        insertTestData(1, 1)
         val id = viewModel.persistEntities().getOrAwaitValue()
         assertEquals(1, recipeRepository.getRecipeTotal().getOrAwaitValue())

@@ -5,7 +5,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import de.hs_rm.recipe_me.Config
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import de.hs_rm.recipe_me.Constants
 import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
@@ -18,27 +20,35 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import javax.inject.Inject
+import javax.inject.Named
 
-@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class ShoppingListRepositoryTest {
+
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var db: AppDatabase
-    private lateinit var shoppingListDao: ShoppingListDao
-    private lateinit var repository: ShoppingListRepository
+    @Inject
+    @Named(Constants.TEST_NAME)
+    lateinit var db: AppDatabase
+
+    @Inject
+    @Named(Constants.TEST_NAME)
+    lateinit var repository: ShoppingListRepository
 
     private lateinit var appContext: Context
 
     @Before
-    fun init() {
-        appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        Config.env = Config.Environments.TEST
-        db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java).build()
-        shoppingListDao = db.shoppingListDao()
-        repository = ShoppingListRepository(shoppingListDao)
+    fun beforeEach() {
+        hiltRule.inject()
+        assertEquals(AppDatabase.Environment.TEST.dbName, db.openHelper.databaseName)
 
+        appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        db.clearAllTables()
         insertTestItems()
     }
 

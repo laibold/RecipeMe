@@ -2,10 +2,10 @@ package de.hs_rm.recipe_me.ui.recipe.category
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.room.Room
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import de.hs_rm.recipe_me.Config
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import de.hs_rm.recipe_me.Constants
 import de.hs_rm.recipe_me.TestDataProvider
 import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
@@ -19,20 +19,35 @@ import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import java.util.concurrent.Executors
+import javax.inject.Inject
+import javax.inject.Named
 
-@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class RecipeCategoryViewModelTest {
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var db: AppDatabase
-    private lateinit var recipeRepository: RecipeRepository
-    private lateinit var recipeImageRepository: RecipeImageRepository
-    private lateinit var recipeDao: RecipeDao
-    private lateinit var viewModel: RecipeCategoryViewModel
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
+
+    @Inject
+    @Named(Constants.TEST_NAME)
+    lateinit var db: AppDatabase
+
+    @Inject
+    @Named(Constants.TEST_NAME)
+    lateinit var recipeRepository: RecipeRepository
+
+    @Inject
+    @Named(Constants.TEST_NAME)
+    lateinit var recipeImageRepository: RecipeImageRepository
+
+    @Inject
+    @Named(Constants.TEST_NAME)
+    lateinit var recipeDao: RecipeDao
+
+    lateinit var viewModel: RecipeCategoryViewModel
 
     private lateinit var appContext: Context
 
@@ -40,19 +55,13 @@ class RecipeCategoryViewModelTest {
      * Build inMemory database and create ViewModel
      */
     @Before
-    fun init() {
-        appContext = InstrumentationRegistry.getInstrumentation().targetContext
+    fun beforeEach() {
+        hiltRule.inject()
+        assertEquals(AppDatabase.Environment.TEST.dbName, db.openHelper.databaseName)
 
-        Config.env = Config.Environments.TEST
-        db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java)
-            .setTransactionExecutor(Executors.newSingleThreadExecutor())
-            .build()
-
-        recipeDao = db.recipeDao()
-        recipeRepository = RecipeRepository(recipeDao)
-        recipeImageRepository = RecipeImageRepository(appContext)
         viewModel = RecipeCategoryViewModel(recipeRepository, recipeImageRepository)
-
+        appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        db.clearAllTables()
         insertTestData()
     }
 

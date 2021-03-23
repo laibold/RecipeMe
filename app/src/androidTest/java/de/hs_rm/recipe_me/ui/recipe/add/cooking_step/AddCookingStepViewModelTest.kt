@@ -20,7 +20,7 @@ class AddCookingStepViewModelTest {
     private lateinit var viewModel: AddCookingStepViewModel
 
     @Before
-    fun init() {
+    fun beforeEach() {
         viewModel = AddCookingStepViewModel()
     }
 
