@@ -1,6 +1,7 @@
 package de.hs_rm.recipe_me.ui.recipe.home
 
 import android.content.Context
+import android.widget.Button
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onData
@@ -8,26 +9,22 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import de.hs_rm.recipe_me.R
+import de.hs_rm.recipe_me.*
+import de.hs_rm.recipe_me.model.RecipeOfTheDay
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.ui.launchFragmentInHiltContainer
-import de.hs_rm.recipe_me.waitForView
-import de.hs_rm.recipe_me.withListSize
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.hasToString
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+import java.time.LocalDate
 import javax.inject.Inject
-import javax.inject.Named
 
 @HiltAndroidTest
 class RecipeHomeFragmentTest {
@@ -36,21 +33,24 @@ class RecipeHomeFragmentTest {
     val hiltRule = HiltAndroidRule(this)
 
     @Inject
-    @Named("android_test_db")
     lateinit var db: AppDatabase
 
     lateinit var context: Context
 
     @Before
     fun init() {
+        Config.env = Config.Environments.TEST
         hiltRule.inject()
-        db.clearAllTables()
-        context = InstrumentationRegistry.getInstrumentation().targetContext
+        context = getInstrumentation().targetContext
     }
 
-    @After
-    fun tearDown() {
-        db.close()
+    /**
+     * Clear Tables and take a nap to prevent database problems
+     */
+    private fun beforeEach() {
+        Assert.assertEquals(Config.DATABASE_TEST, db.openHelper.databaseName)
+        db.clearAllTables()
+        Thread.sleep(500)
     }
 
     /**
@@ -58,6 +58,8 @@ class RecipeHomeFragmentTest {
      */
     @Test
     fun testAddRecipeNavigation() {
+        beforeEach()
+
         val navController = mock(NavController::class.java)
         launchFragmentInHiltContainer<RecipeHomeFragment> {
             Navigation.setViewNavController(requireView(), navController)
@@ -79,6 +81,8 @@ class RecipeHomeFragmentTest {
      */
     @Test
     fun testCategoryNavigation() {
+        beforeEach()
+
         val category = RecipeCategory.SALADS
 
         val navController = mock(NavController::class.java)
@@ -98,6 +102,8 @@ class RecipeHomeFragmentTest {
      */
     @Test
     fun testCountCategories() {
+        beforeEach()
+
         val navController = mock(NavController::class.java)
         launchFragmentInHiltContainer<RecipeHomeFragment> {
             Navigation.setViewNavController(requireView(), navController)
@@ -113,12 +119,14 @@ class RecipeHomeFragmentTest {
      */
     @Test
     fun testRecipeOfTheDayEmptyState() {
-        db.clearAllTables()
+        beforeEach()
 
         val navController = mock(NavController::class.java)
         launchFragmentInHiltContainer<RecipeHomeFragment> {
             Navigation.setViewNavController(requireView(), navController)
         }
+
+        Thread.sleep(500)
 
         val emptyStateText = context.getString(R.string.no_recipe_otd)
         onView(isRoot()).perform(waitForView(R.id.recipe_of_the_day_name))
@@ -133,14 +141,33 @@ class RecipeHomeFragmentTest {
      */
     @Test
     fun testRecipeOfTheDayNavigation() {
+        beforeEach()
+
+        val id: Long
         runBlocking {
-            db.recipeDao().insert(Recipe("Test Recipe", 1, RecipeCategory.SALADS))
+            id = db.recipeDao().insert(Recipe("Test Recipe", 1, RecipeCategory.SALADS))
+            db.recipeOfTheDayDao().insert(RecipeOfTheDay(LocalDate.now(), id))
         }
+
+        var button: Button? = null
 
         val navController = mock(NavController::class.java)
         launchFragmentInHiltContainer<RecipeHomeFragment> {
             Navigation.setViewNavController(requireView(), navController)
+            button = view?.findViewById(R.id.recipe_of_the_day_button)
         }
+
+        Thread.sleep(500)
+
+        val location = IntArray(2)
+        button?.getLocationOnScreen(location)
+
+        // Perform touch on button coordinates
+        onView(isRoot()).perform(touch(location[0], location[1]))
+
+        verify(navController).navigate(
+            RecipeHomeFragmentDirections.toRecipeDetailFragment(id, true)
+        )
     }
 
 }

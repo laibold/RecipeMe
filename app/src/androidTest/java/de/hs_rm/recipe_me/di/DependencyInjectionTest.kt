@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import de.hs_rm.recipe_me.Config
 import de.hs_rm.recipe_me.persistence.dao.RecipeDao
 import de.hs_rm.recipe_me.persistence.dao.ShoppingListDao
 import de.hs_rm.recipe_me.persistence.dao.UserDao
@@ -61,6 +62,7 @@ class DependencyInjectionTest {
 
     @Before
     fun init() {
+        Config.env = Config.Environments.TEST
         hiltRule.inject()
     }
 

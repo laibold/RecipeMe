@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import de.hs_rm.recipe_me.Config
 import de.hs_rm.recipe_me.TestDataProvider
 import de.hs_rm.recipe_me.model.RecipeOfTheDay
 import de.hs_rm.recipe_me.model.recipe.Recipe
@@ -34,6 +35,7 @@ class RecipeOfTheDayRepositoryTest {
     @Before
     fun init() {
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        Config.env = Config.Environments.TEST
         db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java).build()
         recipeDao = db.recipeDao()
         rotdDao = db.recipeOfTheDayDao()

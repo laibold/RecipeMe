@@ -5,6 +5,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import de.hs_rm.recipe_me.Config
 import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
@@ -31,6 +32,7 @@ class RecipeRepositoryTest {
     @Before
     fun init() {
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        Config.env = Config.Environments.TEST
         val db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java)
             .setTransactionExecutor(Executors.newSingleThreadExecutor())
             .build()

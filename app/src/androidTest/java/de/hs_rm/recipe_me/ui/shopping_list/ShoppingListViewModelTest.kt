@@ -5,6 +5,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import de.hs_rm.recipe_me.Config
 import de.hs_rm.recipe_me.TestDataProvider
 import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.persistence.AppDatabase
@@ -47,6 +48,7 @@ class ShoppingListViewModelTest {
      * Clear all database tables and re-initialize ViewModel and its recipe
      */
     private fun beforeEach() {
+        Config.env = Config.Environments.TEST
         db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java)
             .setTransactionExecutor(Executors.newSingleThreadExecutor())
             .build()

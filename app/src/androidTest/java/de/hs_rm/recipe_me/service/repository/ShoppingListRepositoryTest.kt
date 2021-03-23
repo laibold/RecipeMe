@@ -5,6 +5,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import de.hs_rm.recipe_me.Config
 import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
@@ -33,6 +34,7 @@ class ShoppingListRepositoryTest {
     @Before
     fun init() {
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        Config.env = Config.Environments.TEST
         db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java).build()
         shoppingListDao = db.shoppingListDao()
         repository = ShoppingListRepository(shoppingListDao)

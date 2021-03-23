@@ -2,17 +2,18 @@ package de.hs_rm.recipe_me
 
 import android.view.View
 import android.widget.ListView
-import androidx.test.espresso.*
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.isRoot
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.PerformException
+import androidx.test.espresso.UiController
+import androidx.test.espresso.ViewAction
+import androidx.test.espresso.action.MotionEvents
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 import java.util.concurrent.TimeoutException
+
 
 /**
  * This ViewAction tells espresso to wait till a certain view is found in the view hierarchy.
@@ -66,5 +67,35 @@ fun withListSize(size: Int): Matcher<View?>? {
             description.appendText("ListView should have $size items")
         }
 
+    }
+}
+
+/**
+ * Perform touch event at given coordinates. Best practice to use with isRoot() as View
+ */
+fun touch(x: Int, y: Int): ViewAction {
+    return object : ViewAction {
+        override fun getConstraints(): Matcher<View> {
+            return isDisplayed()
+        }
+
+        override fun getDescription(): String {
+            return "Send touch events."
+        }
+
+        override fun perform(uiController: UiController, view: View) {
+            // Get view absolute position
+            val location = IntArray(2)
+            view.getLocationOnScreen(location)
+
+            // Offset coordinates by view position
+            val coordinates = floatArrayOf(x.toFloat() + location[0], y.toFloat() + location[1])
+            val precision = floatArrayOf(1f, 1f)
+
+            // Send down event, pause, and send up
+            val down = MotionEvents.sendDown(uiController, coordinates, precision).down
+            uiController.loopMainThreadForAtLeast(200)
+            MotionEvents.sendUp(uiController, down, coordinates)
+        }
     }
 }

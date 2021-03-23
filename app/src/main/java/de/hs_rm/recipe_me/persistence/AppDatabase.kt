@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import de.hs_rm.recipe_me.Config
 import de.hs_rm.recipe_me.model.RecipeOfTheDay
 import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.Ingredient
@@ -40,7 +41,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
     companion object {
-        private const val DATABASE_NAME = "test_db"
 //        private const val ASSET_NAME = "database/data.db"
 
         // For Singleton instantiation
@@ -56,7 +56,7 @@ abstract class AppDatabase : RoomDatabase() {
         // Create and pre-populate the database. See this article for more details:
         // https://medium.com/google-developers/7-pro-tips-for-room-fbadea4bfbd1#4785
         private fun buildDatabase(context: Context): AppDatabase {
-            return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
+            return Room.databaseBuilder(context, AppDatabase::class.java, Config.getDatabaseName())
 //                .createFromAsset(ASSET_NAME).fallbackToDestructiveMigration()
                 .addMigrations(
                     AppMigration.MIGRATION_4_5,
