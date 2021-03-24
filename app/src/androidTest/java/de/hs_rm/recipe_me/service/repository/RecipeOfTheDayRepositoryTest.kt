@@ -12,7 +12,6 @@ import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.persistence.dao.RecipeDao
 import de.hs_rm.recipe_me.persistence.dao.RecipeOfTheDayDao
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -131,7 +130,7 @@ class RecipeOfTheDayRepositoryTest {
         var oldRotd: Recipe?
         var newRotd: Recipe?
 
-        for (i in 0..50) {
+        for (i in 0..25) {
             // Set current rotd's date to yesterday
             runBlocking {
                 oldRotd = updateAndGetRotd()
