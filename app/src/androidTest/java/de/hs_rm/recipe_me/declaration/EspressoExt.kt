@@ -1,7 +1,9 @@
 package de.hs_rm.recipe_me.declaration
 
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ListView
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
@@ -13,6 +15,7 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 import java.util.concurrent.TimeoutException
+
 
 /**
  * This ViewAction tells espresso to wait till a certain view is found in the view hierarchy.
@@ -56,10 +59,15 @@ fun waitForView(viewId: Int, timeout: Long = 2000): ViewAction {
     }
 }
 
-fun withListSize(size: Int): Matcher<View?>? {
+fun withListSize(size: Int): Matcher<View?> {
     return object : TypeSafeMatcher<View?>() {
         override fun matchesSafely(item: View?): Boolean {
-            return (item as ListView).count == size
+            if (item is ListView) {
+                return item.count == size
+            } else if (item is RecyclerView) {
+                return item.adapter?.itemCount == size
+            }
+            throw ClassCastException(item!!::class.toString() + " must be ListView or RecyclerView")
         }
 
         override fun describeTo(description: Description) {
@@ -72,7 +80,7 @@ fun withListSize(size: Int): Matcher<View?>? {
 /**
  * Perform touch event at given coordinates. Best practice to use with isRoot() as View
  */
-fun touch(x: Int, y: Int): ViewAction {
+fun touch(x: Int, y: Int, holdTime: Long = 200): ViewAction {
     return object : ViewAction {
         override fun getConstraints(): Matcher<View> {
             return isDisplayed()
@@ -93,7 +101,7 @@ fun touch(x: Int, y: Int): ViewAction {
 
             // Send down event, pause, and send up
             val down = MotionEvents.sendDown(uiController, coordinates, precision).down
-            uiController.loopMainThreadForAtLeast(200)
+            uiController.loopMainThreadForAtLeast(holdTime)
             MotionEvents.sendUp(uiController, down, coordinates)
         }
     }

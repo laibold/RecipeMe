@@ -12,7 +12,9 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import de.hs_rm.recipe_me.*
+import de.hs_rm.recipe_me.Constants
+import de.hs_rm.recipe_me.R
+import de.hs_rm.recipe_me.declaration.launchFragmentInHiltContainer
 import de.hs_rm.recipe_me.declaration.touch
 import de.hs_rm.recipe_me.declaration.waitForView
 import de.hs_rm.recipe_me.declaration.withListSize
@@ -20,7 +22,6 @@ import de.hs_rm.recipe_me.model.RecipeOfTheDay
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.persistence.AppDatabase
-import de.hs_rm.recipe_me.ui.launchFragmentInHiltContainer
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.hasToString
 import org.junit.Assert
@@ -105,7 +106,6 @@ class RecipeHomeFragmentTest {
         }
 
         val categoriesCount = RecipeCategory.values().size
-
         onView(withId(R.id.category_list)).check(matches(withListSize(categoriesCount)))
     }
 

@@ -158,7 +158,7 @@ class RecipeOfTheDayRepositoryTest {
     fun newRotdOnRecipeDeleted() {
         insertTestData(2)
         val oldRotd = updateAndGetRotd()
-        var recipeTotal = -1
+        var recipeTotal: Int
 
         runBlocking {
             recipeRepository.deleteRecipeAndRelations(oldRotd!!)

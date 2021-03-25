@@ -17,7 +17,7 @@ import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.declaration.withListSize
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 import de.hs_rm.recipe_me.persistence.AppDatabase
-import de.hs_rm.recipe_me.ui.launchFragmentInHiltContainer
+import de.hs_rm.recipe_me.declaration.launchFragmentInHiltContainer
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anything
 import org.junit.Assert
