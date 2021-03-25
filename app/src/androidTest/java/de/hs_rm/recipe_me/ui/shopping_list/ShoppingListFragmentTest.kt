@@ -5,8 +5,8 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
@@ -14,10 +14,10 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.Constants
 import de.hs_rm.recipe_me.R
-import de.hs_rm.recipe_me.declaration.withListSize
+import de.hs_rm.recipe_me.declaration.espresso.withListSize
+import de.hs_rm.recipe_me.declaration.launchFragmentInHiltContainer
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 import de.hs_rm.recipe_me.persistence.AppDatabase
-import de.hs_rm.recipe_me.declaration.launchFragmentInHiltContainer
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anything
 import org.junit.Assert
@@ -79,7 +79,7 @@ class ShoppingListFragmentTest {
         onView(withId(R.id.list_view)).check(matches(withListSize(0)))
 
         // Add item with text
-        onView(withId(R.id.add_item_edit_text)).perform(ViewActions.typeText(itemName))
+        onView(withId(R.id.add_item_edit_text)).perform(typeText(itemName))
         onView(withId(R.id.add_item_button)).perform(click())
         onView(withId(R.id.list_view)).check(matches(withListSize(1)))
 

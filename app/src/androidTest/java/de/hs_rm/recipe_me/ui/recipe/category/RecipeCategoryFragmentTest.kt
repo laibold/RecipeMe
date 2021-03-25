@@ -19,9 +19,9 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.Constants
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.TestDataProvider
+import de.hs_rm.recipe_me.declaration.espresso.waitForView
+import de.hs_rm.recipe_me.declaration.espresso.withListSize
 import de.hs_rm.recipe_me.declaration.launchFragmentInHiltContainer
-import de.hs_rm.recipe_me.declaration.waitForView
-import de.hs_rm.recipe_me.declaration.withListSize
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import kotlinx.coroutines.runBlocking
@@ -68,10 +68,13 @@ class RecipeCategoryFragmentTest {
     }
 
     /**
-     * Test that empty state text is shown if RecyclerView is empty
+     * Test headline and that empty state text is shown if RecyclerView is empty
      */
     @Test
     fun testEmptyState() {
+        val categoryName = context.getString(TEST_CATEGORY.nameResId)
+        onView(withId(R.id.header)).check(matches(withText(categoryName)))
+
         val emptyStateText = context.getString(R.string.add_recipe_text)
         onView(withId(R.id.add_hint_text)).check(matches(withText(emptyStateText)))
         onView(withId(R.id.recipe_list)).check(matches(withListSize(0)))
@@ -131,7 +134,7 @@ class RecipeCategoryFragmentTest {
     fun testRecipeLongPress() {
         val count = 3
         insertTestRecipes(count)
-        onView(isRoot()).perform(waitForView(R.id.recipe_list))
+        onView(isRoot()).perform(waitForView(R.id.edit_overlay))
 
         val firstItem = allOf(withParent(withId(R.id.recipe_list)), withParentIndex(0))
         val secondItem = allOf(withParent(withId(R.id.recipe_list)), withParentIndex(1))
@@ -176,6 +179,11 @@ class RecipeCategoryFragmentTest {
                 clearValues = true
             )
         )
+
+        // Press back - we should now be back at CategoryFragment again
+        Espresso.pressBack()
+        val categoryName = context.getString(TEST_CATEGORY.nameResId)
+        onView(withId(R.id.header)).check(matches(withText(categoryName)))
     }
 
     /**
@@ -185,7 +193,7 @@ class RecipeCategoryFragmentTest {
     @Test
     fun testDeleteRecipe() {
         insertTestRecipes(1)
-        onView(isRoot()).perform(waitForView(R.id.recipe_list))
+        onView(isRoot()).perform(waitForView(R.id.item_wrapper))
 
         // we can use item_wrapper here because there's only one list item
         onView(withId(R.id.item_wrapper)).perform(longClick())

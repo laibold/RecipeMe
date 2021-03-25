@@ -1,19 +1,14 @@
-package de.hs_rm.recipe_me.declaration
+package de.hs_rm.recipe_me.declaration.espresso
 
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ListView
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.MotionEvents
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
-import org.hamcrest.Description
 import org.hamcrest.Matcher
-import org.hamcrest.TypeSafeMatcher
 import java.util.concurrent.TimeoutException
 
 
@@ -25,7 +20,7 @@ import java.util.concurrent.TimeoutException
 fun waitForView(viewId: Int, timeout: Long = 2000): ViewAction {
     return object : ViewAction {
         override fun getConstraints(): Matcher<View> {
-            return isRoot()
+            return ViewMatchers.isRoot()
         }
 
         override fun getDescription(): String {
@@ -36,7 +31,7 @@ fun waitForView(viewId: Int, timeout: Long = 2000): ViewAction {
             uiController.loopMainThreadUntilIdle()
             val startTime = System.currentTimeMillis()
             val endTime = startTime + timeout
-            val viewMatcher = withId(viewId)
+            val viewMatcher = ViewMatchers.withId(viewId)
 
             do {
                 // Iterate through all views on the screen and see if the view we are looking for is there already
@@ -59,31 +54,13 @@ fun waitForView(viewId: Int, timeout: Long = 2000): ViewAction {
     }
 }
 
-fun withListSize(size: Int): Matcher<View?> {
-    return object : TypeSafeMatcher<View?>() {
-        override fun matchesSafely(item: View?): Boolean {
-            if (item is ListView) {
-                return item.count == size
-            } else if (item is RecyclerView) {
-                return item.adapter?.itemCount == size
-            }
-            throw ClassCastException(item!!::class.toString() + " must be ListView or RecyclerView")
-        }
-
-        override fun describeTo(description: Description) {
-            description.appendText("ListView should have $size items")
-        }
-
-    }
-}
-
 /**
  * Perform touch event at given coordinates. Best practice to use with isRoot() as View
  */
 fun touch(x: Int, y: Int, holdTime: Long = 200): ViewAction {
     return object : ViewAction {
         override fun getConstraints(): Matcher<View> {
-            return isDisplayed()
+            return ViewMatchers.isDisplayed()
         }
 
         override fun getDescription(): String {
