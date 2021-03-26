@@ -89,7 +89,6 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_jetpack_version"
     kapt "androidx.hilt:hilt-compiler:$hilt_jetpack_version"
-    implementation "androidx.hilt:hilt-navigation-fragment:$hilt_jetpack_version"
     testImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
     androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
