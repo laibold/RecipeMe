@@ -1,6 +1,6 @@
 package de.hs_rm.recipe_me.model.user
 
-import org.junit.Assert.*
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 class UserTest {
@@ -12,7 +12,7 @@ class UserTest {
     fun testDefaultValues() {
         val user = User()
 
-        assertEquals(0, user.id)
-        assertEquals("", user.name)
+        assertThat(user.id).isEqualTo(0)
+        assertThat(user.name).isEqualTo("")
     }
 }

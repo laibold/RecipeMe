@@ -2,7 +2,8 @@ package de.hs_rm.recipe_me.model.shopping_list
 
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
-import org.junit.Assert.*
+import com.google.common.truth.Truth.assertThat
+import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class ShoppingListItemTest {
@@ -17,12 +18,12 @@ class ShoppingListItemTest {
         val ingredient = Ingredient(name, quantity, unit)
         item.addIngredient(ingredient)
 
-        assertEquals(item.name, name)
-        assertEquals(item.quantity, 6.0, 0.0)
-        assertEquals(item.unit, unit)
+        assertThat(item.name).isEqualTo(name)
+        assertThat(item.quantity).isEqualTo(6.0)
+        assertThat(item.unit).isEqualTo(unit)
     }
 
-    @Test(expected = MismatchingIngredientException::class)
+    @Test
     fun testAddingFailsByName() {
         val name = "Tomato"
         val wrongName = "Ginger"
@@ -31,10 +32,13 @@ class ShoppingListItemTest {
 
         val item = ShoppingListItem(name, quantity, unit)
         val ingredient = Ingredient(wrongName, quantity, unit)
-        item.addIngredient(ingredient)
+
+        assertThrows(MismatchingIngredientException::class.java) {
+            item.addIngredient(ingredient)
+        }
     }
 
-    @Test(expected = MismatchingIngredientException::class)
+    @Test
     fun testAddingFailsByUnit() {
         val name = "Tomato"
         val quantity = 3.0
@@ -43,7 +47,9 @@ class ShoppingListItemTest {
 
         val item = ShoppingListItem(name, quantity, unit)
         val ingredient = Ingredient(name, quantity, wrongUnit)
-        item.addIngredient(ingredient)
-    }
 
+        assertThrows(MismatchingIngredientException::class.java) {
+            item.addIngredient(ingredient)
+        }
+    }
 }

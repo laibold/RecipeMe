@@ -1,7 +1,7 @@
 package de.hs_rm.recipe_me.model.recipe
 
-import org.junit.Assert.*
 import org.junit.Test
+import com.google.common.truth.Truth.assertThat
 
 class CookingStepTest {
 
@@ -15,13 +15,13 @@ class CookingStepTest {
         val hours = 3
 
         val secondStep = CookingStep("", seconds, TimeUnit.SECOND)
-        assertEquals(seconds, secondStep.getTimeInSeconds())
+        assertThat(secondStep.getTimeInSeconds()).isEqualTo(seconds)
 
         val minuteStep = CookingStep("", minutes, TimeUnit.MINUTE)
-        assertEquals(minutes * 60, minuteStep.getTimeInSeconds())
+        assertThat(minuteStep.getTimeInSeconds()).isEqualTo(minutes * 60)
 
         val hourStep = CookingStep("", hours, TimeUnit.HOUR)
-        assertEquals(hours * 3600, hourStep.getTimeInSeconds())
+        assertThat(hourStep.getTimeInSeconds()).isEqualTo(hours * 3600)
     }
 
     /**
@@ -46,12 +46,11 @@ class CookingStepTest {
         val different2 = CookingStep(equalsId, equalsText, differentTime, equalsUnit)
         val different3 = CookingStep(equalsId, equalsText, equalsTime, differentUnit)
 
-        assertEquals(original, original)
-        assertEquals(original, equals)
+        assertThat(original).isEqualTo(original)
+        assertThat(equals).isEqualTo(original)
 
-        assertNotEquals(original, different1)
-        assertNotEquals(original, different2)
-        assertNotEquals(original, different3)
+        assertThat(different1).isNotEqualTo(original)
+        assertThat(different2).isNotEqualTo(original)
+        assertThat(different3).isNotEqualTo(original)
     }
-
 }

@@ -1,6 +1,6 @@
 package de.hs_rm.recipe_me.model.recipe
 
-import org.junit.Assert.*
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 class RecipeTest {
@@ -12,9 +12,9 @@ class RecipeTest {
     fun testDefaultValues() {
         val recipe = Recipe()
 
-        assertEquals(Recipe.DEFAULT_ID, recipe.id)
-        assertEquals("", recipe.name)
-        assertEquals(0, recipe.servings)
-        assertEquals(RecipeCategory.values()[0], recipe.category)
+        assertThat(recipe.id).isEqualTo(Recipe.DEFAULT_ID)
+        assertThat(recipe.name).isEqualTo("")
+        assertThat(recipe.servings).isEqualTo(0)
+        assertThat(recipe.category).isEqualTo(RecipeCategory.values()[0])
     }
 }

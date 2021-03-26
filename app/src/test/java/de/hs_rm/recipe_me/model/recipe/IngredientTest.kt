@@ -1,6 +1,6 @@
 package de.hs_rm.recipe_me.model.recipe
 
-import org.junit.Assert.*
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 class IngredientTest {
@@ -12,8 +12,8 @@ class IngredientTest {
     fun testDefaultValues() {
         val ingredient = Ingredient("name", 1.0, IngredientUnit.NONE)
 
-        assertEquals(Ingredient.DEFAULT_ID, ingredient.ingredientId)
-        assertEquals(false, ingredient.checked)
+        assertThat(ingredient.ingredientId).isEqualTo(Ingredient.DEFAULT_ID)
+        assertThat(ingredient.checked).isEqualTo(false)
     }
 
     /**
@@ -38,11 +38,11 @@ class IngredientTest {
         val different2 = Ingredient(equalsId, equalsName, differentQuantity, equalsUnit)
         val different3 = Ingredient(equalsId, equalsName, equalsQuantity, differentUnit)
 
-        assertEquals(original, original)
-        assertEquals(original, equals)
+        assertThat(original).isEqualTo(original)
+        assertThat(equals).isEqualTo(original)
 
-        assertNotEquals(original, different1)
-        assertNotEquals(original, different2)
-        assertNotEquals(original, different3)
+        assertThat(different1).isNotEqualTo(original)
+        assertThat(different2).isNotEqualTo(original)
+        assertThat(different3).isNotEqualTo(original)
     }
 }
