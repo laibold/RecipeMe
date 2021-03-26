@@ -64,6 +64,13 @@ class AddRecipeViewModel @Inject constructor(
 
     private lateinit var observer: Observer<RecipeWithRelations>
 
+    init {
+        _ingredients.value = mutableListOf()
+        _cookingStepsWithIngredients.value = mutableListOf()
+        _recipeCategory.value = RecipeCategory.values()[0]
+        _recipe.value = Recipe(_recipeCategory.value!!)
+    }
+
     /**
      * Clear variable values on initialization because ViewModel has Activity lifecycle scope
      */

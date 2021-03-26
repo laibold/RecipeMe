@@ -59,10 +59,7 @@ class AddRecipeViewModelTest {
         db.clearAllTables()
         viewModel = AddRecipeViewModel(recipeRepository, recipeImageRepository)
         viewModel.setCategory(RecipeCategory.MAIN_DISHES)
-        GlobalScope.launch(Dispatchers.Main) {
-            delay(1000) // TODO notwendig?
-            viewModel.initRecipe(Recipe.DEFAULT_ID)
-        }
+        viewModel.initRecipe(Recipe.DEFAULT_ID)
 
         viewModel.recipe.getOrAwaitValue()
         viewModel.ingredients.getOrAwaitValue()
@@ -214,7 +211,7 @@ class AddRecipeViewModelTest {
         assertEquals(2, beforeCountList.size)
 
         viewModel.ingredients.value!!.remove(deleteIngredient)
-        Thread.sleep(1000)
+        Thread.sleep(500)
         viewModel.prepareCookingStepUpdate(0)
 
         val ingredientsAfter = viewModel.cookingStepsWithIngredients.value?.get(0)!!.ingredients
@@ -568,7 +565,8 @@ class AddRecipeViewModelTest {
     }
 
     /**
-     * Test if variables get reset on initRecipe()
+     * Test if variables get reset on initRecipe(). This needs to happen to prevent
+     * a former recipe to be shown again, because ViewModel has activity scoped lifecycle.
      */
     @Test
     fun clearValuesSuccessful() {
