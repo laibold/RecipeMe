@@ -6,7 +6,8 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
@@ -77,15 +78,15 @@ class AddRecipeFragment1Test {
 
         // name = " ", servings = ""
         onView(withId(R.id.recipe_name_field))
-            .perform(typeText(" ")).also { closeSoftKeyboard() }
+            .perform(replaceText(" ")).also { closeSoftKeyboard() }
         onView(withId(R.id.next_button)).perform(click())
         onView(withId(R.id.recipe_name_field)).check(matches(hasErrorText(nameError)))
         onView(withId(R.id.recipe_servings_field)).check(matches(hasErrorText(servingsError)))
 
         // name = "Name", servings = "0"
-        onView(withId(R.id.recipe_name_field)).perform(typeText("Name"))
+        onView(withId(R.id.recipe_name_field)).perform(replaceText("Name"))
         onView(withId(R.id.recipe_servings_field))
-            .perform(typeText("0")).also { closeSoftKeyboard() }
+            .perform(replaceText("0")).also { closeSoftKeyboard() }
         onView(withId(R.id.next_button)).perform(click())
         onView(withId(R.id.recipe_servings_field)).check(matches(hasErrorText(servingsSizeError)))
 
@@ -94,9 +95,7 @@ class AddRecipeFragment1Test {
             .perform(replaceText("1")).also { closeSoftKeyboard() }
         onView(withId(R.id.next_button)).perform(click())
 
-        verify(navController).navigate(
-            AddRecipeFragment1Directions.toAddRecipeFragment2()
-        )
+        verify(navController).navigate(AddRecipeFragment1Directions.toAddRecipeFragment2())
     }
 
 }

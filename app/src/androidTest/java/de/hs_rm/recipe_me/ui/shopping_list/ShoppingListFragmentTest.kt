@@ -5,6 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -55,7 +56,7 @@ class ShoppingListFragmentTest {
     }
 
     /**
-     * Check that on empty list empty state text is shown and buttons (clear & share) are gone
+     * Check that on empty list the empty state text is shown and buttons (clear & share) are gone
      */
     @Test
     fun testEmptyState() {
@@ -79,7 +80,7 @@ class ShoppingListFragmentTest {
         onView(withId(R.id.list_view)).check(matches(withListSize(0)))
 
         // Add item with text
-        onView(withId(R.id.add_item_edit_text)).perform(typeText(itemName))
+        onView(withId(R.id.add_item_edit_text)).perform(ViewActions.replaceText(itemName))
         onView(withId(R.id.add_item_button)).perform(click())
         onView(withId(R.id.list_view)).check(matches(withListSize(1)))
 
