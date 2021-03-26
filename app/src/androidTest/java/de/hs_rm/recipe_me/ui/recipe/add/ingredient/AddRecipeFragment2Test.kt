@@ -85,6 +85,10 @@ class AddRecipeFragment2Test {
         val unitCount = IngredientUnit.values().count()
         onView(withId(R.id.add_ingredient_fab)).perform(click())
         onView(withId(R.id.ingredient_unit_spinner)).check(matches(withSpinnerSize(unitCount)))
+
+        // Press cancel
+        onView(withId(R.id.cancel_button)).perform(click())
+        onView(withId(R.id.ingredient_dialog_layout)).check(doesNotExist())
     }
 
     /**
@@ -204,7 +208,9 @@ class AddRecipeFragment2Test {
     @Test
     fun testBackButtonNavigation() {
         onView(withId(R.id.back_button)).perform(click())
-        verify(navController).navigate(AddRecipeFragment2Directions.toAddRecipeNavGraph())
+        verify(navController).navigate(
+            AddRecipeFragment2Directions.toAddRecipeNavGraph(clearValues = false)
+        )
     }
 
     /**

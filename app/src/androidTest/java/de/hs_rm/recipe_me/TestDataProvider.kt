@@ -24,7 +24,7 @@ object TestDataProvider {
         return Ingredient(recipeId, name, quantity, unit)
     }
 
-    fun getRandomCookingStep(recipeId: Long): CookingStep {
+    fun getRandomCookingStep(recipeId: Long = Recipe.DEFAULT_ID): CookingStep {
         val description = getRandomString(20)
         val time = getRandomInt(1, 60)
         val unit = getRandomTimeUnit()
@@ -40,11 +40,13 @@ object TestDataProvider {
         return ShoppingListItem(name, quantity, ingredientUnit)
     }
 
-    fun getRandomString(length: Int): String {
-        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+    private fun getRandomString(length: Int): String {
+        val allowedChars = ('a'..'z') + (' ')
         return (1..length)
             .map { allowedChars.random() }
             .joinToString("")
+            .capitalize()
+            .trim()
     }
 
     fun getRandomDouble(minValue: Double = 0.0, maxValue: Double): Double {

@@ -98,4 +98,6 @@ class AddRecipeFragment1Test {
         verify(navController).navigate(AddRecipeFragment1Directions.toAddRecipeFragment2())
     }
 
+    // TODO test image
+
 }
