@@ -1,5 +1,6 @@
 package de.hs_rm.recipe_me.declaration
 
+import android.text.Editable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import java.util.concurrent.CountDownLatch
@@ -33,3 +34,9 @@ fun <T> LiveData<T>.getOrAwaitValue(
     @Suppress("UNCHECKED_CAST")
     return data as T
 }
+
+fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
+
+fun Int.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this.toString())
+
+fun Double.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this.toString())

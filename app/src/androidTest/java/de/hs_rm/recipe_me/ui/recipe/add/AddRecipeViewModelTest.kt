@@ -1,8 +1,6 @@
 package de.hs_rm.recipe_me.ui.recipe.add
 
 import android.content.Context
-import android.text.Editable
-import android.widget.EditText
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.platform.app.InstrumentationRegistry
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -10,6 +8,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.Constants
 import de.hs_rm.recipe_me.TestDataProvider
 import de.hs_rm.recipe_me.declaration.getOrAwaitValue
+import de.hs_rm.recipe_me.declaration.toEditable
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.service.repository.RecipeImageRepository
@@ -90,10 +89,10 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun addIngredientSuccessful() {
-        val name = getEditable("Valid Name")
-        val quantity1 = getEditable("1.5")
-        val quantity2 = getEditable("1,5")
-        val quantity3 = getEditable("")
+        val name = "Valid Name".toEditable()
+        val quantity1 = (1.5).toEditable()
+        val quantity2 = "1,5".toEditable()
+        val quantity3 = "".toEditable()
         val unit = IngredientUnit.NONE
 
         val countBefore = viewModel.ingredients.value?.size!!
@@ -112,8 +111,8 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun addIngredientUnsuccessful() {
-        val nameInvalid = getEditable("")
-        val quantityValid = getEditable("1.5")
+        val nameInvalid = "".toEditable()
+        val quantityValid = (1.5).toEditable()
         val unit = IngredientUnit.NONE
 
         val countBefore = viewModel.ingredients.value?.size!!
@@ -141,8 +140,8 @@ class AddRecipeViewModelTest {
         val countBefore = viewModel.ingredients.value?.size!!
 
         val success = viewModel.updateIngredient(
-            getEditable(name),
-            getEditable(quantity.toString()),
+            name.toEditable(),
+            quantity.toEditable(),
             ingredientUnit
         )
         assertTrue(success)
@@ -172,8 +171,8 @@ class AddRecipeViewModelTest {
         val countBefore = viewModel.ingredients.value?.size!!
 
         val success = viewModel.updateIngredient(
-            getEditable(name),
-            getEditable(quantity.toString()),
+            name.toEditable(),
+            quantity.toEditable(),
             ingredientUnit
         )
         assertFalse(success)
@@ -193,15 +192,15 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun deleteAssignedIngredientSuccessful() {
-        viewModel.addIngredient(getEditable("Delete"), getEditable("1.0"), IngredientUnit.NONE)
-        viewModel.addIngredient(getEditable("Keep"), getEditable("1.0"), IngredientUnit.NONE)
+        viewModel.addIngredient("Delete".toEditable(), (1.0).toEditable(), IngredientUnit.NONE)
+        viewModel.addIngredient("Keep".toEditable(), (1.0).toEditable(), IngredientUnit.NONE)
 
         val deleteIngredient = viewModel.ingredients.value!![0]
         val keepIngredient = viewModel.ingredients.value!![1]
 
         viewModel.addCookingStepWithIngredients(
-            getEditable("Text"),
-            getEditable("0"),
+            "Text".toEditable(),
+            (0).toEditable(),
             TimeUnit.SECOND,
             mutableListOf(deleteIngredient, keepIngredient)
         )
@@ -224,9 +223,9 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun addCookingStepSuccessful() {
-        val text = getEditable("Valid Text")
-        val time1 = getEditable("1")
-        val time2 = getEditable("")
+        val text = "Valid Text".toEditable()
+        val time1 = (1).toEditable()
+        val time2 = "".toEditable()
         val unit = TimeUnit.SECOND
         val ingredients = mutableListOf(TestDataProvider.getRandomIngredient(0))
 
@@ -245,8 +244,8 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun addCookingStepUnsuccessful() {
-        val textInvalid = getEditable("")
-        val timeValid = getEditable("3")
+        val textInvalid = "".toEditable()
+        val timeValid = (3).toEditable()
         val unit = TimeUnit.MINUTE
         val ingredients = mutableListOf(TestDataProvider.getRandomIngredient(0))
 
@@ -283,8 +282,8 @@ class AddRecipeViewModelTest {
         val countBefore = viewModel.cookingStepsWithIngredients.value?.size!!
 
         val success = viewModel.updateCookingStepWithIngredients(
-            getEditable(text),
-            getEditable(time.toString()),
+            text.toEditable(),
+            time.toEditable(),
             unit,
             ingredients
         )
@@ -321,8 +320,8 @@ class AddRecipeViewModelTest {
         val countBefore = viewModel.cookingStepsWithIngredients.getOrAwaitValue().size
 
         val success = viewModel.updateCookingStepWithIngredients(
-            getEditable(text),
-            getEditable(time.toString()),
+            text.toEditable(),
+            time.toEditable(),
             unit,
             ingredients
         )
@@ -369,8 +368,8 @@ class AddRecipeViewModelTest {
         val assignedIngredients = mutableListOf(ingredient0, ingredient1, ingredient2)
 
         viewModel.updateCookingStepWithIngredients(
-            getEditable("CookingStepName"),
-            getEditable("0"),
+            "CookingStepName".toEditable(),
+            (0).toEditable(),
             TimeUnit.SECOND,
             assignedIngredients
         )
@@ -394,8 +393,8 @@ class AddRecipeViewModelTest {
         // Update ingredient at index 0
         viewModel.prepareIngredientUpdate(updateIndex)
         viewModel.updateIngredient(
-            getEditable(newName),
-            getEditable(newQuantity.toString()),
+            newName.toEditable(),
+            newQuantity.toEditable(),
             newIngredientUnit
         )
 
@@ -479,8 +478,8 @@ class AddRecipeViewModelTest {
 
         // add ingredient
         viewModel.addIngredient(
-            getEditable("New Ingredient"),
-            getEditable("1"),
+            "New Ingredient".toEditable(),
+            (1).toEditable(),
             IngredientUnit.NONE
         )
         // delete ingredient
@@ -488,15 +487,15 @@ class AddRecipeViewModelTest {
         // edit ingredient
         viewModel.prepareIngredientUpdate(0)
         viewModel.updateIngredient(
-            getEditable("Updated Ingredient"),
-            getEditable("2"),
+            "Updated Ingredient".toEditable(),
+            (2).toEditable(),
             IngredientUnit.CAN
         )
 
         // add step
         viewModel.addCookingStepWithIngredients(
-            getEditable("New Step"),
-            getEditable(""),
+            "New Step".toEditable(),
+            "".toEditable(),
             TimeUnit.SECOND,
             mutableListOf()
         )
@@ -536,7 +535,7 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun validateNameSuccessful() {
-        assertEquals(0, viewModel.validateName(getEditable("n")))
+        assertEquals(0, viewModel.validateName("n".toEditable()))
     }
 
     /**
@@ -544,7 +543,7 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun validateNameUnsuccessful() {
-        assertNotEquals(0, viewModel.validateName(getEditable("")))
+        assertNotEquals(0, viewModel.validateName("".toEditable()))
     }
 
     /**
@@ -552,7 +551,7 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun validateServingsSuccessful() {
-        assertEquals(0, viewModel.validateServings(getEditable("1")))
+        assertEquals(0, viewModel.validateServings((1).toEditable()))
     }
 
     /**
@@ -560,8 +559,8 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun validateServingsUnsuccessful() {
-        assertNotEquals(0, viewModel.validateServings(getEditable("0")))
-        assertNotEquals(0, viewModel.validateServings(getEditable("")))
+        assertNotEquals(0, viewModel.validateServings((0).toEditable()))
+        assertNotEquals(0, viewModel.validateServings("".toEditable()))
     }
 
     /**
@@ -630,15 +629,6 @@ class AddRecipeViewModelTest {
     /////////////////////////////////////////////////////
 
     /**
-     * Mock Editable text from EditText
-     */
-    private fun getEditable(s: String): Editable {
-        val editText = EditText(appContext)
-        editText.setText(s)
-        return editText.text
-    }
-
-    /**
      * Insert as many random ingredients and cooking steps to ViewModel as wanted.
      *
      * @param ingredients amount of ingredients to be inserted
@@ -648,15 +638,15 @@ class AddRecipeViewModelTest {
         runBlocking {
             for (j in 1..ingredients) {
                 viewModel.addIngredient(
-                    getEditable("Inserted name $j"),
-                    getEditable("$j"),
+                    "Inserted name $j".toEditable(),
+                    "$j".toEditable(),
                     IngredientUnit.PINCH
                 )
             }
             for (j in 1..cookingSteps) {
                 viewModel.addCookingStepWithIngredients(
-                    getEditable("Inserted text $j"),
-                    getEditable("$j"),
+                    "Inserted text $j".toEditable(),
+                    "$j".toEditable(),
                     TimeUnit.HOUR,
                     mutableListOf()
                 )
