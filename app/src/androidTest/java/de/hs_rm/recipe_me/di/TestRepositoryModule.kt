@@ -58,5 +58,4 @@ object TestRepositoryModule {
     @Named(TEST)
     fun provideUserImageRepository(@ApplicationContext context: Context) =
         UserImageRepository(context)
-
 }

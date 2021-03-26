@@ -51,6 +51,13 @@ data class CookingStep(
         return true
     }
 
+    override fun hashCode(): Int {
+        var result = text.hashCode()
+        result = 31 * result + time
+        result = 31 * result + timeUnit.hashCode()
+        return result
+    }
+
     companion object {
         /** id a CookingStep has by default (when it has not been persisted) */
         @Ignore

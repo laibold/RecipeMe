@@ -105,11 +105,7 @@ class RecipeCategoryFragmentTest {
         onView(withId(R.id.add_button)).perform(click())
 
         verify(navController).navigate(
-            RecipeCategoryFragmentDirections.toAddRecipeNavGraph(
-                TEST_CATEGORY,
-                0,
-                true
-            )
+            RecipeCategoryFragmentDirections.toAddRecipeNavGraph(TEST_CATEGORY, 0, true)
         )
     }
 

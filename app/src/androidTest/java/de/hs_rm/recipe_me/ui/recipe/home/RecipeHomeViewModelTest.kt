@@ -52,7 +52,7 @@ class RecipeHomeViewModelTest {
     @Named(Constants.TEST_NAME)
     lateinit var recipeOfTheDayRepository: RecipeOfTheDayRepository
 
-    lateinit var viewModel: RecipeHomeViewModel
+    private lateinit var viewModel: RecipeHomeViewModel
 
     private lateinit var appContext: Context
 

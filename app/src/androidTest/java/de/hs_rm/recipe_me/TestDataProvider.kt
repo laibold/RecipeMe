@@ -2,7 +2,6 @@ package de.hs_rm.recipe_me
 
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
-import java.math.RoundingMode
 import kotlin.math.round
 import kotlin.random.Random
 
@@ -49,7 +48,7 @@ object TestDataProvider {
             .trim()
     }
 
-    fun getRandomDouble(minValue: Double = 0.0, maxValue: Double): Double {
+    private fun getRandomDouble(minValue: Double = 0.0, maxValue: Double): Double {
         return Random.nextDouble(minValue, maxValue).round(2)
     }
 
@@ -72,7 +71,7 @@ object TestDataProvider {
         return IngredientUnit.values()[unitIndex]
     }
 
-    fun Double.round(decimals: Int): Double {
+    private fun Double.round(decimals: Int): Double {
         var multiplier = 1.0
         repeat(decimals) { multiplier *= 10 }
         return round(this * multiplier) / multiplier

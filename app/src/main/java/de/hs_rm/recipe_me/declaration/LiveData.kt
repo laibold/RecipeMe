@@ -14,17 +14,6 @@ fun <T> MutableLiveData<MutableList<T>>.addToValue(item: T) {
 }
 
 /**
- * Set item at given index at MutableList in MutableLiveData and notify observers.
- * Observers won't recognize if for example if the content of a [MutableList] inside of LiveData gets changed.
- * Call this method as a workaround.
- */
-fun <T> MutableLiveData<MutableList<T>>.setValueAt(index: Int, item: T) {
-    val items = this.value as ArrayList
-    items[index] = item
-    this.notifyObservers()
-}
-
-/**
  * Notify observers of MutableLiveData. Observers won't recognize if for example
  * if the content of a [MutableList] inside of LiveData gets changed.
  * Call this method as a workaround.

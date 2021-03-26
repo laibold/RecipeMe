@@ -47,7 +47,7 @@ class RecipeCategoryViewModelTest {
     @Named(Constants.TEST_NAME)
     lateinit var recipeDao: RecipeDao
 
-    lateinit var viewModel: RecipeCategoryViewModel
+    private lateinit var viewModel: RecipeCategoryViewModel
 
     private lateinit var appContext: Context
 

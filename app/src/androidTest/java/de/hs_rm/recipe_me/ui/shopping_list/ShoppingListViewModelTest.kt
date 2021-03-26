@@ -42,14 +42,6 @@ class ShoppingListViewModelTest {
     @Named(Constants.TEST_NAME)
     lateinit var userRepository: UserRepository
 
-    @Inject
-    @Named(Constants.TEST_NAME)
-    lateinit var shoppingListDao: ShoppingListDao
-
-    @Inject
-    @Named(Constants.TEST_NAME)
-    lateinit var userDao: UserDao
-
     private lateinit var viewModel: ShoppingListViewModel
 
     private lateinit var appContext: Context
