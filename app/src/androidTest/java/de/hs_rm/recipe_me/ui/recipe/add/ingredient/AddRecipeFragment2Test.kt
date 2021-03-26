@@ -1,7 +1,7 @@
 package de.hs_rm.recipe_me.ui.recipe.add.ingredient
 
 import android.content.Context
-import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onData
@@ -23,8 +23,11 @@ import de.hs_rm.recipe_me.declaration.espresso.withSpinnerSize
 import de.hs_rm.recipe_me.declaration.launchFragmentInHiltContainer
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
+import de.hs_rm.recipe_me.model.recipe.Recipe
+import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.service.Formatter
+import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
 import org.hamcrest.Matchers.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -57,21 +60,24 @@ class AddRecipeFragment2Test {
         db.clearAllTables()
 
         navController = Mockito.mock(NavController::class.java)
-        launchFragmentInHiltContainer<AddRecipeFragment2>(bundleOf()) {
+        launchFragmentInHiltContainer<AddRecipeFragment2> {
+            val viewModel: AddRecipeViewModel by activityViewModels()
+            viewModel.setCategory(RecipeCategory.MAIN_DISHES)
+            viewModel.initRecipe(Recipe.DEFAULT_ID)
             Navigation.setViewNavController(requireView(), navController)
         }
     }
 
     /**
-     * Test that on empty list the empty state text is shown and thatspinner contains all units
+     * Test that on empty list the empty state text is shown and that spinner contains all units
      */
     @Test
     fun testElements() {
+        val headlineText = context.getString(R.string.ingredients)
+        onView(withId(R.id.headline)).check(matches(withText(headlineText)))
         onView(isRoot()).perform(waitForView(R.id.add_hint_text))
         val emptyStateText = context.getString(R.string.add_ingredients_text)
         onView(withId(R.id.add_hint_text)).check(matches(withText(emptyStateText)))
-        val headlineText = context.getString(R.string.ingredients)
-        onView(withId(R.id.headline)).check(matches(withText(headlineText)))
 
         onView(withId(R.id.ingredients_list_view)).check(matches(withEffectiveVisibility(Visibility.GONE)))
 
@@ -135,6 +141,10 @@ class AddRecipeFragment2Test {
             .onChildView(withId(R.id.ingredient_text_view)).check(matches(withText(formattedText)))
     }
 
+    /**
+     * Test that on edit button click the selected ingredient in loaded to dialog and that
+     * editing updates the ingredient in the list
+     */
     @Test
     fun testEditIngredient() {
         val ingredient = TestDataProvider.getRandomIngredient(minQuantity = 2.0)
