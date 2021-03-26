@@ -39,7 +39,7 @@ object TestDataProvider {
         return ShoppingListItem(name, quantity, ingredientUnit)
     }
 
-    private fun getRandomString(length: Int): String {
+    fun getRandomString(length: Int): String {
         val allowedChars = ('a'..'z') + (' ')
         return (1..length)
             .map { allowedChars.random() }
