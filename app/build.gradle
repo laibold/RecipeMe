@@ -63,7 +63,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
-    // lifecycle - LiveData and ViewModel
+    // Preference for settings
+    implementation "androidx.preference:preference-ktx:1.1.1"
+
+    // Lifecycle - LiveData and ViewModel
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 

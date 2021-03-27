@@ -136,4 +136,7 @@
     <string name="category_picture">Kategorie-Bild</string>
     <string name="rotd_picture">Rezept des Tages-Bild</string>
     <string name="check_items_to_be_removed">Markiere zu entfernende Elemente.</string>
+    <string name="settings">Einstellungen</string>
+    <string name="to_settings">Zu den Einstellungen</string>
+    <string name="dark_mode">Dark Mode</string>
 </resources>

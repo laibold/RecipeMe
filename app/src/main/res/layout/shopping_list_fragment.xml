@@ -52,6 +52,7 @@
                     tools:maxLength="@integer/shopping_list_item_name_max_length"
                     tools:text="@tools:sample/lorem/random" />
 
+                <!--TODO plus in white-->
                 <ImageButton
                     android:id="@+id/add_item_button"
                     android:layout_width="@dimen/small_button_size"
