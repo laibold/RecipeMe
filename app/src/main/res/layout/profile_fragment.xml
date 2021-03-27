@@ -6,7 +6,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profile_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?attr/colorOnPrimary">
 
         <include
             android:id="@+id/header"
@@ -124,6 +125,7 @@
             android:id="@+id/version_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/text"
             android:layout_marginStart="@dimen/space_button_text"
             app:layout_constraintBottom_toBottomOf="@id/version_icon"
             app:layout_constraintStart_toEndOf="@+id/version_icon"

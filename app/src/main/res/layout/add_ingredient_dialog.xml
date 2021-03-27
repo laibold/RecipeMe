@@ -2,12 +2,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/round_corners">
+    >
 
+<!--    background color is set by background round_corners-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ingredient_dialog_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/round_corners"
         android:paddingBottom="30dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout

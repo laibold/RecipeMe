@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@android:id/text1"
+    style="?attr/spinnerDropDownItemStyle"
+    android:singleLine="true"
+    android:layout_width="match_parent"
+    android:background="?attr/colorOnPrimary"
+    android:textColor="?attr/colorOnSecondary"
+    tools:text="@string/main_dishes"
+    android:layout_height="?attr/dropdownListPreferredItemHeight"
+    android:ellipsize="marquee" />

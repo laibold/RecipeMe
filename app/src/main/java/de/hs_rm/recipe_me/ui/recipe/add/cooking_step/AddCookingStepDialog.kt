@@ -136,7 +136,7 @@ class AddCookingStepDialog constructor(
     private fun setTimeAdapter(number: Int?) {
         val names = TimeUnit.getNumberStringList(activity.resources, number)
 
-        val adapter = ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, names)
+        val adapter = ArrayAdapter(context, R.layout.spinner_item, names)
         binding.formContent.cookingStepTimeSpinner.adapter = adapter
     }
 

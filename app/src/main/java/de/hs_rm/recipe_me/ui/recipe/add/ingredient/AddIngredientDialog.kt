@@ -82,7 +82,7 @@ class AddIngredientDialog constructor(
     private fun setUnitAdapter(amount: Double?) {
         val names = IngredientUnit.getNumberStringList(context.resources, amount)
 
-        val adapter = ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, names)
+        val adapter = ArrayAdapter(context, R.layout.spinner_item, names)
         binding.ingredientUnitSpinner.adapter = adapter
     }
 

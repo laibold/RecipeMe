@@ -75,7 +75,7 @@
         <item name="android:layout_height">@dimen/big_button_height</item>
         <item name="android:layout_width">@dimen/big_button_width</item>
         <item name="layout_constraintWidth_percent">@dimen/big_button_width_percentage</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/font_size_text</item>
         <item name="android:backgroundTint">?attr/colorPrimaryVariant</item>
     </style>
@@ -102,9 +102,9 @@
     </style>
 
     <style name="tertiary_button_white" parent="tertiary_button">
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:backgroundTint">@color/translucent_black</item>
-        <item name="strokeColor">?attr/colorOnPrimary</item>
+        <item name="strokeColor">@color/white</item>
     </style>
 
     <style name="tertiary_button_transparent" parent="tertiary_button_white">
@@ -139,6 +139,8 @@
     <style name="edit_text">
         <item name="android:backgroundTint">?attr/colorAccent</item>
         <item name="android:layout_height">46dp</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="android:textColorHint">@color/dark_gray</item>
     </style>
 
     <style name="spinner" parent="@style/Widget.AppCompat.Spinner.Underlined">

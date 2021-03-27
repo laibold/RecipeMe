@@ -5,6 +5,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profile_layout"
         android:layout_width="match_parent"
+        android:background="?attr/colorOnPrimary"
         android:layout_height="match_parent">
 
         <include
