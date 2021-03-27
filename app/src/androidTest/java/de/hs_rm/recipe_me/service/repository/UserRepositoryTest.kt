@@ -3,6 +3,7 @@ package de.hs_rm.recipe_me.service.repository
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.Constants
@@ -11,7 +12,6 @@ import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.persistence.dao.UserDao
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -44,7 +44,7 @@ class UserRepositoryTest {
     @Before
     fun beforeEach() {
         hiltRule.inject()
-        assertEquals(AppDatabase.Environment.TEST.dbName, db.openHelper.databaseName)
+        assertThat(db.openHelper.databaseName).isEqualTo(AppDatabase.Environment.TEST.dbName)
 
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
         db.clearAllTables()
@@ -56,16 +56,16 @@ class UserRepositoryTest {
     @Test
     fun testInsertUser() {
         val nullUser = repository.getUser().getOrAwaitValue()
-        assertNull(nullUser)
+        assertThat(nullUser).isNull()
 
-        val userName = TestDataProvider.getRandomString(6)
+        val username = TestDataProvider.getRandomString(6)
         runBlocking {
-            repository.insertOrUpdate(userName)
+            repository.insertOrUpdate(username)
         }
 
         val user = repository.getUser().getOrAwaitValue()
-        assertNotNull(user)
-        assertEquals(userName, user!!.name)
+        assertThat(user).isNotNull()
+        assertThat(user!!.name).isEqualTo(username)
     }
 
     /**
@@ -83,7 +83,7 @@ class UserRepositoryTest {
         }
 
         val user = repository.getUser().getOrAwaitValue()
-        assertNotNull(user)
-        assertEquals(username, user!!.name)
+        assertThat(user).isNotNull()
+        assertThat(user!!.name).isEqualTo(username)
     }
 }

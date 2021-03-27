@@ -15,8 +15,7 @@ import de.hs_rm.recipe_me.service.repository.RecipeImageRepository
 import de.hs_rm.recipe_me.service.repository.RecipeOfTheDayRepository
 import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -62,7 +61,7 @@ class RecipeHomeViewModelTest {
     @Before
     fun beforeEach() {
         hiltRule.inject()
-        assertEquals(AppDatabase.Environment.TEST.dbName, db.openHelper.databaseName)
+        assertThat(db.openHelper.databaseName).isEqualTo(AppDatabase.Environment.TEST.dbName)
 
         viewModel =
             RecipeHomeViewModel(recipeOfTheDayRepository, recipeRepository, recipeImageRepository)
@@ -77,7 +76,7 @@ class RecipeHomeViewModelTest {
     @Test
     fun loadRecipeOfTheDay() {
         viewModel.loadRecipeOfTheDay()
-        assertNotNull(viewModel.recipeOfTheDay.getOrAwaitValue())
+        assertThat(viewModel.recipeOfTheDay.getOrAwaitValue()).isNotNull()
     }
 
     ///////

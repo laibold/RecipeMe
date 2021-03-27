@@ -3,6 +3,7 @@ package de.hs_rm.recipe_me.ui.recipe.add
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.Constants
@@ -14,7 +15,6 @@ import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.service.repository.RecipeImageRepository
 import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import kotlinx.coroutines.*
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -52,7 +52,7 @@ class AddRecipeViewModelTest {
     @Before
     fun beforeEach() {
         hiltRule.inject()
-        assertEquals(AppDatabase.Environment.TEST.dbName, db.openHelper.databaseName)
+        assertThat(db.openHelper.databaseName).isEqualTo(AppDatabase.Environment.TEST.dbName)
 
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
         db.clearAllTables()
@@ -70,10 +70,17 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun setRecipeAttributesUnsuccessful() {
-        assertFalse(viewModel.setRecipeAttributes("", "", RecipeCategory.SNACKS))
-        assertFalse(viewModel.setRecipeAttributes("", "1", RecipeCategory.SNACKS))
-        assertFalse(viewModel.setRecipeAttributes("name", "", RecipeCategory.SNACKS))
-        assertFalse(viewModel.setRecipeAttributes("name", "0", RecipeCategory.SNACKS))
+        assertThat(viewModel.setRecipeAttributes("", "", RecipeCategory.SNACKS))
+            .isFalse()
+
+        assertThat(viewModel.setRecipeAttributes("", "1", RecipeCategory.SNACKS))
+            .isFalse()
+
+        assertThat(viewModel.setRecipeAttributes("name", "", RecipeCategory.SNACKS))
+            .isFalse()
+
+        assertThat(viewModel.setRecipeAttributes("name", "0", RecipeCategory.SNACKS))
+            .isFalse()
     }
 
     /**
@@ -81,7 +88,8 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun setRecipeAttributesSuccessful() {
-        assertTrue(viewModel.setRecipeAttributes("n", "1", RecipeCategory.SNACKS))
+        assertThat(viewModel.setRecipeAttributes("n", "1", RecipeCategory.SNACKS))
+            .isTrue()
     }
 
     /**
@@ -97,13 +105,12 @@ class AddRecipeViewModelTest {
 
         val countBefore = viewModel.ingredients.value?.size!!
 
-        assertTrue(viewModel.addIngredient(name, quantity1, unit))
-        assertTrue(viewModel.addIngredient(name, quantity2, unit))
-        assertTrue(viewModel.addIngredient(name, quantity3, unit))
+        assertThat(viewModel.addIngredient(name, quantity1, unit)).isTrue()
+        assertThat(viewModel.addIngredient(name, quantity2, unit)).isTrue()
+        assertThat(viewModel.addIngredient(name, quantity3, unit)).isTrue()
 
         val countAfter = viewModel.ingredients.value?.size!!
-
-        assertEquals((countBefore + 3), countAfter)
+        assertThat(countAfter).isEqualTo((countBefore + 3))
     }
 
     /**
@@ -117,11 +124,10 @@ class AddRecipeViewModelTest {
 
         val countBefore = viewModel.ingredients.value?.size!!
 
-        assertFalse(viewModel.addIngredient(nameInvalid, quantityValid, unit))
+        assertThat(viewModel.addIngredient(nameInvalid, quantityValid, unit)).isFalse()
 
         val countAfter = viewModel.ingredients.value?.size!!
-
-        assertEquals(countBefore, countAfter)
+        assertThat(countAfter).isEqualTo(countBefore)
     }
 
     /**
@@ -144,15 +150,15 @@ class AddRecipeViewModelTest {
             quantity.toEditable(),
             ingredientUnit
         )
-        assertTrue(success)
+        assertThat(success).isTrue()
 
         val countAfter = viewModel.ingredients.value?.size!!
 
-        assertEquals(name, viewModel.ingredients.value!![position].name)
-        assertEquals(quantity, viewModel.ingredients.value!![position].quantity, 0.0)
-        assertEquals(ingredientUnit, viewModel.ingredients.value!![position].unit)
+        assertThat(viewModel.ingredients.value!![position].name).isEqualTo(name)
+        assertThat(viewModel.ingredients.value!![position].quantity).isEqualTo(quantity)
+        assertThat(viewModel.ingredients.value!![position].unit).isEqualTo(ingredientUnit)
 
-        assertEquals(countBefore, countAfter)
+        assertThat(countAfter).isEqualTo(countBefore)
     }
 
     /**
@@ -175,15 +181,15 @@ class AddRecipeViewModelTest {
             quantity.toEditable(),
             ingredientUnit
         )
-        assertFalse(success)
+        assertThat(success).isFalse()
 
         val countAfter = viewModel.ingredients.value?.size!!
 
-        assertNotEquals(name, viewModel.ingredients.value!![position].name)
-        assertNotEquals(quantity, viewModel.ingredients.value!![position].quantity, 0.0)
-        assertNotEquals(ingredientUnit, viewModel.ingredients.value!![position].unit)
+        assertThat(viewModel.ingredients.value!![position].name).isNotEqualTo(name)
+        assertThat(viewModel.ingredients.value!![position].quantity).isNotEqualTo(quantity)
+        assertThat(viewModel.ingredients.value!![position].unit).isNotEqualTo(ingredientUnit)
 
-        assertEquals(countBefore, countAfter)
+        assertThat(countAfter).isEqualTo(countBefore)
     }
 
     /**
@@ -207,7 +213,7 @@ class AddRecipeViewModelTest {
 
         val ingredientsBefore = viewModel.cookingStepsWithIngredients.value?.get(0)!!.ingredients
         val beforeCountList = ArrayList<Ingredient>(ingredientsBefore)
-        assertEquals(2, beforeCountList.size)
+        assertThat(beforeCountList.size).isEqualTo(2)
 
         viewModel.ingredients.value!!.remove(deleteIngredient)
         Thread.sleep(500)
@@ -215,7 +221,7 @@ class AddRecipeViewModelTest {
 
         val ingredientsAfter = viewModel.cookingStepsWithIngredients.value?.get(0)!!.ingredients
         val afterCountList = ArrayList<Ingredient>(ingredientsAfter)
-        assertEquals(1, afterCountList.size)
+        assertThat(afterCountList.size).isEqualTo(1)
     }
 
     /**
@@ -231,12 +237,12 @@ class AddRecipeViewModelTest {
 
         val countBefore = viewModel.cookingStepsWithIngredients.value?.size!!
 
-        assertTrue(viewModel.addCookingStepWithIngredients(text, time1, unit, ingredients))
-        assertTrue(viewModel.addCookingStepWithIngredients(text, time2, unit, ingredients))
+        assertThat(viewModel.addCookingStepWithIngredients(text, time1, unit, ingredients)).isTrue()
+        assertThat(viewModel.addCookingStepWithIngredients(text, time2, unit, ingredients)).isTrue()
 
         val countAfter = viewModel.cookingStepsWithIngredients.value?.size!!
 
-        assertEquals((countBefore + 2), countAfter)
+        assertThat(countAfter).isEqualTo(countBefore + 2)
     }
 
     /**
@@ -251,18 +257,17 @@ class AddRecipeViewModelTest {
 
         val countBefore = viewModel.cookingStepsWithIngredients.value?.size!!
 
-        assertFalse(
+        assertThat(
             viewModel.addCookingStepWithIngredients(
                 textInvalid,
                 timeValid,
                 unit,
                 ingredients
             )
-        )
+        ).isFalse()
 
         val countAfter = viewModel.cookingStepsWithIngredients.value?.size!!
-
-        assertEquals(countBefore, countAfter)
+        assertThat(countAfter).isEqualTo(countBefore)
     }
 
     /**
@@ -287,19 +292,20 @@ class AddRecipeViewModelTest {
             unit,
             ingredients
         )
-        assertTrue(success)
+        assertThat(success).isTrue()
 
         val countAfter = viewModel.cookingStepsWithIngredients.value?.size!!
 
-        assertEquals(text, viewModel.cookingStepsWithIngredients.value!![position].cookingStep.text)
-        assertEquals(time, viewModel.cookingStepsWithIngredients.value!![position].cookingStep.time)
-        assertEquals(
-            unit,
-            viewModel.cookingStepsWithIngredients.value!![position].cookingStep.timeUnit
-        )
-        assertEquals(1, viewModel.cookingStepsWithIngredients.value!![position].ingredients.size)
+        assertThat(viewModel.cookingStepsWithIngredients.value!![position].cookingStep.text)
+            .isEqualTo(text)
+        assertThat(viewModel.cookingStepsWithIngredients.value!![position].cookingStep.time)
+            .isEqualTo(time)
+        assertThat(viewModel.cookingStepsWithIngredients.value!![position].cookingStep.timeUnit)
+            .isEqualTo(unit)
+        assertThat(viewModel.cookingStepsWithIngredients.value!![position].ingredients.size)
+            .isEqualTo(1)
 
-        assertEquals(countBefore, countAfter)
+        assertThat(countAfter).isEqualTo(countBefore)
     }
 
     /**
@@ -325,24 +331,18 @@ class AddRecipeViewModelTest {
             unit,
             ingredients
         )
-        assertFalse(success)
+        assertThat(success).isFalse()
 
         val countAfter = viewModel.cookingStepsWithIngredients.getOrAwaitValue().size
 
-        assertEquals(countBefore, countAfter)
+        assertThat(countAfter).isEqualTo(countBefore)
 
-        assertNotEquals(
-            text,
-            viewModel.cookingStepsWithIngredients.value!![position].cookingStep.text
-        )
-        assertNotEquals(
-            time,
-            viewModel.cookingStepsWithIngredients.value!![position].cookingStep.time
-        )
-        assertNotEquals(
-            unit,
-            viewModel.cookingStepsWithIngredients.value!![position].cookingStep.timeUnit
-        )
+        assertThat(viewModel.cookingStepsWithIngredients.value!![position].cookingStep.text)
+            .isNotEqualTo(text)
+        assertThat(viewModel.cookingStepsWithIngredients.value!![position].cookingStep.time)
+            .isNotEqualTo(time)
+        assertThat(viewModel.cookingStepsWithIngredients.value!![position].cookingStep.timeUnit)
+            .isNotEqualTo(unit)
     }
 
     /**
@@ -407,15 +407,15 @@ class AddRecipeViewModelTest {
         val cookingStepWithIngredients =
             viewModel.cookingStepsWithIngredients.value!![cookingStepIndex]
 
-        assertEquals(2, cookingStepWithIngredients.ingredients.size)
+        assertThat(cookingStepWithIngredients.ingredients.size).isEqualTo(2)
 
         val updatedAssignedIngredient = cookingStepWithIngredients.ingredients[updateIndex]
-        assertEquals(newName, updatedAssignedIngredient.name)
-        assertEquals(newQuantity, updatedAssignedIngredient.quantity, 0.0)
-        assertEquals(newIngredientUnit, updatedAssignedIngredient.unit)
+        assertThat(updatedAssignedIngredient.name).isEqualTo(newName)
+        assertThat(updatedAssignedIngredient.quantity).isEqualTo(newQuantity)
+        assertThat(updatedAssignedIngredient.unit).isEqualTo(newIngredientUnit)
 
         val unchangedIngredient = cookingStepWithIngredients.ingredients[1]
-        assertTrue(unchangedIngredient == ingredient1)
+        assertThat(unchangedIngredient == ingredient1).isTrue()
     }
 
     /**
@@ -430,17 +430,17 @@ class AddRecipeViewModelTest {
 
         val recipe = viewModel.recipe.getOrAwaitValue()
 
-        assertNotNull(recipe)
+        assertThat(recipe).isNotNull()
 
         val id = viewModel.persistEntities().getOrAwaitValue()
 
-        assertNotEquals(0L, id)
-        assertEquals(1, recipeRepository.getRecipeTotal().getOrAwaitValue())
+        assertThat(id).isNotEqualTo(0L)
+        assertThat(recipeRepository.getRecipeTotal().getOrAwaitValue()).isEqualTo(1)
 
         val recipeWithRelations = recipeRepository.getRecipeWithRelationsById(id).getOrAwaitValue()
 
-        assertEquals(numberOfChildren, recipeWithRelations.ingredients.size)
-        assertEquals(numberOfChildren, recipeWithRelations.cookingStepsWithIngredients.size)
+        assertThat(recipeWithRelations.ingredients.size).isEqualTo(numberOfChildren)
+        assertThat(recipeWithRelations.cookingStepsWithIngredients.size).isEqualTo(numberOfChildren)
     }
 
     /**
@@ -461,8 +461,8 @@ class AddRecipeViewModelTest {
         // Test if test insertion succeeded (May be deleted)
         val recipeWithRelations2 =
             recipeRepository.getRecipeWithRelationsById(recipeId).getOrAwaitValue(10)
-        assertEquals(numberOfChildren, recipeWithRelations2.ingredients.size)
-        assertEquals(numberOfChildren, recipeWithRelations2.cookingStepsWithIngredients.size)
+        assertThat(recipeWithRelations2.ingredients.size).isEqualTo(numberOfChildren)
+        assertThat(recipeWithRelations2.cookingStepsWithIngredients.size).isEqualTo(numberOfChildren)
 
         GlobalScope.launch(Dispatchers.Main) {
             delay(1000)
@@ -504,30 +504,24 @@ class AddRecipeViewModelTest {
         // change (add/remove) ingredient in step
 
         val newRecipeId = viewModel.persistEntities().getOrAwaitValue()
-        assertNotEquals(Recipe.DEFAULT_ID, newRecipeId)
+        assertThat(newRecipeId).isEqualTo(Recipe.DEFAULT_ID)
 
         val recipeWithRelations =
             recipeRepository.getRecipeWithRelationsById(newRecipeId).getOrAwaitValue(10)
 
-        assertEquals(name, recipeWithRelations.recipe.name)
-        assertEquals(servings.toInt(), recipeWithRelations.recipe.servings)
-        assertEquals(category, recipeWithRelations.recipe.category)
+        assertThat(recipeWithRelations.recipe.name).isEqualTo(name)
+        assertThat(recipeWithRelations.recipe.servings).isEqualTo(servings.toInt())
+        assertThat(recipeWithRelations.recipe.category).isEqualTo(category)
 
-        assertEquals(2, recipeWithRelations.ingredients.size)
-        assertEquals(
-            Ingredient("Updated Ingredient", 2.0, IngredientUnit.CAN),
-            recipeWithRelations.ingredients[0]
-        )
-        assertEquals(
-            Ingredient("New Ingredient", 1.0, IngredientUnit.NONE),
-            recipeWithRelations.ingredients[1]
-        )
+        assertThat(recipeWithRelations.ingredients.size).isEqualTo(2)
+        assertThat(recipeWithRelations.ingredients[0])
+            .isEqualTo(Ingredient("Updated Ingredient", 2.0, IngredientUnit.CAN))
+        assertThat(recipeWithRelations.ingredients[1])
+            .isEqualTo(Ingredient("New Ingredient", 1.0, IngredientUnit.NONE))
 
-        assertEquals(3, recipeWithRelations.cookingStepsWithIngredients.size)
-        assertEquals(
-            CookingStep("New Step", 0, TimeUnit.SECOND),
-            recipeWithRelations.cookingStepsWithIngredients[2].cookingStep
-        )
+        assertThat(recipeWithRelations.cookingStepsWithIngredients.size).isEqualTo(3)
+        assertThat(recipeWithRelations.cookingStepsWithIngredients[2].cookingStep)
+            .isEqualTo(CookingStep("New Step", 0, TimeUnit.SECOND))
     }
 
     /**
@@ -535,7 +529,7 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun validateNameSuccessful() {
-        assertEquals(0, viewModel.validateName("n".toEditable()))
+        assertThat(viewModel.validateName("n".toEditable())).isEqualTo(0)
     }
 
     /**
@@ -543,7 +537,7 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun validateNameUnsuccessful() {
-        assertNotEquals(0, viewModel.validateName("".toEditable()))
+        assertThat(viewModel.validateName("".toEditable())).isNotEqualTo(0)
     }
 
     /**
@@ -551,7 +545,7 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun validateServingsSuccessful() {
-        assertEquals(0, viewModel.validateServings((1).toEditable()))
+        assertThat(viewModel.validateServings((1).toEditable())).isEqualTo(0)
     }
 
     /**
@@ -559,8 +553,8 @@ class AddRecipeViewModelTest {
      */
     @Test
     fun validateServingsUnsuccessful() {
-        assertNotEquals(0, viewModel.validateServings((0).toEditable()))
-        assertNotEquals(0, viewModel.validateServings("".toEditable()))
+        assertThat(viewModel.validateServings((0).toEditable())).isNotEqualTo(0)
+        assertThat(viewModel.validateServings("".toEditable())).isNotEqualTo(0)
     }
 
     /**
@@ -573,15 +567,15 @@ class AddRecipeViewModelTest {
         viewModel.setRecipeAttributes("Name", "1", RecipeCategory.BREAKFAST)
         viewModel.initRecipe(Recipe.DEFAULT_ID)
 
-        assertNotNull(viewModel.ingredients.value)
-        assertEquals(0, viewModel.ingredients.value!!.size)
+        assertThat(viewModel.ingredients.value).isNotNull()
+        assertThat(viewModel.ingredients.value!!.size).isEqualTo(0)
 
-        assertNotNull(viewModel.cookingStepsWithIngredients)
-        assertEquals(0, viewModel.cookingStepsWithIngredients.value!!.size)
+        assertThat(viewModel.cookingStepsWithIngredients).isNotNull()
+        assertThat(viewModel.cookingStepsWithIngredients.value!!.size).isEqualTo(0)
 
-        assertEquals("", viewModel.recipe.value!!.name)
+        assertThat(viewModel.recipe.value!!.name).isEqualTo("")
         // servings is private and can't be tested
-        assertEquals(RecipeCategory.MAIN_DISHES, viewModel.category.value)
+        assertThat(viewModel.category.value).isEqualTo(RecipeCategory.MAIN_DISHES)
 
         // recipeToUpdate is private and can't be tested here
     }
@@ -593,7 +587,7 @@ class AddRecipeViewModelTest {
     fun updateAndCreateRecipeSuccessful() {
 //        insertTestData(1, 1)
         val id = viewModel.persistEntities().getOrAwaitValue()
-        assertEquals(1, recipeRepository.getRecipeTotal().getOrAwaitValue())
+        assertThat(recipeRepository.getRecipeTotal().getOrAwaitValue()).isEqualTo(1)
         // recipe saved
 
         GlobalScope.launch(Dispatchers.Main) {
@@ -606,7 +600,7 @@ class AddRecipeViewModelTest {
         viewModel.cookingStepsWithIngredients.getOrAwaitValue()
 
         viewModel.persistEntities().getOrAwaitValue(20)
-        assertEquals(1, recipeRepository.getRecipeTotal().getOrAwaitValue())
+        assertThat(recipeRepository.getRecipeTotal().getOrAwaitValue()).isEqualTo(1)
         // recipe updated
 
         viewModel.setCategory(RecipeCategory.MAIN_DISHES)
@@ -622,7 +616,7 @@ class AddRecipeViewModelTest {
 //        insertTestData(1, 1)
         viewModel.recipe.getOrAwaitValue()
         viewModel.persistEntities().getOrAwaitValue()
-        assertEquals(2, recipeRepository.getRecipeTotal().getOrAwaitValue())
+        assertThat(recipeRepository.getRecipeTotal().getOrAwaitValue()).isEqualTo(2)
         // second recipe saved
     }
 

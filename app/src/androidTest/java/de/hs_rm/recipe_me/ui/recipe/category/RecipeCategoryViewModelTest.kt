@@ -3,6 +3,7 @@ package de.hs_rm.recipe_me.ui.recipe.category
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.Constants
@@ -14,8 +15,6 @@ import de.hs_rm.recipe_me.persistence.dao.RecipeDao
 import de.hs_rm.recipe_me.service.repository.RecipeImageRepository
 import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -57,7 +56,7 @@ class RecipeCategoryViewModelTest {
     @Before
     fun beforeEach() {
         hiltRule.inject()
-        assertEquals(AppDatabase.Environment.TEST.dbName, db.openHelper.databaseName)
+        assertThat(db.openHelper.databaseName).isEqualTo(AppDatabase.Environment.TEST.dbName)
 
         viewModel = RecipeCategoryViewModel(recipeRepository, recipeImageRepository)
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
@@ -73,10 +72,10 @@ class RecipeCategoryViewModelTest {
         val category = RecipeCategory.MAIN_DISHES
         val recipes = viewModel.getRecipesByCategory(category).getOrAwaitValue()
 
-        assertEquals(3, recipes.size)
+        assertThat(recipes.size).isEqualTo(3)
 
         for (recipe in recipes) {
-            assertEquals(category, recipe.category)
+            assertThat(recipe.category).isEqualTo(category)
         }
     }
 
@@ -97,8 +96,8 @@ class RecipeCategoryViewModelTest {
         val recipesAfter = viewModel.getRecipesByCategory(category).getOrAwaitValue()
         val countAfter = recipesAfter.size
 
-        assertFalse(recipesAfter.contains(recipeToDelete))
-        assertEquals(countBefore, countAfter + 1)
+        assertThat(recipesAfter).doesNotContain(recipeToDelete)
+        assertThat(countAfter + 1).isEqualTo(countBefore)
     }
 
     ///////

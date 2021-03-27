@@ -3,8 +3,8 @@ package de.hs_rm.recipe_me.model.recipe
 import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.common.truth.Truth.assertThat
 import de.hs_rm.recipe_me.LocaleContextProvider
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,8 +28,8 @@ class RecipeCategoryTest {
         context = LocaleContextProvider.createLocaleContext(Locale.US, context)
 
         val categoryList = RecipeCategory.getStringList(context.resources)
-        Assert.assertEquals(RecipeCategory.values().size, categoryList.size)
-        Assert.assertEquals("Main dishes", categoryList[0])
+        assertThat(categoryList.size).isEqualTo(RecipeCategory.values().size)
+        assertThat(categoryList[0]).isEqualTo("Main dishes")
     }
 
     /**
@@ -40,7 +40,7 @@ class RecipeCategoryTest {
         context = LocaleContextProvider.createLocaleContext(Locale.GERMANY, context)
 
         val categoryList = RecipeCategory.getStringList(context.resources)
-        Assert.assertEquals(RecipeCategory.values().size, categoryList.size)
-        Assert.assertEquals("Hauptspeisen", categoryList[0])
+        assertThat(categoryList.size).isEqualTo(RecipeCategory.values().size)
+        assertThat(categoryList[0]).isEqualTo("Hauptspeisen")
     }
 }

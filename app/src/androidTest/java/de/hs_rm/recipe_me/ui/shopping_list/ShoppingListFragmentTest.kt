@@ -20,7 +20,7 @@ import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anything
-import org.junit.Assert
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -43,7 +43,7 @@ class ShoppingListFragmentTest {
     @Before
     fun beforeEach() {
         hiltRule.inject()
-        Assert.assertEquals(AppDatabase.Environment.TEST.dbName, db.openHelper.databaseName)
+        assertThat(db.openHelper.databaseName).isEqualTo(AppDatabase.Environment.TEST.dbName)
 
         context = InstrumentationRegistry.getInstrumentation().targetContext
         db.clearAllTables()

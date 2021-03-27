@@ -29,7 +29,7 @@ import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.service.Formatter
 import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
 import org.hamcrest.Matchers.*
-import org.junit.Assert.assertEquals
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -54,7 +54,7 @@ class AddRecipeFragment2Test {
     @Before
     fun beforeEach() {
         hiltRule.inject()
-        assertEquals(AppDatabase.Environment.TEST.dbName, db.openHelper.databaseName)
+        assertThat(db.openHelper.databaseName).isEqualTo(AppDatabase.Environment.TEST.dbName)
 
         context = InstrumentationRegistry.getInstrumentation().targetContext
         db.clearAllTables()

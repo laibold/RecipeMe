@@ -3,8 +3,7 @@ package de.hs_rm.recipe_me.ui.recipe.add.cooking_step
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import de.hs_rm.recipe_me.TestDataProvider
 import de.hs_rm.recipe_me.declaration.getOrAwaitValue
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -29,7 +28,7 @@ class AddCookingStepViewModelTest {
      */
     @Test
     fun initializationSuccessful() {
-        assertNotNull(viewModel.assignedIngredients.getOrAwaitValue())
+        assertThat(viewModel.assignedIngredients.getOrAwaitValue()).isNotNull()
     }
 
     /**
@@ -44,7 +43,7 @@ class AddCookingStepViewModelTest {
         viewModel.resetCheckedStates()
         val countAfter = viewModel.assignedIngredients.getOrAwaitValue().size
 
-        assertEquals(0, countAfter)
+        assertThat(countAfter).isEqualTo(0)
     }
 
     /**
@@ -62,18 +61,18 @@ class AddCookingStepViewModelTest {
         val ingredients = viewModel.assignedIngredients.getOrAwaitValue()
         var count = ingredients.size
 
-        assertEquals(1, count)
+        assertThat(count).isEqualTo(1)
 
         viewModel.toggleCheckedState(ingredient2)
 
         count = ingredients.size
-        assertEquals(2, count)
+        assertThat(count).isEqualTo(2)
 
         viewModel.toggleCheckedState(ingredient1)
         viewModel.toggleCheckedState(ingredient2)
 
         count = ingredients.size
-        assertEquals(0, count)
+        assertThat(count).isEqualTo(0)
     }
 
     /**
@@ -89,6 +88,6 @@ class AddCookingStepViewModelTest {
         viewModel.addAssignedIngredients(listOf(ingredient1, ingredient2))
         val countAfter = viewModel.assignedIngredients.getOrAwaitValue().size
 
-        assertEquals(countBefore + 2, countAfter)
+        assertThat(countAfter).isEqualTo(countBefore + 2)
     }
 }

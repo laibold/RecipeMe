@@ -24,7 +24,7 @@ import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.hasToString
-import org.junit.Assert
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -49,7 +49,7 @@ class RecipeHomeFragmentTest {
     @Before
     fun beforeEach() {
         hiltRule.inject()
-        Assert.assertEquals(AppDatabase.Environment.TEST.dbName, db.openHelper.databaseName)
+        assertThat(db.openHelper.databaseName).isEqualTo(AppDatabase.Environment.TEST.dbName)
 
         context = getInstrumentation().targetContext
         db.clearAllTables()

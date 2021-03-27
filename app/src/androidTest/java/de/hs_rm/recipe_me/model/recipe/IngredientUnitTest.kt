@@ -3,8 +3,8 @@ package de.hs_rm.recipe_me.model.recipe
 import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.common.truth.Truth.assertThat
 import de.hs_rm.recipe_me.LocaleContextProvider
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,12 +28,12 @@ class IngredientUnitTest {
         context = LocaleContextProvider.createLocaleContext(Locale.US, context)
 
         val singularList = IngredientUnit.getNumberStringList(context.resources, 1.0)
-        assertEquals(IngredientUnit.values().size, singularList.size)
-        assertEquals("package", singularList[6])
+        assertThat(singularList.size).isEqualTo(IngredientUnit.values().size)
+        assertThat(singularList[6]).isEqualTo("package")
 
         val pluralList = IngredientUnit.getNumberStringList(context.resources, 1.1)
-        assertEquals(IngredientUnit.values().size, pluralList.size)
-        assertEquals("packages", pluralList[6])
+        assertThat(pluralList.size).isEqualTo(IngredientUnit.values().size)
+        assertThat(pluralList[6]).isEqualTo("packages")
     }
 
     /**
@@ -45,14 +45,13 @@ class IngredientUnitTest {
 
         val singularString1 = IngredientUnit.STICK.getNumberString(context.resources, 1.0)
         val singularString2 = IngredientUnit.STICK.getNumberString(context.resources, null)
-
-        assertEquals("stick", singularString1)
-        assertEquals("stick", singularString2)
+        assertThat(singularString1).isEqualTo("stick")
+        assertThat(singularString2).isEqualTo("stick")
 
         val pluralString1 = IngredientUnit.STICK.getNumberString(context.resources, 0.0)
         val pluralString2 = IngredientUnit.STICK.getNumberString(context.resources, 2.0)
-        assertEquals("sticks", pluralString1)
-        assertEquals("sticks", pluralString2)
+        assertThat(pluralString1).isEqualTo("sticks")
+        assertThat(pluralString2).isEqualTo("sticks")
     }
 
     /**
@@ -64,13 +63,12 @@ class IngredientUnitTest {
 
         val singularString1 = IngredientUnit.STICK.getNumberString(context.resources, 1.0)
         val singularString2 = IngredientUnit.STICK.getNumberString(context.resources, null)
-
-        assertEquals("Stange", singularString1)
-        assertEquals("Stange", singularString2)
+        assertThat(singularString1).isEqualTo("Stange")
+        assertThat(singularString2).isEqualTo("Stange")
 
         val pluralString1 = IngredientUnit.STICK.getNumberString(context.resources, 0.0)
         val pluralString2 = IngredientUnit.STICK.getNumberString(context.resources, 2.0)
-        assertEquals("Stangen", pluralString1)
-        assertEquals("Stangen", pluralString2)
+        assertThat(pluralString1).isEqualTo("Stangen")
+        assertThat(pluralString2).isEqualTo("Stangen")
     }
 }

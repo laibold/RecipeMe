@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import de.hs_rm.recipe_me.LocaleContextProvider
-import org.junit.Assert.*
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,12 +28,12 @@ class TimeUnitTest {
         context = LocaleContextProvider.createLocaleContext(Locale.US, context)
 
         val secondSingular = TimeUnit.SECOND.getNumberString(context.resources, 1)
-        assertEquals("second", secondSingular)
+        assertThat(secondSingular).isEqualTo("second")
 
         val secondPlural1 = TimeUnit.SECOND.getNumberString(context.resources, 0)
         val secondPlural2 = TimeUnit.SECOND.getNumberString(context.resources, null)
-        assertEquals("seconds", secondPlural1)
-        assertEquals("seconds", secondPlural2)
+        assertThat(secondPlural1).isEqualTo("seconds")
+        assertThat(secondPlural2).isEqualTo("seconds")
     }
 
     /**
@@ -44,11 +44,11 @@ class TimeUnitTest {
         context = LocaleContextProvider.createLocaleContext(Locale.GERMANY, context)
 
         val secondSingular = TimeUnit.SECOND.getNumberString(context.resources, 1)
-        assertEquals("Sekunde", secondSingular)
+        assertThat(secondSingular).isEqualTo("Sekunde")
 
         val secondPlural1 = TimeUnit.SECOND.getNumberString(context.resources, 0)
         val secondPlural2 = TimeUnit.SECOND.getNumberString(context.resources, null)
-        assertEquals("Sekunden", secondPlural1)
-        assertEquals("Sekunden", secondPlural2)
+        assertThat(secondPlural1).isEqualTo("Sekunden")
+        assertThat(secondPlural2).isEqualTo("Sekunden")
     }
 }

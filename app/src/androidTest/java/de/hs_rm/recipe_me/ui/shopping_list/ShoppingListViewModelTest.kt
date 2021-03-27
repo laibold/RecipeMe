@@ -9,12 +9,10 @@ import de.hs_rm.recipe_me.Constants
 import de.hs_rm.recipe_me.TestDataProvider
 import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.persistence.AppDatabase
-import de.hs_rm.recipe_me.persistence.dao.ShoppingListDao
-import de.hs_rm.recipe_me.persistence.dao.UserDao
 import de.hs_rm.recipe_me.service.repository.ShoppingListRepository
 import de.hs_rm.recipe_me.service.repository.UserRepository
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -52,7 +50,7 @@ class ShoppingListViewModelTest {
     @Before
     fun beforeEach() {
         hiltRule.inject()
-        assertEquals(AppDatabase.Environment.TEST.dbName, db.openHelper.databaseName)
+        assertThat(db.openHelper.databaseName).isEqualTo(AppDatabase.Environment.TEST.dbName)
 
         viewModel = ShoppingListViewModel(shoppingListRepository, userRepository)
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
@@ -66,11 +64,11 @@ class ShoppingListViewModelTest {
         viewModel.shoppingListItems.getOrAwaitValue()
 
         var itemChecked = viewModel.isItemChecked()
-        assertFalse(itemChecked!!)
+        assertThat(itemChecked!!).isFalse()
 
         viewModel.toggleItemChecked(1)
         itemChecked = viewModel.isItemChecked()
-        assertTrue(itemChecked!!)
+        assertThat(itemChecked!!).isTrue()
     }
 
     @Test
@@ -80,15 +78,15 @@ class ShoppingListViewModelTest {
         viewModel.shoppingListItems.getOrAwaitValue()
 
         var allItemsChecked = viewModel.allItemsChecked()
-        assertFalse(allItemsChecked)
+        assertThat(allItemsChecked).isFalse()
 
         viewModel.toggleItemChecked(0)
         allItemsChecked = viewModel.allItemsChecked()
-        assertFalse(allItemsChecked)
+        assertThat(allItemsChecked).isFalse()
 
         viewModel.toggleItemChecked(1)
         allItemsChecked = viewModel.allItemsChecked()
-        assertTrue(allItemsChecked)
+        assertThat(allItemsChecked).isTrue()
     }
 
     /////

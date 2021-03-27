@@ -17,7 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:theme">
-        <activity android:name=".HiltTestActivity" />
+        <activity android:name=".HiltTestActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="@string/file_provider"

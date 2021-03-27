@@ -3,6 +3,7 @@ package de.hs_rm.recipe_me.service.repository
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.Constants
@@ -12,7 +13,6 @@ import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -41,7 +41,7 @@ class ShoppingListRepositoryTest {
     @Before
     fun beforeEach() {
         hiltRule.inject()
-        assertEquals(AppDatabase.Environment.TEST.dbName, db.openHelper.databaseName)
+        assertThat(db.openHelper.databaseName).isEqualTo(AppDatabase.Environment.TEST.dbName)
 
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
         db.clearAllTables()
@@ -55,37 +55,22 @@ class ShoppingListRepositoryTest {
     fun testAddOrUpdate() {
         runBlocking {
             repository.addOrUpdateFromIngredient(
-                Ingredient(
-                    1L,
-                    "Flour",
-                    200.0,
-                    IngredientUnit.GRAM
-                )
+                Ingredient(1L, "Flour", 200.0, IngredientUnit.GRAM)
             )
             repository.addOrUpdateFromIngredient(
-                Ingredient(
-                    2L,
-                    "Flour",
-                    200.0,
-                    IngredientUnit.GRAM
-                )
+                Ingredient(2L, "Flour", 200.0, IngredientUnit.GRAM)
             )
             repository.addOrUpdateFromIngredient(
-                Ingredient(
-                    3L,
-                    "Paprika",
-                    1.0,
-                    IngredientUnit.NONE
-                )
+                Ingredient(3L, "Paprika", 1.0, IngredientUnit.NONE)
             )
         }
 
         val allItems = repository.getAllItems().getOrAwaitValue()
 
-        assertEquals(3, allItems.size) // 2 + testItem
+        assertThat(allItems.size).isEqualTo(3) // 2 + testItem
 
-        assertEquals(400.0, allItems[1].quantity, 0.0)
-        assertEquals(1.0, allItems[0].quantity, 0.0)
+        assertThat(allItems[1].quantity).isEqualTo(400.0)
+        assertThat(allItems[0].quantity).isEqualTo(1.0)
     }
 
     private fun insertTestItems() {

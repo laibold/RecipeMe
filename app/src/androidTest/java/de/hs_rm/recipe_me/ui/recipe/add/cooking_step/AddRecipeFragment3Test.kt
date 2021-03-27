@@ -1,5 +1,6 @@
 package de.hs_rm.recipe_me.ui.recipe.add.cooking_step
 
+import com.google.common.truth.Truth.assertThat
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.activityViewModels
@@ -29,7 +30,6 @@ import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.service.Formatter
 import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
 import org.hamcrest.Matchers.*
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -59,7 +59,7 @@ class AddRecipeFragment3Test {
     @Before
     fun beforeEach() {
         hiltRule.inject()
-        assertEquals(AppDatabase.Environment.TEST.dbName, db.openHelper.databaseName)
+        assertThat(db.openHelper.databaseName).isEqualTo(AppDatabase.Environment.TEST.dbName)
 
         context = InstrumentationRegistry.getInstrumentation().targetContext
         db.clearAllTables()

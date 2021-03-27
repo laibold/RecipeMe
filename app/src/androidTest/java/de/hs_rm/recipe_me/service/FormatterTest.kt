@@ -6,7 +6,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import de.hs_rm.recipe_me.LocaleContextProvider
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
-import org.junit.Assert.assertEquals
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,7 +29,7 @@ class FormatterTest {
     fun formatIngredientWithoutQuantityAndUnit() {
         val ingredient = Ingredient("Curcuma", 0.0, IngredientUnit.NONE)
         val str = Formatter.formatIngredient(context, ingredient)
-        assertEquals("Curcuma", str)
+        assertThat(str).isEqualTo("Curcuma")
     }
 
     /**
@@ -39,7 +39,7 @@ class FormatterTest {
     fun formatIngredientWithoutUnit() {
         val ingredient = Ingredient("Bananas", 3.0, IngredientUnit.NONE)
         val str = Formatter.formatIngredient(context, ingredient)
-        assertEquals("3 Bananas", str)
+        assertThat(str).isEqualTo("3 Bananas")
     }
 
     /**
@@ -51,7 +51,7 @@ class FormatterTest {
 
         val ingredient = Ingredient("chickpeas", 1.0, IngredientUnit.CAN)
         val str = Formatter.formatIngredient(context, ingredient)
-        assertEquals("1 can chickpeas", str)
+        assertThat(str).isEqualTo("1 can chickpeas")
     }
 
     /**
@@ -63,7 +63,7 @@ class FormatterTest {
 
         val ingredient = Ingredient("Chickpeas", 1.5, IngredientUnit.CAN)
         val str = Formatter.formatIngredient(context, ingredient, 3.0)
-        assertEquals("4.5 cans Chickpeas", str)
+        assertThat(str).isEqualTo("4.5 cans Chickpeas")
     }
 
     /**
@@ -80,7 +80,7 @@ class FormatterTest {
         )
         val str = Formatter.formatIngredientList(context, ingredients)
 
-        assertEquals("3 Bananas, 1.5 cans Chickpeas, Curcuma", str)
+        assertThat(str).isEqualTo("3 Bananas, 1.5 cans Chickpeas, Curcuma")
     }
 
     /**
@@ -97,7 +97,7 @@ class FormatterTest {
         )
         val str = Formatter.formatIngredientList(context, ingredients)
 
-        assertEquals("3 Bananen, 1,5 Dosen Kichererbsen, 2,5 g Kurkuma", str)
+        assertThat(str).isEqualTo("3 Bananen, 1,5 Dosen Kichererbsen, 2,5 g Kurkuma")
     }
 
     /**
@@ -110,7 +110,6 @@ class FormatterTest {
         )
         val str = Formatter.formatIngredientList(context, ingredients)
 
-        assertEquals("3 g Bananas", str)
+        assertThat(str).isEqualTo("3 g Bananas")
     }
-
 }
