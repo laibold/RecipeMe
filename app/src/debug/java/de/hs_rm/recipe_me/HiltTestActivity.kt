@@ -9,7 +9,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class HiltTestActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppThemeLight)
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
