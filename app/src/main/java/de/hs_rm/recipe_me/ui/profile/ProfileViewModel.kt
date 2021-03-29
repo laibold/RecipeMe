@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * ViewModel for [ProfileViewModel]
+ * ViewModel for [ProfileFragment]
  */
 @HiltViewModel
 class ProfileViewModel @Inject constructor(

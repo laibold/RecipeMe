@@ -138,6 +138,10 @@
         <action
             android:id="@+id/to_site_notice_fragment"
             app:destination="@+id/site_notice_fragment" />
+
+        <action
+            android:id="@+id/to_settings_fragment"
+            app:destination="@+id/settings_fragment" />
     </fragment>
 
     <fragment
@@ -180,5 +184,11 @@
         android:name="de.hs_rm.recipe_me.ui.profile.SiteNoticeFragment"
         android:label="Site Notice Fragment"
         tools:layout="@layout/site_notice_fragment" />
+
+    <fragment
+        android:id="@+id/settings_fragment"
+        android:name="de.hs_rm.recipe_me.ui.profile.settings.SettingsFragment"
+        android:label="Settings Fragment"
+        />
 
 </navigation>

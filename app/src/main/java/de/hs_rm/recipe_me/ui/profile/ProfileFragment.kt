@@ -61,6 +61,11 @@ class ProfileFragment : Fragment(), BottomSheetImagePicker.OnImagesSelectedListe
             editProfileDialog().show()
         }
 
+        binding.toSettingsElement.setOnClickListener {
+            val direction = ProfileFragmentDirections.toSettingsFragment()
+            findNavController().navigate(direction)
+        }
+
         binding.toSiteNoticeElement.setOnClickListener {
             val direction = ProfileFragmentDirections.toSiteNoticeFragment()
             findNavController().navigate(direction)

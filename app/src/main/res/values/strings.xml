@@ -138,5 +138,9 @@
     <string name="check_items_to_be_removed">Markiere zu entfernende Elemente.</string>
     <string name="settings">Einstellungen</string>
     <string name="to_settings">Zu den Einstellungen</string>
+    <string name="theme_key" translatable="false">THEME</string>
     <string name="dark_mode">Dark Mode</string>
+    <string name="light">Hell</string>
+    <string name="dark">Dunkel</string>
+    <string name="system_settings">Systemeinstellung</string>
 </resources>
