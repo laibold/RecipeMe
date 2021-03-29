@@ -14,9 +14,7 @@
         android:icon="@drawable/ic_app"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        tools:replace="android:theme">
+        android:supportsRtl="true">
         <activity android:name=".HiltTestActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
