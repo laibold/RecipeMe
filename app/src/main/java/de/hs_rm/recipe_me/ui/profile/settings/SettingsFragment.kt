@@ -27,6 +27,7 @@ class SettingsFragment : Fragment() {
     private lateinit var prefs: SharedPreferences
 
     private lateinit var themeKey: String
+    private lateinit var timerKey: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +42,7 @@ class SettingsFragment : Fragment() {
 
         prefs = PreferenceManager.getDefaultSharedPreferences(requireContext().applicationContext)
         themeKey = getString(R.string.theme_key)
+        timerKey = getString(R.string.timer_in_background_key)
 
         val editor = prefs.edit()
 
@@ -50,12 +52,33 @@ class SettingsFragment : Fragment() {
             editor.putInt(themeKey, value!!).apply()
         }
 
+        binding.timerSwitch.setOnCheckedChangeListener { _, isChecked ->
+            editor.putBoolean(timerKey, isChecked).apply()
+        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setThemeButtonSelection(view)
+        setTimerSwitch()
+    }
+
+    /**
+     * Set timer switch depending on current preference
+     */
+    private fun setTimerSwitch() {
+        // get theme from Preferences if existing, otherwise default theme
+        val prefSelection = prefs.getBoolean(timerKey, false)
+        binding.timerSwitch.isChecked = prefSelection
+    }
+
+    /**
+     * Set theme selection depending on current preference
+     */
+    private fun setThemeButtonSelection(view: View) {
         // get theme from Preferences if existing, otherwise default theme
         val prefTheme = prefs.getInt(themeKey, AppCompatDelegate.getDefaultNightMode())
 
