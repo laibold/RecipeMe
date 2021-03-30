@@ -34,8 +34,8 @@
                 android:id="@+id/radio_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginStart="10dp"
+                android:orientation="vertical"
                 app:layout_constraintTop_toBottomOf="@id/dark_mode_text">
 
                 <RadioButton
@@ -59,10 +59,22 @@
             </RadioGroup>
 
             <TextView
-                android:id="@+id/debug_text"
-                android:layout_width="match_parent"
+                android:id="@+id/timer_text"
+                style="@style/text"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/radio_group"/>
+                android:layout_marginTop="@dimen/small_space"
+                android:text="Timer im Hintergrund starten"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/radio_group" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/timer_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/timer_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/timer_text" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
