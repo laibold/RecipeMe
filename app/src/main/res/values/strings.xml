@@ -143,4 +143,5 @@
     <string name="light">Hell</string>
     <string name="dark">Dunkel</string>
     <string name="system_settings">Systemeinstellung</string>
+    <string name="start_timer_in_background">Timer im Hintergrund starten</string>
 </resources>
