@@ -1,6 +1,5 @@
 package de.hs_rm.recipe_me.ui.profile.settings
 
-import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,7 +13,6 @@ import androidx.preference.PreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.SettingsFragmentBinding
-import java.security.acl.Group
 
 
 @AndroidEntryPoint
@@ -26,9 +24,9 @@ class SettingsFragment : Fragment() {
         R.id.radio_dark_mode to AppCompatDelegate.MODE_NIGHT_YES,
         R.id.radio_system_mode to AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
     )
-    private val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext().applicationContext)
+    private lateinit var prefs: SharedPreferences
 
-    val themeKey = getString(R.string.theme_key)
+    private lateinit var themeKey: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +38,9 @@ class SettingsFragment : Fragment() {
             container,
             false
         )
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(requireContext().applicationContext)
+        themeKey = getString(R.string.theme_key)
 
         val editor = prefs.edit()
 
