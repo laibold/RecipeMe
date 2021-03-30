@@ -1,8 +1,6 @@
 package de.hs_rm.recipe_me.ui.shopping_list
 
 import android.content.Context
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
@@ -10,21 +8,21 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.Constants
 import de.hs_rm.recipe_me.R
+import de.hs_rm.recipe_me.declaration.espresso.waitForView
 import de.hs_rm.recipe_me.declaration.espresso.withListSize
 import de.hs_rm.recipe_me.declaration.launchFragmentInHiltContainer
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anything
-import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -48,10 +46,7 @@ class ShoppingListFragmentTest {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         db.clearAllTables()
 
-        val navController = Mockito.mock(NavController::class.java)
-        launchFragmentInHiltContainer<ShoppingListFragment> {
-            Navigation.setViewNavController(requireView(), navController)
-        }
+        launchFragmentInHiltContainer<ShoppingListFragment>()
     }
 
     /**
@@ -102,6 +97,8 @@ class ShoppingListFragmentTest {
         runBlocking {
             db.shoppingListDao().insert(ShoppingListItem("Item1"))
         }
+
+        Thread.sleep(100)
 
         // should be unchecked by default
         onData(anything()).inAdapterView(withId(R.id.list_view)).atPosition(0)

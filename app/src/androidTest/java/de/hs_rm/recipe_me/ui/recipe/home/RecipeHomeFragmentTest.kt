@@ -10,6 +10,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.Constants
@@ -24,7 +25,6 @@ import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.hasToString
-import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -100,10 +100,7 @@ class RecipeHomeFragmentTest {
      */
     @Test
     fun testCountCategories() {
-        val navController = mock(NavController::class.java)
-        launchFragmentInHiltContainer<RecipeHomeFragment> {
-            Navigation.setViewNavController(requireView(), navController)
-        }
+        launchFragmentInHiltContainer<RecipeHomeFragment>()
 
         val categoriesCount = RecipeCategory.values().size
         onView(withId(R.id.category_list)).check(matches(withListSize(categoriesCount)))
@@ -114,10 +111,7 @@ class RecipeHomeFragmentTest {
      */
     @Test
     fun testRecipeOfTheDayEmptyState() {
-        val navController = mock(NavController::class.java)
-        launchFragmentInHiltContainer<RecipeHomeFragment> {
-            Navigation.setViewNavController(requireView(), navController)
-        }
+        launchFragmentInHiltContainer<RecipeHomeFragment>()
 
         Thread.sleep(500)
 
