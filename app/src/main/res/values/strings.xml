@@ -146,4 +146,6 @@
     <string name="start_timer_in_background">Timer im Hintergrund starten</string>
     <string name="timer_in_background_key" translatable="false">TIMER_IN_BACKGROUND</string>
     <string name="timer_started">Timer gestartet</string>
+    <string name="cooking_step_preview_key" translatable="false">SHOW_COOKING_STEP_PREVIEW</string>
+    <string name="show_cooking_steps_preview">Vorschau für Koch-Schritte anzeigen</string>
 </resources>

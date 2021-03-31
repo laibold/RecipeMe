@@ -97,7 +97,7 @@
     <string name="version">Version</string>
     <string name="recipe_of_the_day">Recipe of the day</string>
     <string name="open">Open</string>
-    <string name="shopping_list_export_headline">See what\'s on %s RecipeMe shopping list:</string>
+    <string name="shopping_list_export_headline">See what\'s on %s RecipeMe shopping list:\n\n</string>
     <string name="my">my</string>
     <string name="save">Save</string>
     <string name="your_name">Your name</string>
@@ -138,4 +138,5 @@
     <string name="system_settings">System settings</string>
     <string name="start_timer_in_background">Start timer in background</string>
     <string name="timer_started">Timer started</string>
+    <string name="show_cooking_steps_preview">Show preview for cooking steps</string>
 </resources>

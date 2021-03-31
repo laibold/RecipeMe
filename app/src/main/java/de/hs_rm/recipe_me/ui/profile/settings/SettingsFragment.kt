@@ -28,6 +28,7 @@ class SettingsFragment : Fragment() {
 
     private lateinit var themeKey: String
     private lateinit var timerKey: String
+    private lateinit var cookingStepKey: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +44,7 @@ class SettingsFragment : Fragment() {
         prefs = PreferenceManager.getDefaultSharedPreferences(requireContext().applicationContext)
         themeKey = getString(R.string.theme_key)
         timerKey = getString(R.string.timer_in_background_key)
+        cookingStepKey = getString(R.string.cooking_step_preview_key)
 
         val editor = prefs.edit()
 
@@ -56,6 +58,10 @@ class SettingsFragment : Fragment() {
             editor.putBoolean(timerKey, isChecked).apply()
         }
 
+        binding.cookingStepPreviewSwitch.setOnCheckedChangeListener { _, isChecked ->
+            editor.putBoolean(cookingStepKey, isChecked).apply()
+        }
+
         return binding.root
     }
 
@@ -64,15 +70,7 @@ class SettingsFragment : Fragment() {
 
         setThemeButtonSelection(view)
         setTimerSwitch()
-    }
-
-    /**
-     * Set timer switch depending on current preference
-     */
-    private fun setTimerSwitch() {
-        // get theme from Preferences if existing, otherwise default theme
-        val prefSelection = prefs.getBoolean(timerKey, false)
-        binding.timerSwitch.isChecked = prefSelection
+        setCookingStepSwitch()
     }
 
     /**
@@ -92,6 +90,24 @@ class SettingsFragment : Fragment() {
         } else {
             binding.radioSystemMode.isChecked = true
         }
+    }
+
+    /**
+     * Set timer switch depending on current preference
+     */
+    private fun setTimerSwitch() {
+        // get theme from Preferences if existing, otherwise default theme
+        val prefSelection = prefs.getBoolean(timerKey, false)
+        binding.timerSwitch.isChecked = prefSelection
+    }
+
+    /**
+     * Set cooking step preview switch depending on current preference
+     */
+    private fun setCookingStepSwitch() {
+        // get theme from Preferences if existing, otherwise default theme
+        val prefSelection = prefs.getBoolean(cookingStepKey, false)
+        binding.cookingStepPreviewSwitch.isChecked = prefSelection
     }
 
 }
