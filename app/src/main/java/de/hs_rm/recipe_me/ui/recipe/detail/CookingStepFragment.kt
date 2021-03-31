@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.preference.PreferenceManager
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.CookingStepFragmentBinding
@@ -24,7 +26,7 @@ class CookingStepFragment : Fragment(), CookingStepCallbackAdapter {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = DataBindingUtil.inflate(
             inflater,
@@ -61,13 +63,31 @@ class CookingStepFragment : Fragment(), CookingStepCallbackAdapter {
      * @param message message displayed on timer and when ending
      */
     private fun startTimer(message: String, seconds: Int) {
+        val prefs =
+            PreferenceManager.getDefaultSharedPreferences(requireContext().applicationContext)
+        val timerKey = getString(R.string.timer_in_background_key)
+        val skipUi = prefs.getBoolean(timerKey, false)
+
         val intent = Intent(AlarmClock.ACTION_SET_TIMER).apply {
             putExtra(AlarmClock.EXTRA_MESSAGE, message)
             putExtra(AlarmClock.EXTRA_LENGTH, seconds)
-            putExtra(AlarmClock.EXTRA_SKIP_UI, false)
+            putExtra(AlarmClock.EXTRA_SKIP_UI, skipUi)
         }
-        if (context?.let { intent.resolveActivity(it.packageManager) } != null) {
-            requireContext().startActivity(intent)
+
+        requireContext().startActivity(intent)
+
+        // show snackbar with link to timer (for API > 25) if user set timer to run in background
+        if (skipUi) {
+            val snackbar =
+                Snackbar.make(binding.root, getString(R.string.timer_started), Snackbar.LENGTH_LONG)
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                snackbar.setAction(getString(R.string.open)) {
+                    requireContext().startActivity(Intent(AlarmClock.ACTION_SHOW_TIMERS))
+                }
+            }
+
+            snackbar.show()
         }
     }
 

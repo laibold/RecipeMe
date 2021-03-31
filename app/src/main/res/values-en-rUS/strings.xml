@@ -137,4 +137,5 @@
     <string name="dark">Dark</string>
     <string name="system_settings">System settings</string>
     <string name="start_timer_in_background">Start timer in background</string>
+    <string name="timer_started">Timer started</string>
 </resources>

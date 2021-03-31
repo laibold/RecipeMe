@@ -145,4 +145,5 @@
     <string name="system_settings">Systemeinstellung</string>
     <string name="start_timer_in_background">Timer im Hintergrund starten</string>
     <string name="timer_in_background_key" translatable="false">TIMER_IN_BACKGROUND</string>
+    <string name="timer_started">Timer gestartet</string>
 </resources>
