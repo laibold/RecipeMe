@@ -42,6 +42,7 @@ class SettingsFragmentTest {
 
     private lateinit var themeKey: String
     private lateinit var timerKey: String
+    private lateinit var cookingStepKey: String
 
     private lateinit var themeRadioGroup: RadioGroup
 
@@ -57,6 +58,7 @@ class SettingsFragmentTest {
 
         themeKey = context.getString(R.string.theme_key)
         timerKey = context.getString(R.string.timer_in_background_key)
+        cookingStepKey = context.getString(R.string.cooking_step_preview_key)
 
         launchFragmentInHiltContainer<SettingsFragment> {
             themeRadioGroup = requireView().findViewById(R.id.radio_group)
@@ -110,6 +112,7 @@ class SettingsFragmentTest {
     fun testTimerSetting() {
         // by default switch should not be checked
         onView(withId(R.id.timer_switch)).check(matches(isNotChecked()))
+        assertThat(getCurrentTimerPref(false)).isEqualTo(false)
 
         onView(withId(R.id.timer_switch)).perform(click())
         onView(withId(R.id.timer_switch)).check(matches(isChecked()))
@@ -121,7 +124,7 @@ class SettingsFragmentTest {
     }
 
     /**
-     * Test stat state of switch is set based on preference
+     * Test that state of timer switch is set based on preference
      */
     @Test
     fun testPersistingTimerSetting() {
@@ -132,6 +135,38 @@ class SettingsFragmentTest {
         launchFragmentInHiltContainer<SettingsFragment>()
         onView(withId(R.id.timer_switch)).check(matches(isChecked()))
         assertThat(getCurrentTimerPref(false)).isEqualTo(true)
+    }
+
+    /**
+     * Test that switch changes preference of cooking step preview
+     */
+    @Test
+    fun testCookingStepPreviewSetting() {
+        // by default switch should be checked
+        onView(withId(R.id.cooking_step_preview_switch)).check(matches(isChecked()))
+        assertThat(getCurrentCookingStepPreviewPref(true)).isEqualTo(true)
+
+        onView(withId(R.id.cooking_step_preview_switch)).perform(click())
+        onView(withId(R.id.cooking_step_preview_switch)).check(matches(isNotChecked()))
+        assertThat(getCurrentCookingStepPreviewPref(true)).isEqualTo(false)
+
+        onView(withId(R.id.cooking_step_preview_switch)).perform(click())
+        onView(withId(R.id.cooking_step_preview_switch)).check(matches(isChecked()))
+        assertThat(getCurrentCookingStepPreviewPref(false)).isEqualTo(true)
+    }
+
+    /**
+     * Test stat state of cooking step preview switch is set based on preference
+     */
+    @Test
+    fun testPersistingCookingStepPreviewSetting() {
+        onView(withId(R.id.cooking_step_preview_switch)).check(matches(isChecked()))
+        onView(withId(R.id.cooking_step_preview_switch)).perform(click())
+
+        // restart and check
+        launchFragmentInHiltContainer<SettingsFragment>()
+        onView(withId(R.id.cooking_step_preview_switch)).check(matches(isNotChecked()))
+        assertThat(getCurrentCookingStepPreviewPref(true)).isEqualTo(false)
     }
 
     /////
@@ -153,5 +188,14 @@ class SettingsFragmentTest {
      */
     private fun getCurrentTimerPref(default: Boolean): Boolean {
         return prefs.getBoolean(timerKey, default)
+    }
+
+    /**
+     * Returns value of current "show cooking steps in preview" preference
+     *
+     * @param default return value if no value is defined
+     */
+    private fun getCurrentCookingStepPreviewPref(default: Boolean): Boolean {
+        return prefs.getBoolean(cookingStepKey, default)
     }
 }
