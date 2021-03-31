@@ -106,7 +106,7 @@ class SettingsFragment : Fragment() {
      */
     private fun setCookingStepSwitch() {
         // get theme from Preferences if existing, otherwise default theme
-        val prefSelection = prefs.getBoolean(cookingStepKey, false)
+        val prefSelection = prefs.getBoolean(cookingStepKey, true)
         binding.cookingStepPreviewSwitch.isChecked = prefSelection
     }
 
