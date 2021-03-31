@@ -1,6 +1,7 @@
 package de.hs_rm.recipe_me.ui.profile.settings
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -8,8 +9,7 @@ import androidx.preference.PreferenceManager
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isChecked
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -38,8 +38,12 @@ class SettingsFragmentTest {
     lateinit var db: AppDatabase
 
     lateinit var context: Context
+    lateinit var prefs: SharedPreferences
 
-    lateinit var themeRadioGroup: RadioGroup
+    private lateinit var themeKey: String
+    private lateinit var timerKey: String
+
+    private lateinit var themeRadioGroup: RadioGroup
 
     @Before
     fun beforeEach() {
@@ -48,7 +52,11 @@ class SettingsFragmentTest {
 
         context = InstrumentationRegistry.getInstrumentation().targetContext
         db.clearAllTables()
-        PreferenceManager.getDefaultSharedPreferences(context).edit().clear()
+        prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        prefs.edit().clear().commit()
+
+        themeKey = context.getString(R.string.theme_key)
+        timerKey = context.getString(R.string.timer_in_background_key)
 
         launchFragmentInHiltContainer<SettingsFragment> {
             themeRadioGroup = requireView().findViewById(R.id.radio_group)
@@ -61,14 +69,19 @@ class SettingsFragmentTest {
     @Test
     fun testThemeSettings() {
         onView(withId(R.id.radio_light_mode)).perform(click())
+        // check if pref was set successfully
+        assertThat(getCurrentThemePref()).isEqualTo(AppCompatDelegate.MODE_NIGHT_NO)
+        // check if app's theme mode changed
         var currentMode = AppCompatDelegate.getDefaultNightMode()
         assertThat(currentMode).isEqualTo(AppCompatDelegate.MODE_NIGHT_NO)
 
         onView(withId(R.id.radio_dark_mode)).perform(click())
+        assertThat(getCurrentThemePref()).isEqualTo(AppCompatDelegate.MODE_NIGHT_YES)
         currentMode = AppCompatDelegate.getDefaultNightMode()
         assertThat(currentMode).isEqualTo(AppCompatDelegate.MODE_NIGHT_YES)
 
         onView(withId(R.id.radio_system_mode)).perform(click())
+        assertThat(getCurrentThemePref()).isEqualTo(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         currentMode = AppCompatDelegate.getDefaultNightMode()
         assertThat(currentMode).isEqualTo(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
     }
@@ -78,15 +91,67 @@ class SettingsFragmentTest {
      * and that its settings will still be active
      */
     @Test
-    fun testPersistingTheme() {
+    fun testPersistingThemeSetting() {
         // by default this one is not checked
         onView(withId(R.id.radio_dark_mode)).perform(click())
 
         // restart and check
         launchFragmentInHiltContainer<SettingsFragment>()
         onView(withId(R.id.radio_dark_mode)).check(matches(isChecked()))
+        assertThat(getCurrentThemePref()).isEqualTo(AppCompatDelegate.MODE_NIGHT_YES)
         val currentMode = AppCompatDelegate.getDefaultNightMode()
         assertThat(currentMode).isEqualTo(AppCompatDelegate.MODE_NIGHT_YES)
     }
 
+    /**
+     * Test that switch changes preference of timer starting in background
+     */
+    @Test
+    fun testTimerSetting() {
+        // by default switch should not be checked
+        onView(withId(R.id.timer_switch)).check(matches(isNotChecked()))
+
+        onView(withId(R.id.timer_switch)).perform(click())
+        onView(withId(R.id.timer_switch)).check(matches(isChecked()))
+        assertThat(getCurrentTimerPref(false)).isEqualTo(true)
+
+        onView(withId(R.id.timer_switch)).perform(click())
+        onView(withId(R.id.timer_switch)).check(matches(isNotChecked()))
+        assertThat(getCurrentTimerPref(true)).isEqualTo(false)
+    }
+
+    /**
+     * Test stat state of switch is set based on preference
+     */
+    @Test
+    fun testPersistingTimerSetting() {
+        onView(withId(R.id.timer_switch)).check(matches(isNotChecked()))
+        onView(withId(R.id.timer_switch)).perform(click())
+
+        // restart and check
+        launchFragmentInHiltContainer<SettingsFragment>()
+        onView(withId(R.id.timer_switch)).check(matches(isChecked()))
+        assertThat(getCurrentTimerPref(false)).isEqualTo(true)
+    }
+
+    /////
+
+    /**
+     * Returns value of current night theme preference
+     *
+     * @return current pref value or -100 (= MODE_NIGHT_UNSPECIFIED) if none defined
+     */
+    private fun getCurrentThemePref(): Int {
+        val default = AppCompatDelegate.MODE_NIGHT_UNSPECIFIED
+        return prefs.getInt(themeKey, default)
+    }
+
+    /**
+     * Returns value of current "start timer in background" preference
+     *
+     * @param default return value if no value is defined
+     */
+    private fun getCurrentTimerPref(default: Boolean): Boolean {
+        return prefs.getBoolean(timerKey, default)
+    }
 }

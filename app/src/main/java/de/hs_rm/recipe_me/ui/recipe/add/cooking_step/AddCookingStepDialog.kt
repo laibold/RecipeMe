@@ -96,11 +96,11 @@ class AddCookingStepDialog constructor(
     private fun setButtons() {
         if (cookingStepWithIngredients != null) {
             // Update
-            binding.addButton.text = activity.resources.getString(R.string.update)
+            binding.addButton.text = activity.getString(R.string.update)
             binding.addButton.setOnClickListener { updateCookingStepAndClose() }
         } else {
             // Add
-            binding.addButton.text = activity.resources.getString(R.string.add)
+            binding.addButton.text = activity.getString(R.string.add)
             binding.addButton.setOnClickListener { addCookingStepAndClose() }
         }
 
@@ -177,7 +177,7 @@ class AddCookingStepDialog constructor(
             dismiss()
         } else {
             binding.formContent.cookingStepField.error =
-                activity.resources.getString(R.string.err_enter_description)
+                activity.getString(R.string.err_enter_description)
         }
     }
 
@@ -196,7 +196,7 @@ class AddCookingStepDialog constructor(
             dismiss()
         } else {
             binding.formContent.cookingStepField.error =
-                activity.resources.getString(R.string.err_enter_description)
+                activity.getString(R.string.err_enter_description)
         }
     }
 
