@@ -18,6 +18,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.preference.PreferenceManager
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 import dagger.hilt.android.AndroidEntryPoint
@@ -160,7 +161,7 @@ class RecipeDetailFragment : Fragment() {
             }
         })
 
-        binding.forwardButton.setOnClickListener {
+        binding.toCookingStepsButton.setOnClickListener {
             val direction = RecipeDetailFragmentDirections.toCookingStepFragment()
             findNavController().navigate(direction)
         }
@@ -187,7 +188,7 @@ class RecipeDetailFragment : Fragment() {
         }
 
         if (recipeWithRelations.cookingStepsWithIngredients.isEmpty()) {
-            binding.forwardButton.visibility = View.GONE
+            binding.toCookingStepsButton.visibility = View.GONE
             binding.recipeInfo.cookingStepsHeadline.visibility = View.GONE
         } else {
             setCookingSteps(recipeWithRelations)
@@ -238,13 +239,22 @@ class RecipeDetailFragment : Fragment() {
     }
 
     /**
-     * Set CookingSteps to TextView
+     * Set CookingSteps to TextView if preview is enabled in preferences
      */
     private fun setCookingSteps(recipeWithRelations: RecipeWithRelations) {
-        var allCookingSteps = ""
-        for (cookingStep in recipeWithRelations.cookingStepsWithIngredients)
-            allCookingSteps += cookingStep.cookingStep.text + "\n\n"
-        binding.recipeInfo.steps.text = allCookingSteps
+        val prefs =
+            PreferenceManager.getDefaultSharedPreferences(requireContext().applicationContext)
+        val previewKey = getString(R.string.cooking_step_preview_key)
+        val showPreview = prefs.getBoolean(previewKey, true)
+
+        if (showPreview) {
+            var allCookingSteps = ""
+            for (cookingStep in recipeWithRelations.cookingStepsWithIngredients)
+                allCookingSteps += cookingStep.cookingStep.text + "\n\n"
+            binding.recipeInfo.steps.text = allCookingSteps
+        } else {
+            binding.recipeInfo.cookingStepsHeadline.visibility = View.GONE
+        }
     }
 
     /**
