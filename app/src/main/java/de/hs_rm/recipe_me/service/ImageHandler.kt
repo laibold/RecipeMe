@@ -172,7 +172,7 @@ object ImageHandler {
     /**
      * Returns absolute path to the device where the image resources of the app will be stored
      */
-    private fun getImageDirPath(context: Context): String {
+    fun getImageDirPath(context: Context): String {
         return context.getExternalFilesDir(null)?.absolutePath + IMAGES_PATH
     }
 

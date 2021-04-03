@@ -1,11 +1,14 @@
 package de.hs_rm.recipe_me.ui.profile.settings
 
+import android.app.Activity
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -13,10 +16,17 @@ import androidx.preference.PreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.SettingsFragmentBinding
-
+import de.hs_rm.recipe_me.service.BackupService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
+
+    @Inject
+    lateinit var backupService: BackupService
 
     private lateinit var binding: SettingsFragmentBinding
     private val radioModeMap = mapOf(
@@ -29,6 +39,7 @@ class SettingsFragment : Fragment() {
     private lateinit var themeKey: String
     private lateinit var timerKey: String
     private lateinit var cookingStepKey: String
+    private var selectDirectoryKey: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,9 +53,7 @@ class SettingsFragment : Fragment() {
         )
 
         prefs = PreferenceManager.getDefaultSharedPreferences(requireContext().applicationContext)
-        themeKey = getString(R.string.theme_key)
-        timerKey = getString(R.string.timer_in_background_key)
-        cookingStepKey = getString(R.string.cooking_step_preview_key)
+        setKeys()
 
         val editor = prefs.edit()
 
@@ -62,6 +71,22 @@ class SettingsFragment : Fragment() {
             editor.putBoolean(cookingStepKey, isChecked).apply()
         }
 
+        val resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    result.data?.data.also { uri ->
+                        CoroutineScope(Dispatchers.IO).launch {
+                            backupService.exportBackup(uri)
+                        }
+                    }
+                }
+            }
+
+        binding.saveDataText.setOnClickListener {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+            resultLauncher.launch(intent)
+        }
+
         return binding.root
     }
 
@@ -71,6 +96,16 @@ class SettingsFragment : Fragment() {
         setThemeButtonSelection(view)
         setTimerSwitch()
         setCookingStepSwitch()
+    }
+
+    /**
+     * Set keys used for preferences and intents
+     */
+    private fun setKeys() {
+        themeKey = getString(R.string.theme_key)
+        timerKey = getString(R.string.timer_in_background_key)
+        cookingStepKey = getString(R.string.cooking_step_preview_key)
+        selectDirectoryKey = requireContext().resources.getInteger(R.integer.select_directory_key)
     }
 
     /**

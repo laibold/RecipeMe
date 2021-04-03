@@ -148,4 +148,6 @@
     <string name="timer_started">Timer gestartet</string>
     <string name="cooking_step_preview_key" translatable="false">SHOW_COOKING_STEP_PREVIEW</string>
     <string name="show_cooking_steps_preview">Vorschau für Koch-Schritte anzeigen</string>
+    <string name="save_data">Daten sichern</string>
+    <string name="restore_data">Daten wiederherstellen</string>
 </resources>

@@ -6,10 +6,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.persistence.dao.RecipeDao
 import de.hs_rm.recipe_me.persistence.dao.RecipeOfTheDayDao
 import de.hs_rm.recipe_me.persistence.dao.ShoppingListDao
 import de.hs_rm.recipe_me.persistence.dao.UserDao
+import de.hs_rm.recipe_me.service.BackupService
 import de.hs_rm.recipe_me.service.repository.*
 import javax.inject.Singleton
 
@@ -52,5 +54,10 @@ object RepositoryModule {
     @Provides
     fun provideUserImageRepository(@ApplicationContext context: Context) =
         UserImageRepository(context)
+
+    @Singleton
+    @Provides
+    fun provideBackupService(@ApplicationContext context: Context, db: AppDatabase) =
+        BackupService(context, db)
 
 }

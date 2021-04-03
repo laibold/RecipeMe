@@ -96,6 +96,26 @@
                 app:layout_constraintTop_toTopOf="@id/cooking_step_preview_text"
                 tools:checked="true" />
 
+            <TextView
+                android:id="@+id/save_data_text"
+                style="@style/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_space"
+                android:text="@string/save_data"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cooking_step_preview_text" />
+
+            <TextView
+                android:id="@+id/restore_data_text"
+                style="@style/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_space"
+                android:text="@string/restore_data"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/save_data_text" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -139,4 +139,6 @@
     <string name="start_timer_in_background">Start timer in background</string>
     <string name="timer_started">Timer started</string>
     <string name="show_cooking_steps_preview">Show preview for cooking steps</string>
+    <string name="save_data">Save data</string>
+    <string name="restore_data">Restore data</string>
 </resources>
