@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
@@ -71,20 +72,21 @@ class SettingsFragment : Fragment() {
             editor.putBoolean(cookingStepKey, isChecked).apply()
         }
 
-        val resultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    result.data?.data.also { uri ->
-                        CoroutineScope(Dispatchers.IO).launch {
-                            backupService.exportBackup(uri)
-                        }
-                    }
-                }
-            }
+        val exportResultLauncher = registerExportLauncher()
+        val importResultLauncher = registerImportLauncher()
 
         binding.saveDataText.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-            resultLauncher.launch(intent)
+            exportResultLauncher.launch(intent)
+        }
+
+        binding.restoreDataText.setOnClickListener {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "application/zip"
+            }
+            importResultLauncher.launch(intent)
+            // TODO restart may be needed, because database is closed here
         }
 
         return binding.root
@@ -96,6 +98,36 @@ class SettingsFragment : Fragment() {
         setThemeButtonSelection(view)
         setTimerSwitch()
         setCookingStepSwitch()
+    }
+
+    /**
+     * Returns Launcher that calls export backup function in BackupService
+     */
+    private fun registerExportLauncher(): ActivityResultLauncher<Intent> {
+        return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.data.also { uri ->
+                    CoroutineScope(Dispatchers.IO).launch {
+                        backupService.exportBackup(uri)
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns Launcher that calls import backup function in BackupService
+     */
+    private fun registerImportLauncher(): ActivityResultLauncher<Intent> {
+        return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.data.also { uri ->
+                    CoroutineScope(Dispatchers.IO).launch {
+                        backupService.importBackup(uri)
+                    }
+                }
+            }
+        }
     }
 
     /**
