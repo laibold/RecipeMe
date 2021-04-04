@@ -2,7 +2,6 @@ package de.hs_rm.recipe_me.ui.profile.settings
 
 import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,11 +12,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.preference.PreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.SettingsFragmentBinding
 import de.hs_rm.recipe_me.service.BackupService
+import de.hs_rm.recipe_me.service.PreferenceService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,17 +28,16 @@ class SettingsFragment : Fragment() {
     @Inject
     lateinit var backupService: BackupService
 
+    @Inject
+    lateinit var preferenceService: PreferenceService
+
     private lateinit var binding: SettingsFragmentBinding
     private val radioModeMap = mapOf(
         R.id.radio_light_mode to AppCompatDelegate.MODE_NIGHT_NO,
         R.id.radio_dark_mode to AppCompatDelegate.MODE_NIGHT_YES,
         R.id.radio_system_mode to AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
     )
-    private lateinit var prefs: SharedPreferences
 
-    private lateinit var themeKey: String
-    private lateinit var timerKey: String
-    private lateinit var cookingStepKey: String
     private var selectDirectoryKey: Int = 0
 
     override fun onCreateView(
@@ -53,23 +51,20 @@ class SettingsFragment : Fragment() {
             false
         )
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(requireContext().applicationContext)
-        setKeys()
-
-        val editor = prefs.edit()
+        selectDirectoryKey = requireContext().resources.getInteger(R.integer.select_directory_key)
 
         // set theme preference on button selection
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
             val value = radioModeMap[checkedId]
-            editor.putInt(themeKey, value!!).apply()
+            preferenceService.setTheme(value!!)
         }
 
         binding.timerSwitch.setOnCheckedChangeListener { _, isChecked ->
-            editor.putBoolean(timerKey, isChecked).apply()
+            preferenceService.setTimerInBackground(isChecked)
         }
 
         binding.cookingStepPreviewSwitch.setOnCheckedChangeListener { _, isChecked ->
-            editor.putBoolean(cookingStepKey, isChecked).apply()
+            preferenceService.setShowCookingStepPreview(isChecked)
         }
 
         val exportResultLauncher = registerExportLauncher()
@@ -131,21 +126,11 @@ class SettingsFragment : Fragment() {
     }
 
     /**
-     * Set keys used for preferences and intents
-     */
-    private fun setKeys() {
-        themeKey = getString(R.string.theme_key)
-        timerKey = getString(R.string.timer_in_background_key)
-        cookingStepKey = getString(R.string.cooking_step_preview_key)
-        selectDirectoryKey = requireContext().resources.getInteger(R.integer.select_directory_key)
-    }
-
-    /**
      * Set theme selection depending on current preference
      */
     private fun setThemeButtonSelection(view: View) {
         // get theme from Preferences if existing, otherwise default theme
-        val prefTheme = prefs.getInt(themeKey, AppCompatDelegate.getDefaultNightMode())
+        val prefTheme = preferenceService.getTheme(AppCompatDelegate.getDefaultNightMode())
 
         // check radio button with belonging value if possible, otherwise system radio button
         if (radioModeMap.values.contains(prefTheme)) {
@@ -164,7 +149,7 @@ class SettingsFragment : Fragment() {
      */
     private fun setTimerSwitch() {
         // get theme from Preferences if existing, otherwise default theme
-        val prefSelection = prefs.getBoolean(timerKey, false)
+        val prefSelection = preferenceService.getTimerInBackground(false)
         binding.timerSwitch.isChecked = prefSelection
     }
 
@@ -173,7 +158,7 @@ class SettingsFragment : Fragment() {
      */
     private fun setCookingStepSwitch() {
         // get theme from Preferences if existing, otherwise default theme
-        val prefSelection = prefs.getBoolean(cookingStepKey, true)
+        val prefSelection = preferenceService.getShowCookingStepPreview(true)
         binding.cookingStepPreviewSwitch.isChecked = prefSelection
     }
 

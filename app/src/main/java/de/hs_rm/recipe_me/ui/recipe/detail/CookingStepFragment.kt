@@ -9,16 +9,20 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.preference.PreferenceManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.CookingStepFragmentBinding
 import de.hs_rm.recipe_me.declaration.ui.fragments.CookingStepCallbackAdapter
 import de.hs_rm.recipe_me.model.recipe.CookingStep
+import de.hs_rm.recipe_me.service.PreferenceService
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CookingStepFragment : Fragment(), CookingStepCallbackAdapter {
+
+    @Inject
+    lateinit var preferenceService: PreferenceService
 
     private val viewModel: RecipeDetailViewModel by activityViewModels()
     private lateinit var binding: CookingStepFragmentBinding
@@ -63,10 +67,7 @@ class CookingStepFragment : Fragment(), CookingStepCallbackAdapter {
      * @param message message displayed on timer and when ending
      */
     private fun startTimer(message: String, seconds: Int) {
-        val prefs =
-            PreferenceManager.getDefaultSharedPreferences(requireContext().applicationContext)
-        val timerKey = getString(R.string.timer_in_background_key)
-        val skipUi = prefs.getBoolean(timerKey, false)
+        val skipUi = preferenceService.getTimerInBackground(false)
 
         val intent = Intent(AlarmClock.ACTION_SET_TIMER).apply {
             putExtra(AlarmClock.EXTRA_MESSAGE, message)

@@ -18,7 +18,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.preference.PreferenceManager
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,9 +25,14 @@ import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeDetailFragmentBinding
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
 import de.hs_rm.recipe_me.service.GlideApp
+import de.hs_rm.recipe_me.service.PreferenceService
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RecipeDetailFragment : Fragment() {
+
+    @Inject
+    lateinit var preferenceService: PreferenceService
 
     private lateinit var binding: RecipeDetailFragmentBinding
     private val args: RecipeDetailFragmentArgs by navArgs()
@@ -242,10 +246,7 @@ class RecipeDetailFragment : Fragment() {
      * Set CookingSteps to TextView if preview is enabled in preferences
      */
     private fun setCookingSteps(recipeWithRelations: RecipeWithRelations) {
-        val prefs =
-            PreferenceManager.getDefaultSharedPreferences(requireContext().applicationContext)
-        val previewKey = getString(R.string.cooking_step_preview_key)
-        val showPreview = prefs.getBoolean(previewKey, true)
+        val showPreview = preferenceService.getShowCookingStepPreview(true)
 
         if (showPreview) {
             var allCookingSteps = ""

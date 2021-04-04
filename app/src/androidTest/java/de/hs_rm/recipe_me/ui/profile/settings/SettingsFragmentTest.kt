@@ -18,6 +18,7 @@ import de.hs_rm.recipe_me.Constants
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.declaration.launchFragmentInHiltContainer
 import de.hs_rm.recipe_me.persistence.AppDatabase
+import de.hs_rm.recipe_me.service.PreferenceService
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -56,9 +57,9 @@ class SettingsFragmentTest {
         prefs = PreferenceManager.getDefaultSharedPreferences(context)
         prefs.edit().clear().commit()
 
-        themeKey = context.getString(R.string.theme_key)
-        timerKey = context.getString(R.string.timer_in_background_key)
-        cookingStepKey = context.getString(R.string.cooking_step_preview_key)
+        themeKey = PreferenceService.THEME_KEY
+        timerKey = PreferenceService.TIMER_KEY
+        cookingStepKey = PreferenceService.COOKING_STEP_KEY
 
         launchFragmentInHiltContainer<SettingsFragment> {
             themeRadioGroup = requireView().findViewById(R.id.radio_group)

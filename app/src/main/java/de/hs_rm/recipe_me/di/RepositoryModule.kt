@@ -12,6 +12,7 @@ import de.hs_rm.recipe_me.persistence.dao.RecipeOfTheDayDao
 import de.hs_rm.recipe_me.persistence.dao.ShoppingListDao
 import de.hs_rm.recipe_me.persistence.dao.UserDao
 import de.hs_rm.recipe_me.service.BackupService
+import de.hs_rm.recipe_me.service.PreferenceService
 import de.hs_rm.recipe_me.service.repository.*
 import javax.inject.Singleton
 
@@ -57,7 +58,14 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideBackupService(@ApplicationContext context: Context, db: AppDatabase) =
-        BackupService(context, db)
+    fun provideBackupService(
+        @ApplicationContext context: Context,
+        db: AppDatabase,
+        preferenceService: PreferenceService
+    ) = BackupService(context, db, preferenceService)
+
+    @Singleton
+    @Provides
+    fun providePreferenceService(@ApplicationContext context: Context) = PreferenceService(context)
 
 }

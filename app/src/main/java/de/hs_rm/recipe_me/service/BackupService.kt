@@ -15,11 +15,16 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 import java.util.zip.ZipOutputStream
 import javax.inject.Inject
+import kotlin.collections.HashMap
 
 /**
  * Service for backup and restoring database, images and preferences
  */
-class BackupService @Inject constructor(val context: Context, val db: AppDatabase) {
+class BackupService @Inject constructor(
+    val context: Context,
+    val db: AppDatabase,
+    val preferenceService: PreferenceService
+) {
 
     private val dbFiles = mutableListOf<File>()
 
@@ -125,10 +130,7 @@ class BackupService @Inject constructor(val context: Context, val db: AppDatabas
      * Create HashMap from Preferences and copy them to ZipOutputStream as json
      */
     private fun exportPreferences(zipOut: ZipOutputStream) {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-        val prefsMap = prefs.all
-
-        val prefsMapString: String = Gson().toJson(prefsMap)
+        val prefsMapString = preferenceService.preferencesToJsonString()
 
         val file = File.createTempFile("temp", ".json")
         file.writeText(prefsMapString)

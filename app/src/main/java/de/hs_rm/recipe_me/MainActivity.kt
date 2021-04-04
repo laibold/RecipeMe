@@ -8,6 +8,7 @@ import androidx.navigation.ui.NavigationUI
 import androidx.preference.PreferenceManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import de.hs_rm.recipe_me.service.PreferenceService
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -15,13 +16,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var preferenceListener: PreferenceListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        preferenceListener = PreferenceListener(applicationContext)
+        preferenceListener = PreferenceListener()
 
         // if something changes in preference stuff here, please sync it with the function on HiltTestActivity for UI tests
         val preferences = PreferenceManager.getDefaultSharedPreferences(this)
         preferences.registerOnSharedPreferenceChangeListener(preferenceListener)
         // Set theme mode by calling listener manually
-        preferenceListener.onSharedPreferenceChanged(preferences, getString(R.string.theme_key))
+        preferenceListener.onSharedPreferenceChanged(preferences, PreferenceService.THEME_KEY)
 
         // set theme after default theme showed splash screen
         setTheme(R.style.AppTheme)
