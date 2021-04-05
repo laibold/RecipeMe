@@ -120,6 +120,7 @@ dependencies {
     testImplementation "org.mockito:mockito-android:3.6.0"
     androidTestImplementation "org.mockito:mockito-android:3.6.0"
     androidTestImplementation "com.google.truth:truth:1.1.2"
+    testImplementation "com.google.truth:truth:1.1.2"
 }
 
 gradle.projectsEvaluated {
