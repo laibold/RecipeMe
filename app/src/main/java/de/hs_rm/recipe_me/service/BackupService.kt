@@ -22,7 +22,7 @@ import kotlin.collections.HashMap
 class BackupService @Inject constructor(
     val context: Context,
     val db: AppDatabase,
-    val preferenceService: PreferenceService
+    val preferenceService: PreferenceService,
 ) {
 
     private val dbFiles = mutableListOf<File>()
@@ -167,23 +167,24 @@ class BackupService @Inject constructor(
         importImages(imageEntries, zipFile)
     }
 
-    private fun importImages(entries: List<ZipEntry>, zipFile: ZipFile) {
-        // https://stackoverflow.com/questions/1399126/java-util-zip-recreating-directory-structure
-        val imagesDir = ImageHandler.getImageDirPath(context)
-        val imagesFile = File(imagesDir)
+    /**
+     * Copy files from database directory to internal database directory (clean before)
+     */
+    private fun importDatabase(file: ZipFile) {
+        db.close()
 
-        imagesFile.deleteRecursively()
+        val dbPath = context.getDatabasePath(AppDatabase.env.dbName).absolutePath
+        val dbPathDirectory = dbPath.split("/").dropLast(1).joinToString("/")
 
-        for (entry in entries) {
-            val nameWithoutDir = entry.name.removePrefix(zipImageDir)
-            val file = File(imagesFile, nameWithoutDir)
-            if (entry.isDirectory) {
-                file.mkdirs()
-            } else {
-                file.parentFile?.mkdirs()
-                zipFile.getInputStream(entry).use { fileIn ->
-                    copy(fileIn, file)
-                }
+        // clear directory TODO maybe better solution is possible
+        val dirOut = FileOutputStream(dbPath)
+        dirOut.channel.truncate(0)
+
+        for (dbFile in dbFiles) {
+            val fileName = dbFile.toString().split("/").last()
+            FileOutputStream("$dbPathDirectory/$fileName").use { fOut ->
+                val entry = file.getEntry(zipDbDir + fileName)
+                copy(file.getInputStream(entry), fOut)
             }
         }
     }
@@ -203,23 +204,25 @@ class BackupService @Inject constructor(
     }
 
     /**
-     * Copy files from database directory to internal database directory (clean before)
+     * Import images from backup zip file
      */
-    private fun importDatabase(file: ZipFile) {
-        db.close()
+    private fun importImages(entries: List<ZipEntry>, zipFile: ZipFile) {
+        // https://stackoverflow.com/questions/1399126/java-util-zip-recreating-directory-structure
+        val imagesDir = ImageHandler.getImageDirPath(context)
+        val imagesFile = File(imagesDir)
 
-        val dbPath = context.getDatabasePath(AppDatabase.env.dbName).absolutePath
-        val dbPathDirectory = dbPath.split("/").dropLast(1).joinToString("/")
+        imagesFile.deleteRecursively()
 
-        // clear directory TODO maybe better solution is possible
-        val dirOut = FileOutputStream(dbPath)
-        dirOut.channel.truncate(0)
-
-        for (dbFile in dbFiles) {
-            val fileName = dbFile.toString().split("/").last()
-            FileOutputStream("$dbPathDirectory/$fileName").use { fOut ->
-                val entry = file.getEntry(zipDbDir + fileName)
-                copy(file.getInputStream(entry), fOut)
+        for (entry in entries) {
+            val nameWithoutDir = entry.name.removePrefix(zipImageDir)
+            val file = File(imagesFile, nameWithoutDir)
+            if (entry.isDirectory) {
+                file.mkdirs()
+            } else {
+                file.parentFile?.mkdirs()
+                zipFile.getInputStream(entry).use { fileIn ->
+                    copy(fileIn, file)
+                }
             }
         }
     }
