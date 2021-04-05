@@ -48,7 +48,7 @@ class BackupService @Inject constructor(
      *
      * @param uri Directory where zip file should be saved
      */
-    fun exportBackup(uri: Uri?) {
+    fun exportBackup(uri: Uri) {
         /*
          Structure in recipe-me-backup-202104021408.zip
          database/database(*)
@@ -56,23 +56,21 @@ class BackupService @Inject constructor(
          preferences.json (created from map)
          */
 
-        if (uri != null) {
-            // create file name
-            val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm")
-            val date = LocalDateTime.now().format(formatter)
-            val filename = "recipe-me-backup-$date.zip"
+        // create file name
+        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm")
+        val date = LocalDateTime.now().format(formatter)
+        val filename = "recipe-me-backup-$date.zip"
 
-            // Create zip file and stream files to be saved to it
-            val documentFile = DocumentFile.fromTreeUri(context, uri)
-            val zipFile = documentFile?.createFile("application/zip", filename)
+        // Create zip file and stream files to be saved to it
+        val documentFile = DocumentFile.fromTreeUri(context, uri)
+        val zipFile = documentFile?.createFile("application/zip", filename)
 
-            if (zipFile != null) {
-                val out = context.contentResolver.openOutputStream(zipFile.uri)
-                ZipOutputStream(BufferedOutputStream(out)).use { zipOut ->
-                    exportDatabase(zipOut)
-                    exportImages(zipOut)
-                    exportPreferences(zipOut)
-                }
+        if (zipFile != null) {
+            val out = context.contentResolver.openOutputStream(zipFile.uri)
+            ZipOutputStream(BufferedOutputStream(out)).use { zipOut ->
+                exportDatabase(zipOut)
+                exportImages(zipOut)
+                exportPreferences(zipOut)
             }
         }
     }
@@ -145,35 +143,32 @@ class BackupService @Inject constructor(
     /**
      * Import data from backup zip file
      */
-    fun importBackup(uri: Uri?) {
+    fun importBackup(uri: Uri) {
+        // copy selected file to app's cache dir to handle it as ZipFile
+        // https://stackoverflow.com/questions/58425517/how-to-get-file-path-from-the-content-uri-for-zip-file
+        val selectedFile = File(context.cacheDir, "backup_import_temp.zip")
+        val fileIn = context.contentResolver.openInputStream(uri)
 
-        if (uri != null) {
-            // copy selected file to app's cache dir to handle it as ZipFile
-            // https://stackoverflow.com/questions/58425517/how-to-get-file-path-from-the-content-uri-for-zip-file
-            val selectedFile = File(context.cacheDir, "backup_import_temp.zip")
-            val fileIn = context.contentResolver.openInputStream(uri)
-
-            if (fileIn != null) {
-                fileIn.use { copy(fileIn, selectedFile) }
-            } else {
-                throw IOException() //TODO
-            }
-
-            val zipFile = ZipFile(selectedFile)
-            val entries = zipFile.entries().toList()
-
-            for (entry in entries) {
-                Log.i("entry", entry.name)
-            }
-
-            val imageList = entries.filter { it.name.startsWith(zipImageDir) }
-            val preferenceFile = zipFile.getEntry(preferenceFileName)
-
-            runBlocking {
-                importDatabase(zipFile)
-            }
-            importPreferences(preferenceFile, zipFile)
+        if (fileIn != null) {
+            fileIn.use { copy(fileIn, selectedFile) }
+        } else {
+            throw IOException() //TODO
         }
+
+        val zipFile = ZipFile(selectedFile)
+        val entries = zipFile.entries().toList()
+
+        for (entry in entries) {
+            Log.i("entry", entry.name)
+        }
+
+        val imageList = entries.filter { it.name.startsWith(zipImageDir) }
+        val preferenceFile = zipFile.getEntry(preferenceFileName)
+
+        runBlocking {
+            importDatabase(zipFile)
+        }
+        importPreferences(preferenceFile, zipFile)
     }
 
     /**

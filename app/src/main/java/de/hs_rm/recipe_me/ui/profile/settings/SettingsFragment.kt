@@ -9,34 +9,18 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.SettingsFragmentBinding
-import de.hs_rm.recipe_me.service.BackupService
-import de.hs_rm.recipe_me.service.PreferenceService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
 
-    @Inject
-    lateinit var backupService: BackupService
-
-    @Inject
-    lateinit var preferenceService: PreferenceService
-
     private lateinit var binding: SettingsFragmentBinding
-    private val radioModeMap = mapOf(
-        R.id.radio_light_mode to AppCompatDelegate.MODE_NIGHT_NO,
-        R.id.radio_dark_mode to AppCompatDelegate.MODE_NIGHT_YES,
-        R.id.radio_system_mode to AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-    )
+    private val viewModel: SettingsViewModel by viewModels()
 
     private var selectDirectoryKey: Int = 0
 
@@ -55,16 +39,15 @@ class SettingsFragment : Fragment() {
 
         // set theme preference on button selection
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
-            val value = radioModeMap[checkedId]
-            preferenceService.setTheme(value!!)
+            viewModel.setTheme(checkedId)
         }
 
         binding.timerSwitch.setOnCheckedChangeListener { _, isChecked ->
-            preferenceService.setTimerInBackground(isChecked)
+            viewModel.setTimerInBackground(isChecked)
         }
 
         binding.cookingStepPreviewSwitch.setOnCheckedChangeListener { _, isChecked ->
-            preferenceService.setShowCookingStepPreview(isChecked)
+            viewModel.setShowCookingStepPreview(isChecked)
         }
 
         val exportResultLauncher = registerExportLauncher()
@@ -102,9 +85,7 @@ class SettingsFragment : Fragment() {
         return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.data.also { uri ->
-                    CoroutineScope(Dispatchers.IO).launch {
-                        backupService.exportBackup(uri)
-                    }
+                    viewModel.exportBackup(uri)
                 }
             }
         }
@@ -118,7 +99,7 @@ class SettingsFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.data.also { uri ->
                     // TODO block UI here
-                    backupService.importBackup(uri)
+                    viewModel.importBackup(uri)
 
                     // set selections depending on new values (listeners would create infinite loops here)
                     setThemeButtonSelection(binding.root)
@@ -133,18 +114,10 @@ class SettingsFragment : Fragment() {
      * Set theme selection depending on current preference
      */
     private fun setThemeButtonSelection(view: View) {
-        // get theme from Preferences if existing, otherwise default theme
-        val prefTheme = preferenceService.getTheme(AppCompatDelegate.getDefaultNightMode())
-
-        // check radio button with belonging value if possible, otherwise system radio button
-        if (radioModeMap.values.contains(prefTheme)) {
-            val viewId = radioModeMap.entries.firstOrNull { it.value == prefTheme }?.key
-            if (viewId != null) {
-                val radioButton = view.findViewById<RadioButton>(viewId)
-                radioButton.isChecked = true
-            }
-        } else {
-            binding.radioSystemMode.isChecked = true
+        val viewId = viewModel.getThemeButtonIdToBeChecked()
+        if (viewId != null) {
+            val radioButton = view.findViewById<RadioButton>(viewId)
+            radioButton.isChecked = true
         }
     }
 
@@ -153,7 +126,7 @@ class SettingsFragment : Fragment() {
      */
     private fun setTimerSwitch() {
         // get theme from Preferences if existing, otherwise default theme
-        val prefSelection = preferenceService.getTimerInBackground(false)
+        val prefSelection = viewModel.getTimerInBackground()
         binding.timerSwitch.isChecked = prefSelection
     }
 
@@ -162,8 +135,7 @@ class SettingsFragment : Fragment() {
      */
     private fun setCookingStepSwitch() {
         // get theme from Preferences if existing, otherwise default theme
-        val prefSelection = preferenceService.getShowCookingStepPreview(true)
+        val prefSelection = viewModel.getShowCookingStepPreview()
         binding.cookingStepPreviewSwitch.isChecked = prefSelection
     }
-
 }
