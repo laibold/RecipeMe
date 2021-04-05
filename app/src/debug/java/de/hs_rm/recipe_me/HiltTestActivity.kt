@@ -15,7 +15,7 @@ class HiltTestActivity : AppCompatActivity() {
         preferenceListener = PreferenceListener()
 
         // copied from MainActivity, keep in sync
-        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         preferences.registerOnSharedPreferenceChangeListener(preferenceListener)
         // Set theme mode by calling listener manually
         preferenceListener.onSharedPreferenceChanged(preferences, PreferenceService.THEME_KEY)

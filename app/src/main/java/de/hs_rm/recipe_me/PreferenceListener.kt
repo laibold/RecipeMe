@@ -1,6 +1,5 @@
 package de.hs_rm.recipe_me
 
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import de.hs_rm.recipe_me.service.PreferenceService

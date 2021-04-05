@@ -4,9 +4,9 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.documentfile.provider.DocumentFile
-import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import de.hs_rm.recipe_me.persistence.AppDatabase
+import kotlinx.coroutines.runBlocking
 import java.io.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -167,9 +167,26 @@ class BackupService @Inject constructor(
             }
 
             val imageList = entries.filter { it.name.startsWith(zipImageDir) }
-            val preferenceFileList = entries.filter { it.name == preferenceFileName }
+            val preferenceFile = zipFile.getEntry(preferenceFileName)
 
-            importDatabase(zipFile)
+            runBlocking {
+                importDatabase(zipFile)
+            }
+            importPreferences(preferenceFile, zipFile)
+        }
+    }
+
+    /**
+     * Import preferences from ZipEntry in ZipFile
+     */
+    private fun importPreferences(entry: ZipEntry?, zipFile: ZipFile) {
+        if (entry != null) {
+            zipFile.getInputStream(entry).use { fileIn ->
+                InputStreamReader(fileIn).use { reader ->
+                    val prefMap = Gson().fromJson(reader, HashMap::class.java)
+                    preferenceService.createFromHashMap(prefMap)
+                }
+            }
         }
     }
 

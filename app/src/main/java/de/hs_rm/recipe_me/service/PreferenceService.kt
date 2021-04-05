@@ -8,15 +8,15 @@ import javax.inject.Inject
 
 class PreferenceService @Inject constructor(val context: Context) {
 
-    private var prefs: SharedPreferences =
+    private var preferences: SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-    private var editor: SharedPreferences.Editor = prefs.edit()
+    private var editor: SharedPreferences.Editor = preferences.edit()
 
     /**
      * Get current theme (Value from AppCompatDelegate) or default if not set
      */
     fun getTheme(default: Int): Int {
-        return prefs.getInt(THEME_KEY, default)
+        return preferences.getInt(THEME_KEY, default)
     }
 
     /**
@@ -30,7 +30,7 @@ class PreferenceService @Inject constructor(val context: Context) {
      * Get value of "start timer in background" or default if not set
      */
     fun getTimerInBackground(default: Boolean): Boolean {
-        return prefs.getBoolean(TIMER_KEY, default)
+        return preferences.getBoolean(TIMER_KEY, default)
     }
 
     /**
@@ -44,7 +44,7 @@ class PreferenceService @Inject constructor(val context: Context) {
      * Get value of "show cooking step preview" or default if not set
      */
     fun getShowCookingStepPreview(default: Boolean): Boolean {
-        return prefs.getBoolean(COOKING_STEP_KEY, default)
+        return preferences.getBoolean(COOKING_STEP_KEY, default)
     }
 
     /**
@@ -54,13 +54,28 @@ class PreferenceService @Inject constructor(val context: Context) {
         editor.putBoolean(COOKING_STEP_KEY, value).apply()
     }
 
+    /**
+     * Export all preferences to json String with (key, value) pairs
+     */
     fun preferencesToJsonString(): String {
-        val prefsMap = prefs.all
+        val prefsMap = preferences.all
         return Gson().toJson(prefsMap)
     }
 
-    fun createFromHashMap(jsonMap: HashMap<String, String>) {
+    /**
+     * Set preferences given from HashMap with (String, String) pairs.
+     */
+    fun createFromHashMap(prefMap: HashMap<*, *>) {
+        val themeVal = prefMap[THEME_KEY]
+        val timerVal = prefMap[TIMER_KEY]
+        val cookingStepVal = prefMap[COOKING_STEP_KEY]
 
+        themeVal?.let {
+            // output will be X.0, so direct cast to integer isn't possible
+            setTheme((themeVal as Double).toInt())
+        }
+        timerVal?.let { setTimerInBackground(timerVal as Boolean) }
+        cookingStepVal?.let { setShowCookingStepPreview(cookingStepVal as Boolean) }
     }
 
     companion object {

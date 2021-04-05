@@ -117,9 +117,13 @@ class SettingsFragment : Fragment() {
         return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.data.also { uri ->
-                    CoroutineScope(Dispatchers.IO).launch {
-                        backupService.importBackup(uri)
-                    }
+                    // TODO block UI here
+                    backupService.importBackup(uri)
+
+                    // set selections depending on new values (listeners would create infinite loops here)
+                    setThemeButtonSelection(binding.root)
+                    setTimerSwitch()
+                    setCookingStepSwitch()
                 }
             }
         }
