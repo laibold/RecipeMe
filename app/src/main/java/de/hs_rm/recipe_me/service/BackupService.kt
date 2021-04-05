@@ -168,8 +168,6 @@ class BackupService @Inject constructor(
     }
 
     private fun importImages(entries: List<ZipEntry>, zipFile: ZipFile) {
-        // todo clear image dir
-
         // https://stackoverflow.com/questions/1399126/java-util-zip-recreating-directory-structure
         val imagesDir = ImageHandler.getImageDirPath(context)
         val imagesFile = File(imagesDir)
@@ -177,7 +175,8 @@ class BackupService @Inject constructor(
         imagesFile.deleteRecursively()
 
         for (entry in entries) {
-            val file = File(imagesFile, entry.name)
+            val nameWithoutDir = entry.name.removePrefix(zipImageDir)
+            val file = File(imagesFile, nameWithoutDir)
             if (entry.isDirectory) {
                 file.mkdirs()
             } else {
@@ -216,8 +215,8 @@ class BackupService @Inject constructor(
         val dirOut = FileOutputStream(dbPath)
         dirOut.channel.truncate(0)
 
-            for (dbFile in dbFiles) {
-                val fileName = dbFile.toString().split("/").last()
+        for (dbFile in dbFiles) {
+            val fileName = dbFile.toString().split("/").last()
             FileOutputStream("$dbPathDirectory/$fileName").use { fOut ->
                 val entry = file.getEntry(zipDbDir + fileName)
                 copy(file.getInputStream(entry), fOut)
@@ -260,5 +259,4 @@ class BackupService @Inject constructor(
             copy(input, it)
         }
     }
-
 }
