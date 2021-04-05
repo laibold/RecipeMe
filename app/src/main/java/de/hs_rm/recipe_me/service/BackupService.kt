@@ -2,7 +2,6 @@ package de.hs_rm.recipe_me.service
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.documentfile.provider.DocumentFile
 import com.google.gson.Gson
 import de.hs_rm.recipe_me.persistence.AppDatabase
@@ -158,10 +157,6 @@ class BackupService @Inject constructor(
         val zipFile = ZipFile(selectedFile)
         val entries = zipFile.entries().toList()
 
-        for (entry in entries) {
-            Log.i("entry", entry.name)
-        }
-
         val imageEntries = entries.filter { it.name.startsWith(zipImageDir) }
         val preferenceEntry = zipFile.getEntry(preferenceFileName)
 
@@ -215,13 +210,16 @@ class BackupService @Inject constructor(
         db.close()
 
         val dbPath = context.getDatabasePath(AppDatabase.env.dbName).absolutePath
-        val fileOut = FileOutputStream(dbPath)
-        fileOut.channel.truncate(0) // clear directory TODO maybe better solution is possible
-        fileOut.use { fOut ->
+        val dbPathDirectory = dbPath.split("/").dropLast(1).joinToString("/")
+
+        // clear directory TODO maybe better solution is possible
+        val dirOut = FileOutputStream(dbPath)
+        dirOut.channel.truncate(0)
+
             for (dbFile in dbFiles) {
                 val fileName = dbFile.toString().split("/").last()
+            FileOutputStream("$dbPathDirectory/$fileName").use { fOut ->
                 val entry = file.getEntry(zipDbDir + fileName)
-                // FIXME!!!!! only test_db gets imported
                 copy(file.getInputStream(entry), fOut)
             }
         }
