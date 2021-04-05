@@ -162,13 +162,36 @@ class BackupService @Inject constructor(
             Log.i("entry", entry.name)
         }
 
-        val imageList = entries.filter { it.name.startsWith(zipImageDir) }
-        val preferenceFile = zipFile.getEntry(preferenceFileName)
+        val imageEntries = entries.filter { it.name.startsWith(zipImageDir) }
+        val preferenceEntry = zipFile.getEntry(preferenceFileName)
 
         runBlocking {
             importDatabase(zipFile)
         }
-        importPreferences(preferenceFile, zipFile)
+        importPreferences(preferenceEntry, zipFile)
+        importImages(imageEntries, zipFile)
+    }
+
+    private fun importImages(entries: List<ZipEntry>, zipFile: ZipFile) {
+        // todo clear image dir
+
+        // https://stackoverflow.com/questions/1399126/java-util-zip-recreating-directory-structure
+        val imagesDir = ImageHandler.getImageDirPath(context)
+        val imagesFile = File(imagesDir)
+
+        imagesFile.deleteRecursively()
+
+        for (entry in entries) {
+            val file = File(imagesFile, entry.name)
+            if (entry.isDirectory) {
+                file.mkdirs()
+            } else {
+                file.parentFile?.mkdirs()
+                zipFile.getInputStream(entry).use { fileIn ->
+                    copy(fileIn, file)
+                }
+            }
+        }
     }
 
     /**
@@ -198,6 +221,7 @@ class BackupService @Inject constructor(
             for (dbFile in dbFiles) {
                 val fileName = dbFile.toString().split("/").last()
                 val entry = file.getEntry(zipDbDir + fileName)
+                // FIXME!!!!! only test_db gets imported
                 copy(file.getInputStream(entry), fOut)
             }
         }
