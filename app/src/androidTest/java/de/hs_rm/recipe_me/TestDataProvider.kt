@@ -52,7 +52,7 @@ object TestDataProvider {
         return Random.nextDouble(minValue, maxValue).round(2)
     }
 
-    private fun getRandomInt(minValue: Int, maxValue: Int): Int {
+    fun getRandomInt(minValue: Int, maxValue: Int): Int {
         return Random.nextInt(minValue, maxValue)
     }
 
