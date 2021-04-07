@@ -12,12 +12,16 @@ import java.io.OutputStream
 
 object ImageHandler {
 
-    private const val IMAGES_PATH = "/images"
-    private const val RECIPES_PATH = "/recipes"
-    private const val PROFILE_PATH = "/profile"
+    private const val IMAGES_DIR = "images"
+    private const val RECIPES_DIR = "recipes"
+    private const val PROFILE_DIR = "profile"
 
-    private const val RECIPE_IMAGE_NAME = "/recipe_image.jpg"
-    private const val PROFILE_IMAGE_NAME = "/profile_image.jpg"
+    private const val RECIPE_IMAGE_NAME = "recipe_image.jpg"
+    private const val PROFILE_IMAGE_NAME = "profile_image.jpg"
+
+    // patterns for matching files that belong to the image directory
+    const val RECIPE_PATTERN = "^$RECIPES_DIR/(\\d*/)?($RECIPE_IMAGE_NAME)?$"
+    const val PROFILE_PATTERN = "^$PROFILE_DIR/($PROFILE_IMAGE_NAME)?$"
 
     private const val JPEG_QUALITY = 50
     const val RECIPE_IMAGE_WIDTH = 1000
@@ -65,7 +69,7 @@ object ImageHandler {
      * @param filename Filename with leading "/"
      */
     private fun deleteImage(absolutePath: String, filename: String) {
-        val file = File(absolutePath + filename).absoluteFile
+        val file = File(absolutePath, filename).absoluteFile
         val directory = File(absolutePath).absoluteFile
 
         if (file.exists()) {
@@ -73,8 +77,10 @@ object ImageHandler {
         }
 
         // If directory is now empty, also delete it
-        if (directory.list() != null && directory.list().isEmpty()) {
-            directory.delete()
+        directory.list()?.let { dir ->
+            if (dir.isEmpty()) {
+                directory.delete()
+            }
         }
     }
 
@@ -91,7 +97,7 @@ object ImageHandler {
      * This function should be called from Dispatchers.IO coroutine scope in a repository.
      */
     fun getRecipeImage(context: Context, recipe: Recipe): Bitmap? {
-        val file = File(getRecipeDirPath(context, recipe.id) + RECIPE_IMAGE_NAME)
+        val file = File(getRecipeDirPath(context, recipe.id), RECIPE_IMAGE_NAME)
         return if (file.exists()) {
             ImageLoader().getImageFromUri(
                 context,
@@ -105,7 +111,7 @@ object ImageHandler {
     }
 
     fun getRecipeImageFile(context: Context, recipeId: Long): File? {
-        val file = File(getRecipeDirPath(context, recipeId) + RECIPE_IMAGE_NAME)
+        val file = File(getRecipeDirPath(context, recipeId), RECIPE_IMAGE_NAME)
         return if (file.exists()) {
             file
         } else {
@@ -134,7 +140,7 @@ object ImageHandler {
      * This function should be called from a repository.
      */
     fun getProfileImage(context: Context): Bitmap? {
-        val file = File(getProfileDirPath(context) + PROFILE_IMAGE_NAME)
+        val file = File(getProfileDirPath(context), PROFILE_IMAGE_NAME)
         return if (file.exists()) {
             ImageLoader().getImageFromUri(
                 context,
@@ -159,21 +165,21 @@ object ImageHandler {
      * Returns absolute path to the directory where images of the given recipe are stored
      */
     private fun getRecipeDirPath(context: Context, id: Long): String {
-        return getImageDirPath(context) + "$RECIPES_PATH/$id"
+        return getImageDirPath(context) + "/$RECIPES_DIR/$id"
     }
 
     /**
      * Returns absolute path to the profile image directory
      */
     private fun getProfileDirPath(context: Context): String {
-        return getImageDirPath(context) + PROFILE_PATH
+        return getImageDirPath(context) + "/$PROFILE_DIR"
     }
 
     /**
      * Returns absolute path to the device where the image resources of the app will be stored
      */
     fun getImageDirPath(context: Context): String {
-        return context.getExternalFilesDir(null)?.absolutePath + IMAGES_PATH
+        return context.getExternalFilesDir(null)?.absolutePath + "/$IMAGES_DIR"
     }
 
     /**

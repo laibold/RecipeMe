@@ -147,4 +147,5 @@
     <string name="show_cooking_steps_preview">Vorschau für Koch-Schritte anzeigen</string>
     <string name="save_data">Daten sichern</string>
     <string name="restore_data">Daten wiederherstellen</string>
+    <string name="invalid_file">Ungültige Datei</string>
 </resources>

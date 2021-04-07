@@ -141,4 +141,5 @@
     <string name="show_cooking_steps_preview">Show preview for cooking steps</string>
     <string name="save_data">Save data</string>
     <string name="restore_data">Restore data</string>
+    <string name="invalid_file">Invalid file</string>
 </resources>

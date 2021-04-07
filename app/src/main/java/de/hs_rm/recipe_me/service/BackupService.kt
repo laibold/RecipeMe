@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import com.google.gson.Gson
+import de.hs_rm.recipe_me.model.exception.InvalidBackupFileException
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import kotlinx.coroutines.runBlocking
 import java.io.*
@@ -141,30 +142,60 @@ class BackupService @Inject constructor(
 
     /**
      * Import data from backup zip file
+     * @throws InvalidBackupFileException if File at uri is not valid
      */
     fun importBackup(uri: Uri) {
         // copy selected file to app's cache dir to handle it as ZipFile
         // https://stackoverflow.com/questions/58425517/how-to-get-file-path-from-the-content-uri-for-zip-file
-        val selectedFile = File(context.cacheDir, "backup_import_temp.zip")
-        val fileIn = context.contentResolver.openInputStream(uri)
+        val tempFile = File(context.cacheDir, "backup_import_temp.zip")
+        val selectedFileIn = context.contentResolver.openInputStream(uri)
 
-        if (fileIn != null) {
-            fileIn.use { copy(fileIn, selectedFile) }
+        if (selectedFileIn != null) {
+            selectedFileIn.use { copy(selectedFileIn, tempFile) }
         } else {
             throw IOException() //TODO
         }
 
-        val zipFile = ZipFile(selectedFile)
-        val entries = zipFile.entries().toList()
+        val zipFile = ZipFile(tempFile)
+        if (validateImportFile(zipFile)) {
+            val entries = zipFile.entries().toList()
 
-        val imageEntries = entries.filter { it.name.startsWith(zipImageDir) }
-        val preferenceEntry = zipFile.getEntry(preferenceFileName)
+            val imageEntries = entries.filter { it.name.startsWith(zipImageDir) }
+            val preferenceEntry = zipFile.getEntry(preferenceFileName)
 
-        runBlocking {
-            importDatabase(zipFile)
+            runBlocking {
+                importDatabase(zipFile)
+            }
+            importPreferences(preferenceEntry, zipFile)
+            importImages(imageEntries, zipFile)
+        } else {
+            throw InvalidBackupFileException()
         }
-        importPreferences(preferenceEntry, zipFile)
-        importImages(imageEntries, zipFile)
+    }
+
+    /**
+     * Validates that given zipFile contains all database files and preference file
+     * @return true if file is valid
+     */
+    private fun validateImportFile(zipFile: ZipFile): Boolean {
+        val entries = zipFile.entries().toList().map { it.name }
+
+        // database files in database/
+        for (dbFile in dbFiles) {
+            val fileName = dbFile.toString().split("/").last()
+            val entryName = zipDbDir + fileName
+            if (!entries.contains(entryName)) {
+                return false
+            }
+        }
+
+        // file preferences.json
+        if (!entries.contains(preferenceFileName)) {
+            return false
+        }
+
+        // images are optional, their format will be checked while copying
+        return true
     }
 
     /**
@@ -213,15 +244,22 @@ class BackupService @Inject constructor(
 
         imagesFile.deleteRecursively()
 
+        val recipePattern = ImageHandler.RECIPE_PATTERN.toRegex()
+        val profilePattern = ImageHandler.PROFILE_PATTERN.toRegex()
+
         for (entry in entries) {
             val nameWithoutDir = entry.name.removePrefix(zipImageDir)
-            val file = File(imagesFile, nameWithoutDir)
-            if (entry.isDirectory) {
-                file.mkdirs()
-            } else {
-                file.parentFile?.mkdirs()
-                zipFile.getInputStream(entry).use { fileIn ->
-                    copy(fileIn, file)
+
+            // only copy files that match the pattern for recipe or profile images
+            if (nameWithoutDir.matches(recipePattern) || nameWithoutDir.matches(profilePattern)) {
+                val file = File(imagesFile, nameWithoutDir)
+                if (entry.isDirectory) {
+                    file.mkdirs()
+                } else {
+                    file.parentFile?.mkdirs()
+                    zipFile.getInputStream(entry).use { fileIn ->
+                        copy(fileIn, file)
+                    }
                 }
             }
         }

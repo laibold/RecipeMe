@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
@@ -15,6 +16,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.SettingsFragmentBinding
+import de.hs_rm.recipe_me.model.exception.InvalidBackupFileException
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
@@ -99,7 +101,12 @@ class SettingsFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.data.also { uri ->
                     // TODO block UI here
-                    viewModel.importBackup(uri)
+                    try {
+                        viewModel.importBackup(uri)
+                    } catch (e: InvalidBackupFileException) {
+                        val error = getString(R.string.invalid_file)
+                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                    }
 
                     // set selections depending on new values (listeners would create infinite loops here)
                     setThemeButtonSelection(binding.root)
