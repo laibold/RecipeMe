@@ -44,8 +44,8 @@ object TestDataProvider {
         return (1..length)
             .map { allowedChars.random() }
             .joinToString("")
-            .capitalize()
             .trim()
+            .capitalize()
     }
 
     private fun getRandomDouble(minValue: Double = 0.0, maxValue: Double): Double {

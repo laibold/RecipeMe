@@ -5,6 +5,7 @@ import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
@@ -74,7 +75,7 @@ class ShoppingListFragmentTest {
         onView(withId(R.id.list_view)).check(matches(withListSize(0)))
 
         // Add item with text
-        onView(withId(R.id.add_item_edit_text)).perform(ViewActions.replaceText(itemName))
+        onView(withId(R.id.add_item_edit_text)).perform(replaceText(itemName))
         onView(withId(R.id.add_item_button)).perform(click())
         onView(withId(R.id.list_view)).check(matches(withListSize(1)))
 
@@ -84,7 +85,7 @@ class ShoppingListFragmentTest {
         onData(anything()).inAdapterView(withId(R.id.list_view)).atPosition(0)
             .onChildView(withId(R.id.item_checkbox)).check(matches(isNotChecked()))
 
-        // Check is buttons are displayed now
+        // Check if buttons are displayed now
         onView(withId(R.id.share_button)).check(matches(isDisplayed()))
         onView(withId(R.id.clear_list_button)).check(matches(isDisplayed()))
     }
