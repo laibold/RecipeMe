@@ -1,7 +1,6 @@
 package de.hs_rm.recipe_me.service
 
 import android.content.Context
-import android.net.Uri
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
@@ -60,10 +59,21 @@ class BackupServiceTest {
         val filename = backupService.exportBackup(uri)
 
         val files = tempDir.listFiles()
-
         assertThat(files).hasLength(1)
         assertThat(files!![0].name).isEqualTo(filename)
 
         tempDir.destroy()
+    }
+
+    @Test
+    fun testImportBackup() {
+        val tempDir = TempDir()
+        val uri = tempDir.toDocumentFile()
+
+        val filename = backupService.exportBackup(uri)
+        val exportedFile = filename?.let { File(tempDir.getFile(), filename) }
+        assertThat(exportedFile).isNotNull()
+
+        backupService.importBackup(exportedFile?.inputStream())
     }
 }

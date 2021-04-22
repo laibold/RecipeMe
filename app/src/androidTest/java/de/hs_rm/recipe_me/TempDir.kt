@@ -45,6 +45,10 @@ class TempDir {
         return DocumentFile.fromFile(file)
     }
 
+    fun getFile(): File {
+        return file
+    }
+
     companion object {
         var lastPathStr = ""
     }

@@ -1,6 +1,5 @@
 package de.hs_rm.recipe_me.ui.profile.settings
 
-import android.net.Uri
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.ViewModel
@@ -11,6 +10,7 @@ import de.hs_rm.recipe_me.service.PreferenceService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.InputStream
 import javax.inject.Inject
 
 /**
@@ -94,7 +94,7 @@ class SettingsViewModel @Inject constructor(
     /**
      * Import backup from uri
      */
-    fun importBackup(uri: Uri?) {
+    fun importBackup(uri: InputStream?) {
         if (uri != null) {
             backupService.importBackup(uri)
         }

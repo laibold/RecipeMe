@@ -104,7 +104,10 @@ class SettingsFragment : Fragment() {
                 result.data?.data.also { uri ->
                     // TODO block UI here
                     try {
-                        viewModel.importBackup(uri)
+                        val selectedFileIn = uri?.let {
+                            requireContext().contentResolver.openInputStream(it)
+                        }
+                        viewModel.importBackup(selectedFileIn)
                     } catch (e: InvalidBackupFileException) {
                         val error = getString(R.string.invalid_file)
                         Toast.makeText(context, error, Toast.LENGTH_SHORT).show()

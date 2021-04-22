@@ -149,14 +149,13 @@ class BackupService @Inject constructor(
      * Import data from backup zip file
      * @throws InvalidBackupFileException if File at uri is not valid
      */
-    fun importBackup(uri: Uri) {
+    fun importBackup(inputStream: InputStream?) {
         // copy selected file to app's cache dir to handle it as ZipFile
         // https://stackoverflow.com/questions/58425517/how-to-get-file-path-from-the-content-uri-for-zip-file
         val tempFile = File(context.cacheDir, "backup_import_temp.zip")
-        val selectedFileIn = context.contentResolver.openInputStream(uri)
 
-        if (selectedFileIn != null) {
-            selectedFileIn.use { copy(selectedFileIn, tempFile) }
+        if (inputStream != null) {
+            inputStream.use { copy(inputStream, tempFile) }
         } else {
             throw IOException() //TODO
         }
@@ -176,6 +175,8 @@ class BackupService @Inject constructor(
         } else {
             throw InvalidBackupFileException()
         }
+
+        tempFile.delete()
     }
 
     /**
