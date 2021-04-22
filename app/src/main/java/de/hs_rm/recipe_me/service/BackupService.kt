@@ -26,7 +26,7 @@ class BackupService @Inject constructor(
     val preferenceService: PreferenceService,
 ) {
 
-    private val dbFiles = mutableListOf<File>()
+    val dbFiles = mutableListOf<File>()
 
     private val zipImageDir = "images/"
     private val zipDbDir = "database/"
@@ -75,6 +75,8 @@ class BackupService @Inject constructor(
                 exportPreferences(zipOut)
             }
         }
+
+        return zipFile?.name
     }
 
     /**
