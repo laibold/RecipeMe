@@ -1,11 +1,13 @@
 package de.hs_rm.recipe_me.ui.profile.settings
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.service.BackupService
+import de.hs_rm.recipe_me.service.ImageHandler
 import de.hs_rm.recipe_me.service.PreferenceService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -83,10 +85,10 @@ class SettingsViewModel @Inject constructor(
     /**
      * Export backup to uri
      */
-    fun exportBackup(uri: DocumentFile?) {
+    fun exportBackup(uri: DocumentFile?, context: Context) {
         if (uri != null) {
             CoroutineScope(Dispatchers.IO).launch {
-                backupService.exportBackup(uri)
+                backupService.exportBackup(uri, ImageHandler.getImageDirPath(context))
             }
         }
     }
@@ -94,9 +96,9 @@ class SettingsViewModel @Inject constructor(
     /**
      * Import backup from uri
      */
-    fun importBackup(uri: InputStream?) {
+    fun importBackup(uri: InputStream?, context: Context) {
         if (uri != null) {
-            backupService.importBackup(uri)
+            backupService.importBackup(uri, ImageHandler.getImageDirPath(context))
         }
     }
 }

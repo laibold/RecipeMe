@@ -1,7 +1,6 @@
 package de.hs_rm.recipe_me.service
 
 import android.content.Context
-import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import com.google.gson.Gson
 import de.hs_rm.recipe_me.model.exception.InvalidBackupFileException
@@ -50,7 +49,7 @@ class BackupService @Inject constructor(
      *
      * @return Name of the zip file or null on failure
      */
-    fun exportBackup(documentFile: DocumentFile): String? {
+    fun exportBackup(documentFile: DocumentFile, imageDirPath: String): String? {
         /*
          Structure in recipe-me-backup-202104021408.zip
          database/database(*)
@@ -64,14 +63,13 @@ class BackupService @Inject constructor(
         val filename = "recipe-me-backup-$date"
 
         // Create zip file and stream files to be saved to it
-        //val documentFile = DocumentFile.fromTreeUri(context, uri)
         val zipFile = documentFile.createFile("application/zip", filename)
 
         if (zipFile != null) {
             val out = context.contentResolver.openOutputStream(zipFile.uri)
             ZipOutputStream(BufferedOutputStream(out)).use { zipOut ->
                 exportDatabase(zipOut)
-                exportImages(zipOut)
+                exportImages(zipOut, imageDirPath)
                 exportPreferences(zipOut)
             }
         }
@@ -99,10 +97,9 @@ class BackupService @Inject constructor(
     /**
      * Copy image with directory structure to ZipOutputStream
      */
-    private fun exportImages(zipOut: ZipOutputStream) {
-        val imagesDir = ImageHandler.getImageDirPath(context)
-        val imagesFile = File(imagesDir)
-        val imagesFileUri = File(imagesDir).toURI()
+    private fun exportImages(zipOut: ZipOutputStream, imageDirPath: String) {
+        val imagesFile = File(imageDirPath)
+        val imagesFileUri = File(imageDirPath).toURI()
 
         // https://stackoverflow.com/questions/1399126/java-util-zip-recreating-directory-structure
         val queue = LinkedList<File>()
@@ -149,7 +146,7 @@ class BackupService @Inject constructor(
      * Import data from backup zip file
      * @throws InvalidBackupFileException if File at uri is not valid
      */
-    fun importBackup(inputStream: InputStream?) {
+    fun importBackup(inputStream: InputStream?, imageDirPath: String) {
         // copy selected file to app's cache dir to handle it as ZipFile
         // https://stackoverflow.com/questions/58425517/how-to-get-file-path-from-the-content-uri-for-zip-file
         val tempFile = File(context.cacheDir, "backup_import_temp.zip")
@@ -171,7 +168,7 @@ class BackupService @Inject constructor(
                 importDatabase(zipFile)
             }
             importPreferences(preferenceEntry, zipFile)
-            importImages(imageEntries, zipFile)
+            importImages(imageEntries, zipFile, imageDirPath)
         } else {
             throw InvalidBackupFileException()
         }
@@ -243,10 +240,9 @@ class BackupService @Inject constructor(
     /**
      * Import images from backup zip file
      */
-    private fun importImages(entries: List<ZipEntry>, zipFile: ZipFile) {
+    private fun importImages(entries: List<ZipEntry>, zipFile: ZipFile, imageDirPath: String) {
         // https://stackoverflow.com/questions/1399126/java-util-zip-recreating-directory-structure
-        val imagesDir = ImageHandler.getImageDirPath(context)
-        val imagesFile = File(imagesDir)
+        val imagesFile = File(imageDirPath)
 
         imagesFile.deleteRecursively()
 

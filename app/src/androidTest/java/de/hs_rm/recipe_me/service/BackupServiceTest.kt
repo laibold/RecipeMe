@@ -8,7 +8,10 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.Constants
 import de.hs_rm.recipe_me.TempDir
+import de.hs_rm.recipe_me.TestDataProvider
 import de.hs_rm.recipe_me.persistence.AppDatabase
+import kotlinx.coroutines.runBlocking
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -41,9 +44,15 @@ class BackupServiceTest {
     fun init() {
         hiltRule.inject()
         assertThat(db.openHelper.databaseName).isEqualTo(AppDatabase.Environment.TEST.dbName)
+        db.clearAllTables()
         context = InstrumentationRegistry.getInstrumentation().targetContext
 
         backupService = BackupService(context, db, preferenceService)
+    }
+
+    @After
+    fun cleanup() {
+        context.cacheDir.deleteRecursively()
     }
 
     @Test
@@ -53,27 +62,68 @@ class BackupServiceTest {
 
     @Test
     fun testExportBackup() {
-        val tempDir = TempDir()
-        val uri = tempDir.toDocumentFile()
+        val tempExportDir = TempDir()
+        val tempImageDir = TempDir()
+        val uri = tempExportDir.toDocumentFile()
 
-        val filename = backupService.exportBackup(uri)
+        val filename = backupService.exportBackup(uri, tempImageDir.getFile().toString())
 
-        val files = tempDir.listFiles()
+        val files = tempExportDir.listFiles()
         assertThat(files).hasLength(1)
         assertThat(files!![0].name).isEqualTo(filename)
 
-        tempDir.destroy()
+        tempExportDir.destroy()
+        tempImageDir.destroy()
     }
 
     @Test
     fun testImportBackup() {
-        val tempDir = TempDir()
-        val uri = tempDir.toDocumentFile()
+        // insert recipe to database
+        runBlocking { db.recipeDao().insert(TestDataProvider.getRandomRecipe()) }
 
-        val filename = backupService.exportBackup(uri)
-        val exportedFile = filename?.let { File(tempDir.getFile(), filename) }
+        // mock image dir
+        val tempImageDir = TempDir()
+        val recipesDir = File(tempImageDir.getFile(), "recipes").apply { mkdir() }
+        val recipeDir = File(recipesDir, "1").apply { mkdir() }
+        File(recipeDir, "recipe_image.jpg").apply { createNewFile() }
+
+        // preferences
+        preferenceService.clear()
+        preferenceService.setTimerInBackground(true)
+
+        // mock export dir
+        val tempExportDir = TempDir()
+        val exportUri = tempExportDir.toDocumentFile()
+
+        // export
+        val filename = backupService.exportBackup(exportUri, tempImageDir.getFile().toString())
+
+        val exportedFile = filename?.let { File(tempExportDir.getFile(), filename) }
         assertThat(exportedFile).isNotNull()
 
-        backupService.importBackup(exportedFile?.inputStream())
+        val files = tempExportDir.listFiles()
+        assertThat(files).hasLength(1)
+        assertThat(files!![0].name).isEqualTo(filename)
+
+        // reset db, image dir and preferences
+        db.clearAllTables()
+        tempImageDir.destroy() // gets destroyed while importing as well, but just to be sure (throws exception on error)
+        preferenceService.clear()
+
+        val tempImportImageDir = TempDir()
+        backupService.importBackup(exportedFile!!.inputStream(), tempImportImageDir.toString())
+
+        // check db
+        runBlocking { assertThat(db.recipeDao().getRecipeCount()).isEqualTo(1) }
+
+        // check image dirs and file
+        val importedFile = File(
+            tempImportImageDir.getFile(),
+            "recipes" + File.separator + "1" + File.separator + "recipe_image.jpg"
+        )
+        assertThat(importedFile.exists()).isTrue()
+
+        // check preferences
+        assertThat(preferenceService.getTimerInBackground(false)).isTrue()
     }
 }

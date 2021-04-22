@@ -78,6 +78,13 @@ class PreferenceService @Inject constructor(val context: Context) {
         cookingStepVal?.let { setShowCookingStepPreview(cookingStepVal as Boolean) }
     }
 
+    /**
+     * Remove all preference settings
+     */
+    fun clear() {
+        editor.clear()
+    }
+
     companion object {
         const val THEME_KEY = "THEME"
         const val TIMER_KEY = "TIMER_IN_BACKGROUND"

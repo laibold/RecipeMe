@@ -2,6 +2,7 @@ package de.hs_rm.recipe_me
 
 import androidx.documentfile.provider.DocumentFile
 import java.io.File
+import java.io.IOException
 
 /**
  * TempDir can be used to create a temporary and unique directory for test cases.
@@ -21,7 +22,9 @@ class TempDir {
         lastPathStr = pathStr
 
         file = File(pathStr)
-        file.mkdir()
+        if (!file.mkdir()) {
+            throw IOException("TempDir file creation failed!")
+        }
     }
 
     /**
@@ -35,7 +38,9 @@ class TempDir {
      * Delete directory and its children
      */
     fun destroy() {
-        file.deleteRecursively()
+        if (!file.deleteRecursively()) {
+            throw IOException("TempDir file deletion failed!")
+        }
     }
 
     /**
@@ -47,6 +52,10 @@ class TempDir {
 
     fun getFile(): File {
         return file
+    }
+
+    override fun toString(): String {
+        return file.toString()
     }
 
     companion object {
