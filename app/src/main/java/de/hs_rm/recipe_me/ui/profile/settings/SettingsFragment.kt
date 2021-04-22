@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
+import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
@@ -87,7 +88,8 @@ class SettingsFragment : Fragment() {
         return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.data.also { uri ->
-                    viewModel.exportBackup(uri)
+                    val documentFile = uri?.let { DocumentFile.fromTreeUri(requireContext(), it) }
+                    documentFile?.let { viewModel.exportBackup(documentFile) }
                 }
             }
         }

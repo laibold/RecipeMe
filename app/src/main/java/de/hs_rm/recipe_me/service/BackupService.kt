@@ -46,9 +46,11 @@ class BackupService @Inject constructor(
     /**
      * Creates zip file with database files, images in their original structure and preferences as .json
      *
-     * @param uri Directory where zip file should be saved
+     * @param documentFile Directory where zip file should be saved
+     *
+     * @return Name of the zip file or null on failure
      */
-    fun exportBackup(uri: Uri) {
+    fun exportBackup(documentFile: DocumentFile): String? {
         /*
          Structure in recipe-me-backup-202104021408.zip
          database/database(*)
@@ -59,11 +61,11 @@ class BackupService @Inject constructor(
         // create file name
         val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm")
         val date = LocalDateTime.now().format(formatter)
-        val filename = "recipe-me-backup-$date.zip"
+        val filename = "recipe-me-backup-$date"
 
         // Create zip file and stream files to be saved to it
-        val documentFile = DocumentFile.fromTreeUri(context, uri)
-        val zipFile = documentFile?.createFile("application/zip", filename)
+        //val documentFile = DocumentFile.fromTreeUri(context, uri)
+        val zipFile = documentFile.createFile("application/zip", filename)
 
         if (zipFile != null) {
             val out = context.contentResolver.openOutputStream(zipFile.uri)
@@ -136,6 +138,7 @@ class BackupService @Inject constructor(
         zipOut.putNextEntry(ZipEntry(preferenceFileName))
         copy(file, zipOut)
         zipOut.closeEntry()
+        file.delete()
     }
 
     ///// IMPORT

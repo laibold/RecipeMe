@@ -2,6 +2,7 @@ package de.hs_rm.recipe_me.ui.profile.settings
 
 import android.net.Uri
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.R
@@ -82,7 +83,7 @@ class SettingsViewModel @Inject constructor(
     /**
      * Export backup to uri
      */
-    fun exportBackup(uri: Uri?) {
+    fun exportBackup(uri: DocumentFile?) {
         if (uri != null) {
             CoroutineScope(Dispatchers.IO).launch {
                 backupService.exportBackup(uri)
