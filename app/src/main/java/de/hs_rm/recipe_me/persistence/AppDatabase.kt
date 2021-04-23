@@ -45,7 +45,6 @@ abstract class AppDatabase : RoomDatabase() {
         // really careful!!!
 
         private const val ASSET_NAME = "database/data.db"
-        lateinit var env: Environment
 
         // For Singleton instantiation
         @Volatile
@@ -61,8 +60,6 @@ abstract class AppDatabase : RoomDatabase() {
         // https://medium.com/google-developers/7-pro-tips-for-room-fbadea4bfbd1#4785
         private fun buildDatabase(context: Context, env: Environment): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, env.dbName).also { db ->
-                this.env = env
-
                 if (env == Environment.TEST) {
                     // allow main thread queries only in test environment
                     db.allowMainThreadQueries()

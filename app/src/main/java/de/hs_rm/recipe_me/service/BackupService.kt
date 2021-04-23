@@ -34,7 +34,7 @@ class BackupService @Inject constructor(
 
     init {
         val filenameExtensions = listOf("", "-shm", "-wal")
-        val dbPath = context.getDatabasePath(AppDatabase.env.dbName).absolutePath
+        val dbPath = context.getDatabasePath(db.openHelper.databaseName).absolutePath
 
         for (filenameExt in filenameExtensions) {
             dbFiles.add(File(dbPath + filenameExt))
@@ -214,9 +214,7 @@ class BackupService @Inject constructor(
      */
     @Throws(IOException::class)
     private fun importDatabase(file: ZipFile) {
-        db.close()
-
-        val dbPath = context.getDatabasePath(AppDatabase.env.dbName).absolutePath
+        val dbPath = context.getDatabasePath(db.openHelper.databaseName).absolutePath
         val dbPathDirectory = dbPath.split("/").dropLast(1).joinToString("/")
 
         // clear directory TODO maybe better solution is possible
