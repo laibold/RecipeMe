@@ -52,7 +52,11 @@ class BackupServiceTest {
 
     @After
     fun cleanup() {
-        context.cacheDir.deleteRecursively()
+        context.cacheDir.listFiles()?.let { files ->
+            for (file in files) {
+                file.deleteRecursively()
+            }
+        }
     }
 
     @Test
@@ -125,5 +129,9 @@ class BackupServiceTest {
 
         // check preferences
         assertThat(preferenceService.getTimerInBackground(false)).isTrue()
+
+        tempImageDir.destroy()
+        tempExportDir.destroy()
+        tempImportImageDir.destroy()
     }
 }

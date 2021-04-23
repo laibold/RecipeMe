@@ -18,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.SettingsFragmentBinding
 import de.hs_rm.recipe_me.model.exception.InvalidBackupFileException
+import java.io.IOException
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
@@ -89,7 +90,14 @@ class SettingsFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.data.also { uri ->
                     val documentFile = uri?.let { DocumentFile.fromTreeUri(requireContext(), it) }
-                    documentFile?.let { viewModel.exportBackup(documentFile, requireContext()) }
+                    documentFile?.let {
+                        try {
+                            viewModel.exportBackup(documentFile, requireContext())
+                        } catch (e: IOException) {
+                            val error = getString(R.string.error_exporting_backup)
+                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
         }
@@ -110,6 +118,9 @@ class SettingsFragment : Fragment() {
                         viewModel.importBackup(selectedFileIn, requireContext())
                     } catch (e: InvalidBackupFileException) {
                         val error = getString(R.string.invalid_file)
+                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                    } catch (e: IOException) {
+                        val error = getString(R.string.error_importing_backup)
                         Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
                     }
 

@@ -15,6 +15,7 @@ import java.util.zip.ZipFile
 import java.util.zip.ZipOutputStream
 import javax.inject.Inject
 import kotlin.collections.HashMap
+import kotlin.jvm.Throws
 
 /**
  * Service for backup and restoring database, images and preferences
@@ -49,6 +50,7 @@ class BackupService @Inject constructor(
      *
      * @return Name of the zip file or null on failure
      */
+    @Throws(IOException::class)
     fun exportBackup(documentFile: DocumentFile, imageDirPath: String): String? {
         /*
          Structure in recipe-me-backup-202104021408.zip
@@ -72,14 +74,17 @@ class BackupService @Inject constructor(
                 exportImages(zipOut, imageDirPath)
                 exportPreferences(zipOut)
             }
+        } else {
+            throw IOException("Error while creating zip file for backup export")
         }
 
-        return zipFile?.name
+        return zipFile.name
     }
 
     /**
      * Copy database file in transaction to ZipOutputStream
      */
+    @Throws(IOException::class)
     private fun exportDatabase(zipOut: ZipOutputStream) {
         db.runInTransaction {
             for (file in dbFiles) {
@@ -97,6 +102,7 @@ class BackupService @Inject constructor(
     /**
      * Copy image with directory structure to ZipOutputStream
      */
+    @Throws(IOException::class)
     private fun exportImages(zipOut: ZipOutputStream, imageDirPath: String) {
         val imagesFile = File(imageDirPath)
         val imagesFileUri = File(imageDirPath).toURI()
@@ -128,6 +134,7 @@ class BackupService @Inject constructor(
     /**
      * Create HashMap from Preferences and copy them to ZipOutputStream as json
      */
+    @Throws(IOException::class)
     private fun exportPreferences(zipOut: ZipOutputStream) {
         val prefsMapString = preferenceService.preferencesToJsonString()
 
@@ -146,6 +153,7 @@ class BackupService @Inject constructor(
      * Import data from backup zip file
      * @throws InvalidBackupFileException if File at uri is not valid
      */
+    @Throws(IOException::class)
     fun importBackup(inputStream: InputStream?, imageDirPath: String) {
         // copy selected file to app's cache dir to handle it as ZipFile
         // https://stackoverflow.com/questions/58425517/how-to-get-file-path-from-the-content-uri-for-zip-file
@@ -154,7 +162,7 @@ class BackupService @Inject constructor(
         if (inputStream != null) {
             inputStream.use { copy(inputStream, tempFile) }
         } else {
-            throw IOException() //TODO
+            throw IOException("Error while creating inputStream for temporary zip file at importing backup")
         }
 
         val zipFile = ZipFile(tempFile)
@@ -204,6 +212,7 @@ class BackupService @Inject constructor(
     /**
      * Copy files from database directory to internal database directory (clean before)
      */
+    @Throws(IOException::class)
     private fun importDatabase(file: ZipFile) {
         db.close()
 
@@ -226,6 +235,7 @@ class BackupService @Inject constructor(
     /**
      * Import preferences from ZipEntry in ZipFile
      */
+    @Throws(IOException::class)
     private fun importPreferences(entry: ZipEntry?, zipFile: ZipFile) {
         if (entry != null) {
             zipFile.getInputStream(entry).use { fileIn ->
@@ -234,12 +244,15 @@ class BackupService @Inject constructor(
                     preferenceService.createFromHashMap(prefMap)
                 }
             }
+        } else {
+            throw IOException("Given zip entry for preferences was null")
         }
     }
 
     /**
      * Import images from backup zip file
      */
+    @Throws(IOException::class)
     private fun importImages(entries: List<ZipEntry>, zipFile: ZipFile, imageDirPath: String) {
         // https://stackoverflow.com/questions/1399126/java-util-zip-recreating-directory-structure
         val imagesFile = File(imageDirPath)
@@ -272,6 +285,7 @@ class BackupService @Inject constructor(
     /**
      * Copy from InputStream to OutputStream
      */
+    @Throws(IOException::class)
     private fun copy(input: InputStream, out: OutputStream) {
         val buffer = ByteArray(1024)
         while (true) {
@@ -286,6 +300,7 @@ class BackupService @Inject constructor(
     /**
      * Copy file to OutputStream
      */
+    @Throws(IOException::class)
     private fun copy(file: File, out: OutputStream) {
         val input: InputStream = FileInputStream(file)
         input.use {
@@ -296,6 +311,7 @@ class BackupService @Inject constructor(
     /**
      * Copy from InputStream to File
      */
+    @Throws(IOException::class)
     private fun copy(input: InputStream, file: File) {
         val out: OutputStream = FileOutputStream(file)
         out.use {

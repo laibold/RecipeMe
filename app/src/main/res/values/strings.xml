@@ -148,4 +148,6 @@
     <string name="save_data">Daten sichern</string>
     <string name="restore_data">Daten wiederherstellen</string>
     <string name="invalid_file">Ungültige Datei</string>
+    <string name="error_exporting_backup">Fehler beim Exportieren der Daten</string>
+    <string name="error_importing_backup">Fehler beim Importieren der Daten</string>
 </resources>

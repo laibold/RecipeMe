@@ -12,8 +12,10 @@ import de.hs_rm.recipe_me.service.PreferenceService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.io.InputStream
 import javax.inject.Inject
+import kotlin.jvm.Throws
 
 /**
  * ViewModel for [SettingsFragment]
@@ -85,6 +87,7 @@ class SettingsViewModel @Inject constructor(
     /**
      * Export backup to uri
      */
+    @Throws(IOException::class)
     fun exportBackup(uri: DocumentFile?, context: Context) {
         if (uri != null) {
             CoroutineScope(Dispatchers.IO).launch {

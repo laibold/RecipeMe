@@ -142,4 +142,6 @@
     <string name="save_data">Save data</string>
     <string name="restore_data">Restore data</string>
     <string name="invalid_file">Invalid file</string>
+    <string name="error_exporting_backup">Error while exporting files</string>
+    <string name="error_importing_backup">Error while importing files</string>
 </resources>
