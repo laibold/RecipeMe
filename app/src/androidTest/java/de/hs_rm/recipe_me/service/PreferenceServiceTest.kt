@@ -18,7 +18,7 @@ class PreferenceServiceTest {
 
     private lateinit var context: Context
     lateinit var preferenceService: PreferenceService
-    lateinit var contextPreferences: SharedPreferences
+    private lateinit var contextPreferences: SharedPreferences
 
     @Before
     fun beforeEach() {

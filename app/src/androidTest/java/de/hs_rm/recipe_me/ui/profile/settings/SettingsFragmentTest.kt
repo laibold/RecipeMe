@@ -39,7 +39,7 @@ class SettingsFragmentTest {
     lateinit var db: AppDatabase
 
     lateinit var context: Context
-    lateinit var prefs: SharedPreferences
+    private lateinit var prefs: SharedPreferences
 
     private lateinit var themeKey: String
     private lateinit var timerKey: String

@@ -10,6 +10,7 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.EditProfileDialogBinding
 import de.hs_rm.recipe_me.declaration.ui.fragments.BottomSheetImageProvider
@@ -36,17 +37,17 @@ class EditProfileDialog constructor(
         val width = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
         window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
 
-        viewModel.editProfileImage.observe(activity as LifecycleOwner) { image ->
+        viewModel.editProfileImage.observe(activity as LifecycleOwner, Observer { image ->
             if (image != null) {
                 binding.profileImage.setImageBitmap(image)
             }
-        }
+        })
 
-        viewModel.profileImage.observe(activity as LifecycleOwner) { image ->
+        viewModel.profileImage.observe(activity as LifecycleOwner, Observer { image ->
             if (image != null && viewModel.editProfileImage.value == null) {
                 binding.profileImage.setImageBitmap(image)
             }
-        }
+        })
 
         binding.changeProfilePicButton.setOnClickListener { bottomSheetImageProvider.onGetImage() }
 

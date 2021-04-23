@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.ShoppingListFragmentBinding
@@ -39,9 +40,9 @@ class ShoppingListFragment : Fragment() {
         viewModel.loadShoppingListItems()
         viewModel.loadUser()
 
-        viewModel.shoppingListItems.observe(viewLifecycleOwner) {
+        viewModel.shoppingListItems.observe(viewLifecycleOwner, Observer {
             onShoppingListItemsChanged(it)
-        }
+        })
 
         binding.shoppingListListLayout.listView.emptyView =
             binding.shoppingListListLayout.addHintText
@@ -62,11 +63,11 @@ class ShoppingListFragment : Fragment() {
             onClearButtonPressed()
         }
 
-        viewModel.user.observe(viewLifecycleOwner) { user ->
+        viewModel.user.observe(viewLifecycleOwner, Observer { user ->
             binding.shareButton.setOnClickListener {
                 TextSharer.share(requireContext(), getShareText(user))
             }
-        }
+        })
 
         return binding.root
     }
