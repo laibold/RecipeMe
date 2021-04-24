@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.kroegerama.imgpicker.BottomSheetImagePicker
 import com.kroegerama.imgpicker.ButtonType
@@ -42,18 +43,18 @@ class ProfileFragment : Fragment(), BottomSheetImagePicker.OnImagesSelectedListe
         viewModel.loadRecipeTotal()
         viewModel.loadUser()
 
-        viewModel.profileImage.observe(viewLifecycleOwner, { image ->
+        viewModel.profileImage.observe(viewLifecycleOwner, Observer { image ->
             if (image != null) {
                 binding.profileImage.setImageBitmap(image)
             }
             binding.profileImage.visibility = View.VISIBLE
         })
 
-        viewModel.total.observe(viewLifecycleOwner, {
+        viewModel.total.observe(viewLifecycleOwner, Observer {
             binding.profileQuantityRecipesText.text = getRecipeTotalText(it)
         })
 
-        viewModel.user.observe(viewLifecycleOwner, { user ->
+        viewModel.user.observe(viewLifecycleOwner, Observer { user ->
             binding.profileGreeting.text = getUserGreeting(user)
         })
 

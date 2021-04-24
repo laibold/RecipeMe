@@ -9,6 +9,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
@@ -54,7 +55,7 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
             addIngredientDialog().show()
         }
 
-        viewModel.ingredients.observe(viewLifecycleOwner, {
+        viewModel.ingredients.observe(viewLifecycleOwner, Observer {
             adapter = viewModel.ingredients.value?.let { list -> ingredientListAdapter(list) }
             binding.ingredientsListView.adapter = adapter
             adapter?.notifyDataSetChanged()

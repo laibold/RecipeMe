@@ -15,6 +15,7 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -110,7 +111,7 @@ class RecipeDetailFragment : Fragment() {
             true
         }
 
-        viewModel.recipe.observe(viewLifecycleOwner, { recipeWithRelations ->
+        viewModel.recipe.observe(viewLifecycleOwner, Observer { recipeWithRelations ->
             if (recipeWithRelations != null) {
                 onRecipeChanged(recipeWithRelations)
             } else {

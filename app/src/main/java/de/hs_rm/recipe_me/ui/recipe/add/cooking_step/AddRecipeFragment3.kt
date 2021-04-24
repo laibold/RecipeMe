@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
@@ -88,7 +89,7 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
         // Remove observer to pretend a wrong list to be shown for a little while
         viewModel.cookingStepsWithIngredients.removeObservers(viewLifecycleOwner)
 
-        id.observe(viewLifecycleOwner, {
+        id.observe(viewLifecycleOwner, Observer {
             val direction = AddRecipeFragment3Directions.toRecipeDetailFragment(it)
             findNavController().navigate(direction)
         })
