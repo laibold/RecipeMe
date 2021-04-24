@@ -40,7 +40,7 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
             addCookingStepDialog().show()
         }
 
-        viewModel.cookingStepsWithIngredients.observe(viewLifecycleOwner, { list ->
+        viewModel.cookingStepsWithIngredients.observe(viewLifecycleOwner, Observer { list ->
             adapter = AddCookingStepListAdapter(
                 requireContext(),
                 R.layout.add_cooking_step_listitem,
