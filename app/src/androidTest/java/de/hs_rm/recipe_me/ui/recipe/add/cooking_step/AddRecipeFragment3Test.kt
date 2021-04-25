@@ -326,7 +326,7 @@ class AddRecipeFragment3Test {
         onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(2)
             .onChildView(withId(R.id.item_checkbox)).check(matches(isNotChecked()))
 
-        // check seconds ingredient, first and second should be checked
+        // check second ingredient, first and second should be checked
         onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(1)
             .onChildView(withId(R.id.item_checkbox)).perform(click())
 
@@ -334,8 +334,16 @@ class AddRecipeFragment3Test {
             .onChildView(withId(R.id.item_checkbox)).check(matches(isChecked()))
         onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(1)
             .onChildView(withId(R.id.item_checkbox)).check(matches(isChecked()))
+        onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(2)
+            .onChildView(withId(R.id.item_checkbox)).check(matches(isNotChecked()))
 
-        // error wenn beide gechecked sind und einer entchecked werden soll (irgendwie wenn man 2x hintereinander auf den selben klickt)
+        // uncheck second ingredient again, only first one should be checked
+        onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(0)
+            .onChildView(withId(R.id.item_checkbox)).check(matches(isChecked()))
+        onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(1)
+            .onChildView(withId(R.id.item_checkbox)).check(matches(isNotChecked()))
+        onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(2)
+            .onChildView(withId(R.id.item_checkbox)).check(matches(isNotChecked()))
 
         onView(withId(R.id.add_button)).perform(click())
         onView(withId(R.id.add_button)).perform(click())
