@@ -253,19 +253,17 @@ class AddRecipeFragment3Test {
     fun testLoadPersistedCookingStep() {
         var rId: Long
         val cookingStep = TestDataProvider.getRandomCookingStep().apply { text = "step text" }
-        val ingredients = listOf(
-            TestDataProvider.getRandomIngredient(Recipe.DEFAULT_ID, 1.0),
-            TestDataProvider.getRandomIngredient(Recipe.DEFAULT_ID, 1.0),
-            TestDataProvider.getRandomIngredient(Recipe.DEFAULT_ID, 1.0)
-        )
+        val ingredient1 = Ingredient("name", 1.0, IngredientUnit.CUP)
+        val ingredient2 = Ingredient("name", 1.0, IngredientUnit.CUP)
+        val ingredient3 = Ingredient("ingredient", 2.0, IngredientUnit.CAN)
 
         runBlocking {
             // Insert Recipe with 3 Ingredients where first and third are assigned to single CookingStep
             rId = db.recipeDao().insert(TestDataProvider.getRandomRecipe())
 
-            val ingredientId1 = db.recipeDao().insert(ingredients[0].apply { recipeId = rId })
-            db.recipeDao().insert(ingredients[1].apply { recipeId = rId })
-            val ingredientId3 = db.recipeDao().insert(ingredients[2].apply { recipeId = rId })
+            val ingredientId1 = db.recipeDao().insert(ingredient1.apply { recipeId = rId })
+            db.recipeDao().insert(ingredient2.apply { recipeId = rId })
+            val ingredientId3 = db.recipeDao().insert(ingredient3.apply { recipeId = rId })
 
             val stepId = db.recipeDao().insert(cookingStep.apply { recipeId = rId })
 
@@ -286,7 +284,7 @@ class AddRecipeFragment3Test {
         onData(anything()).inAdapterView(withId(R.id.cooking_step_list_view)).atPosition(0)
             .onChildView(withId(R.id.edit_button)).perform(click())
         val ingredientText =
-            Formatter.formatIngredientList(context, listOf(ingredients[0], ingredients[2]))
+            Formatter.formatIngredientList(context, listOf(ingredient1, ingredient3))
         checkCookingStepInDialog(cookingStep, ingredientText)
 
         onView(withId(R.id.edit_ingredients_button)).perform(click())
