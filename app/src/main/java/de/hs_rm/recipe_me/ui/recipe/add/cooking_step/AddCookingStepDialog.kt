@@ -78,7 +78,7 @@ class AddCookingStepDialog constructor(
         }
 
         if (cookingStepWithIngredients != null) {
-            // Cooking Step has bin reached in and should be updated, set values to fields
+            // Cooking Step has been reached in and should be updated, set values to fields
             cookingStepViewModel.addAssignedIngredients(cookingStepWithIngredients.ingredients)
 
             binding.formContent.cookingStepField.setText(cookingStepWithIngredients.cookingStep.text)
