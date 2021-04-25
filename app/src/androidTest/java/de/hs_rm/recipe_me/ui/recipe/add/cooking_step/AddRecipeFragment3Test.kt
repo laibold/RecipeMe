@@ -26,10 +26,16 @@ import de.hs_rm.recipe_me.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.declaration.launchFragmentInHiltContainer
 import de.hs_rm.recipe_me.declaration.toEditable
 import de.hs_rm.recipe_me.model.recipe.*
+import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.service.Formatter
 import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.*
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -73,16 +79,11 @@ class AddRecipeFragment3Test {
             Navigation.setViewNavController(requireView(), navController)
         }
 
-        for (i in 1..3) {
-            val ingredient = TestDataProvider.getRandomIngredient()
-            ingredients.add(ingredient)
-            viewModel.addIngredient(
-                ingredient.name.toEditable(),
-                ingredient.quantity.toEditable(),
-                ingredient.unit
-            )
-        }
+    }
 
+    @After
+    fun cleanup() {
+        ingredients.clear()
     }
 
     /**
@@ -168,13 +169,16 @@ class AddRecipeFragment3Test {
      */
     @Test
     fun testAddCookingStep() {
+        addIngredientsToViewModel(3)
+
         val cookingStep = TestDataProvider.getRandomCookingStep()
 
         onView(withId(R.id.cooking_step_list_view)).check(matches(withListSize(0)))
         onView(withId(R.id.add_cooking_step_fab)).perform(click())
         onView(withId(R.id.dialog_layout)).check(matches(isDisplayed()))
 
-        addCookingStep(cookingStep, 2)
+        insertToCookingStepDialog(cookingStep, 2)
+        onView(withId(R.id.add_button)).perform(click())
 
         onView(withId(R.id.cooking_step_list_view)).check(matches(withListSize(1)))
         onData(anything()).inAdapterView(withId(R.id.cooking_step_list_view)).atPosition(0)
@@ -186,13 +190,16 @@ class AddRecipeFragment3Test {
      * editing updates the cooking step in the list
      */
     @Test
-    fun testEditIngredient() {
+    fun testEditCookingStep() {
+        addIngredientsToViewModel(4)
+
         val cookingStep = TestDataProvider.getRandomCookingStep()
 
         // add test cooking step
         onView(withId(R.id.cooking_step_list_view)).check(matches(withListSize(0)))
         onView(withId(R.id.add_cooking_step_fab)).perform(click())
-        addCookingStep(cookingStep, 1)
+        insertToCookingStepDialog(cookingStep, 1)
+        onView(withId(R.id.add_button)).perform(click())
         onView(withId(R.id.cooking_step_list_view)).check(matches(withListSize(1)))
 
         // click edit and check form
@@ -203,7 +210,8 @@ class AddRecipeFragment3Test {
 
         // set new values – we call addCookingStep with 2 ingredients, which will deselect index 0 and select index 1
         val updatedCookingStep = TestDataProvider.getRandomCookingStep()
-        addCookingStep(updatedCookingStep, 2)
+        insertToCookingStepDialog(updatedCookingStep, 2)
+        onView(withId(R.id.add_button)).perform(click())
         val updatedIngredientText = Formatter.formatIngredientList(context, ingredients.slice(1..1))
 
         // check updated cooking step in list
@@ -227,7 +235,8 @@ class AddRecipeFragment3Test {
 
         // add test cooking step
         onView(withId(R.id.add_cooking_step_fab)).perform(click())
-        addCookingStep(cookingStep, 0)
+        insertToCookingStepDialog(cookingStep, 0)
+        onView(withId(R.id.add_button)).perform(click())
         onView(withId(R.id.cooking_step_list_view)).check(matches(withListSize(1)))
 
         // remove and check
@@ -240,15 +249,112 @@ class AddRecipeFragment3Test {
         onView(withId(R.id.add_hint_text)).check(matches(withText(emptyStateText)))
     }
 
+    @Test
+    fun testLoadPersistedCookingStep() {
+        var rId: Long
+        val cookingStep = TestDataProvider.getRandomCookingStep().apply { text = "step text" }
+        val ingredients = listOf(
+            TestDataProvider.getRandomIngredient(Recipe.DEFAULT_ID, 1.0),
+            TestDataProvider.getRandomIngredient(Recipe.DEFAULT_ID, 1.0),
+            TestDataProvider.getRandomIngredient(Recipe.DEFAULT_ID, 1.0)
+        )
+
+        runBlocking {
+            // Insert Recipe with 3 Ingredients where first and third are assigned to single CookingStep
+            rId = db.recipeDao().insert(TestDataProvider.getRandomRecipe())
+
+            val ingredientId1 = db.recipeDao().insert(ingredients[0].apply { recipeId = rId })
+            db.recipeDao().insert(ingredients[1].apply { recipeId = rId })
+            val ingredientId3 = db.recipeDao().insert(ingredients[2].apply { recipeId = rId })
+
+            val stepId = db.recipeDao().insert(cookingStep.apply { recipeId = rId })
+
+            db.recipeDao().insert(CookingStepIngredientCrossRef(stepId, ingredientId1))
+            db.recipeDao().insert(CookingStepIngredientCrossRef(stepId, ingredientId3))
+        }
+
+        GlobalScope.launch(Dispatchers.Main) {
+            viewModel.initRecipe(rId)
+        }
+
+        onView(withId(R.id.cooking_step_list_view)).check(matches(withListSize(1)))
+
+        onData(anything()).inAdapterView(withId(R.id.cooking_step_list_view)).atPosition(0)
+            .onChildView(withId(R.id.cooking_step_text)).check(matches(withText(cookingStep.text)))
+
+        // click edit and check form
+        onData(anything()).inAdapterView(withId(R.id.cooking_step_list_view)).atPosition(0)
+            .onChildView(withId(R.id.edit_button)).perform(click())
+        val ingredientText =
+            Formatter.formatIngredientList(context, listOf(ingredients[0], ingredients[2]))
+        checkCookingStepInDialog(cookingStep, ingredientText)
+
+        onView(withId(R.id.edit_ingredients_button)).perform(click())
+        onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(0)
+            .onChildView(withId(R.id.item_checkbox)).check(matches(isChecked()))
+        onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(1)
+            .onChildView(withId(R.id.item_checkbox)).check(matches(isNotChecked()))
+        onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(2)
+            .onChildView(withId(R.id.item_checkbox)).check(matches(isChecked()))
+    }
+
+    /**
+     * Test that checking ingredients in dialog list works as expected even if the ingredients have the same values
+     */
+    @Test
+    fun testAssignIngredients() {
+        viewModel.addIngredient("name".toEditable(), (2.0).toEditable(), IngredientUnit.CAN)
+        viewModel.addIngredient("name".toEditable(), (2.0).toEditable(), IngredientUnit.CAN)
+        viewModel.addIngredient("ingredient".toEditable(), (0.0).toEditable(), IngredientUnit.CUP)
+
+        val cookingStep = TestDataProvider.getRandomCookingStep()
+
+        onView(withId(R.id.cooking_step_list_view)).check(matches(withListSize(0)))
+        onView(withId(R.id.add_cooking_step_fab)).perform(click())
+        onView(withId(R.id.dialog_layout)).check(matches(isDisplayed()))
+
+        insertToCookingStepDialog(cookingStep, 0)
+
+        onView(withId(R.id.edit_ingredients_button)).perform(click())
+
+        // check first ingredient, only this one should be checked
+        onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(0)
+            .onChildView(withId(R.id.item_checkbox)).perform(click())
+
+        onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(0)
+            .onChildView(withId(R.id.item_checkbox)).check(matches(isChecked()))
+        onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(1)
+            .onChildView(withId(R.id.item_checkbox)).check(matches(isNotChecked()))
+        onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(2)
+            .onChildView(withId(R.id.item_checkbox)).check(matches(isNotChecked()))
+
+        // check seconds ingredient, first and second should be checked
+        onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(1)
+            .onChildView(withId(R.id.item_checkbox)).perform(click())
+
+        onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(0)
+            .onChildView(withId(R.id.item_checkbox)).check(matches(isChecked()))
+        onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(1)
+            .onChildView(withId(R.id.item_checkbox)).check(matches(isChecked()))
+
+        // error wenn beide gechecked sind und einer entchecked werden soll (irgendwie wenn man 2x hintereinander auf den selben klickt)
+
+        onView(withId(R.id.add_button)).perform(click())
+        onView(withId(R.id.add_button)).perform(click())
+    }
+
     /**
      * Assign 3 ingredients to cooking step and delete 1 afterwards.
      * The list in the dialog should be refreshed and the other ingredients should still be assigned
      */
     @Test
     fun testDeletedIngredient() {
+        addIngredientsToViewModel(3)
+
         val cookingStep = TestDataProvider.getRandomCookingStep()
         onView(withId(R.id.add_cooking_step_fab)).perform(click())
-        addCookingStep(cookingStep, 3)
+        insertToCookingStepDialog(cookingStep, 3)
+        onView(withId(R.id.add_button)).perform(click())
 
         viewModel.ingredients.getOrAwaitValue().removeAt(0)
 
@@ -272,10 +378,13 @@ class AddRecipeFragment3Test {
      */
     @Test
     fun testUpdatedIngredient() {
+        addIngredientsToViewModel(3)
+
         val cookingStep = TestDataProvider.getRandomCookingStep()
         val updatedIngredient = TestDataProvider.getRandomIngredient()
         onView(withId(R.id.add_cooking_step_fab)).perform(click())
-        addCookingStep(cookingStep, 2)
+        insertToCookingStepDialog(cookingStep, 2)
+        onView(withId(R.id.add_button)).perform(click())
 
         viewModel.prepareIngredientUpdate(0)
         viewModel.updateIngredient(
@@ -300,10 +409,27 @@ class AddRecipeFragment3Test {
             .onChildView(withId(R.id.item_checkbox)).check(matches(isChecked()))
     }
 
+    ///
+
+    private fun addIngredientsToViewModel(quantity: Int) {
+        for (i in 1..quantity) {
+            val ingredient = TestDataProvider.getRandomIngredient()
+            ingredients.add(ingredient)
+            viewModel.addIngredient(
+                ingredient.name.toEditable(),
+                ingredient.quantity.toEditable(),
+                ingredient.unit
+            )
+        }
+    }
+
     /**
-     * Add cooking step and assign number of ingredients (be aware of the maximum size)
+     * Fill out cooking step dialog and assign number of ingredients (be aware of the maximum size)
      */
-    private fun addCookingStep(cookingStep: CookingStep, numberOfAssignedIngredients: Int) {
+    private fun insertToCookingStepDialog(
+        cookingStep: CookingStep,
+        numberOfAssignedIngredients: Int
+    ) {
         val unitName = cookingStep.timeUnit.getNumberString(context.resources, cookingStep.time)
 
         onView(withId(R.id.cooking_step_field)).perform(replaceText(cookingStep.text))
@@ -321,8 +447,6 @@ class AddRecipeFragment3Test {
             }
             onView(withId(R.id.add_button)).perform(click())
         }
-
-        onView(withId(R.id.add_button)).perform(click())
     }
 
     /**
