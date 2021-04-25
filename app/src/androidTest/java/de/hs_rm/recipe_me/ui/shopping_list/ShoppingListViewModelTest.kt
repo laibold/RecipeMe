@@ -6,8 +6,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.Constants
-import de.hs_rm.recipe_me.TestDataProvider
-import de.hs_rm.recipe_me.declaration.getOrAwaitValue
+import test_shared.TestDataProvider
+import test_shared.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.service.repository.ShoppingListRepository
 import de.hs_rm.recipe_me.service.repository.UserRepository

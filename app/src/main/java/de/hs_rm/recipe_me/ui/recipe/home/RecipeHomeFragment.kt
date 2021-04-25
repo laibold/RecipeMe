@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
@@ -59,7 +58,7 @@ class RecipeHomeFragment : Fragment() {
             true
         }
 
-        viewModel.recipeOfTheDay.observe(viewLifecycleOwner, Observer { recipe ->
+        viewModel.recipeOfTheDay.observe(viewLifecycleOwner, { recipe ->
             onRecipeOfTheDayChanged(recipe)
         })
 

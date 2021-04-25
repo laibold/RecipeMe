@@ -8,7 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
-import de.hs_rm.recipe_me.TestDataProvider
+import test_shared.TestDataProvider
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

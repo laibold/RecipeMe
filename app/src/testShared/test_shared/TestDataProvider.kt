@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me
+package test_shared
 
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem

@@ -8,7 +8,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.Constants
 import de.hs_rm.recipe_me.TempDir
-import de.hs_rm.recipe_me.TestDataProvider
+import test_shared.TestDataProvider
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import kotlinx.coroutines.runBlocking
 import org.junit.After

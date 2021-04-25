@@ -18,11 +18,11 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.Constants
 import de.hs_rm.recipe_me.R
-import de.hs_rm.recipe_me.TestDataProvider
+import test_shared.TestDataProvider
 import de.hs_rm.recipe_me.declaration.espresso.waitForView
 import de.hs_rm.recipe_me.declaration.espresso.withListSize
 import de.hs_rm.recipe_me.declaration.espresso.withSpinnerSize
-import de.hs_rm.recipe_me.declaration.getOrAwaitValue
+import test_shared.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.declaration.launchFragmentInHiltContainer
 import de.hs_rm.recipe_me.declaration.toEditable
 import de.hs_rm.recipe_me.model.recipe.*

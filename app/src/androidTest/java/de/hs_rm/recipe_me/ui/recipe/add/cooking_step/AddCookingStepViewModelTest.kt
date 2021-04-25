@@ -1,8 +1,8 @@
 package de.hs_rm.recipe_me.ui.recipe.add.cooking_step
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import de.hs_rm.recipe_me.TestDataProvider
-import de.hs_rm.recipe_me.declaration.getOrAwaitValue
+import test_shared.TestDataProvider
+import test_shared.declaration.getOrAwaitValue
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Rule
