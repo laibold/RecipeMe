@@ -24,6 +24,9 @@ class ShoppingListViewModelTest {
     @get:Rule
     val coroutineRule = MainCoroutineRule()
 
+    /**
+     * Test that items get loaded from repository
+     */
     @Test
     fun canLoadShoppingListItems() {
         val items = listOf(
@@ -46,6 +49,9 @@ class ShoppingListViewModelTest {
         assertThat(loadedItems).hasSize(3)
     }
 
+    /**
+     * Test function of isItemChecked()
+     */
     @Test
     fun canIdentifyCheckedItems() {
         val shoppingListRepository: ShoppingListRepository = mock()
@@ -72,6 +78,9 @@ class ShoppingListViewModelTest {
         assertThat(itemChecked!!).isTrue()
     }
 
+    /**
+     * Test function of toggleItemChecked() and allItemsChecked()
+     */
     @Test
     fun canCountCheckedItems() {
         val shoppingListRepository: ShoppingListRepository = mock {
@@ -100,6 +109,9 @@ class ShoppingListViewModelTest {
         assertThat(allItemsChecked).isTrue()
     }
 
+    /**
+     * Test that adding item calls repository function with trimmed Editable
+     */
     @Test
     fun canAddShoppingListItems() {
         val shoppingListRepository: ShoppingListRepository = mock {
@@ -113,6 +125,9 @@ class ShoppingListViewModelTest {
         verifyBlocking(shoppingListRepository, times(1)) { addFromString("name") }
     }
 
+    /**
+     * Test that clearCheckedItems calls function in repository
+     */
     @Test
     fun canClearCheckedItems() {
         val shoppingListRepository: ShoppingListRepository = mock {
@@ -126,6 +141,9 @@ class ShoppingListViewModelTest {
         verifyBlocking(shoppingListRepository, times(1)) { clearCheckedItems() }
     }
 
+    /**
+     * Test that user can be loaded from repository
+     */
     @Test
     fun canLoadUser() {
         val user = User()
