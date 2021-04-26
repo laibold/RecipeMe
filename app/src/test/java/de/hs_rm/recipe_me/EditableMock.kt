@@ -3,7 +3,21 @@ package de.hs_rm.recipe_me
 import android.text.Editable
 import android.text.InputFilter
 
-class EditableMock(private val str: String) : Editable {
+class EditableMock : Editable {
+
+    private lateinit var str: String
+
+    constructor(str: String) {
+        this.str = str
+    }
+
+    constructor(int: Int) {
+        this.str = int.toString()
+    }
+
+    constructor(double: Double) {
+        this.str = double.toString()
+    }
 
     override fun get(index: Int): Char {
         return str[index]

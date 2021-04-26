@@ -37,7 +37,7 @@ class AddRecipeViewModel @Inject constructor(
     private var updatingCookingStepIndex = -1
     private var updatingIngredientIndex = -1
 
-    private var recipeToUpdate: Recipe? = null
+    internal var recipeToUpdate: Recipe? = null
     private var oldIngredients: MutableList<Ingredient>? = null
     private var oldCookingSteps: MutableList<CookingStep>? = null
 
@@ -544,10 +544,7 @@ class AddRecipeViewModel @Inject constructor(
         // that have just been inserted
         for (ingredient in ingredients) {
             recipeRepository.insert(
-                CookingStepIngredientCrossRef(
-                    cookingStepId,
-                    ingredient.ingredientId
-                )
+                CookingStepIngredientCrossRef(cookingStepId, ingredient.ingredientId)
             )
         }
     }

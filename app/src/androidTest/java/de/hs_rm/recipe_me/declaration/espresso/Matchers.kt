@@ -8,6 +8,7 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
+// TODO add some waiting time
 fun withListSize(size: Int): Matcher<View?> {
     return object : TypeSafeMatcher<View?>() {
         override fun matchesSafely(item: View?): Boolean {

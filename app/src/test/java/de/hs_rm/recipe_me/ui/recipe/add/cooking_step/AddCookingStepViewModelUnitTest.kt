@@ -13,7 +13,7 @@ import test_shared.declaration.getOrAwaitValue
 /**
  * Tests for [AddCookingStepViewModel]
  */
-class AddCookingStepViewModelTest {
+class AddCookingStepViewModelUnitTest {
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
