@@ -43,18 +43,18 @@ class ProfileFragment : Fragment(), BottomSheetImagePicker.OnImagesSelectedListe
         viewModel.loadRecipeTotal()
         viewModel.loadUser()
 
-        viewModel.profileImage.observe(viewLifecycleOwner, Observer { image ->
+        viewModel.profileImage.observe(viewLifecycleOwner, { image ->
             if (image != null) {
                 binding.profileImage.setImageBitmap(image)
             }
             binding.profileImage.visibility = View.VISIBLE
         })
 
-        viewModel.recipeTotal.observe(viewLifecycleOwner, Observer {
+        viewModel.recipeTotal.observe(viewLifecycleOwner, {
             binding.profileQuantityRecipesText.text = getRecipeTotalText(it)
         })
 
-        viewModel.user.observe(viewLifecycleOwner, Observer { user ->
+        viewModel.user.observe(viewLifecycleOwner, { user ->
             binding.profileGreeting.text = getUserGreeting(user)
         })
 

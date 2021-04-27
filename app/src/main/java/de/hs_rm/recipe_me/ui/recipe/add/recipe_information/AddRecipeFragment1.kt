@@ -54,7 +54,7 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
         // observe recipe in viewModel except user is navigating to fragment to create a new recipe
         // means: user is editing a recipe or is moving back from fragment 2
         if (!(args.clearValues && args.recipeId == Recipe.DEFAULT_ID)) {
-            viewModel.recipe.observe(viewLifecycleOwner, Observer { recipe ->
+            viewModel.recipe.observe(viewLifecycleOwner, { recipe ->
                 if (recipe != null) {
                     if (recipe.name != "") {
                         binding.recipeNameField.setText(viewModel.recipe.value!!.name)
@@ -68,7 +68,7 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
         }
 
         // Observe category and set spinner selection and image if no custom image has been set
-        viewModel.category.observe(viewLifecycleOwner, Observer { category ->
+        viewModel.category.observe(viewLifecycleOwner, { category ->
             val ordinal = category.ordinal
             if (binding.recipeCategorySpinner.selectedItemPosition != ordinal) {
                 binding.recipeCategorySpinner.setSelection(ordinal)
@@ -77,7 +77,7 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
             setRecipeImageToView(category)
         })
 
-        viewModel.recipeImage.observe(viewLifecycleOwner, Observer { image ->
+        viewModel.recipeImage.observe(viewLifecycleOwner, { image ->
             if (image != null) {
                 binding.recipeImage.setImageBitmap(image)
             }

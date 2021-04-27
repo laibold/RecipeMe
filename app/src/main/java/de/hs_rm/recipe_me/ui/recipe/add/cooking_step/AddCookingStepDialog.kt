@@ -58,7 +58,7 @@ class AddCookingStepDialog constructor(
         setIngredientAdapter()
 
         cookingStepViewModel.assignedIngredients.observe(
-            activity as LifecycleOwner, Observer { ingredients ->
+            activity as LifecycleOwner, { ingredients ->
                 if (ingredients.isNotEmpty()) {
                     binding.formContent.ingredientsTextView.text =
                         Formatter.formatIngredientList(activity, ingredients)

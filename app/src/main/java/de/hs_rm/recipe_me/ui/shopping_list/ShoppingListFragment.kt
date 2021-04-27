@@ -40,7 +40,7 @@ class ShoppingListFragment : Fragment() {
         viewModel.loadShoppingListItems()
         viewModel.loadUser()
 
-        viewModel.shoppingListItems.observe(viewLifecycleOwner, Observer {
+        viewModel.shoppingListItems.observe(viewLifecycleOwner, {
             onShoppingListItemsChanged(it)
         })
 
@@ -63,7 +63,7 @@ class ShoppingListFragment : Fragment() {
             onClearButtonPressed()
         }
 
-        viewModel.user.observe(viewLifecycleOwner, Observer { user ->
+        viewModel.user.observe(viewLifecycleOwner, { user ->
             binding.shareButton.setOnClickListener {
                 TextSharer.share(requireContext(), getShareText(user))
             }

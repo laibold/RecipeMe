@@ -37,13 +37,13 @@ class EditProfileDialog constructor(
         val width = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
         window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
 
-        viewModel.editProfileImage.observe(activity as LifecycleOwner, Observer { image ->
+        viewModel.editProfileImage.observe(activity as LifecycleOwner, { image ->
             if (image != null) {
                 binding.profileImage.setImageBitmap(image)
             }
         })
 
-        viewModel.profileImage.observe(activity as LifecycleOwner, Observer { image ->
+        viewModel.profileImage.observe(activity as LifecycleOwner, { image ->
             if (image != null && viewModel.editProfileImage.value == null) {
                 binding.profileImage.setImageBitmap(image)
             }

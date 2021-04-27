@@ -111,7 +111,7 @@ class RecipeDetailFragment : Fragment() {
             true
         }
 
-        viewModel.recipe.observe(viewLifecycleOwner, Observer { recipeWithRelations ->
+        viewModel.recipe.observe(viewLifecycleOwner, { recipeWithRelations ->
             if (recipeWithRelations != null) {
                 onRecipeChanged(recipeWithRelations)
             } else {

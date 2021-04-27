@@ -40,7 +40,7 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
             addCookingStepDialog().show()
         }
 
-        viewModel.cookingStepsWithIngredients.observe(viewLifecycleOwner, Observer { list ->
+        viewModel.cookingStepsWithIngredients.observe(viewLifecycleOwner, { list ->
             adapter = AddCookingStepListAdapter(
                 requireContext(),
                 R.layout.add_cooking_step_listitem,
@@ -89,7 +89,7 @@ class AddRecipeFragment3 : Fragment(), EditCookingStepAdapter {
         // Remove observer to pretend a wrong list to be shown for a little while
         viewModel.cookingStepsWithIngredients.removeObservers(viewLifecycleOwner)
 
-        id.observe(viewLifecycleOwner, Observer {
+        id.observe(viewLifecycleOwner, {
             val direction = AddRecipeFragment3Directions.toRecipeDetailFragment(it)
             findNavController().navigate(direction)
         })

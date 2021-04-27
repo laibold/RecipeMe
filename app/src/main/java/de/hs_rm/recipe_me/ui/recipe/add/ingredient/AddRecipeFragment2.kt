@@ -55,7 +55,7 @@ class AddRecipeFragment2 : Fragment(), EditIngredientAdapter {
             addIngredientDialog().show()
         }
 
-        viewModel.ingredients.observe(viewLifecycleOwner, Observer {
+        viewModel.ingredients.observe(viewLifecycleOwner, {
             adapter = viewModel.ingredients.value?.let { list -> ingredientListAdapter(list) }
             binding.ingredientsListView.adapter = adapter
             adapter?.notifyDataSetChanged()
