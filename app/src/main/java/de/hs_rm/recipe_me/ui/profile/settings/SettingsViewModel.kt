@@ -88,10 +88,10 @@ class SettingsViewModel @Inject constructor(
      * Export backup to uri
      */
     @Throws(IOException::class)
-    fun exportBackup(uri: DocumentFile?, context: Context) {
-        if (uri != null) {
+    fun exportBackup(documentFile: DocumentFile?, context: Context) {
+        if (documentFile != null) {
             CoroutineScope(Dispatchers.IO).launch {
-                backupService.exportBackup(uri, ImageHandler.getImageDirPath(context))
+                backupService.exportBackup(documentFile, ImageHandler.getImageDirPath(context))
             }
         }
     }
@@ -99,6 +99,7 @@ class SettingsViewModel @Inject constructor(
     /**
      * Import backup from uri
      */
+    @Throws(IOException::class)
     fun importBackup(uri: InputStream?, context: Context) {
         if (uri != null) {
             backupService.importBackup(uri, ImageHandler.getImageDirPath(context))
