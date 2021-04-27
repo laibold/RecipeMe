@@ -50,7 +50,7 @@ class ProfileFragment : Fragment(), BottomSheetImagePicker.OnImagesSelectedListe
             binding.profileImage.visibility = View.VISIBLE
         })
 
-        viewModel.total.observe(viewLifecycleOwner, Observer {
+        viewModel.recipeTotal.observe(viewLifecycleOwner, Observer {
             binding.profileQuantityRecipesText.text = getRecipeTotalText(it)
         })
 
