@@ -21,6 +21,9 @@ class SettingsViewModelTest {
     @get:Rule
     val coroutineRule = MainCoroutineRule()
 
+    /**
+     * Test that button id is returned if preference is set in service
+     */
     @Test
     fun returnsThemeButtonToBeCheckedOnPreferenceSet() {
         val preferenceService: PreferenceService = mock {
@@ -33,6 +36,9 @@ class SettingsViewModelTest {
         assertThat(id).isEqualTo(R.id.radio_light_mode)
     }
 
+    /**
+     * Test that system mode button id is returned if preference is not set in service
+     */
     @Test
     fun returnsThemeButtonToBeCheckedWithoutPreferenceSet() {
         val backupService: BackupService = mock()
@@ -46,6 +52,9 @@ class SettingsViewModelTest {
         assertThat(id).isEqualTo(R.id.radio_system_mode)
     }
 
+    /**
+     * Test setting of theme
+     */
     @Test
     fun setsTheme() {
         val preferenceService: PreferenceService = mock {
@@ -62,6 +71,9 @@ class SettingsViewModelTest {
         verify(preferenceService, times(1)).setTheme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
     }
 
+    /**
+     * Test timer in background getter
+     */
     @Test
     fun getsTimerInBackground() {
         val preferenceService: PreferenceService = mock {
@@ -75,6 +87,9 @@ class SettingsViewModelTest {
         assertThat(pref).isTrue()
     }
 
+    /**
+     * Test timer in background setter
+     */
     @Test
     fun setsTimerInBackground() {
         val preferenceService: PreferenceService = mock {
@@ -87,6 +102,9 @@ class SettingsViewModelTest {
         verify(preferenceService, times(1)).setTimerInBackground(true)
     }
 
+    /**
+     * Test show cooking step preview getter
+     */
     @Test
     fun getsShowCookingStepPreview() {
         val preferenceService: PreferenceService = mock {
@@ -100,6 +118,9 @@ class SettingsViewModelTest {
         assertThat(pref).isTrue()
     }
 
+    /**
+     * Test show cooking step preview setter
+     */
     @Test
     fun setsShowCookingStepPreview() {
         val preferenceService: PreferenceService = mock {
@@ -112,6 +133,9 @@ class SettingsViewModelTest {
         verify(preferenceService, times(1)).setShowCookingStepPreview(true)
     }
 
+    /**
+     * Test if exportBackup calls function in service on non null documentFile
+     */
     @Test
     fun exportsBackup() {
         val backupService: BackupService = mock {
@@ -124,6 +148,9 @@ class SettingsViewModelTest {
         verifyBlocking(backupService, times(1)) { exportBackup(any(), any()) }
     }
 
+    /**
+     * Test if exportBackup calls function in service on null documentFile
+     */
     @Test
     fun doesNotExportBackupOnNullDocumentFile() {
         val backupService: BackupService = mock()
@@ -134,6 +161,9 @@ class SettingsViewModelTest {
         verify(backupService, never()).exportBackup(any(), any())
     }
 
+    /**
+     * Test if importBackup calls function in service on non null documentFile
+     */
     @Test
     fun importsBackup() {
         val backupService: BackupService = mock {
@@ -146,6 +176,9 @@ class SettingsViewModelTest {
         verify(backupService, times(1)).importBackup(any(), any())
     }
 
+    /**
+     * Test if importBackup calls function in service on null documentFile
+     */
     @Test
     fun doesNotImportBackupOnNullDocumentFile() {
         val backupService: BackupService = mock()
