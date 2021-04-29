@@ -2,14 +2,14 @@ package de.hs_rm.recipe_me.ui.recipe.add
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
-import de.hs_rm.recipe_me.Constants
-import test_shared.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.declaration.toEditable
-import de.hs_rm.recipe_me.model.recipe.*
+import de.hs_rm.recipe_me.model.recipe.IngredientUnit
+import de.hs_rm.recipe_me.model.recipe.Recipe
+import de.hs_rm.recipe_me.model.recipe.RecipeCategory
+import de.hs_rm.recipe_me.model.recipe.TimeUnit
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.service.repository.RecipeImageRepository
 import de.hs_rm.recipe_me.service.repository.RecipeRepository
@@ -17,31 +17,20 @@ import kotlinx.coroutines.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
-import javax.inject.Named
+import org.mockito.Mockito.mock
+import test_shared.declaration.getOrAwaitValue
 
 /**
  * Functional tests for [AddRecipeViewModel]
  */
-@HiltAndroidTest
 class AddRecipeViewModelTest {
-
-    @get:Rule
-    val hiltRule = HiltAndroidRule(this)
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    @Inject
-    @Named(Constants.TEST_NAME)
     lateinit var db: AppDatabase
 
-    @Inject
-    @Named(Constants.TEST_NAME)
     lateinit var recipeRepository: RecipeRepository
-
-    @Inject
-    @Named(Constants.TEST_NAME)
     lateinit var recipeImageRepository: RecipeImageRepository
 
     private lateinit var viewModel: AddRecipeViewModel
@@ -53,11 +42,14 @@ class AddRecipeViewModelTest {
      */
     @Before
     fun beforeEach() {
-        hiltRule.inject()
-        assertThat(db.openHelper.databaseName).isEqualTo(AppDatabase.Environment.TEST.dbName)
-
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        db.clearAllTables()
+        db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java)
+            .allowMainThreadQueries().build()
+        val dao = db.recipeDao()
+        recipeRepository = RecipeRepository(dao)
+
+        recipeImageRepository = mock(RecipeImageRepository::class.java)
+
         viewModel = AddRecipeViewModel(recipeRepository, recipeImageRepository)
         viewModel.setCategory(RecipeCategory.MAIN_DISHES)
         viewModel.initRecipe(Recipe.DEFAULT_ID)

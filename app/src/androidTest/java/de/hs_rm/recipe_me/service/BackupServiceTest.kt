@@ -6,9 +6,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import de.hs_rm.recipe_me.Constants
 import de.hs_rm.recipe_me.TempDir
-import test_shared.TestDataProvider
+import de.hs_rm.recipe_me.di.Constants
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -17,6 +16,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import test_shared.TestDataProvider
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Named
@@ -34,30 +34,29 @@ class BackupServiceTest {
     @Named(Constants.TEST_NAME)
     lateinit var db: AppDatabase
 
-    @Inject
     lateinit var preferenceService: PreferenceService
-
-    @Inject
     lateinit var backupService: BackupService
 
     lateinit var imageHandler: ImageHandler
 
-    lateinit var context: Context
+    lateinit var appContext: Context
 
     @Before
     fun init() {
         hiltRule.inject()
         assertThat(db.openHelper.databaseName).isEqualTo(AppDatabase.Environment.TEST.dbName)
         db.clearAllTables()
-        context = InstrumentationRegistry.getInstrumentation().targetContext
-        imageHandler = mock(ImageHandler::class.java)
 
-        backupService = BackupService(context, db, preferenceService, imageHandler)
+        appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        preferenceService = PreferenceService(appContext)
+        imageHandler = mock(ImageHandler::class.java)
+        backupService = BackupService(appContext, db, preferenceService, imageHandler)
     }
 
     @After
     fun cleanup() {
-        context.cacheDir.listFiles()?.let { files ->
+        appContext.cacheDir.listFiles()?.let { files ->
             for (file in files) {
                 file.deleteRecursively()
             }

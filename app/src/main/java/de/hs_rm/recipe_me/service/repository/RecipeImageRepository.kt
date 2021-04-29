@@ -2,6 +2,7 @@ package de.hs_rm.recipe_me.service.repository
 
 import android.graphics.Bitmap
 import android.net.Uri
+import de.hs_rm.recipe_me.OpenForTesting
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.service.ImageHandler
 import kotlinx.coroutines.CoroutineScope
@@ -15,6 +16,7 @@ import javax.inject.Singleton
  * Single Source of Truth for recipe images. Use it with Dependency Injection
  */
 @Singleton
+@OpenForTesting
 class RecipeImageRepository @Inject constructor(
     private val imageHandler: ImageHandler
 ) {

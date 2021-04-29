@@ -12,15 +12,15 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import de.hs_rm.recipe_me.Constants
 import de.hs_rm.recipe_me.R
-import test_shared.TestDataProvider
 import de.hs_rm.recipe_me.declaration.espresso.waitForView
 import de.hs_rm.recipe_me.declaration.espresso.withListSize
 import de.hs_rm.recipe_me.declaration.espresso.withSpinnerSize
 import de.hs_rm.recipe_me.declaration.launchFragmentInHiltContainer
+import de.hs_rm.recipe_me.di.Constants
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.model.recipe.Recipe
@@ -29,12 +29,12 @@ import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.service.Formatter
 import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
 import org.hamcrest.Matchers.*
-import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.verify
+import test_shared.TestDataProvider
 import javax.inject.Inject
 import javax.inject.Named
 

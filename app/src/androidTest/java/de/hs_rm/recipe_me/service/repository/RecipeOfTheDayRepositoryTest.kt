@@ -1,12 +1,10 @@
 package de.hs_rm.recipe_me.service.repository
 
-import android.content.Context
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
-import de.hs_rm.recipe_me.Constants
-import test_shared.TestDataProvider
 import de.hs_rm.recipe_me.model.RecipeOfTheDay
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.persistence.AppDatabase
@@ -16,48 +14,32 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import test_shared.TestDataProvider
 import java.time.LocalDate
-import javax.inject.Inject
-import javax.inject.Named
 
-@HiltAndroidTest
 class RecipeOfTheDayRepositoryTest {
 
     @get:Rule
-    val hiltRule = HiltAndroidRule(this)
+    var instantExecutorRule = InstantTaskExecutorRule()
 
-    @Inject
-    @Named(Constants.TEST_NAME)
-    lateinit var db: AppDatabase
-
-    @Inject
-    @Named(Constants.TEST_NAME)
     lateinit var rotdRepository: RecipeOfTheDayRepository
-
-    @Inject
-    @Named(Constants.TEST_NAME)
     lateinit var recipeRepository: RecipeRepository
 
-    @Inject
-    @Named(Constants.TEST_NAME)
     lateinit var rotdDao: RecipeOfTheDayDao
-
-    @Inject
-    @Named(Constants.TEST_NAME)
     lateinit var recipeDao: RecipeDao
-
-    private lateinit var context: Context
 
     /**
      * Build inMemory database and create repositories with DAOs from database
      */
     @Before
     fun beforeEach() {
-        hiltRule.inject()
-        assertThat(db.openHelper.databaseName).isEqualTo(AppDatabase.Environment.TEST.dbName)
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        val db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java).build()
+        rotdDao = db.recipeOfTheDayDao()
+        recipeDao = db.recipeDao()
 
-        context = InstrumentationRegistry.getInstrumentation().targetContext
-        db.clearAllTables()
+        rotdRepository = RecipeOfTheDayRepository(rotdDao, recipeDao)
+        recipeRepository = RecipeRepository(recipeDao)
     }
 
     /**

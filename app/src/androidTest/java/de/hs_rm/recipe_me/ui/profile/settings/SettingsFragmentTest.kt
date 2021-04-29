@@ -14,9 +14,9 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import de.hs_rm.recipe_me.Constants
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.declaration.launchFragmentInHiltContainer
+import de.hs_rm.recipe_me.di.Constants
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.service.PreferenceService
 import org.junit.Before

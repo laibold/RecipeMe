@@ -1,6 +1,5 @@
 package de.hs_rm.recipe_me.ui.recipe.add.cooking_step
 
-import com.google.common.truth.Truth.assertThat
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.activityViewModels
@@ -14,17 +13,16 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import de.hs_rm.recipe_me.Constants
 import de.hs_rm.recipe_me.R
-import test_shared.TestDataProvider
 import de.hs_rm.recipe_me.declaration.espresso.waitForView
 import de.hs_rm.recipe_me.declaration.espresso.withListSize
 import de.hs_rm.recipe_me.declaration.espresso.withSpinnerSize
-import test_shared.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.declaration.launchFragmentInHiltContainer
 import de.hs_rm.recipe_me.declaration.toEditable
+import de.hs_rm.recipe_me.di.Constants
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.persistence.AppDatabase
@@ -37,6 +35,8 @@ import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.*
 import org.junit.*
 import org.mockito.Mockito.mock
+import test_shared.TestDataProvider
+import test_shared.declaration.getOrAwaitValue
 import javax.inject.Inject
 import javax.inject.Named
 

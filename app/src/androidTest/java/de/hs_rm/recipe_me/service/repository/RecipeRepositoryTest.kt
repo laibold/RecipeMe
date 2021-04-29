@@ -1,13 +1,9 @@
 package de.hs_rm.recipe_me.service.repository
 
-import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
-import de.hs_rm.recipe_me.Constants
-import test_shared.declaration.getOrAwaitValue
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
@@ -16,35 +12,21 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
-import javax.inject.Named
+import test_shared.declaration.getOrAwaitValue
 
-@HiltAndroidTest
 class RecipeRepositoryTest {
-
-    @get:Rule
-    val hiltRule = HiltAndroidRule(this)
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    @Inject
-    @Named(Constants.TEST_NAME)
-    lateinit var db: AppDatabase
-
-    @Inject
-    @Named(Constants.TEST_NAME)
     lateinit var repository: RecipeRepository
-
-    private lateinit var appContext: Context
 
     @Before
     fun beforeEach() {
-        hiltRule.inject()
-        assertThat(db.openHelper.databaseName).isEqualTo(AppDatabase.Environment.TEST.dbName)
-
-        appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        db.clearAllTables()
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        val db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java).build()
+        val dao = db.recipeDao()
+        repository = RecipeRepository(dao)
         insertTestRecipe()
     }
 
