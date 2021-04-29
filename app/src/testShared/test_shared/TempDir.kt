@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me
+package test_shared
 
 import androidx.documentfile.provider.DocumentFile
 import java.io.File
