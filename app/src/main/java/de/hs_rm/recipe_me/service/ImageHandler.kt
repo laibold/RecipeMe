@@ -9,7 +9,6 @@ import de.hs_rm.recipe_me.OpenForTesting
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import java.io.File
 import java.io.FileOutputStream
-import java.io.OutputStream
 
 @OpenForTesting
 class ImageHandler(private val context: Context) {
@@ -41,11 +40,7 @@ class ImageHandler(private val context: Context) {
      *
      * @return On success path to image as String, else null
      */
-    private fun saveImage(
-        image: Bitmap,
-        absolutePath: String,
-        filename: String,
-    ): String? {
+    private fun saveImage(image: Bitmap, absolutePath: String, filename: String): String? {
         var savedImagePath: String? = null
         val storageDir = File(absolutePath)
         var success = true
@@ -55,14 +50,9 @@ class ImageHandler(private val context: Context) {
         if (success) {
             val imageFile = File(storageDir, filename)
             savedImagePath = imageFile.absolutePath
-            try {
-                val fOut: OutputStream = FileOutputStream(imageFile)
-                image.compress(Bitmap.CompressFormat.JPEG, JPEG_QUALITY, fOut)
-                fOut.close()
-            } catch (e: Exception) {
-                e.printStackTrace()
+            FileOutputStream(imageFile).use { out ->
+                image.compress(Bitmap.CompressFormat.JPEG, JPEG_QUALITY, out)
             }
-
         }
         return savedImagePath
     }
@@ -95,12 +85,15 @@ class ImageHandler(private val context: Context) {
     fun getRecipeImage(recipe: Recipe): Bitmap? {
         val file = File(getRecipeDirPath(recipe.id), RECIPE_IMAGE_NAME)
         return if (file.exists()) {
-            getImageFromUri(Uri.fromFile(file), RECIPE_IMAGE_WIDTH, RECIPE_IMAGE_HEIGHT)
+            getImageFromFile(file, RECIPE_IMAGE_WIDTH, RECIPE_IMAGE_HEIGHT)
         } else {
             null
         }
     }
 
+    /**
+     * Returns file for image of recipe with given id if existing, else null
+     */
     fun getRecipeImageFile(recipeId: Long): File? {
         val file = File(getRecipeDirPath(recipeId), RECIPE_IMAGE_NAME)
         return if (file.exists()) {
@@ -133,7 +126,7 @@ class ImageHandler(private val context: Context) {
     fun getProfileImage(): Bitmap? {
         val file = File(getProfileDirPath(), PROFILE_IMAGE_NAME)
         return if (file.exists()) {
-            getImageFromUri(Uri.fromFile(file), PROFILE_IMAGE_WIDTH, PROFILE_IMAGE_HEIGHT)
+            getImageFromFile(file, PROFILE_IMAGE_WIDTH, PROFILE_IMAGE_HEIGHT)
         } else {
             null
         }
@@ -166,6 +159,14 @@ class ImageHandler(private val context: Context) {
      */
     fun getImageDirPath(): String {
         return context.getExternalFilesDir(null)?.absolutePath + "/$IMAGES_DIR"
+    }
+
+    /**
+     * Returns image as Bitmap from given File
+     * Must be called from Dispatchers.IO coroutine scope
+     */
+    fun getImageFromFile(file: File, width: Int, height: Int): Bitmap {
+        return getImageFromUri(Uri.fromFile(file), width, height)
     }
 
     /**
