@@ -6,6 +6,13 @@ plugins {
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'kotlin-allopen'
+
+allOpen {
+    // allows mocking for classes w/o directly opening them for release builds
+    annotation 'de.hs_rm.recipe_me.OpenClass'
+    // https://proandroiddev.com/mocking-androidtest-in-kotlin-51f0a603d500
+}
 
 android {
     compileSdkVersion 30
