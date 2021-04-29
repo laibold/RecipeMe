@@ -11,6 +11,7 @@ import de.hs_rm.recipe_me.persistence.dao.RecipeDao
 import de.hs_rm.recipe_me.persistence.dao.RecipeOfTheDayDao
 import de.hs_rm.recipe_me.persistence.dao.ShoppingListDao
 import de.hs_rm.recipe_me.persistence.dao.UserDao
+import de.hs_rm.recipe_me.service.ImageHandler
 import de.hs_rm.recipe_me.service.repository.*
 import javax.inject.Named
 import javax.inject.Singleton
@@ -29,8 +30,8 @@ object TestRepositoryModule {
     @Singleton
     @Provides
     @Named(TEST)
-    fun provideRecipeImageRepository(@ApplicationContext context: Context) =
-        RecipeImageRepository(context)
+    fun provideRecipeImageRepository(imageHandler: ImageHandler) =
+        RecipeImageRepository(imageHandler)
 
     @Singleton
     @Provides
@@ -56,6 +57,6 @@ object TestRepositoryModule {
     @Singleton
     @Provides
     @Named(TEST)
-    fun provideUserImageRepository(@ApplicationContext context: Context) =
-        UserImageRepository(context)
+    fun provideUserImageRepository(imageHandler: ImageHandler) =
+        UserImageRepository(imageHandler)
 }

@@ -35,11 +35,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.*
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.mockito.Mockito
+import org.junit.*
+import org.mockito.Mockito.mock
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -70,7 +67,7 @@ class AddRecipeFragment3Test {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         db.clearAllTables()
 
-        navController = Mockito.mock(NavController::class.java)
+        navController = mock(NavController::class.java)
         launchFragmentInHiltContainer<AddRecipeFragment3> {
             val viewModelTemp: AddRecipeViewModel by activityViewModels()
             viewModel = viewModelTemp
@@ -250,6 +247,7 @@ class AddRecipeFragment3Test {
     }
 
     @Test
+    @Ignore
     fun testLoadPersistedCookingStep() {
         var rId: Long
         val cookingStep = TestDataProvider.getRandomCookingStep().apply { text = "step text" }
@@ -300,6 +298,7 @@ class AddRecipeFragment3Test {
      * Test that checking ingredients in dialog list works as expected even if the ingredients have the same values
      */
     @Test
+    @Ignore
     fun testAssignIngredients() {
         viewModel.addIngredient("name".toEditable(), (2.0).toEditable(), IngredientUnit.CAN)
         viewModel.addIngredient("name".toEditable(), (2.0).toEditable(), IngredientUnit.CAN)

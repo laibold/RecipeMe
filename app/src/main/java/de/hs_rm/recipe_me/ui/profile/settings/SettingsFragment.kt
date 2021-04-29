@@ -92,7 +92,7 @@ class SettingsFragment : Fragment() {
                     val documentFile = uri?.let { DocumentFile.fromTreeUri(requireContext(), it) }
                     documentFile?.let {
                         try {
-                            viewModel.exportBackup(documentFile, requireContext())
+                            viewModel.exportBackup(documentFile)
                         } catch (e: IOException) {
                             val error = getString(R.string.error_exporting_backup)
                             Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
@@ -115,7 +115,7 @@ class SettingsFragment : Fragment() {
                         val selectedFileIn = uri?.let {
                             requireContext().contentResolver.openInputStream(it)
                         }
-                        viewModel.importBackup(selectedFileIn, requireContext())
+                        viewModel.importBackup(selectedFileIn)
                     } catch (e: InvalidBackupFileException) {
                         val error = getString(R.string.invalid_file)
                         Toast.makeText(context, error, Toast.LENGTH_SHORT).show()

@@ -140,7 +140,7 @@ class SettingsViewModelTest {
     fun exportsBackup() {
         val viewModel = SettingsViewModel(mock(), mock())
 
-        viewModel.exportBackup(mock(), mock())
+        viewModel.exportBackup(mock())
         // backupService interaction can't be verified here, maybe because of CoroutineScope?
     }
 
@@ -152,9 +152,9 @@ class SettingsViewModelTest {
         val backupService: BackupService = mock()
         val viewModel = SettingsViewModel(backupService, mock())
 
-        viewModel.exportBackup(null, mock())
+        viewModel.exportBackup(null)
 
-        verify(backupService, never()).exportBackup(any(), any())
+        verify(backupService, never()).exportBackup(any())
     }
 
     /**
@@ -163,13 +163,13 @@ class SettingsViewModelTest {
     @Test
     fun importsBackup() {
         val backupService: BackupService = mock {
-            on { importBackup(any(), any()) } doAnswer {}
+            on { importBackup(any()) } doAnswer {}
         }
         val viewModel = SettingsViewModel(backupService, mock())
 
-        viewModel.importBackup(mock(), mock())
+        viewModel.importBackup(mock())
 
-        verify(backupService, times(1)).importBackup(any(), any())
+        verify(backupService, times(1)).importBackup(any())
     }
 
     /**
@@ -180,9 +180,9 @@ class SettingsViewModelTest {
         val backupService: BackupService = mock()
         val viewModel = SettingsViewModel(backupService, mock())
 
-        viewModel.importBackup(null, mock())
+        viewModel.importBackup(null)
 
-        verify(backupService, never()).importBackup(any(), any())
+        verify(backupService, never()).importBackup(any())
     }
 
 }

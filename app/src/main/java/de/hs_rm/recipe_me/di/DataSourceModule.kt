@@ -11,6 +11,7 @@ import de.hs_rm.recipe_me.persistence.dao.RecipeDao
 import de.hs_rm.recipe_me.persistence.dao.RecipeOfTheDayDao
 import de.hs_rm.recipe_me.persistence.dao.ShoppingListDao
 import de.hs_rm.recipe_me.persistence.dao.UserDao
+import de.hs_rm.recipe_me.service.ImageHandler
 import javax.inject.Singleton
 
 /**
@@ -44,6 +45,12 @@ object DataSourceModule {
     @Provides
     fun provideUserDao(appDatabase: AppDatabase): UserDao {
         return appDatabase.userDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideImageHandler(@ApplicationContext context: Context): ImageHandler {
+        return ImageHandler(context)
     }
 
 }

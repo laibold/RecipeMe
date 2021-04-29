@@ -15,6 +15,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Named
@@ -38,6 +40,8 @@ class BackupServiceTest {
     @Inject
     lateinit var backupService: BackupService
 
+    lateinit var imageHandler: ImageHandler
+
     lateinit var context: Context
 
     @Before
@@ -46,8 +50,9 @@ class BackupServiceTest {
         assertThat(db.openHelper.databaseName).isEqualTo(AppDatabase.Environment.TEST.dbName)
         db.clearAllTables()
         context = InstrumentationRegistry.getInstrumentation().targetContext
+        imageHandler = mock(ImageHandler::class.java)
 
-        backupService = BackupService(context, db, preferenceService)
+        backupService = BackupService(context, db, preferenceService, imageHandler)
     }
 
     @After
@@ -69,8 +74,9 @@ class BackupServiceTest {
         val tempExportDir = TempDir()
         val tempImageDir = TempDir()
         val uri = tempExportDir.toDocumentFile()
+        `when`(imageHandler.getImageDirPath()).thenReturn(tempImageDir.getFile().toString())
 
-        val filename = backupService.exportBackup(uri, tempImageDir.getFile().toString())
+        val filename = backupService.exportBackup(uri)
 
         val files = tempExportDir.listFiles()
         assertThat(files).hasLength(1)
@@ -90,6 +96,7 @@ class BackupServiceTest {
         val recipesDir = File(tempImageDir.getFile(), "recipes").apply { mkdir() }
         val recipeDir = File(recipesDir, "1").apply { mkdir() }
         File(recipeDir, "recipe_image.jpg").apply { createNewFile() }
+        `when`(imageHandler.getImageDirPath()).thenReturn(tempImageDir.getFile().toString())
 
         // preferences
         preferenceService.clear()
@@ -100,7 +107,7 @@ class BackupServiceTest {
         val exportUri = tempExportDir.toDocumentFile()
 
         // export
-        val filename = backupService.exportBackup(exportUri, tempImageDir.getFile().toString())
+        val filename = backupService.exportBackup(exportUri)
 
         val exportedFile = filename?.let { File(tempExportDir.getFile(), filename) }
         assertThat(exportedFile).isNotNull()
@@ -115,7 +122,8 @@ class BackupServiceTest {
         preferenceService.clear()
 
         val tempImportImageDir = TempDir()
-        backupService.importBackup(exportedFile!!.inputStream(), tempImportImageDir.toString())
+        `when`(imageHandler.getImageDirPath()).thenReturn(tempImportImageDir.getFile().toString())
+        backupService.importBackup(exportedFile!!.inputStream())
 
         // check db
         runBlocking { assertThat(db.recipeDao().getRecipeCount()).isEqualTo(1) }

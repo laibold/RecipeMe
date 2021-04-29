@@ -15,15 +15,15 @@ import java.util.zip.ZipFile
 import java.util.zip.ZipOutputStream
 import javax.inject.Inject
 import kotlin.collections.HashMap
-import kotlin.jvm.Throws
 
 /**
  * Service for backup and restoring database, images and preferences
  */
 class BackupService @Inject constructor(
-    val context: Context,
-    val db: AppDatabase,
-    val preferenceService: PreferenceService,
+    private val context: Context,
+    private val db: AppDatabase,
+    private val preferenceService: PreferenceService,
+    private val imageHandler: ImageHandler
 ) {
 
     val dbFiles = mutableListOf<File>()
@@ -51,7 +51,7 @@ class BackupService @Inject constructor(
      * @return Name of the zip file or null on failure
      */
     @Throws(IOException::class)
-    fun exportBackup(documentFile: DocumentFile, imageDirPath: String): String? {
+    fun exportBackup(documentFile: DocumentFile): String? {
         /*
          Structure in recipe-me-backup-202104021408.zip
          database/database(*)
@@ -71,7 +71,7 @@ class BackupService @Inject constructor(
             val out = context.contentResolver.openOutputStream(zipFile.uri)
             ZipOutputStream(BufferedOutputStream(out)).use { zipOut ->
                 exportDatabase(zipOut)
-                exportImages(zipOut, imageDirPath)
+                exportImages(zipOut, imageHandler.getImageDirPath())
                 exportPreferences(zipOut)
             }
         } else {
@@ -154,7 +154,7 @@ class BackupService @Inject constructor(
      * @throws InvalidBackupFileException if File at uri is not valid
      */
     @Throws(IOException::class)
-    fun importBackup(inputStream: InputStream?, imageDirPath: String) {
+    fun importBackup(inputStream: InputStream?) {
         // copy selected file to app's cache dir to handle it as ZipFile
         // https://stackoverflow.com/questions/58425517/how-to-get-file-path-from-the-content-uri-for-zip-file
         val tempFile = File(context.cacheDir, "backup_import_temp.zip")
@@ -176,7 +176,7 @@ class BackupService @Inject constructor(
                 importDatabase(zipFile)
             }
             importPreferences(preferenceEntry, zipFile)
-            importImages(imageEntries, zipFile, imageDirPath)
+            importImages(imageEntries, zipFile, imageHandler.getImageDirPath())
         } else {
             throw InvalidBackupFileException()
         }
