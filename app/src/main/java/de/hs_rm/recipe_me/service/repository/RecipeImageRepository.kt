@@ -21,6 +21,14 @@ class RecipeImageRepository @Inject constructor(
 ) {
 
     /**
+     * Returns image as Bitmap from given Uri
+     * Must be called from Dispatchers.IO coroutine scope
+     */
+    fun getImageFromUri(uri: Uri, width: Int, height: Int): Bitmap {
+        return ImageHandler.getImageFromUri(context, uri, width, height)
+    }
+
+    /**
      * Saves recipe image to file system
      */
     fun saveRecipeImage(image: Bitmap, recipeId: Long) {
@@ -42,14 +50,6 @@ class RecipeImageRepository @Inject constructor(
      */
     fun getRecipeImageFile(recipeId: Long): File? {
         return ImageHandler.getRecipeImageFile(context, recipeId)
-    }
-
-    /**
-     * Returns image as Bitmap from given Uri
-     * Must be called from Dispatchers.IO coroutine scope
-     */
-    fun getImageFromUri(uri: Uri, width: Int, height: Int): Bitmap {
-        return ImageHandler.getImageFromUri(context, uri, width, height)
     }
 
     /**

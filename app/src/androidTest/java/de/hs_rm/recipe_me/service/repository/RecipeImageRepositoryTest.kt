@@ -4,26 +4,24 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.platform.app.InstrumentationRegistry
-import com.google.common.truth.Truth.assertThat
-import dagger.hilt.android.testing.HiltAndroidTest
+import com.google.common.truth.Truth
 import de.hs_rm.recipe_me.TempDir
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.io.File
 
-@HiltAndroidTest
-class UserImageRepositoryTest {
+class RecipeImageRepositoryTest {
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var repository: UserImageRepository
+    private lateinit var repository: RecipeImageRepository
 
     @Before
     fun beforeEach() {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        repository = UserImageRepository(appContext)
+        repository = RecipeImageRepository(appContext)
     }
 
     @Test
@@ -33,16 +31,22 @@ class UserImageRepositoryTest {
 
         val imgFromRepo = repository.getImageFromUri(uri, 1, 2)
 
-        assertThat(imgFromRepo).isNotNull()
+        Truth.assertThat(imgFromRepo).isNotNull()
     }
 
-    // TODO
-    fun canGetProfileImage() {
+    fun canSaveRecipeImage() {
 
     }
 
-    // TODO
-    fun canSaveProfileImage() {
+    fun canGetRecipeImage() {
+
+    }
+
+    fun canGetRecipeImageFile() {
+
+    }
+
+    fun canDeleteRecipeImage() {
 
     }
 
