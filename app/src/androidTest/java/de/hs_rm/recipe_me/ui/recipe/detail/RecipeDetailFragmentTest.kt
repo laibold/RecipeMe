@@ -92,6 +92,9 @@ class RecipeDetailFragmentTest {
         assertThat(viewModel!!.servings.get()).isEqualTo(5)
     }
 
+    /**
+     * Test if recipe name, servings, ingredients and cooking steps are shown correctly
+     */
     @Test
     fun canShowRecipe() {
         PreferenceService(context).setShowCookingStepPreview(true)
@@ -122,11 +125,14 @@ class RecipeDetailFragmentTest {
         val formattedText = Formatter.formatIngredient(context, ingredients[0])
         onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(0)
             .onChildView(withId(R.id.ingredient_text_view)).check(matches(withText(formattedText)))
-        // steps
+        // cooking steps
         val text = "Step 1\n\nStep 2\n\nStep 3"
         onView(withId(R.id.cooking_steps_text)).check(matches(withText(text)))
     }
 
+    /**
+     * Test if cooking step preview is hidden depending on preference
+     */
     @Test
     fun hidesCookingStepPreviewDependingOnPreference() {
         PreferenceService(context).setShowCookingStepPreview(false)
@@ -141,6 +147,9 @@ class RecipeDetailFragmentTest {
         onView(withId(R.id.cooking_steps_text)).check(matches(withText("")))
     }
 
+    /**
+     * Test if button for navigation to CookingStepFragment is hidden when recipe doesn't contain cooking steps
+     */
     @Test
     fun hidesButtonWhenNoStepsPresent() {
         val recipe = Recipe(RecipeCategory.MAIN_DISHES)
@@ -153,6 +162,9 @@ class RecipeDetailFragmentTest {
             .check(matches(withEffectiveVisibility(Visibility.GONE)))
     }
 
+    /**
+     * Test if servings are changed correctly via buttons
+     */
     @Test
     fun canChangeServings() {
         val recipe = Recipe("Recipe Name", 2, RecipeCategory.MAIN_DISHES)
@@ -169,42 +181,51 @@ class RecipeDetailFragmentTest {
             viewModel = tempViewModel
         }
 
+        // define matchers
+        val servingsSize = onView(withId(R.id.servings_size))
+        val servingsText = onView(withId(R.id.servings_text))
+        val minusButton = onView(withId(R.id.minus_button))
+        val plusButton = onView(withId(R.id.plus_button))
+        val ingredientText = onData(anything()).inAdapterView(withId(R.id.ingredients_list_view))
+            .atPosition(0)
+            .onChildView(withId(R.id.ingredient_text_view))
+
         // servings
-        onView(withId(R.id.servings_size)).check(matches(withText("2")))
-        onView(withId(R.id.servings_text)).check(matches(withText(context.getString(R.string.servings))))
+        servingsSize.check(matches(withText("2")))
+        servingsText.check(matches(withText(context.getString(R.string.servings))))
 
         //decrease to 1 serving
-        onView(withId(R.id.minus_button)).perform(click())
-        onView(withId(R.id.servings_size)).check(matches(withText("1")))
-        onView(withId(R.id.servings_text)).check(matches(withText(context.getString(R.string.serving))))
+        minusButton.perform(click())
+        servingsSize.check(matches(withText("1")))
+        servingsText.check(matches(withText(context.getString(R.string.serving))))
 
         var formattedText =
             Formatter.formatIngredient(context, ingredients[0], viewModel!!.getServingsMultiplier())
-        onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(0)
-            .onChildView(withId(R.id.ingredient_text_view)).check(matches(withText(formattedText)))
+        ingredientText.check(matches(withText(formattedText)))
 
         // try to decrease to 0 - size should not change
-        onView(withId(R.id.minus_button)).perform(click())
-        onView(withId(R.id.servings_size)).check(matches(withText("1")))
-        onView(withId(R.id.servings_text)).check(matches(withText(context.getString(R.string.serving))))
+        minusButton.perform(click())
+        servingsSize.check(matches(withText("1")))
+        servingsText.check(matches(withText(context.getString(R.string.serving))))
 
         formattedText =
             Formatter.formatIngredient(context, ingredients[0], viewModel!!.getServingsMultiplier())
-        onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(0)
-            .onChildView(withId(R.id.ingredient_text_view)).check(matches(withText(formattedText)))
+        ingredientText.check(matches(withText(formattedText)))
 
         //increase to 3 servings
-        onView(withId(R.id.plus_button)).perform(click())
-        onView(withId(R.id.plus_button)).perform(click())
-        onView(withId(R.id.servings_size)).check(matches(withText("3")))
-        onView(withId(R.id.servings_text)).check(matches(withText(context.getString(R.string.servings))))
+        plusButton.perform(click())
+        plusButton.perform(click())
+        servingsSize.check(matches(withText("3")))
+        servingsText.check(matches(withText(context.getString(R.string.servings))))
 
         formattedText =
             Formatter.formatIngredient(context, ingredients[0], viewModel!!.getServingsMultiplier())
-        onData(anything()).inAdapterView(withId(R.id.ingredients_list_view)).atPosition(0)
-            .onChildView(withId(R.id.ingredient_text_view)).check(matches(withText(formattedText)))
+        ingredientText.check(matches(withText(formattedText)))
     }
 
+    /**
+     * Test if visibility and checked state for adding ingredients to shopping list behave as expected
+     */
     @Test
     fun canSwitchAddIngredientsToShoppingListStates() {
         val recipe = Recipe("Recipe Name", 2, RecipeCategory.MAIN_DISHES)
@@ -246,6 +267,9 @@ class RecipeDetailFragmentTest {
         checkbox.check(matches(withEffectiveVisibility(Visibility.GONE)))
     }
 
+    /**
+     * Test if ingredients can be added to shopping list
+     */
     @Test
     fun canAddIngredientsToShoppingList() {
         val recipe = Recipe("Recipe Name", 2, RecipeCategory.MAIN_DISHES)
@@ -309,6 +333,9 @@ class RecipeDetailFragmentTest {
         checkbox2.check(matches(isNotChecked()))
     }
 
+    /**
+     * Test navigation to CookingStepFragment
+     */
     @Test
     fun canNavigateToCookingStepFragment() {
         val recipe = Recipe(RecipeCategory.MAIN_DISHES)
@@ -325,6 +352,9 @@ class RecipeDetailFragmentTest {
         verify(navController).navigate(RecipeDetailFragmentDirections.toCookingStepFragment())
     }
 
+    /**
+     * Test navigation to AddRecipeNavGraph with parameters
+     */
     @Test
     fun canNavigateToEditRecipe() {
         val recipe = Recipe(RecipeCategory.MAIN_DISHES)
@@ -348,6 +378,9 @@ class RecipeDetailFragmentTest {
 
     /////
 
+    /**
+     * Add recipe and optionally ingredients and cooking steps to RecipeDao
+     */
     private fun insertTestData(
         recipe: Recipe,
         ingredients: List<Ingredient> = listOf(),
