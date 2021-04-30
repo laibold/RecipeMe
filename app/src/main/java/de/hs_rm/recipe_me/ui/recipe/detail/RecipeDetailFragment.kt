@@ -165,7 +165,7 @@ class RecipeDetailFragment : Fragment() {
         })
 
         binding.toCookingStepsButton.setOnClickListener {
-            val direction = RecipeDetailFragmentDirections.toCookingStepFragment()
+            val direction = RecipeDetailFragmentDirections.toCookingStepFragment(recipeId)
             findNavController().navigate(direction)
         }
 

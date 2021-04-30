@@ -7,14 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.Observable
+import androidx.databinding.ObservableInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.CookingStepFragmentBinding
 import de.hs_rm.recipe_me.declaration.ui.fragments.CookingStepCallbackAdapter
 import de.hs_rm.recipe_me.model.recipe.CookingStep
+import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
 import de.hs_rm.recipe_me.service.PreferenceService
 import javax.inject.Inject
 
@@ -24,6 +28,7 @@ class CookingStepFragment : Fragment(), CookingStepCallbackAdapter {
     @Inject
     lateinit var preferenceService: PreferenceService
 
+    private val args: RecipeDetailFragmentArgs by navArgs()
     private val viewModel: RecipeDetailViewModel by activityViewModels()
     private lateinit var binding: CookingStepFragmentBinding
 
@@ -39,9 +44,23 @@ class CookingStepFragment : Fragment(), CookingStepCallbackAdapter {
             false
         )
 
-        binding.header.headlineText = viewModel.recipe.value!!.recipe.name
+        if (viewModel.recipe.value == null) {
+            viewModel.loadRecipe(args.recipeId)
+        }
 
-        setAdapter()
+        viewModel.recipe.observe(viewLifecycleOwner, { value ->
+            value?.let { recipeWithRelations ->
+                binding.header.headlineText = recipeWithRelations.recipe.name
+                setAdapter(recipeWithRelations)
+            }
+        })
+
+        viewModel.servings.addOnPropertyChangedCallback(object :
+            Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(observable: Observable, i: Int) {
+                viewModel.recipe.value?.let { setAdapter(it) }
+            }
+        })
 
         return binding.root
     }
@@ -49,11 +68,11 @@ class CookingStepFragment : Fragment(), CookingStepCallbackAdapter {
     /**
      * Set [CookingStepListAdapter] to cookingStepListView
      */
-    private fun setAdapter() {
+    private fun setAdapter(recipeWithRelations: RecipeWithRelations) {
         val adapter = CookingStepListAdapter(
             requireContext(),
             R.layout.cooking_step_listitem,
-            viewModel.recipe.value!!.cookingStepsWithIngredients,
+            recipeWithRelations.cookingStepsWithIngredients,
             viewModel.getServingsMultiplier(),
             this
         )

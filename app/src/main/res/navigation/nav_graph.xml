@@ -177,7 +177,13 @@
         android:id="@+id/cooking_step_fragment"
         android:name="de.hs_rm.recipe_me.ui.recipe.detail.CookingStepFragment"
         android:label="Cooking Step Fragment"
-        tools:layout="@layout/cooking_step_fragment" />
+        tools:layout="@layout/cooking_step_fragment" >
+
+        <argument
+            android:name="recipeId"
+            app:argType="long" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/site_notice_fragment"

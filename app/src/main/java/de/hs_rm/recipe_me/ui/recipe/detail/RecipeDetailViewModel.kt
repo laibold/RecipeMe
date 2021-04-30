@@ -3,6 +3,7 @@ package de.hs_rm.recipe_me.ui.recipe.detail
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,10 +22,10 @@ import javax.inject.Inject
 class RecipeDetailViewModel @Inject constructor(
     private val recipeRepository: RecipeRepository,
     private val imageRepository: RecipeImageRepository,
-    internal var shoppingListRepository: ShoppingListRepository,
+    internal var shoppingListRepository: ShoppingListRepository
 ) : ViewModel() {
 
-    lateinit var recipe: LiveData<RecipeWithRelations>
+    var recipe: LiveData<RecipeWithRelations> = MutableLiveData()
     var servings = ObservableInt(NOT_INITIALIZED)
     var ingredientSelectionActive = ObservableBoolean(false)
 

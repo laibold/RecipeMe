@@ -349,7 +349,7 @@ class RecipeDetailFragmentTest {
         }
 
         onView(withId(R.id.to_cooking_steps_button)).perform(click())
-        verify(navController).navigate(RecipeDetailFragmentDirections.toCookingStepFragment())
+        verify(navController).navigate(RecipeDetailFragmentDirections.toCookingStepFragment(recipeId))
     }
 
     /**
