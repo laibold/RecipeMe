@@ -15,8 +15,6 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.request.RequestOptions
@@ -102,7 +100,7 @@ class RecipeDetailFragment : Fragment() {
                         recipeId = viewModel.recipe.value?.recipe!!.id,
                         clearValues = true
                     )
-                    view.findNavController().navigate(direction)
+                    findNavController().navigate(direction)
                 }
                 MotionEvent.ACTION_UP -> {
                     view.performClick()
@@ -250,10 +248,10 @@ class RecipeDetailFragment : Fragment() {
         val showPreview = preferenceService.getShowCookingStepPreview(true)
 
         if (showPreview) {
-            var allCookingSteps = ""
-            for (cookingStep in recipeWithRelations.cookingStepsWithIngredients)
-                allCookingSteps += cookingStep.cookingStep.text + "\n\n"
-            binding.recipeInfo.steps.text = allCookingSteps
+            val cookingStepsTexts =
+                recipeWithRelations.cookingStepsWithIngredients.map { it.cookingStep.text }
+            val allCookingSteps = cookingStepsTexts.joinToString("\n\n")
+            binding.recipeInfo.cookingStepsText.text = allCookingSteps
         } else {
             binding.recipeInfo.cookingStepsHeadline.visibility = View.GONE
         }

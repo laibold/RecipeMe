@@ -21,7 +21,7 @@ import javax.inject.Inject
 class RecipeDetailViewModel @Inject constructor(
     private val recipeRepository: RecipeRepository,
     private val imageRepository: RecipeImageRepository,
-    private val shoppingListRepository: ShoppingListRepository,
+    internal var shoppingListRepository: ShoppingListRepository,
 ) : ViewModel() {
 
     lateinit var recipe: LiveData<RecipeWithRelations>
