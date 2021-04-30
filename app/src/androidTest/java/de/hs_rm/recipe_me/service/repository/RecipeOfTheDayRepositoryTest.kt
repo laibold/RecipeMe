@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
-import dagger.hilt.android.testing.HiltAndroidRule
 import de.hs_rm.recipe_me.model.RecipeOfTheDay
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.persistence.AppDatabase
@@ -22,11 +21,11 @@ class RecipeOfTheDayRepositoryTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    lateinit var rotdRepository: RecipeOfTheDayRepository
-    lateinit var recipeRepository: RecipeRepository
+    private lateinit var rotdRepository: RecipeOfTheDayRepository
+    private lateinit var recipeRepository: RecipeRepository
 
-    lateinit var rotdDao: RecipeOfTheDayDao
-    lateinit var recipeDao: RecipeDao
+    private lateinit var rotdDao: RecipeOfTheDayDao
+    private lateinit var recipeDao: RecipeDao
 
     /**
      * Build inMemory database and create repositories with DAOs from database

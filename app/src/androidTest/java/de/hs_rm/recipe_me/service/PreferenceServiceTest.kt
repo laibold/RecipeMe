@@ -17,7 +17,7 @@ import org.junit.runner.RunWith
 class PreferenceServiceTest {
 
     private lateinit var context: Context
-    lateinit var preferenceService: PreferenceService
+    private lateinit var preferenceService: PreferenceService
     private lateinit var contextPreferences: SharedPreferences
 
     @Before

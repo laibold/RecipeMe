@@ -26,7 +26,7 @@ class RecipeCategoryViewModelTest {
     @get:Rule
     val coroutineRule = MainCoroutineRule()
 
-    lateinit var recipeRepository: RecipeRepository
+    private lateinit var recipeRepository: RecipeRepository
 
     private lateinit var imageRepository: RecipeImageRepository
 

@@ -16,7 +16,6 @@ import android.widget.ArrayAdapter
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddCookingStepDialogBinding
 import de.hs_rm.recipe_me.declaration.ui.focusAndOpenKeyboard

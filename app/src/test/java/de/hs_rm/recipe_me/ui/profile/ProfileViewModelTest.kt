@@ -27,9 +27,9 @@ class ProfileViewModelTest {
     @get:Rule
     val coroutineRule = MainCoroutineRule()
 
-    lateinit var recipeRepository: RecipeRepository
-    lateinit var userRepository: UserRepository
-    lateinit var imageRepository: UserImageRepository
+    private lateinit var recipeRepository: RecipeRepository
+    private lateinit var userRepository: UserRepository
+    private lateinit var imageRepository: UserImageRepository
 
     lateinit var viewModel: ProfileViewModel
 

@@ -1,4 +1,4 @@
-package de.hs_rm.recipe_me.ui.profile.settings;
+package de.hs_rm.recipe_me.ui.profile.settings
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule

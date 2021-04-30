@@ -34,12 +34,12 @@ class BackupServiceTest {
     @Named(Constants.TEST_NAME)
     lateinit var db: AppDatabase
 
-    lateinit var preferenceService: PreferenceService
-    lateinit var backupService: BackupService
+    private lateinit var preferenceService: PreferenceService
+    private lateinit var backupService: BackupService
 
-    lateinit var imageHandler: ImageHandler
+    private lateinit var imageHandler: ImageHandler
 
-    lateinit var appContext: Context
+    private lateinit var appContext: Context
 
     @Before
     fun init() {

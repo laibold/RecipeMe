@@ -30,8 +30,8 @@ class AddRecipeViewModelTest {
 
     lateinit var db: AppDatabase
 
-    lateinit var recipeRepository: RecipeRepository
-    lateinit var recipeImageRepository: RecipeImageRepository
+    private lateinit var recipeRepository: RecipeRepository
+    private lateinit var recipeImageRepository: RecipeImageRepository
 
     private lateinit var viewModel: AddRecipeViewModel
 

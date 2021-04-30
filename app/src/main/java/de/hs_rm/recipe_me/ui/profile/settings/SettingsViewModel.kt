@@ -1,13 +1,11 @@
 package de.hs_rm.recipe_me.ui.profile.settings
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.service.BackupService
-import de.hs_rm.recipe_me.service.ImageHandler
 import de.hs_rm.recipe_me.service.PreferenceService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +13,6 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 import java.io.InputStream
 import javax.inject.Inject
-import kotlin.jvm.Throws
 
 /**
  * ViewModel for [SettingsFragment]

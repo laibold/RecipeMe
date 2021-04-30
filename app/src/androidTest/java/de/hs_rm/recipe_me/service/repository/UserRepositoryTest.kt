@@ -18,7 +18,7 @@ class UserRepositoryTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    lateinit var dao: UserDao
+    private lateinit var dao: UserDao
     lateinit var repository: UserRepository
 
     @Before

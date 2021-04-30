@@ -53,7 +53,7 @@ class RecipeDetailFragmentTest {
     @Named(Constants.TEST_NAME)
     lateinit var db: AppDatabase
 
-    lateinit var recipeDao: RecipeDao
+    private lateinit var recipeDao: RecipeDao
 
     private lateinit var context: Context
 
