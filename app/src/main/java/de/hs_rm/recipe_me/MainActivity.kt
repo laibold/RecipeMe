@@ -60,6 +60,8 @@ class MainActivity : AppCompatActivity() {
      * This function can be used in layouts to let a view block all clicks.
      * Just add android:onClick="preventClicks" to the xml attributes
      */
-    fun preventClicks(view: View) {}
+    @Suppress("UNUSED_PARAMETER")
+    fun preventClicks(view: View) {
+    }
 
 }

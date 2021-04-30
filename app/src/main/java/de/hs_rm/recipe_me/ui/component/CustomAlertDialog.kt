@@ -111,6 +111,7 @@ class CustomAlertDialog private constructor(
         /**
          * Icon of the dialog
          */
+        @Suppress("unused")
         fun icon(id: Int) = apply { this.icon = id }
 
         /**

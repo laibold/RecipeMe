@@ -31,6 +31,7 @@ class ProfileViewModel @Inject constructor(
     lateinit var recipeTotal: LiveData<Int>
     lateinit var user: LiveData<User?>
 
+    @Suppress("PropertyName")
     internal var _editProfileImage = MutableLiveData<Bitmap?>()
     val editProfileImage: LiveData<Bitmap?>
         get() = _editProfileImage

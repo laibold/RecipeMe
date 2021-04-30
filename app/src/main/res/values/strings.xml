@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">RecipeMe</string>
     <string name="shopping_list">Einkaufsliste</string>
     <string name="profile">Profil</string>
@@ -27,8 +27,8 @@
     <string name="slice_sg">Scheibe</string>
     <string name="slice_pl">Scheiben</string>
     <string name="dash_sg">Spritzer</string>
-    <string name="dash_pl">Spritzer</string>
-    <string name="stick_sg">Stange</string>
+    <string name="dash_pl" tools:ignore="Typos">Spritzer</string>
+    <string name="stick_sg" tools:ignore="Typos">Stange</string>
     <string name="stick_pl">Stangen</string>
     <string name="clove_sg">Zehe</string>
     <string name="clove_pl">Zehen</string>
