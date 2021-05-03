@@ -5,9 +5,12 @@ import android.content.SharedPreferences
 import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.documentfile.provider.DocumentFile
+import androidx.fragment.app.viewModels
 import androidx.preference.PreferenceManager
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
@@ -15,13 +18,20 @@ import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import de.hs_rm.recipe_me.R
+import de.hs_rm.recipe_me.declaration.anyNotNull
 import de.hs_rm.recipe_me.declaration.launchFragmentInHiltContainer
 import de.hs_rm.recipe_me.di.Constants
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.service.PreferenceService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito.*
+import test_shared.TempDir
+import java.io.File
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -38,8 +48,9 @@ class SettingsFragmentTest {
     @Named(Constants.TEST_NAME)
     lateinit var db: AppDatabase
 
-    lateinit var context: Context
+    private lateinit var context: Context
     private lateinit var prefs: SharedPreferences
+    private lateinit var viewModel: SettingsViewModel
 
     private lateinit var themeKey: String
     private lateinit var timerKey: String
@@ -63,6 +74,8 @@ class SettingsFragmentTest {
 
         launchFragmentInHiltContainer<SettingsFragment> {
             themeRadioGroup = requireView().findViewById(R.id.radio_group)
+            val tempViewModel: SettingsViewModel by viewModels()
+            viewModel = tempViewModel
         }
     }
 
@@ -70,7 +83,7 @@ class SettingsFragmentTest {
      * Test that on selecting radio button the night/day mode changes
      */
     @Test
-    fun testThemeSettings() {
+    fun canSetTheme() {
         onView(withId(R.id.radio_light_mode)).perform(click())
         // check if pref was set successfully
         assertThat(getCurrentThemePref()).isEqualTo(AppCompatDelegate.MODE_NIGHT_NO)
@@ -94,7 +107,7 @@ class SettingsFragmentTest {
      * and that its settings will still be active
      */
     @Test
-    fun testPersistingThemeSetting() {
+    fun canPersistThemePreference() {
         // by default this one is not checked
         onView(withId(R.id.radio_dark_mode)).perform(click())
 
@@ -110,7 +123,7 @@ class SettingsFragmentTest {
      * Test that switch changes preference of timer starting in background
      */
     @Test
-    fun testTimerSetting() {
+    fun canSetTimerPreference() {
         // by default switch should not be checked
         onView(withId(R.id.timer_switch)).check(matches(isNotChecked()))
         assertThat(getCurrentTimerPref(false)).isEqualTo(false)
@@ -128,7 +141,7 @@ class SettingsFragmentTest {
      * Test that state of timer switch is set based on preference
      */
     @Test
-    fun testPersistingTimerSetting() {
+    fun canPersistTimerPreference() {
         onView(withId(R.id.timer_switch)).check(matches(isNotChecked()))
         onView(withId(R.id.timer_switch)).perform(click())
 
@@ -142,7 +155,7 @@ class SettingsFragmentTest {
      * Test that switch changes preference of cooking step preview
      */
     @Test
-    fun testCookingStepPreviewSetting() {
+    fun canSetCookingStepPreviewSetting() {
         // by default switch should be checked
         onView(withId(R.id.cooking_step_preview_switch)).check(matches(isChecked()))
         assertThat(getCurrentCookingStepPreviewPref(true)).isEqualTo(true)
@@ -157,10 +170,10 @@ class SettingsFragmentTest {
     }
 
     /**
-     * Test stat state of cooking step preview switch is set based on preference
+     * Test that state of cooking step preview switch is set based on preference
      */
     @Test
-    fun testPersistingCookingStepPreviewSetting() {
+    fun canPersistCookingStepPreviewPreference() {
         onView(withId(R.id.cooking_step_preview_switch)).check(matches(isChecked()))
         onView(withId(R.id.cooking_step_preview_switch)).perform(click())
 
@@ -168,6 +181,54 @@ class SettingsFragmentTest {
         launchFragmentInHiltContainer<SettingsFragment>()
         onView(withId(R.id.cooking_step_preview_switch)).check(matches(isNotChecked()))
         assertThat(getCurrentCookingStepPreviewPref(true)).isEqualTo(false)
+    }
+
+    /**
+     * Test that export dialog stays open when no directory or an invalid directory is selected
+     * and that exportBackup() in service is not getting called
+     */
+    @Test
+    fun doesNotExportBackupOnInvalidInputs() {
+        viewModel.backupService = spy(viewModel.backupService)
+
+        onView(withId(R.id.save_data_text)).perform(click())
+        onView(withId(R.id.ingredient_dialog_layout)).check(matches(isDisplayed()))
+
+        // dialog still open when no directory selected
+        onView(withId(R.id.save_button)).perform(click())
+        onView(withId(R.id.ingredient_dialog_layout)).check(matches(isDisplayed()))
+
+        // dialog still open when invalid directory is selected
+        GlobalScope.launch(Dispatchers.Main) {
+            viewModel.selectedExportDir.value = DocumentFile.fromFile(File("invalid/dir"))
+        }
+        onView(withId(R.id.save_button)).perform(click())
+        onView(withId(R.id.ingredient_dialog_layout)).check(matches(isDisplayed()))
+
+        verify(viewModel.backupService, never()).exportBackup(anyNotNull(DocumentFile::class.java))
+    }
+
+    /**
+     * Test that selected export directory is shown in dialog and that saving export file works
+     */
+    @Test
+    fun canExportBackup() {
+        val tempDir = TempDir()
+        viewModel.backupService = spy(viewModel.backupService)
+
+        onView(withId(R.id.save_data_text)).perform(click())
+        onView(withId(R.id.ingredient_dialog_layout)).check(matches(isDisplayed()))
+
+        // dialog still open when invalid directory is selected
+        GlobalScope.launch(Dispatchers.Main) {
+            viewModel.selectedExportDir.value = DocumentFile.fromFile(tempDir.getFile())
+        }
+        onView(withId(R.id.export_dir_text)).check(matches(withText(".../" + tempDir.getFile().name)))
+        onView(withId(R.id.save_button)).perform(click())
+        onView(withId(R.id.ingredient_dialog_layout)).check(doesNotExist())
+
+        verify(viewModel.backupService, times(1)).exportBackup(anyNotNull(DocumentFile::class.java))
+        assertThat(tempDir.listFiles()!!.size).isEqualTo(1)
     }
 
     /////

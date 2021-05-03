@@ -3,6 +3,7 @@ package de.hs_rm.recipe_me.service
 import android.content.Context
 import androidx.documentfile.provider.DocumentFile
 import com.google.gson.Gson
+import de.hs_rm.recipe_me.OpenForTesting
 import de.hs_rm.recipe_me.model.exception.InvalidBackupFileException
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import kotlinx.coroutines.runBlocking
@@ -19,6 +20,7 @@ import kotlin.collections.HashMap
 /**
  * Service for backup and restoring database, images and preferences
  */
+@OpenForTesting
 class BackupService @Inject constructor(
     private val context: Context,
     private val db: AppDatabase,

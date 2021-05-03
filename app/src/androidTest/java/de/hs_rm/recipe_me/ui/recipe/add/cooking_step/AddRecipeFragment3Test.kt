@@ -269,9 +269,7 @@ class AddRecipeFragment3Test {
             db.recipeDao().insert(CookingStepIngredientCrossRef(stepId, ingredientId3))
         }
 
-        GlobalScope.launch(Dispatchers.Main) {
-            viewModel.initRecipe(rId)
-        }
+        GlobalScope.launch(Dispatchers.Main) { viewModel.initRecipe(rId) }
 
         onView(withId(R.id.cooking_step_list_view)).check(matches(withListSize(1)))
 

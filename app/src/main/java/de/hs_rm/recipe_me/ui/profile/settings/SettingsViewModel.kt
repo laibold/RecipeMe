@@ -20,7 +20,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val backupService: BackupService,
+    internal var backupService: BackupService,
     private val preferenceService: PreferenceService
 ) : ViewModel() {
 

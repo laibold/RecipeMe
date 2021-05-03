@@ -92,7 +92,7 @@ class AddRecipeViewModelTest {
         val id = viewModel.persistEntities().getOrAwaitValue()
 
         GlobalScope.launch(Dispatchers.Main) {
-            delay(1000)
+            delay(500)
             viewModel.initRecipe(id)
         }
 
