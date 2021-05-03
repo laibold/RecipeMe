@@ -58,8 +58,7 @@ class SettingsFragment : Fragment() {
         val importResultLauncher = registerImportLauncher()
 
         binding.saveDataText.setOnClickListener {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-            exportResultLauncher.launch(intent)
+            ExportBackupDialog(requireActivity(), viewModel, exportResultLauncher).show()
         }
 
         binding.restoreDataText.setOnClickListener {
@@ -89,15 +88,8 @@ class SettingsFragment : Fragment() {
         return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.data.also { uri ->
-                    val documentFile = uri?.let { DocumentFile.fromTreeUri(requireContext(), it) }
-                    documentFile?.let {
-                        try {
-                            viewModel.exportBackup(documentFile)
-                        } catch (e: IOException) {
-                            val error = getString(R.string.error_exporting_backup)
-                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                    viewModel.selectedExportDir.value =
+                        uri?.let { DocumentFile.fromTreeUri(requireContext(), it) }
                 }
             }
         }

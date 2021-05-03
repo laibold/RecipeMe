@@ -150,4 +150,8 @@
     <string name="invalid_file">Ungültige Datei</string>
     <string name="error_exporting_backup">Fehler beim Exportieren der Daten</string>
     <string name="error_importing_backup">Fehler beim Importieren der Daten</string>
+    <string name="choose_destination">Ziel auswählen</string>
+    <string name="select">Auswählen</string>
+    <string name="saved_data_successfully">Daten erfolgreich gesichert</string>
+    <string name="invalid_file_path">Ungültiger Dateipfad</string>
 </resources>

@@ -144,4 +144,8 @@
     <string name="invalid_file">Invalid file</string>
     <string name="error_exporting_backup">Error while exporting files</string>
     <string name="error_importing_backup">Error while importing files</string>
+    <string name="choose_destination">Choose destination</string>
+    <string name="select">Select</string>
+    <string name="saved_data_successfully">Saved data successfully</string>
+    <string name="invalid_file_path">Invalid file path</string>
 </resources>
