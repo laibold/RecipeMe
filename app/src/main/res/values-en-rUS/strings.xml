@@ -148,4 +148,8 @@
     <string name="select">Select</string>
     <string name="saved_data_successfully">Saved data successfully</string>
     <string name="invalid_file_path">Invalid file path</string>
+    <string name="imported_data_success">Imported data successfully</string>
+    <string name="select_file">Select file</string>
+    <string name="data_reset_warning">All data in the app will be reset before the import!</string>
+    <string name="reset_data_and_restore">Reset data and restore</string>
 </resources>

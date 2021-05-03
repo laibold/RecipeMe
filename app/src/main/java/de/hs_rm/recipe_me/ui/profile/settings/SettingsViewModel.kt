@@ -1,5 +1,6 @@
 package de.hs_rm.recipe_me.ui.profile.settings
 
+import android.net.Uri
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.MutableLiveData
@@ -25,6 +26,7 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
 
     var selectedExportDir = MutableLiveData<DocumentFile?>()
+    var selectedImportFile = MutableLiveData<Uri?>()
 
     // this is not really about the view but about ids that may be checked, so it belongs to the ViewModel
     private val radioModeMap = mapOf(

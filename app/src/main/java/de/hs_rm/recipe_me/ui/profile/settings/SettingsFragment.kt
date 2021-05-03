@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
@@ -17,8 +16,6 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.SettingsFragmentBinding
-import de.hs_rm.recipe_me.model.exception.InvalidBackupFileException
-import java.io.IOException
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
@@ -62,12 +59,8 @@ class SettingsFragment : Fragment() {
         }
 
         binding.restoreDataText.setOnClickListener {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                addCategory(Intent.CATEGORY_OPENABLE)
-                type = "application/zip"
-            }
-            importResultLauncher.launch(intent)
-            // TODO restart may be needed, because database is closed here
+            ImportBackupDialog(requireActivity(), viewModel, importResultLauncher, this)
+                .show()
         }
 
         return binding.root
@@ -76,7 +69,7 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setThemeButtonSelection(view)
+        setThemeButtonSelection()
         setTimerSwitch()
         setCookingStepSwitch()
     }
@@ -102,24 +95,7 @@ class SettingsFragment : Fragment() {
         return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.data.also { uri ->
-                    // TODO block UI here
-                    try {
-                        val selectedFileIn = uri?.let {
-                            requireContext().contentResolver.openInputStream(it)
-                        }
-                        viewModel.importBackup(selectedFileIn)
-                    } catch (e: InvalidBackupFileException) {
-                        val error = getString(R.string.invalid_file)
-                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-                    } catch (e: IOException) {
-                        val error = getString(R.string.error_importing_backup)
-                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-                    }
-
-                    // set selections depending on new values (listeners would create infinite loops here)
-                    setThemeButtonSelection(binding.root)
-                    setTimerSwitch()
-                    setCookingStepSwitch()
+                    viewModel.selectedImportFile.value = uri
                 }
             }
         }
@@ -128,10 +104,10 @@ class SettingsFragment : Fragment() {
     /**
      * Set theme selection depending on current preference
      */
-    private fun setThemeButtonSelection(view: View) {
+    internal fun setThemeButtonSelection() {
         val viewId = viewModel.getThemeButtonIdToBeChecked()
         if (viewId != null) {
-            val radioButton = view.findViewById<RadioButton>(viewId)
+            val radioButton = binding.root.findViewById<RadioButton>(viewId)
             radioButton.isChecked = true
         }
     }
@@ -139,7 +115,7 @@ class SettingsFragment : Fragment() {
     /**
      * Set timer switch depending on current preference
      */
-    private fun setTimerSwitch() {
+    internal fun setTimerSwitch() {
         // get theme from Preferences if existing, otherwise default theme
         val prefSelection = viewModel.getTimerInBackground()
         binding.timerSwitch.isChecked = prefSelection
@@ -148,7 +124,7 @@ class SettingsFragment : Fragment() {
     /**
      * Set cooking step preview switch depending on current preference
      */
-    private fun setCookingStepSwitch() {
+    internal fun setCookingStepSwitch() {
         // get theme from Preferences if existing, otherwise default theme
         val prefSelection = viewModel.getShowCookingStepPreview()
         binding.cookingStepPreviewSwitch.isChecked = prefSelection

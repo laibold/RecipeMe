@@ -154,4 +154,8 @@
     <string name="select">Auswählen</string>
     <string name="saved_data_successfully">Daten erfolgreich gesichert</string>
     <string name="invalid_file_path">Ungültiger Dateipfad</string>
+    <string name="imported_data_success">Daten erfolgreich importiert</string>
+    <string name="select_file">Datei auswählen</string>
+    <string name="data_reset_warning">Vor dem Importieren werden alle Daten in der App zurückgesetzt!</string>
+    <string name="reset_data_and_restore">App zurücksetzen und wiederherstellen</string>
 </resources>
