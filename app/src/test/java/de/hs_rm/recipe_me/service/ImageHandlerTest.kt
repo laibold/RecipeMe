@@ -37,9 +37,7 @@ class ImageHandlerTest {
     @Test
     fun canDeleteRecipeImage() {
         val tempDir = TempDir()
-        val tempImage = File(tempDir.getFile(), "/images/recipes/1/recipe_image.jpg")
-        tempImage.mkdirs()
-        tempImage.createNewFile()
+        val tempImage = tempDir.createChildDirsWithFile("images/recipes/1", "recipe_image.jpg")
         val context: Context = mock {
             on { getExternalFilesDir(null) } doReturn tempDir.getFile()
         }
@@ -56,9 +54,7 @@ class ImageHandlerTest {
     @Test
     fun canGetRecipeImage() {
         val tempDir = TempDir()
-        val tempImage = File(tempDir.getFile(), "/images/recipes/1/recipe_image.jpg")
-        tempImage.mkdirs()
-        tempImage.createNewFile()
+        tempDir.createChildDirsWithFile("images/recipes/1", "recipe_image.jpg")
         val context: Context = mock {
             on { getExternalFilesDir(null) } doReturn tempDir.getFile()
         }
@@ -97,9 +93,7 @@ class ImageHandlerTest {
     @Test
     fun canGetRecipeImageFile() {
         val tempDir = TempDir()
-        val tempImage = File(tempDir.getFile(), "/images/recipes/1/recipe_image.jpg")
-        tempImage.mkdirs()
-        tempImage.createNewFile()
+        tempDir.createChildDirsWithFile("images/recipes/1", "recipe_image.jpg")
         val context: Context = mock {
             on { getExternalFilesDir(null) } doReturn tempDir.getFile()
         }

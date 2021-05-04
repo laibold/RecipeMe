@@ -57,6 +57,20 @@ class TempDir {
         return File(file, filename).apply { createNewFile() }
     }
 
+    /**
+     * Create directories in path and file with filename at the end of the path and return the file (including path)
+     */
+    fun createChildDirsWithFile(path: String, filename: String): File {
+        path.trimEnd('/')
+        val newFile = File(file, "$path/$filename")
+        newFile.mkdirs()
+        newFile.createNewFile()
+        return newFile
+    }
+
+    /**
+     * Return File of TempDir
+     */
     fun getFile(): File {
         return file
     }
@@ -66,6 +80,7 @@ class TempDir {
     }
 
     companion object {
+        /** for internal use to assure that every directory has a unique name */
         var lastPathStr = ""
     }
 

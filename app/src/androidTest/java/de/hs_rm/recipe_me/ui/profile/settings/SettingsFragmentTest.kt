@@ -253,7 +253,7 @@ class SettingsFragmentTest {
     @Test
     fun doesNotImportBackupOnInvalidInputs() {
         val tempDir = TempDir()
-        val invalidBackupFile = File(tempDir.getFile(), "backup.zip").also { it.createNewFile() }
+        val invalidBackupFile = tempDir.createChildFile("backup.zip")
         viewModel.backupService = spy(viewModel.backupService)
 
         onView(withId(R.id.restore_data_text)).perform(click())
@@ -296,7 +296,7 @@ class SettingsFragmentTest {
     @Test
     fun canImportBackup() {
         val tempDir = TempDir()
-        val backupFile = File(tempDir.getFile(), "backup.zip").also { it.createNewFile() }
+        val backupFile = tempDir.createChildFile("backup.zip")
 
         viewModel.backupService = mock(BackupService::class.java)
 
