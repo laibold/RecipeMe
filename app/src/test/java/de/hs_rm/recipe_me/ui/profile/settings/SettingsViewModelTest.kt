@@ -140,7 +140,9 @@ class SettingsViewModelTest {
     fun exportsBackup() {
         val viewModel = SettingsViewModel(mock(), mock())
 
-        viewModel.exportBackup(mock())
+        // this is how Fragment does it
+        viewModel.selectedExportDir.value = mock()
+        viewModel.exportBackup(viewModel.selectedExportDir.value)
         // backupService interaction can't be verified here, maybe because of CoroutineScope?
     }
 
@@ -167,6 +169,8 @@ class SettingsViewModelTest {
         }
         val viewModel = SettingsViewModel(backupService, mock())
 
+        // this is how Fragment does it, but we also have to mock the input stream here
+        viewModel.selectedImportFile.value = mock()
         viewModel.importBackup(mock())
 
         verify(backupService, times(1)).importBackup(any())

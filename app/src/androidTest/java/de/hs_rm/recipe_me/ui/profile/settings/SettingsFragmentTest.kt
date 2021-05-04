@@ -2,6 +2,7 @@ package de.hs_rm.recipe_me.ui.profile.settings
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
 import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -22,6 +23,7 @@ import de.hs_rm.recipe_me.declaration.anyNotNull
 import de.hs_rm.recipe_me.declaration.launchFragmentInHiltContainer
 import de.hs_rm.recipe_me.di.Constants
 import de.hs_rm.recipe_me.persistence.AppDatabase
+import de.hs_rm.recipe_me.service.BackupService
 import de.hs_rm.recipe_me.service.PreferenceService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -32,6 +34,7 @@ import org.junit.Test
 import org.mockito.Mockito.*
 import test_shared.TempDir
 import java.io.File
+import java.io.InputStream
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -192,20 +195,28 @@ class SettingsFragmentTest {
         viewModel.backupService = spy(viewModel.backupService)
 
         onView(withId(R.id.save_data_text)).perform(click())
-        onView(withId(R.id.ingredient_dialog_layout)).check(matches(isDisplayed()))
+        onView(withId(R.id.export_backup_dialog_layout)).check(matches(isDisplayed()))
 
         // dialog still open when no directory selected
         onView(withId(R.id.save_button)).perform(click())
-        onView(withId(R.id.ingredient_dialog_layout)).check(matches(isDisplayed()))
+        onView(withId(R.id.export_backup_dialog_layout)).check(matches(isDisplayed()))
 
         // dialog still open when invalid directory is selected
         GlobalScope.launch(Dispatchers.Main) {
             viewModel.selectedExportDir.value = DocumentFile.fromFile(File("invalid/dir"))
         }
         onView(withId(R.id.save_button)).perform(click())
-        onView(withId(R.id.ingredient_dialog_layout)).check(matches(isDisplayed()))
+        onView(withId(R.id.export_backup_dialog_layout)).check(matches(isDisplayed()))
+
+        // be sad and close dialog via cancel button
+        onView(withId(R.id.cancel_button)).perform(click())
+        onView(withId(R.id.export_backup_dialog_layout)).check(doesNotExist())
 
         verify(viewModel.backupService, never()).exportBackup(anyNotNull(DocumentFile::class.java))
+
+        // open dialog again and check if selected path is reset
+        onView(withId(R.id.save_data_text)).perform(click())
+        onView(withId(R.id.export_dir_text)).check(matches(withText(R.string.choose_destination)))
     }
 
     /**
@@ -217,7 +228,7 @@ class SettingsFragmentTest {
         viewModel.backupService = spy(viewModel.backupService)
 
         onView(withId(R.id.save_data_text)).perform(click())
-        onView(withId(R.id.ingredient_dialog_layout)).check(matches(isDisplayed()))
+        onView(withId(R.id.export_backup_dialog_layout)).check(matches(isDisplayed()))
 
         // dialog still open when invalid directory is selected
         GlobalScope.launch(Dispatchers.Main) {
@@ -225,10 +236,84 @@ class SettingsFragmentTest {
         }
         onView(withId(R.id.export_dir_text)).check(matches(withText(".../" + tempDir.getFile().name)))
         onView(withId(R.id.save_button)).perform(click())
-        onView(withId(R.id.ingredient_dialog_layout)).check(doesNotExist())
+        onView(withId(R.id.export_backup_dialog_layout)).check(doesNotExist())
 
         verify(viewModel.backupService, times(1)).exportBackup(anyNotNull(DocumentFile::class.java))
         assertThat(tempDir.listFiles()!!.size).isEqualTo(1)
+
+        // open dialog again and check if selected path is reset
+        onView(withId(R.id.save_data_text)).perform(click())
+        onView(withId(R.id.export_dir_text)).check(matches(withText(R.string.choose_destination)))
+    }
+
+    /**
+     * Test that import dialog stays open when no file or an invalid file is selected
+     * and that exportBackup() in service is not getting called
+     */
+    @Test
+    fun doesNotImportBackupOnInvalidInputs() {
+        val tempDir = TempDir()
+        val invalidBackupFile = File(tempDir.getFile(), "backup.zip").also { it.createNewFile() }
+        viewModel.backupService = spy(viewModel.backupService)
+
+        onView(withId(R.id.restore_data_text)).perform(click())
+        onView(withId(R.id.import_backup_dialog_layout)).check(matches(isDisplayed()))
+
+        // dialog still open when no directory selected
+        onView(withId(R.id.save_button)).perform(click())
+        onView(withId(R.id.import_backup_dialog_layout)).check(matches(isDisplayed()))
+
+        // dialog still open when invalid uri (non existing file) is selected
+        GlobalScope.launch(Dispatchers.Main) {
+            viewModel.selectedImportFile.value = Uri.fromFile(File("invalid/dir/file.zip"))
+        }
+        onView(withId(R.id.save_button)).perform(click())
+        onView(withId(R.id.import_backup_dialog_layout)).check(matches(isDisplayed()))
+
+        // dialog still open when invalid file es selected (not a real backup file - verified in service)
+        GlobalScope.launch(Dispatchers.Main) {
+            viewModel.selectedImportFile.value = Uri.fromFile(invalidBackupFile)
+        }
+        onView(withId(R.id.save_button)).perform(click())
+        onView(withId(R.id.import_backup_dialog_layout)).check(matches(isDisplayed()))
+
+        // be sad and close dialog via cancel button
+        onView(withId(R.id.cancel_button)).perform(click())
+        onView(withId(R.id.import_backup_dialog_layout)).check(doesNotExist())
+
+        // importBackup is just called once to verify invalid file (exception thrown)
+        verify(viewModel.backupService, times(1)).importBackup(any(InputStream::class.java))
+        assertThat(viewModel.selectedImportFile.value).isNull()
+
+        // open dialog again and check if selected path is reset
+        onView(withId(R.id.restore_data_text)).perform(click())
+        onView(withId(R.id.import_dir_text)).check(matches(withText(R.string.select_file)))
+    }
+
+    /**
+     * Test that importBackup() in BackupService is called when selecting an existing file
+     */
+    @Test
+    fun canImportBackup() {
+        val tempDir = TempDir()
+        val backupFile = File(tempDir.getFile(), "backup.zip").also { it.createNewFile() }
+
+        viewModel.backupService = mock(BackupService::class.java)
+
+        onView(withId(R.id.restore_data_text)).perform(click())
+        onView(withId(R.id.import_backup_dialog_layout)).check(matches(isDisplayed()))
+
+        GlobalScope.launch(Dispatchers.Main) {
+            viewModel.selectedImportFile.value = Uri.fromFile(backupFile)
+        }
+        onView(withId(R.id.save_button)).perform(click())
+
+        onView(withId(R.id.import_backup_dialog_layout)).check(doesNotExist())
+        verify(viewModel.backupService, times(1)).importBackup(anyNotNull(InputStream::class.java))
+
+        // open dialog again and check if selected path is reset
+        onView(withId(R.id.restore_data_text)).perform(click())
+        onView(withId(R.id.import_dir_text)).check(matches(withText(R.string.select_file)))
     }
 
     /////
