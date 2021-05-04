@@ -5,7 +5,7 @@
 
     <!-- background color is set by background round_corners -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ingredient_dialog_layout"
+        android:id="@+id/import_backup_dialog_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/round_corners"
@@ -30,7 +30,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/export_dir_text"
+                android:id="@+id/import_dir_text"
                 style="@style/text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

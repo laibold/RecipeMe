@@ -6,12 +6,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.LifecycleOwner
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.ImportBackupDialogBinding
 import de.hs_rm.recipe_me.model.exception.InvalidBackupFileException
 import de.hs_rm.recipe_me.ui.component.CustomDialog
+import java.io.FileNotFoundException
 import java.io.IOException
 
 class ImportBackupDialog(
@@ -28,7 +28,7 @@ class ImportBackupDialog(
             uri?.let {
                 val filename = it.path?.split("/")?.last()
                 @SuppressLint("SetTextI18n")
-                binding.exportDirText.text = ".../$filename"
+                binding.importDirText.text = ".../$filename"
             }
         })
 
@@ -45,7 +45,7 @@ class ImportBackupDialog(
             val fileError = activity.getString(R.string.invalid_file)
 
             try {
-                if (uri != null && DocumentFile.fromSingleUri(context, uri)!!.exists()) {
+                if (uri != null) {
                     val selectedFileIn = activity.contentResolver.openInputStream(uri)
                     viewModel.importBackup(selectedFileIn)
 
@@ -60,11 +60,19 @@ class ImportBackupDialog(
                 } else {
                     Toast.makeText(context, fileError, Toast.LENGTH_SHORT).show()
                 }
-            } catch (e: InvalidBackupFileException) {
-                Toast.makeText(context, fileError, Toast.LENGTH_SHORT).show()
-            } catch (e: IOException) {
-                val importError = activity.getString(R.string.error_importing_backup)
-                Toast.makeText(context, importError, Toast.LENGTH_SHORT).show()
+            } catch (ex: Exception) {
+                when (ex) {
+                    is InvalidBackupFileException, is FileNotFoundException -> {
+                        // InvalidBackupFileException when file is invalid, FileNotFoundException when file not found (obviously)
+                        Toast.makeText(context, fileError, Toast.LENGTH_SHORT).show()
+                    }
+                    is IOException -> {
+                        val importError = activity.getString(R.string.error_importing_backup)
+                        Toast.makeText(context, importError, Toast.LENGTH_SHORT).show()
+
+                    }
+                    else -> throw ex
+                }
             }
 
         }

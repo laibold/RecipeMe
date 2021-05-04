@@ -28,7 +28,7 @@ class BackupService @Inject constructor(
     private val imageHandler: ImageHandler
 ) {
 
-    val dbFiles = mutableListOf<File>()
+    final val dbFiles = mutableListOf<File>()
 
     private val zipImageDir = "images/"
     private val zipDbDir = "database/"

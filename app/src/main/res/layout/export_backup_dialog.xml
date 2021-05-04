@@ -4,7 +4,7 @@
 
     <!-- background color is set by background round_corners -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ingredient_dialog_layout"
+        android:id="@+id/export_backup_dialog_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/round_corners"
