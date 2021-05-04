@@ -75,7 +75,8 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="@id/timer_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/timer_text" />
+                app:layout_constraintTop_toTopOf="@id/timer_text"
+                app:thumbTint="@drawable/custom_thumb_selector" />
 
             <TextView
                 android:id="@+id/cooking_step_preview_text"
@@ -94,6 +95,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/cooking_step_preview_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/cooking_step_preview_text"
+                app:thumbTint="@drawable/custom_thumb_selector"
                 tools:checked="true" />
 
             <TextView
