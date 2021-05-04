@@ -50,6 +50,13 @@ class TempDir {
         return DocumentFile.fromFile(file)
     }
 
+    /**
+     * Create file with given name in directory and return it
+     */
+    fun createChildFile(filename: String): File {
+        return File(file, filename).apply { createNewFile() }
+    }
+
     fun getFile(): File {
         return file
     }

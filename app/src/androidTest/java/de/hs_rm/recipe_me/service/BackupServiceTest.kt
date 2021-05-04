@@ -6,18 +6,25 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import test_shared.TempDir
+import de.hs_rm.recipe_me.declaration.anyNotNull
 import de.hs_rm.recipe_me.di.Constants
+import de.hs_rm.recipe_me.model.exception.InvalidBackupFileException
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
+import org.mockito.Mockito.*
+import test_shared.TempDir
 import test_shared.TestDataProvider
+import java.io.BufferedOutputStream
 import java.io.File
+import java.io.IOException
+import java.util.zip.ZipEntry
+import java.util.zip.ZipFile
+import java.util.zip.ZipOutputStream
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -35,7 +42,6 @@ class BackupServiceTest {
     lateinit var db: AppDatabase
 
     private lateinit var preferenceService: PreferenceService
-    private lateinit var backupService: BackupService
 
     private lateinit var imageHandler: ImageHandler
 
@@ -51,7 +57,6 @@ class BackupServiceTest {
 
         preferenceService = PreferenceService(appContext)
         imageHandler = mock(ImageHandler::class.java)
-        backupService = BackupService(appContext, db, preferenceService, imageHandler)
     }
 
     @After
@@ -61,19 +66,23 @@ class BackupServiceTest {
                 file.deleteRecursively()
             }
         }
+        // sleep to prevent tests from catching wrong files
+        Thread.sleep(200)
     }
 
     @Test
     fun testDatabaseFiles() {
+        val backupService = BackupService(appContext, db, preferenceService, imageHandler)
         assertThat(backupService.dbFiles).hasSize(3)
     }
 
     @Test
-    fun testExportBackup() {
+    fun canExportBackup() {
         val tempExportDir = TempDir()
         val tempImageDir = TempDir()
         val uri = tempExportDir.toDocumentFile()
         `when`(imageHandler.getImageDirPath()).thenReturn(tempImageDir.getFile().toString())
+        val backupService = BackupService(appContext, db, preferenceService, imageHandler)
 
         val filename = backupService.exportBackup(uri)
 
@@ -86,7 +95,7 @@ class BackupServiceTest {
     }
 
     @Test
-    fun testImportBackup() {
+    fun canImportBackup() {
         // insert recipe to database
         runBlocking { db.recipeDao().insert(TestDataProvider.getRandomRecipe()) }
 
@@ -104,6 +113,8 @@ class BackupServiceTest {
         // mock export dir
         val tempExportDir = TempDir()
         val exportUri = tempExportDir.toDocumentFile()
+
+        val backupService = BackupService(appContext, db, preferenceService, imageHandler)
 
         // export
         val filename = backupService.exportBackup(exportUri)
@@ -141,4 +152,80 @@ class BackupServiceTest {
         tempExportDir.destroy()
         tempImportImageDir.destroy()
     }
+
+    /**
+     * Test that backupService throws IOException if InputStream is null
+     */
+    @Test
+    fun throwsIOExceptionOnNullInputStream() {
+        val backupService = spy(BackupService(appContext, db, preferenceService, imageHandler))
+
+        val exception = assertThrows(IOException::class.java) {
+            backupService.importBackup(null)
+        }
+
+        assertThat(exception.message).contains("Error while creating inputStream")
+        verify(backupService, never()).importDatabase(anyNotNull(ZipFile::class.java))
+        verify(backupService, never()).importImages(
+            anyList(),
+            anyNotNull(ZipFile::class.java),
+            anyString()
+        )
+        verify(backupService, never()).importPreferences(any(), anyNotNull(ZipFile::class.java))
+    }
+
+    /**
+     * Test that backupService throws InvalidBackupFileException when File from InputStream is an empty zip file
+     */
+    @Test
+    fun throwsInvalidBackupFileExceptionOnEmptyBackupFile() {
+        val tempDir = TempDir()
+        val file = tempDir.createChildFile("backup.zip")
+
+        val backupService = spy(BackupService(appContext, db, preferenceService, imageHandler))
+
+        val exception = assertThrows(InvalidBackupFileException::class.java) {
+            backupService.importBackup(file.inputStream())
+        }
+
+        assertThat(exception.message).contains("Zip error for backup file")
+        verify(backupService, never()).importDatabase(anyNotNull(ZipFile::class.java))
+        verify(backupService, never()).importImages(
+            anyList(),
+            anyNotNull(ZipFile::class.java),
+            anyString()
+        )
+        verify(backupService, never()).importPreferences(any(), anyNotNull(ZipFile::class.java))
+    }
+
+    /**
+     * Test that backupService throws InvalidBackupFileException when File from InputStream is an invalid backup file
+     */
+    @Test
+    fun throwsInvalidBackupFileExceptionOnInvalidBackupFile() {
+        val tempDir = TempDir()
+        val file = tempDir.createChildFile("backup.zip")
+
+        val out = file.outputStream()
+        ZipOutputStream(BufferedOutputStream(out)).use { zipOut ->
+            zipOut.putNextEntry(ZipEntry("zipEntry.jpg"))
+            zipOut.closeEntry()
+        }
+
+        val backupService = spy(BackupService(appContext, db, preferenceService, imageHandler))
+
+        val exception = assertThrows(InvalidBackupFileException::class.java) {
+            backupService.importBackup(file.inputStream())
+        }
+
+        assertThat(exception.message).contains("Backup file is not valid")
+        verify(backupService, never()).importDatabase(anyNotNull(ZipFile::class.java))
+        verify(backupService, never()).importImages(
+            anyList(),
+            anyNotNull(ZipFile::class.java),
+            anyString()
+        )
+        verify(backupService, never()).importPreferences(any(), anyNotNull(ZipFile::class.java))
+    }
+
 }

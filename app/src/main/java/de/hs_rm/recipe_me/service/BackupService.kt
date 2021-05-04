@@ -12,6 +12,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.zip.ZipEntry
+import java.util.zip.ZipException
 import java.util.zip.ZipFile
 import java.util.zip.ZipOutputStream
 import javax.inject.Inject
@@ -153,9 +154,10 @@ class BackupService @Inject constructor(
 
     /**
      * Import data from backup zip file
+     * @throws IOException if InputStream is null or if error happens at file operation
      * @throws InvalidBackupFileException if File at uri is not valid
      */
-    @Throws(IOException::class)
+    @Throws(IOException::class, InvalidBackupFileException::class)
     fun importBackup(inputStream: InputStream?) {
         // copy selected file to app's cache dir to handle it as ZipFile
         // https://stackoverflow.com/questions/58425517/how-to-get-file-path-from-the-content-uri-for-zip-file
@@ -167,7 +169,13 @@ class BackupService @Inject constructor(
             throw IOException("Error while creating inputStream for temporary zip file at importing backup")
         }
 
-        val zipFile = ZipFile(tempFile)
+        val zipFile: ZipFile
+        try {
+            zipFile = ZipFile(tempFile)
+        } catch (e: ZipException) {
+            throw InvalidBackupFileException("Zip error for backup file: " + e.message!!)
+        }
+
         if (validateImportFile(zipFile)) {
             val entries = zipFile.entries().toList()
 
@@ -215,7 +223,7 @@ class BackupService @Inject constructor(
      * Copy files from database directory to internal database directory (clean before)
      */
     @Throws(IOException::class)
-    private fun importDatabase(file: ZipFile) {
+    internal fun importDatabase(file: ZipFile) {
         val dbPath = context.getDatabasePath(db.openHelper.databaseName).absolutePath
         val dbPathDirectory = dbPath.split("/").dropLast(1).joinToString("/")
 
@@ -236,7 +244,7 @@ class BackupService @Inject constructor(
      * Import preferences from ZipEntry in ZipFile
      */
     @Throws(IOException::class)
-    private fun importPreferences(entry: ZipEntry?, zipFile: ZipFile) {
+    internal fun importPreferences(entry: ZipEntry?, zipFile: ZipFile) {
         if (entry != null) {
             zipFile.getInputStream(entry).use { fileIn ->
                 InputStreamReader(fileIn).use { reader ->
@@ -253,7 +261,7 @@ class BackupService @Inject constructor(
      * Import images from backup zip file
      */
     @Throws(IOException::class)
-    private fun importImages(entries: List<ZipEntry>, zipFile: ZipFile, imageDirPath: String) {
+    internal fun importImages(entries: List<ZipEntry>, zipFile: ZipFile, imageDirPath: String) {
         // https://stackoverflow.com/questions/1399126/java-util-zip-recreating-directory-structure
         val imagesFile = File(imageDirPath)
 
