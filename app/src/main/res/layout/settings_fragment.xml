@@ -118,6 +118,27 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/save_data_text" />
 
+            <ImageView
+                android:id="@+id/version_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_space_button"
+                android:background="@drawable/ic_baseline_access_time_24"
+                android:contentDescription="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/version_text"
+                style="@style/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_button_text"
+                app:layout_constraintBottom_toBottomOf="@id/version_icon"
+                app:layout_constraintStart_toEndOf="@+id/version_icon"
+                app:layout_constraintTop_toTopOf="@+id/version_icon"
+                tools:text="@string/version" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

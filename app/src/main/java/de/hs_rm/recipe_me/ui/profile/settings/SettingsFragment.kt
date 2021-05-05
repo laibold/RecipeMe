@@ -1,5 +1,6 @@
 package de.hs_rm.recipe_me.ui.profile.settings
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -14,6 +15,7 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import de.hs_rm.recipe_me.BuildConfig
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.SettingsFragmentBinding
 
@@ -62,6 +64,10 @@ class SettingsFragment : Fragment() {
             ImportBackupDialog(requireActivity(), viewModel, importResultLauncher, this)
                 .show()
         }
+
+        val versionNumber = BuildConfig.VERSION_NAME
+        @SuppressLint("SetTextI18n")
+        binding.versionText.text = "${getString(R.string.version)}: $versionNumber"
 
         return binding.root
     }

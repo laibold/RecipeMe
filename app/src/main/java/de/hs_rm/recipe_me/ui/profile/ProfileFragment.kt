@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.kroegerama.imgpicker.BottomSheetImagePicker
 import com.kroegerama.imgpicker.ButtonType
 import dagger.hilt.android.AndroidEntryPoint
-import de.hs_rm.recipe_me.BuildConfig
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.ProfileFragmentBinding
 import de.hs_rm.recipe_me.declaration.ui.fragments.BottomSheetImageProvider
@@ -27,7 +26,6 @@ class ProfileFragment : Fragment(), BottomSheetImagePicker.OnImagesSelectedListe
     private val viewModel: ProfileViewModel by viewModels()
     private lateinit var binding: ProfileFragmentBinding
 
-    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,10 +68,6 @@ class ProfileFragment : Fragment(), BottomSheetImagePicker.OnImagesSelectedListe
             val direction = ProfileFragmentDirections.toSiteNoticeFragment()
             findNavController().navigate(direction)
         }
-
-        val versionNumber = BuildConfig.VERSION_NAME
-
-        binding.versionText.text = "${getString(R.string.version)}: $versionNumber"
 
         return binding.root
     }

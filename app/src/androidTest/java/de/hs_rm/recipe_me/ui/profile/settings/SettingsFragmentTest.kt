@@ -316,6 +316,15 @@ class SettingsFragmentTest {
         onView(withId(R.id.import_dir_text)).check(matches(withText(R.string.select_file)))
     }
 
+    /**
+     * Test if current version (from build.gradle) is shown in fragment. Must be hard coded here
+     */
+    @Test
+    fun canShowVersion() {
+        val currentVersion = "Version: 2.1.5"
+        onView(withId(R.id.version_text)).check(matches(withText(currentVersion)))
+    }
+
     /////
 
     /**
