@@ -30,7 +30,7 @@ import de.hs_rm.recipe_me.persistence.dao.UserDao
         CookingStepIngredientCrossRef::class,
         User::class
     ],
-    version = 9
+    version = 10
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -73,7 +73,8 @@ abstract class AppDatabase : RoomDatabase() {
                     AppMigration.MIGRATION_5_6,
                     AppMigration.MIGRATION_6_7,
                     AppMigration.MIGRATION_7_8,
-                    AppMigration.MIGRATION_8_9
+                    AppMigration.MIGRATION_8_9,
+                    AppMigration.MIGRATION_9_10
                 )
                 .build()
         }

@@ -5,7 +5,6 @@ import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import de.hs_rm.recipe_me.model.recipe.TimeUnit
 import java.time.LocalDate
-import java.util.*
 
 /**
  * Converters for [AppDatabase]
@@ -69,7 +68,7 @@ class Converters {
     }
 
     /**
-     * [String] -> [Date]
+     * [String] -> [LocalDate]
      */
     @TypeConverter
     fun stringToDate(dateStr: String): LocalDate {

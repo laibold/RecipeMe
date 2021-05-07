@@ -1,0 +1,299 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 10,
+    "identityHash": "8e15c161f6ff41fe793ec1c6fcc0527e",
+    "entities": [
+      {
+        "tableName": "Recipe",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `servings` INTEGER NOT NULL, `category` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "servings",
+            "columnName": "servings",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Ingredient",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ingredientId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `recipeId` INTEGER NOT NULL, `name` TEXT NOT NULL, `quantity` REAL NOT NULL, `unit` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "ingredientId",
+            "columnName": "ingredientId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "recipeId",
+            "columnName": "recipeId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quantity",
+            "columnName": "quantity",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unit",
+            "columnName": "unit",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "ingredientId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "CookingStep",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cookingStepId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `recipeId` INTEGER NOT NULL, `text` TEXT NOT NULL, `time` INTEGER NOT NULL, `timeUnit` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "cookingStepId",
+            "columnName": "cookingStepId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "recipeId",
+            "columnName": "recipeId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "text",
+            "columnName": "text",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeUnit",
+            "columnName": "timeUnit",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "cookingStepId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "ShoppingListItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `checked` INTEGER NOT NULL, `name` TEXT NOT NULL, `quantity` REAL NOT NULL, `unit` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "checked",
+            "columnName": "checked",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quantity",
+            "columnName": "quantity",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unit",
+            "columnName": "unit",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "RecipeOfTheDay",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT NOT NULL, `recipeId` INTEGER NOT NULL, FOREIGN KEY(`recipeId`) REFERENCES `Recipe`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "recipeId",
+            "columnName": "recipeId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_RecipeOfTheDay_recipeId",
+            "unique": false,
+            "columnNames": [
+              "recipeId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_RecipeOfTheDay_recipeId` ON `${TABLE_NAME}` (`recipeId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Recipe",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "recipeId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "CookingStepIngredientCrossRef",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cookingStepId` INTEGER NOT NULL, `ingredientId` INTEGER NOT NULL, PRIMARY KEY(`cookingStepId`, `ingredientId`))",
+        "fields": [
+          {
+            "fieldPath": "cookingStepId",
+            "columnName": "cookingStepId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ingredientId",
+            "columnName": "ingredientId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "cookingStepId",
+            "ingredientId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_CookingStepIngredientCrossRef_ingredientId",
+            "unique": false,
+            "columnNames": [
+              "ingredientId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_CookingStepIngredientCrossRef_ingredientId` ON `${TABLE_NAME}` (`ingredientId`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "User",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8e15c161f6ff41fe793ec1c6fcc0527e')"
+    ]
+  }
+}

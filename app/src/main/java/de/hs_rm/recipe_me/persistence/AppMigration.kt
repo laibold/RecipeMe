@@ -2,6 +2,7 @@ package de.hs_rm.recipe_me.persistence
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 
 /**
  * Migrations as static objects for [AppDatabase]
@@ -156,6 +157,51 @@ object AppMigration {
             )
             database.execSQL(
                 "DROP TABLE CookingStep_old"
+            )
+        }
+    }
+
+    /**
+     * Migrate Enum mapping from Int to String
+     */
+    val MIGRATION_9_10 = object : Migration(9, 10) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            migrateRecipe(database)
+
+        }
+
+        private fun migrateRecipe(database: SupportSQLiteDatabase) {
+            database.execSQL("ALTER TABLE Recipe RENAME TO Recipe_old")
+
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS Recipe (" +
+                        " id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        " name TEXT NOT NULL," +
+                        " servings INTEGER NOT NULL," +
+                        " category TEXT NOT NULL)"
+            )
+
+            val recipeCursor = database.query("SELECT * FROM Recipe_old")
+
+            recipeCursor.moveToFirst()
+
+            while (!recipeCursor.isAfterLast) {
+                val id = recipeCursor.getInt(recipeCursor.getColumnIndex("id"))
+                val recipeName = recipeCursor.getString(recipeCursor.getColumnIndex("name"))
+                val servings = recipeCursor.getInt(recipeCursor.getColumnIndex("servings"))
+                val category = recipeCursor.getInt(recipeCursor.getColumnIndex("category"))
+                val categoryString = RecipeCategory.values()[category].name
+
+                database.execSQL(
+                    "INSERT INTO Recipe (id, name, servings, category)" +
+                            " VALUES ($id, \"$recipeName\", $servings, \"$categoryString\")"
+                )
+
+                recipeCursor.moveToNext()
+            }
+
+            database.execSQL(
+                "DROP TABLE Recipe_old"
             )
         }
     }

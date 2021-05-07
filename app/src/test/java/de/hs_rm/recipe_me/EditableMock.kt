@@ -5,7 +5,7 @@ import android.text.InputFilter
 
 class EditableMock : Editable {
 
-    private lateinit var str: String
+    private var str: String
 
     constructor(str: String) {
         this.str = str
