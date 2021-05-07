@@ -69,9 +69,9 @@ class RecipeDetailFragmentTest {
 
     @Test
     fun resetsServingsOnDestroy() {
-        val recipe1 = Recipe(RecipeCategory.MAIN_DISHES).apply { servings = 3 }
+        val recipe1 = Recipe().apply { servings = 3 }
         val recipeId1 = insertTestData(recipe1)
-        val recipe2 = Recipe(RecipeCategory.MAIN_DISHES).apply { servings = 5 }
+        val recipe2 = Recipe().apply { servings = 5 }
         val recipeId2 = insertTestData(recipe2)
 
         val args1 = bundleOf("recipeId" to recipeId1)
@@ -136,7 +136,7 @@ class RecipeDetailFragmentTest {
     @Test
     fun hidesCookingStepPreviewDependingOnPreference() {
         PreferenceService(context).setShowCookingStepPreview(false)
-        val recipe = Recipe(RecipeCategory.MAIN_DISHES)
+        val recipe = Recipe()
         val cookingStep = TestDataProvider.getRandomCookingStep()
         val recipeId = insertTestData(recipe, cookingSteps = listOf(cookingStep))
 
@@ -152,7 +152,7 @@ class RecipeDetailFragmentTest {
      */
     @Test
     fun hidesButtonWhenNoStepsPresent() {
-        val recipe = Recipe(RecipeCategory.MAIN_DISHES)
+        val recipe = Recipe()
         val recipeId = insertTestData(recipe)
 
         val args = bundleOf("recipeId" to recipeId)
@@ -338,7 +338,7 @@ class RecipeDetailFragmentTest {
      */
     @Test
     fun canNavigateToCookingStepFragment() {
-        val recipe = Recipe(RecipeCategory.MAIN_DISHES)
+        val recipe = Recipe()
         val cookingStep = TestDataProvider.getRandomCookingStep()
         val recipeId = insertTestData(recipe, cookingSteps = listOf(cookingStep))
 
@@ -357,7 +357,7 @@ class RecipeDetailFragmentTest {
      */
     @Test
     fun canNavigateToEditRecipe() {
-        val recipe = Recipe(RecipeCategory.MAIN_DISHES)
+        val recipe = Recipe()
         val cookingStep = TestDataProvider.getRandomCookingStep()
         val recipeId = insertTestData(recipe, cookingSteps = listOf(cookingStep))
 
