@@ -146,7 +146,6 @@
     <style name="spinner" parent="@style/Widget.AppCompat.Spinner.Underlined">
         <item name="android:backgroundTint">?attr/colorAccent</item>
         <item name="android:layout_height">46dp</item>
-        <item name="android:paddingEnd">10dp</item>
     </style>
 
     <style name="custom_floating_action_button">
