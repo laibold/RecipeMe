@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 10,
-    "identityHash": "8e15c161f6ff41fe793ec1c6fcc0527e",
+    "identityHash": "7d3d62cb71310b2443abee31da6bf2fc",
     "entities": [
       {
         "tableName": "Recipe",
@@ -44,7 +44,7 @@
       },
       {
         "tableName": "Ingredient",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ingredientId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `recipeId` INTEGER NOT NULL, `name` TEXT NOT NULL, `quantity` REAL NOT NULL, `unit` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ingredientId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `recipeId` INTEGER NOT NULL, `name` TEXT NOT NULL, `quantity` REAL NOT NULL, `unit` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "ingredientId",
@@ -73,7 +73,7 @@
           {
             "fieldPath": "unit",
             "columnName": "unit",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -132,7 +132,7 @@
       },
       {
         "tableName": "ShoppingListItem",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `checked` INTEGER NOT NULL, `name` TEXT NOT NULL, `quantity` REAL NOT NULL, `unit` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `checked` INTEGER NOT NULL, `name` TEXT NOT NULL, `quantity` REAL NOT NULL, `unit` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -161,7 +161,7 @@
           {
             "fieldPath": "unit",
             "columnName": "unit",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -293,7 +293,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8e15c161f6ff41fe793ec1c6fcc0527e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7d3d62cb71310b2443abee31da6bf2fc')"
     ]
   }
 }

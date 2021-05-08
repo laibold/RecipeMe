@@ -2,6 +2,7 @@ package de.hs_rm.recipe_me.persistence
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 
 /**
@@ -167,7 +168,8 @@ object AppMigration {
     val MIGRATION_9_10 = object : Migration(9, 10) {
         override fun migrate(database: SupportSQLiteDatabase) {
             migrateRecipe(database)
-
+            migrateIngredient(database)
+            migrateShoppingListItem(database)
         }
 
         private fun migrateRecipe(database: SupportSQLiteDatabase) {
@@ -181,15 +183,14 @@ object AppMigration {
                         " category TEXT NOT NULL)"
             )
 
-            val recipeCursor = database.query("SELECT * FROM Recipe_old")
+            val cursor = database.query("SELECT * FROM Recipe_old")
+            cursor.moveToFirst()
 
-            recipeCursor.moveToFirst()
-
-            while (!recipeCursor.isAfterLast) {
-                val id = recipeCursor.getInt(recipeCursor.getColumnIndex("id"))
-                val recipeName = recipeCursor.getString(recipeCursor.getColumnIndex("name"))
-                val servings = recipeCursor.getInt(recipeCursor.getColumnIndex("servings"))
-                val category = recipeCursor.getInt(recipeCursor.getColumnIndex("category"))
+            while (!cursor.isAfterLast) {
+                val id = cursor.getInt(cursor.getColumnIndex("id"))
+                val recipeName = cursor.getString(cursor.getColumnIndex("name"))
+                val servings = cursor.getInt(cursor.getColumnIndex("servings"))
+                val category = cursor.getInt(cursor.getColumnIndex("category"))
                 val categoryString = RecipeCategory.values()[category].name
 
                 database.execSQL(
@@ -197,11 +198,83 @@ object AppMigration {
                             " VALUES ($id, \"$recipeName\", $servings, \"$categoryString\")"
                 )
 
-                recipeCursor.moveToNext()
+                cursor.moveToNext()
             }
 
             database.execSQL(
                 "DROP TABLE Recipe_old"
+            )
+        }
+
+        private fun migrateIngredient(database: SupportSQLiteDatabase) {
+            database.execSQL("ALTER TABLE Ingredient RENAME TO Ingredient_old")
+
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS Ingredient (" +
+                        " ingredientId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        " recipeId INTEGER NOT NULL," +
+                        " name TEXT NOT NULL," +
+                        " quantity REAL NOT NULL," +
+                        " unit TEXT NOT NULL)"
+            )
+
+            val cursor = database.query("SELECT * FROM Ingredient_old")
+            cursor.moveToFirst()
+
+            while (!cursor.isAfterLast) {
+                val ingredientId = cursor.getInt(cursor.getColumnIndex("ingredientId"))
+                val recipeId = cursor.getInt(cursor.getColumnIndex("recipeId"))
+                val name = cursor.getString(cursor.getColumnIndex("name"))
+                val quantity = cursor.getDouble(cursor.getColumnIndex("quantity"))
+                val unit = cursor.getInt(cursor.getColumnIndex("unit"))
+                val unitString = IngredientUnit.values()[unit].name
+
+                database.execSQL(
+                    "INSERT INTO Ingredient (ingredientId, recipeId, name, quantity, unit)" +
+                            " VALUES ($ingredientId, $recipeId, \"$name\", $quantity, \"$unitString\")"
+                )
+
+                cursor.moveToNext()
+            }
+
+            database.execSQL(
+                "DROP TABLE Ingredient_old"
+            )
+        }
+
+        private fun migrateShoppingListItem(database: SupportSQLiteDatabase) {
+            database.execSQL("ALTER TABLE ShoppingListItem RENAME TO ShoppingListItem_old")
+
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS ShoppingListItem (" +
+                        " id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        " checked INTEGER NOT NULL," +
+                        " name TEXT NOT NULL," +
+                        " quantity REAL NOT NULL," +
+                        " unit TEXT NOT NULL)"
+            )
+
+            val cursor = database.query("SELECT * FROM ShoppingListItem_old")
+            cursor.moveToFirst()
+
+            while (!cursor.isAfterLast) {
+                val id = cursor.getInt(cursor.getColumnIndex("id"))
+                val checked = cursor.getInt(cursor.getColumnIndex("checked"))
+                val name = cursor.getString(cursor.getColumnIndex("name"))
+                val quantity = cursor.getDouble(cursor.getColumnIndex("quantity"))
+                val unit = cursor.getInt(cursor.getColumnIndex("unit"))
+                val unitString = IngredientUnit.values()[unit]
+
+                database.execSQL(
+                    "INSERT INTO ShoppingListItem (id, checked, name, quantity, unit)" +
+                            " VALUES ($id, $checked, \"$name\", $quantity, \"$unitString\")"
+                )
+
+                cursor.moveToNext()
+            }
+
+            database.execSQL(
+                "DROP TABLE ShoppingListItem_old"
             )
         }
     }
