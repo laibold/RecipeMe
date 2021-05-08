@@ -5,10 +5,7 @@ import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
-import de.hs_rm.recipe_me.model.recipe.Ingredient
-import de.hs_rm.recipe_me.model.recipe.IngredientUnit
-import de.hs_rm.recipe_me.model.recipe.Recipe
-import de.hs_rm.recipe_me.model.recipe.RecipeCategory
+import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 import org.junit.Rule
 import org.junit.Test
@@ -30,9 +27,11 @@ class MigrationTest {
         val r1 = Recipe("Recipe 1", 1, RecipeCategory.MAIN_DISHES).apply { id = 1 }
         val r2 = Recipe("Recipe 2", 2, RecipeCategory.SNACKS).apply { id = 2 }
         val i1 = Ingredient(1, "Ing 1", 1.0, IngredientUnit.NONE).apply { ingredientId = 3 }
-        val i2 = Ingredient(2, "Ing 2", 1.0, IngredientUnit.PACK).apply { ingredientId = 4 }
+        val i2 = Ingredient(2, "Ing 2", 2.0, IngredientUnit.PACK).apply { ingredientId = 4 }
         val s1 = ShoppingListItem(i1).apply { id = 5 }
         val s2 = ShoppingListItem(i2).apply { id = 6 }
+        val cs1 = CookingStep(1, "Step 1", 1, TimeUnit.SECOND).apply { cookingStepId = 7 }
+        val cs2 = CookingStep(2, "Step 2", 2, TimeUnit.HOUR).apply { cookingStepId = 8 }
 
         @Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER")
         var db = helper.createDatabase(TEST_DB, 9).apply {
@@ -61,6 +60,14 @@ class MigrationTest {
             execSQL(
                 "INSERT INTO ShoppingListItem (id, checked, name, quantity, unit)" +
                         " VALUES (${s2.id}, ${s2.checked}, \"${s2.name}\", ${s2.quantity}, ${s2.unit.ordinal})"
+            )
+            execSQL(
+                "INSERT INTO CookingStep (cookingStepId, recipeId, text, time, timeUnit)" +
+                        " VALUES (${cs1.cookingStepId}, ${cs1.recipeId}, \"${cs1.text}\", ${cs1.time}, ${cs1.timeUnit.ordinal})"
+            )
+            execSQL(
+                "INSERT INTO CookingStep (cookingStepId, recipeId, text, time, timeUnit)" +
+                        " VALUES (${cs2.cookingStepId}, ${cs2.recipeId}, \"${cs2.text}\", ${cs2.time}, ${cs2.timeUnit.ordinal})"
             )
             // Prepare for the next version.
             close()
@@ -118,11 +125,9 @@ class MigrationTest {
             .apply { ingredientId = iId2.toLong() }
 
         assertThat(ingredientCursor.count).isEqualTo(2)
-
         assertThat(queriedIngredient1).isEqualTo(i1)
         assertThat(queriedIngredient1.recipeId).isEqualTo(i1.recipeId)
         assertThat(queriedIngredient1.ingredientId).isEqualTo(i1.ingredientId)
-
         assertThat(queriedIngredient2).isEqualTo(i2)
         assertThat(queriedIngredient2.recipeId).isEqualTo(i2.recipeId)
         assertThat(queriedIngredient2.ingredientId).isEqualTo(i2.ingredientId)
@@ -159,5 +164,36 @@ class MigrationTest {
         assertThat(queriedShoppingListItem1).isEqualTo(s1)
         assertThat(queriedShoppingListItem2).isEqualTo(s2)
 
+        // cooking steps
+        val csCursor = db.query("SELECT * FROM CookingStep")
+        csCursor.moveToFirst()
+
+        val csId1 = csCursor.getInt(csCursor.getColumnIndex("cookingStepId")).toLong()
+        val csRId1 = csCursor.getInt(csCursor.getColumnIndex("recipeId")).toLong()
+        val csText1 = csCursor.getString(csCursor.getColumnIndex("text"))
+        val csTime1 = csCursor.getInt(csCursor.getColumnIndex("time"))
+        val csUnitString1 = csCursor.getString(csCursor.getColumnIndex("timeUnit"))
+        val csUnit1 = TimeUnit.valueOf(csUnitString1)
+        val queriedCookingStep1 =
+            CookingStep(csRId1, csText1, csTime1, csUnit1).apply { cookingStepId = csId1 }
+
+        csCursor.moveToNext()
+
+        val csId2 = csCursor.getInt(csCursor.getColumnIndex("cookingStepId")).toLong()
+        val csRId2 = csCursor.getInt(csCursor.getColumnIndex("recipeId")).toLong()
+        val csText2 = csCursor.getString(csCursor.getColumnIndex("text"))
+        val csTime2 = csCursor.getInt(csCursor.getColumnIndex("time"))
+        val csUnitString2 = csCursor.getString(csCursor.getColumnIndex("timeUnit"))
+        val csUnit2 = TimeUnit.valueOf(csUnitString2)
+        val queriedCookingStep2 =
+            CookingStep(csRId2, csText2, csTime2, csUnit2).apply { cookingStepId = csId2 }
+
+        assertThat(csCursor.count).isEqualTo(2)
+        assertThat(queriedCookingStep1).isEqualTo(cs1)
+        assertThat(queriedCookingStep1.recipeId).isEqualTo(cs1.recipeId)
+        assertThat(queriedCookingStep1.cookingStepId).isEqualTo(cs1.cookingStepId)
+        assertThat(queriedCookingStep2).isEqualTo(cs2)
+        assertThat(queriedCookingStep2.recipeId).isEqualTo(cs2.recipeId)
+        assertThat(queriedCookingStep2.cookingStepId).isEqualTo(cs2.cookingStepId)
     }
 }

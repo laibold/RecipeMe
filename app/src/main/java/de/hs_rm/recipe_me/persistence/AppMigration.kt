@@ -4,6 +4,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.model.recipe.RecipeCategory
+import de.hs_rm.recipe_me.model.recipe.TimeUnit
 
 /**
  * Migrations as static objects for [AppDatabase]
@@ -170,6 +171,7 @@ object AppMigration {
             migrateRecipe(database)
             migrateIngredient(database)
             migrateShoppingListItem(database)
+            migrateCookingStep(database)
         }
 
         private fun migrateRecipe(database: SupportSQLiteDatabase) {
@@ -263,7 +265,7 @@ object AppMigration {
                 val name = cursor.getString(cursor.getColumnIndex("name"))
                 val quantity = cursor.getDouble(cursor.getColumnIndex("quantity"))
                 val unit = cursor.getInt(cursor.getColumnIndex("unit"))
-                val unitString = IngredientUnit.values()[unit]
+                val unitString = IngredientUnit.values()[unit].name
 
                 database.execSQL(
                     "INSERT INTO ShoppingListItem (id, checked, name, quantity, unit)" +
@@ -275,6 +277,42 @@ object AppMigration {
 
             database.execSQL(
                 "DROP TABLE ShoppingListItem_old"
+            )
+        }
+
+        private fun migrateCookingStep(database: SupportSQLiteDatabase) {
+            database.execSQL("ALTER TABLE CookingStep RENAME TO CookingStep_old")
+
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS CookingStep (" +
+                        " cookingStepId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        " recipeId INTEGER NOT NULL," +
+                        " text TEXT NOT NULL," +
+                        " time INTEGER NOT NULL," +
+                        " timeUnit TEXT NOT NULL)"
+            )
+
+            val cursor = database.query("SELECT * FROM CookingStep_old")
+            cursor.moveToFirst()
+
+            while (!cursor.isAfterLast) {
+                val id = cursor.getInt(cursor.getColumnIndex("cookingStepId")).toLong()
+                val recipeId = cursor.getInt(cursor.getColumnIndex("recipeId")).toLong()
+                val text = cursor.getString(cursor.getColumnIndex("text"))
+                val time = cursor.getInt(cursor.getColumnIndex("time"))
+                val timeUnit = cursor.getInt(cursor.getColumnIndex("timeUnit"))
+                val timeUnitString = TimeUnit.values()[timeUnit].name
+
+                database.execSQL(
+                    "INSERT INTO CookingStep (cookingStepId, recipeId, text, time, timeUnit)" +
+                            " VALUES ($id, $recipeId, \"$text\", $time, \"$timeUnitString\")"
+                )
+
+                cursor.moveToNext()
+            }
+
+            database.execSQL(
+                "DROP TABLE CookingStep_old"
             )
         }
     }
