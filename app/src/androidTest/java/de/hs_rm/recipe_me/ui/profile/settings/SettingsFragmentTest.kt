@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.preference.PreferenceManager
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -61,6 +63,8 @@ class SettingsFragmentTest {
 
     private lateinit var themeRadioGroup: RadioGroup
 
+    private lateinit var navController: NavController
+
     @Before
     fun beforeEach() {
         hiltRule.inject()
@@ -75,10 +79,12 @@ class SettingsFragmentTest {
         timerKey = PreferenceService.TIMER_KEY
         cookingStepKey = PreferenceService.COOKING_STEP_KEY
 
+        navController = mock(NavController::class.java)
         launchFragmentInHiltContainer<SettingsFragment> {
             themeRadioGroup = requireView().findViewById(R.id.radio_group)
             val tempViewModel: SettingsViewModel by viewModels()
             viewModel = tempViewModel
+            Navigation.setViewNavController(requireView(), navController)
         }
     }
 
@@ -317,12 +323,12 @@ class SettingsFragmentTest {
     }
 
     /**
-     * Test if current version (from build.gradle) is shown in fragment. Must be hard coded here
+     * Test navigation to site notice fragment
      */
     @Test
-    fun canShowVersion() {
-        val currentVersion = "Version: 2.1.5"
-        onView(withId(R.id.version_text)).check(matches(withText(currentVersion)))
+    fun canNavigateToSiteNoticeFragment() {
+        onView(withId(R.id.to_site_notice_element)).perform(click())
+        verify(navController).navigate(SettingsFragmentDirections.toSiteNoticeFragment())
     }
 
     /////

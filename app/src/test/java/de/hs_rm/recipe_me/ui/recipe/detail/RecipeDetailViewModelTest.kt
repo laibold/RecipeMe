@@ -102,7 +102,7 @@ class RecipeDetailViewModelTest {
 
     @Test
     fun canCalculateServingsMultiplier() {
-        val recipe = Recipe(RecipeCategory.MAIN_DISHES).apply { servings = 3 }
+        val recipe = Recipe().apply { servings = 3 }
         val recipeWithRelations = RecipeWithRelations(recipe, listOf(), listOf())
         val recipeRepository: RecipeRepository = mock {
             on { getRecipeWithRelationsById(eq(1)) } doReturn MutableLiveData(recipeWithRelations)

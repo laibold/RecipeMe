@@ -3,7 +3,6 @@ package de.hs_rm.recipe_me.service
 import android.content.Context
 import com.google.common.truth.Truth.assertThat
 import de.hs_rm.recipe_me.model.recipe.Recipe
-import de.hs_rm.recipe_me.model.recipe.RecipeCategory
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
@@ -61,7 +60,7 @@ class ImageHandlerTest {
         val imageHandler = spy(ImageHandler(context)) {
             onGeneric { getImageFromFile(any(), any(), any()) } doReturn mock()
         }
-        val recipe = Recipe(RecipeCategory.MAIN_DISHES).apply { id = 1 }
+        val recipe = Recipe().apply { id = 1 }
 
         val bitmap = imageHandler.getRecipeImage(recipe)
 
@@ -80,7 +79,7 @@ class ImageHandlerTest {
         val imageHandler = spy(ImageHandler(context)) {
             onGeneric { getImageFromFile(any(), any(), any()) } doReturn mock()
         }
-        val recipe = Recipe(RecipeCategory.MAIN_DISHES).apply { id = 1 }
+        val recipe = Recipe().apply { id = 1 }
 
         val bitmap = imageHandler.getRecipeImage(recipe)
 
