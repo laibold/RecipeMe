@@ -14,10 +14,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import de.hs_rm.recipe_me.BuildConfig
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.SettingsFragmentBinding
+import de.hs_rm.recipe_me.ui.profile.ProfileFragmentDirections
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
@@ -65,9 +67,10 @@ class SettingsFragment : Fragment() {
                 .show()
         }
 
-        val versionNumber = BuildConfig.VERSION_NAME
-        @SuppressLint("SetTextI18n")
-        binding.versionText.text = "${getString(R.string.version)}: $versionNumber"
+        binding.toSiteNoticeElement.setOnClickListener {
+            val direction = SettingsFragmentDirections.toSiteNoticeFragment()
+            findNavController().navigate(direction)
+        }
 
         return binding.root
     }

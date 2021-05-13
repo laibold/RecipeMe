@@ -64,11 +64,6 @@ class ProfileFragment : Fragment(), BottomSheetImagePicker.OnImagesSelectedListe
             findNavController().navigate(direction)
         }
 
-        binding.toSiteNoticeElement.setOnClickListener {
-            val direction = ProfileFragmentDirections.toSiteNoticeFragment()
-            findNavController().navigate(direction)
-        }
-
         return binding.root
     }
 
