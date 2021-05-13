@@ -7,3 +7,5 @@ fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(t
 fun Int.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this.toString())
 
 fun Double.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this.toString())
+
+fun Boolean.toInt() = if (this) 1 else 0

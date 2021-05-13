@@ -5,6 +5,7 @@ import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
+import de.hs_rm.recipe_me.declaration.toInt
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 import org.junit.Rule
@@ -55,11 +56,11 @@ class MigrationTest {
             )
             execSQL(
                 "INSERT INTO ShoppingListItem (id, checked, name, quantity, unit)" +
-                        " VALUES (${s1.id}, ${s1.checked}, \"${s1.name}\", ${s1.quantity}, ${s1.unit.ordinal})"
+                        " VALUES (${s1.id}, ${s1.checked.toInt()}, \"${s1.name}\", ${s1.quantity}, ${s1.unit.ordinal})"
             )
             execSQL(
                 "INSERT INTO ShoppingListItem (id, checked, name, quantity, unit)" +
-                        " VALUES (${s2.id}, ${s2.checked}, \"${s2.name}\", ${s2.quantity}, ${s2.unit.ordinal})"
+                        " VALUES (${s2.id}, ${s2.checked.toInt()}, \"${s2.name}\", ${s2.quantity}, ${s2.unit.ordinal})"
             )
             execSQL(
                 "INSERT INTO CookingStep (cookingStepId, recipeId, text, time, timeUnit)" +
