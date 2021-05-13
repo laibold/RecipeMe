@@ -1,42 +1,41 @@
 package de.hs_rm.recipe_me.service.repository
 
-import android.content.Context
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import de.hs_rm.recipe_me.TestDataProvider
+import com.google.common.truth.Truth.assertThat
 import de.hs_rm.recipe_me.model.RecipeOfTheDay
 import de.hs_rm.recipe_me.model.recipe.Recipe
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.persistence.dao.RecipeDao
 import de.hs_rm.recipe_me.persistence.dao.RecipeOfTheDayDao
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
+import test_shared.TestDataProvider
 import java.time.LocalDate
 
-@RunWith(AndroidJUnit4::class)
 class RecipeOfTheDayRepositoryTest {
 
-    private lateinit var db: AppDatabase
+    @get:Rule
+    var instantExecutorRule = InstantTaskExecutorRule()
+
     private lateinit var rotdRepository: RecipeOfTheDayRepository
     private lateinit var recipeRepository: RecipeRepository
+
     private lateinit var rotdDao: RecipeOfTheDayDao
     private lateinit var recipeDao: RecipeDao
-
-    private lateinit var appContext: Context
 
     /**
      * Build inMemory database and create repositories with DAOs from database
      */
     @Before
-    fun init() {
-        appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java).build()
-        recipeDao = db.recipeDao()
+    fun beforeEach() {
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        val db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java).build()
         rotdDao = db.recipeOfTheDayDao()
+        recipeDao = db.recipeDao()
 
         rotdRepository = RecipeOfTheDayRepository(rotdDao, recipeDao)
         recipeRepository = RecipeRepository(recipeDao)
@@ -52,13 +51,13 @@ class RecipeOfTheDayRepositoryTest {
         val yesterdaysRotd = RecipeOfTheDay(yesterdayDate, 0)
 
         var result = rotdRepository.rotdInvalid(yesterdaysRotd)
-        assertTrue(result)
+        assertThat(result).isTrue()
 
         val todaysDate = LocalDate.now()
         val todaysRotd = RecipeOfTheDay(todaysDate, 0)
 
         result = rotdRepository.rotdInvalid(todaysRotd)
-        assertFalse(result)
+        assertThat(result).isFalse()
     }
 
     /**
@@ -66,12 +65,11 @@ class RecipeOfTheDayRepositoryTest {
      */
     @Test
     fun createRotdFromNullSuccessful() {
-        db.clearAllTables()
         insertTestData(1)
         val rotd = updateAndGetRotd()
 
-        assertNotNull(rotd)
-        assertNotEquals(rotd!!.name, "")
+        assertThat(rotd).isNotNull()
+        assertThat(rotd!!.name).isNotEqualTo("")
 
         assertCurrentRotdDateAndCount()
     }
@@ -82,10 +80,9 @@ class RecipeOfTheDayRepositoryTest {
      */
     @Test
     fun createRotdWithOneRecipeSuccessful() {
-        db.clearAllTables()
         insertTestData(1)
-        var oldRotd: Recipe? = null
-        var newRotd: Recipe? = null
+        var oldRotd: Recipe?
+        var newRotd: Recipe?
 
         runBlocking {
             // Set current rotd's date to yesterday
@@ -97,11 +94,11 @@ class RecipeOfTheDayRepositoryTest {
         }
         runBlocking {
             newRotd = updateAndGetRotd()
-            assertEquals(1, rotdDao.getCount())
+            assertThat(rotdDao.getCount()).isEqualTo(1)
         }
 
-        assertNotNull(newRotd)
-        assertEquals(oldRotd, newRotd)
+        assertThat(newRotd).isNotNull()
+        assertThat(newRotd).isEqualTo(oldRotd)
     }
 
     /**
@@ -110,12 +107,11 @@ class RecipeOfTheDayRepositoryTest {
      */
     @Test
     fun switchRotdSuccessful() {
-        db.clearAllTables()
         insertTestData(2)
-        var oldRotd: Recipe? = null
+        var oldRotd: Recipe?
         var newRotd: Recipe?
 
-        for (i in 0..100) {
+        for (i in 0..25) {
             // Set current rotd's date to yesterday
             runBlocking {
                 oldRotd = updateAndGetRotd()
@@ -127,9 +123,9 @@ class RecipeOfTheDayRepositoryTest {
 
             newRotd = updateAndGetRotd()
 
-            assertNotNull(newRotd)
-            assertNotEquals(oldRotd!!.id, newRotd!!.id)
-            assertNotEquals(oldRotd, newRotd)
+            assertThat(newRotd).isNotNull()
+            assertThat(newRotd!!.id).isNotEqualTo(oldRotd!!.id)
+            assertThat(newRotd).isNotEqualTo(oldRotd)
         }
 
         assertCurrentRotdDateAndCount()
@@ -141,23 +137,22 @@ class RecipeOfTheDayRepositoryTest {
      */
     @Test
     fun newRotdOnRecipeDeleted() {
-        db.clearAllTables()
         insertTestData(2)
         val oldRotd = updateAndGetRotd()
-        var recipeTotal = -1
+        var recipeTotal: Int
 
         runBlocking {
             recipeRepository.deleteRecipeAndRelations(oldRotd!!)
 
-            assertEquals(0, rotdDao.getCount())
+            assertThat(rotdDao.getCount()).isEqualTo(0)
             recipeTotal = recipeDao.getRecipeCount()
         }
 
-        assertEquals(1, recipeTotal)
+        assertThat(recipeTotal).isEqualTo(1)
 
         val newRotd = updateAndGetRotd()
 
-        assertNotEquals(newRotd, oldRotd)
+        assertThat(newRotd).isNotEqualTo(oldRotd)
         assertCurrentRotdDateAndCount()
     }
 
@@ -167,10 +162,9 @@ class RecipeOfTheDayRepositoryTest {
      */
     @Test
     fun rotdWithOneRecipeSuccessful() {
-        db.clearAllTables()
         insertTestData(1)
-        var oldRotd: Recipe? = null
-        var newRotd: Recipe? = null
+        var oldRotd: Recipe?
+        var newRotd: Recipe?
 
         runBlocking {
             oldRotd = updateAndGetRotd()
@@ -182,25 +176,25 @@ class RecipeOfTheDayRepositoryTest {
 
         runBlocking {
             newRotd = updateAndGetRotd()
-            assertEquals(1, rotdDao.getCount())
+            assertThat(rotdDao.getCount()).isEqualTo(1)
         }
 
-        assertNotNull(newRotd)
-        assertEquals(oldRotd, newRotd)
+        assertThat(newRotd).isNotNull()
+        assertThat(newRotd).isEqualTo(oldRotd)
     }
 
     /**
      * Try to create a rotd without recipes in database. There should be no error,
      * but dao must be empty
      */
+    @Test
     fun rotdWithoutRecipesSuccessful() {
-        db.clearAllTables()
         runBlocking {
-            assertEquals(0, recipeDao.getRecipeCount())
+            assertThat(recipeDao.getRecipeCount()).isEqualTo(0)
 
             val rotd = updateAndGetRotd()
-            assertNull(rotd)
-            assertEquals(0, rotdDao.getCount())
+            assertThat(rotd).isNull()
+            assertThat(rotdDao.getCount()).isEqualTo(0)
         }
     }
 
@@ -208,7 +202,7 @@ class RecipeOfTheDayRepositoryTest {
      * Updates recipe of the day and returns the new [Recipe]
      */
     private fun updateAndGetRotd(): Recipe? {
-        var recipe: Recipe? = null
+        var recipe: Recipe?
         runBlocking {
             rotdRepository.updateRecipeOfTheDay()
             val rotdId = rotdRepository.getRecipeOfTheDayId()
@@ -223,9 +217,9 @@ class RecipeOfTheDayRepositoryTest {
     private fun assertCurrentRotdDateAndCount() {
         runBlocking {
             val currentRotdObject = rotdDao.getRecipeOfTheDay()
-            assertEquals(LocalDate.now(), currentRotdObject!!.date)
+            assertThat(currentRotdObject!!.date).isEqualTo(LocalDate.now())
 
-            assertEquals(1, rotdDao.getCount())
+            assertThat(rotdDao.getCount()).isEqualTo(1)
         }
     }
 

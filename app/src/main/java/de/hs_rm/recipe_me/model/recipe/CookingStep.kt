@@ -52,7 +52,7 @@ data class CookingStep(
     }
 
     override fun hashCode(): Int {
-        var result = 31 * text.hashCode()
+        var result = text.hashCode()
         result = 31 * result + time
         result = 31 * result + timeUnit.hashCode()
         return result

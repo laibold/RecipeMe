@@ -5,7 +5,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?attr/colorOnPrimary">
 
         <include
             android:id="@+id/header"
@@ -51,6 +52,7 @@
                     tools:maxLength="@integer/shopping_list_item_name_max_length"
                     tools:text="@tools:sample/lorem/random" />
 
+                <!--TODO plus in white-->
                 <ImageButton
                     android:id="@+id/add_item_button"
                     android:layout_width="@dimen/small_button_size"
@@ -61,9 +63,9 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_baseline_add_circle_24"
                     android:tint="?attr/colorPrimaryVariant"
-                    app:tooltipTextCompat="@{@string/add_to_shopping_list}"
                     app:layout_constraintBottom_toBottomOf="@id/add_item_edit_text"
-                    app:layout_constraintStart_toEndOf="@id/add_item_edit_text" />
+                    app:layout_constraintStart_toEndOf="@id/add_item_edit_text"
+                    app:tooltipTextCompat="@{@string/add_to_shopping_list}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -85,10 +87,11 @@
             style="@style/custom_floating_action_button"
             android:contentDescription="@string/share"
             android:src="@drawable/ic_baseline_share_24"
-            app:tooltipTextCompat="@{@string/share}"
+            android:backgroundTint="?attr/colorPrimaryDark"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:tooltipTextCompat="@{@string/share}"
             tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

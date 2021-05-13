@@ -6,10 +6,14 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import de.hs_rm.recipe_me.persistence.AppDatabase
 import de.hs_rm.recipe_me.persistence.dao.RecipeDao
 import de.hs_rm.recipe_me.persistence.dao.RecipeOfTheDayDao
 import de.hs_rm.recipe_me.persistence.dao.ShoppingListDao
 import de.hs_rm.recipe_me.persistence.dao.UserDao
+import de.hs_rm.recipe_me.service.BackupService
+import de.hs_rm.recipe_me.service.ImageHandler
+import de.hs_rm.recipe_me.service.PreferenceService
 import de.hs_rm.recipe_me.service.repository.*
 import javax.inject.Singleton
 
@@ -27,8 +31,8 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideRecipeImageRepository(@ApplicationContext context: Context) =
-        RecipeImageRepository(context)
+    fun provideRecipeImageRepository(imageHandler: ImageHandler) =
+        RecipeImageRepository(imageHandler)
 
     @Singleton
     @Provides
@@ -50,7 +54,20 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideUserImageRepository(@ApplicationContext context: Context) =
-        UserImageRepository(context)
+    fun provideUserImageRepository(imageHandler: ImageHandler) =
+        UserImageRepository(imageHandler)
+
+    @Singleton
+    @Provides
+    fun provideBackupService(
+        @ApplicationContext context: Context,
+        db: AppDatabase,
+        preferenceService: PreferenceService,
+        imageHandler: ImageHandler
+    ) = BackupService(context, db, preferenceService, imageHandler)
+
+    @Singleton
+    @Provides
+    fun providePreferenceService(@ApplicationContext context: Context) = PreferenceService(context)
 
 }

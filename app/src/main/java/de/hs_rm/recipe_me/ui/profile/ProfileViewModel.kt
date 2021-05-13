@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * ViewModel for [ProfileViewModel]
+ * ViewModel for [ProfileFragment]
  */
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
@@ -28,10 +28,11 @@ class ProfileViewModel @Inject constructor(
     private val imageRepository: UserImageRepository
 ) : ViewModel() {
 
-    lateinit var total: LiveData<Int>
+    lateinit var recipeTotal: LiveData<Int>
     lateinit var user: LiveData<User?>
 
-    private val _editProfileImage = MutableLiveData<Bitmap?>()
+    @Suppress("PropertyName")
+    internal var _editProfileImage = MutableLiveData<Bitmap?>()
     val editProfileImage: LiveData<Bitmap?>
         get() = _editProfileImage
 
@@ -43,7 +44,7 @@ class ProfileViewModel @Inject constructor(
      * Get total from repository and save it to ViewModel
      */
     fun loadRecipeTotal() {
-        total = recipeRepository.getRecipeTotal()
+        recipeTotal = recipeRepository.getRecipeTotal()
     }
 
     /**
@@ -71,8 +72,8 @@ class ProfileViewModel @Inject constructor(
                 _profileImage.postValue(it)
             }
             imageRepository.saveProfileImage(it)
+            clearEditProfileImage()
         }
-        clearEditProfileImage()
     }
 
     /**

@@ -39,9 +39,9 @@ class ShoppingListFragment : Fragment() {
         viewModel.loadShoppingListItems()
         viewModel.loadUser()
 
-        viewModel.shoppingListItems.observe(viewLifecycleOwner) {
+        viewModel.shoppingListItems.observe(viewLifecycleOwner, {
             onShoppingListItemsChanged(it)
-        }
+        })
 
         binding.shoppingListListLayout.listView.emptyView =
             binding.shoppingListListLayout.addHintText
@@ -62,11 +62,11 @@ class ShoppingListFragment : Fragment() {
             onClearButtonPressed()
         }
 
-        viewModel.user.observe(viewLifecycleOwner) { user ->
+        viewModel.user.observe(viewLifecycleOwner, { user ->
             binding.shareButton.setOnClickListener {
                 TextSharer.share(requireContext(), getShareText(user))
             }
-        }
+        })
 
         return binding.root
     }

@@ -1,39 +1,38 @@
 package de.hs_rm.recipe_me.ui.recipe.add
 
 import android.content.Context
-import android.text.Editable
-import android.widget.EditText
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import de.hs_rm.recipe_me.TestDataProvider
-import de.hs_rm.recipe_me.declaration.getOrAwaitValue
-import de.hs_rm.recipe_me.model.recipe.*
+import com.google.common.truth.Truth.assertThat
+import de.hs_rm.recipe_me.declaration.toEditable
+import de.hs_rm.recipe_me.model.recipe.IngredientUnit
+import de.hs_rm.recipe_me.model.recipe.Recipe
+import de.hs_rm.recipe_me.model.recipe.RecipeCategory
+import de.hs_rm.recipe_me.model.recipe.TimeUnit
 import de.hs_rm.recipe_me.persistence.AppDatabase
-import de.hs_rm.recipe_me.persistence.dao.RecipeDao
 import de.hs_rm.recipe_me.service.repository.RecipeImageRepository
 import de.hs_rm.recipe_me.service.repository.RecipeRepository
 import kotlinx.coroutines.*
-import org.junit.After
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import java.io.IOException
-import java.util.concurrent.Executors
+import org.mockito.Mockito.mock
+import test_shared.declaration.getOrAwaitValue
 
-@RunWith(AndroidJUnit4::class)
+/**
+ * Functional tests for [AddRecipeViewModel]
+ */
 class AddRecipeViewModelTest {
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var db: AppDatabase
+    lateinit var db: AppDatabase
+
     private lateinit var recipeRepository: RecipeRepository
     private lateinit var recipeImageRepository: RecipeImageRepository
-    private lateinit var recipeDao: RecipeDao
+
     private lateinit var viewModel: AddRecipeViewModel
 
     private lateinit var appContext: Context
@@ -42,331 +41,22 @@ class AddRecipeViewModelTest {
      * Build inMemory database and create ViewModel
      */
     @Before
-    fun init() {
+    fun beforeEach() {
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
-    }
-
-    @After
-    @Throws(IOException::class)
-    fun closeDb() {
-        db.close()
-    }
-
-    /**
-     * Clear all database tables and re-initialize ViewModel and its recipe
-     */
-    private fun beforeEach() {
         db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java)
-            .setTransactionExecutor(Executors.newSingleThreadExecutor())
-            .build()
+            .allowMainThreadQueries().build()
+        val dao = db.recipeDao()
+        recipeRepository = RecipeRepository(dao)
 
-        recipeDao = db.recipeDao()
-        recipeRepository = RecipeRepository(recipeDao)
-        recipeImageRepository = RecipeImageRepository(appContext)
+        recipeImageRepository = mock(RecipeImageRepository::class.java)
 
-        db.clearAllTables()
         viewModel = AddRecipeViewModel(recipeRepository, recipeImageRepository)
         viewModel.setCategory(RecipeCategory.MAIN_DISHES)
-        GlobalScope.launch(Dispatchers.Main) {
-            delay(1000)
-            viewModel.initRecipe(Recipe.DEFAULT_ID)
-        }
+        viewModel.initRecipe(Recipe.DEFAULT_ID)
 
         viewModel.recipe.getOrAwaitValue()
         viewModel.ingredients.getOrAwaitValue()
         viewModel.cookingStepsWithIngredients.getOrAwaitValue()
-    }
-
-    /**
-     * Try to set recipe name and servings with invalid values. Function should return false.
-     */
-    @Test
-    fun setRecipeAttributesUnsuccessful() {
-        beforeEach()
-        assertFalse(viewModel.setRecipeAttributes("", "", RecipeCategory.SNACKS))
-        assertFalse(viewModel.setRecipeAttributes("", "1", RecipeCategory.SNACKS))
-        assertFalse(viewModel.setRecipeAttributes("name", "", RecipeCategory.SNACKS))
-        assertFalse(viewModel.setRecipeAttributes("name", "0", RecipeCategory.SNACKS))
-    }
-
-    /**
-     * Set recipe name and servings with valid values. Function should return true.
-     */
-    @Test
-    fun setRecipeAttributesSuccessful() {
-        beforeEach()
-        assertTrue(viewModel.setRecipeAttributes("n", "1", RecipeCategory.SNACKS))
-    }
-
-    /**
-     * Add Ingredients with valid values, check return values and amount of ingredients.
-     */
-    @Test
-    fun addIngredientSuccessful() {
-        beforeEach()
-        val name = getEditable("Valid Name")
-        val quantity1 = getEditable("1.5")
-        val quantity2 = getEditable("1,5")
-        val quantity3 = getEditable("")
-        val unit = IngredientUnit.NONE
-
-        val countBefore = viewModel.ingredients.value?.size!!
-
-        assertTrue(viewModel.addIngredient(name, quantity1, unit))
-        assertTrue(viewModel.addIngredient(name, quantity2, unit))
-        assertTrue(viewModel.addIngredient(name, quantity3, unit))
-
-        val countAfter = viewModel.ingredients.value?.size!!
-
-        assertEquals((countBefore + 3), countAfter)
-    }
-
-    /**
-     * Add Ingredients with valid name, check return value and amount of ingredients (shouldn't increase).
-     */
-    @Test
-    fun addIngredientUnsuccessful() {
-        beforeEach()
-        val nameInvalid = getEditable("")
-        val quantityValid = getEditable("1.5")
-        val unit = IngredientUnit.NONE
-
-        val countBefore = viewModel.ingredients.value?.size!!
-
-        assertFalse(viewModel.addIngredient(nameInvalid, quantityValid, unit))
-
-        val countAfter = viewModel.ingredients.value?.size!!
-
-        assertEquals(countBefore, countAfter)
-    }
-
-    /**
-     * Update ingredient with valid values and check them as well as the amount of ingredients
-     */
-    @Test
-    fun updateIngredientSuccessful() {
-        beforeEach()
-        insertTestData(3, 0)
-        val position = 1
-        val name = "new name"
-        val quantity = 1.5
-        val ingredientUnit = IngredientUnit.CLOVE
-
-        viewModel.prepareIngredientUpdate(position)
-
-        val countBefore = viewModel.ingredients.value?.size!!
-
-        val success = viewModel.updateIngredient(
-            getEditable(name),
-            getEditable(quantity.toString()),
-            ingredientUnit
-        )
-        assertTrue(success)
-
-        val countAfter = viewModel.ingredients.value?.size!!
-
-        assertEquals(name, viewModel.ingredients.value!![position].name)
-        assertEquals(quantity, viewModel.ingredients.value!![position].quantity, 0.0)
-        assertEquals(ingredientUnit, viewModel.ingredients.value!![position].unit)
-
-        assertEquals(countBefore, countAfter)
-    }
-
-    /**
-     * Update ingredient with invalid values and check them as well as the amount of ingredients (shouldn't change)
-     */
-    @Test
-    fun updateIngredientUnsuccessful() {
-        beforeEach()
-        insertTestData(3, 0)
-        val position = 1
-        val name = ""
-        val quantity = 1.5
-        val ingredientUnit = IngredientUnit.CLOVE
-
-        viewModel.prepareIngredientUpdate(position)
-
-        val countBefore = viewModel.ingredients.value?.size!!
-
-        val success = viewModel.updateIngredient(
-            getEditable(name),
-            getEditable(quantity.toString()),
-            ingredientUnit
-        )
-        assertFalse(success)
-
-        val countAfter = viewModel.ingredients.value?.size!!
-
-        assertNotEquals(name, viewModel.ingredients.value!![position].name)
-        assertNotEquals(quantity, viewModel.ingredients.value!![position].quantity, 0.0)
-        assertNotEquals(ingredientUnit, viewModel.ingredients.value!![position].unit)
-
-        assertEquals(countBefore, countAfter)
-    }
-
-    /**
-     * Test that if an ingredients gets removed in viewModel scope, it wont be assigned to a
-     * CookingStep in viewModel scope anymore
-     */
-    @Test
-    fun deleteAssignedIngredientSuccessful() {
-        beforeEach()
-
-        viewModel.addIngredient(getEditable("Delete"), getEditable("1.0"), IngredientUnit.NONE)
-        viewModel.addIngredient(getEditable("Keep"), getEditable("1.0"), IngredientUnit.NONE)
-
-        val deleteIngredient = viewModel.ingredients.value!![0]
-        val keepIngredient = viewModel.ingredients.value!![1]
-
-        viewModel.addCookingStepWithIngredients(
-            getEditable("Text"),
-            getEditable("0"),
-            TimeUnit.SECOND,
-            mutableListOf(deleteIngredient, keepIngredient)
-        )
-
-        val ingredientsBefore = viewModel.cookingStepsWithIngredients.value?.get(0)!!.ingredients
-        val beforeCountList = ArrayList<Ingredient>(ingredientsBefore)
-        assertEquals(2, beforeCountList.size)
-
-        viewModel.ingredients.value!!.remove(deleteIngredient)
-        Thread.sleep(1000)
-        viewModel.prepareCookingStepUpdate(0)
-
-        val ingredientsAfter = viewModel.cookingStepsWithIngredients.value?.get(0)!!.ingredients
-        val afterCountList = ArrayList<Ingredient>(ingredientsAfter)
-        assertEquals(1, afterCountList.size)
-    }
-
-    /**
-     * Add CookingStepsWithIngredients with valid values, check return values and amount of cooking steps.
-     */
-    @Test
-    fun addCookingStepSuccessful() {
-        beforeEach()
-        val text = getEditable("Valid Text")
-        val time1 = getEditable("1")
-        val time2 = getEditable("")
-        val unit = TimeUnit.SECOND
-        val ingredients = mutableListOf(TestDataProvider.getRandomIngredient(0))
-
-        val countBefore = viewModel.cookingStepsWithIngredients.value?.size!!
-
-        assertTrue(viewModel.addCookingStepWithIngredients(text, time1, unit, ingredients))
-        assertTrue(viewModel.addCookingStepWithIngredients(text, time2, unit, ingredients))
-
-        val countAfter = viewModel.cookingStepsWithIngredients.value?.size!!
-
-        assertEquals((countBefore + 2), countAfter)
-    }
-
-    /**
-     * Add CookingStepWithIngredients with invalid text, check return value and amount of CookingSteps (shouldn't increase).
-     */
-    @Test
-    fun addCookingStepUnsuccessful() {
-        beforeEach()
-        val textInvalid = getEditable("")
-        val timeValid = getEditable("3")
-        val unit = TimeUnit.MINUTE
-        val ingredients = mutableListOf(TestDataProvider.getRandomIngredient(0))
-
-        val countBefore = viewModel.cookingStepsWithIngredients.value?.size!!
-
-        assertFalse(
-            viewModel.addCookingStepWithIngredients(
-                textInvalid,
-                timeValid,
-                unit,
-                ingredients
-            )
-        )
-
-        val countAfter = viewModel.cookingStepsWithIngredients.value?.size!!
-
-        assertEquals(countBefore, countAfter)
-    }
-
-    /**
-     * Update CookingStep with valid values and check them as well as the amount of CookingSteps
-     */
-    @Test
-    fun updateCookingStepSuccessful() {
-        beforeEach()
-        insertTestData(0, 3)
-        val position = 1
-        val text = "new text"
-        val time = 50
-        val unit = TimeUnit.MINUTE
-        val ingredients = mutableListOf(TestDataProvider.getRandomIngredient(0))
-
-        viewModel.prepareCookingStepUpdate(position)
-
-        val countBefore = viewModel.cookingStepsWithIngredients.value?.size!!
-
-        val success = viewModel.updateCookingStepWithIngredients(
-            getEditable(text),
-            getEditable(time.toString()),
-            unit,
-            ingredients
-        )
-        assertTrue(success)
-
-        val countAfter = viewModel.cookingStepsWithIngredients.value?.size!!
-
-        assertEquals(text, viewModel.cookingStepsWithIngredients.value!![position].cookingStep.text)
-        assertEquals(time, viewModel.cookingStepsWithIngredients.value!![position].cookingStep.time)
-        assertEquals(
-            unit,
-            viewModel.cookingStepsWithIngredients.value!![position].cookingStep.timeUnit
-        )
-        assertEquals(1, viewModel.cookingStepsWithIngredients.value!![position].ingredients.size)
-
-        assertEquals(countBefore, countAfter)
-    }
-
-    /**
-     * Update CookingStepWithIngredient with invalid values and check them as well as the amount of CookingStep (shouldn't change)
-     */
-    @Test
-    fun updateCookingStepUnsuccessful() {
-        beforeEach()
-        insertTestData(2, 3)
-        val position = 1
-        val text = ""
-        val time = 0
-        val unit = TimeUnit.MINUTE
-        val ingredient = viewModel.ingredients.getOrAwaitValue()[0]
-        val ingredients = mutableListOf(ingredient)
-
-        viewModel.prepareCookingStepUpdate(position)
-
-        val countBefore = viewModel.cookingStepsWithIngredients.getOrAwaitValue().size
-
-        val success = viewModel.updateCookingStepWithIngredients(
-            getEditable(text),
-            getEditable(time.toString()),
-            unit,
-            ingredients
-        )
-        assertFalse(success)
-
-        val countAfter = viewModel.cookingStepsWithIngredients.getOrAwaitValue().size
-
-        assertEquals(countBefore, countAfter)
-
-        assertNotEquals(
-            text,
-            viewModel.cookingStepsWithIngredients.value!![position].cookingStep.text
-        )
-        assertNotEquals(
-            time,
-            viewModel.cookingStepsWithIngredients.value!![position].cookingStep.time
-        )
-        assertNotEquals(
-            unit,
-            viewModel.cookingStepsWithIngredients.value!![position].cookingStep.timeUnit
-        )
     }
 
     /**
@@ -380,7 +70,7 @@ class AddRecipeViewModelTest {
         val numberOfChildren = 3
         val cookingStepIndex = 0
         val updateIndex = 0
-        beforeEach()
+
         insertTestData(numberOfChildren, numberOfChildren)
 
         viewModel.prepareCookingStepUpdate(cookingStepIndex)
@@ -392,8 +82,8 @@ class AddRecipeViewModelTest {
         val assignedIngredients = mutableListOf(ingredient0, ingredient1, ingredient2)
 
         viewModel.updateCookingStepWithIngredients(
-            getEditable("CookingStepName"),
-            getEditable("0"),
+            "CookingStepName".toEditable(),
+            (0).toEditable(),
             TimeUnit.SECOND,
             assignedIngredients
         )
@@ -402,7 +92,7 @@ class AddRecipeViewModelTest {
         val id = viewModel.persistEntities().getOrAwaitValue()
 
         GlobalScope.launch(Dispatchers.Main) {
-            delay(1000)
+            delay(500)
             viewModel.initRecipe(id)
         }
 
@@ -417,8 +107,8 @@ class AddRecipeViewModelTest {
         // Update ingredient at index 0
         viewModel.prepareIngredientUpdate(updateIndex)
         viewModel.updateIngredient(
-            getEditable(newName),
-            getEditable(newQuantity.toString()),
+            newName.toEditable(),
+            newQuantity.toEditable(),
             newIngredientUnit
         )
 
@@ -431,15 +121,15 @@ class AddRecipeViewModelTest {
         val cookingStepWithIngredients =
             viewModel.cookingStepsWithIngredients.value!![cookingStepIndex]
 
-        assertEquals(2, cookingStepWithIngredients.ingredients.size)
+        assertThat(cookingStepWithIngredients.ingredients.size).isEqualTo(2)
 
         val updatedAssignedIngredient = cookingStepWithIngredients.ingredients[updateIndex]
-        assertEquals(newName, updatedAssignedIngredient.name)
-        assertEquals(newQuantity, updatedAssignedIngredient.quantity, 0.0)
-        assertEquals(newIngredientUnit, updatedAssignedIngredient.unit)
+        assertThat(updatedAssignedIngredient.name).isEqualTo(newName)
+        assertThat(updatedAssignedIngredient.quantity).isEqualTo(newQuantity)
+        assertThat(updatedAssignedIngredient.unit).isEqualTo(newIngredientUnit)
 
         val unchangedIngredient = cookingStepWithIngredients.ingredients[1]
-        assertTrue(unchangedIngredient == ingredient1)
+        assertThat(unchangedIngredient == ingredient1).isTrue()
     }
 
     /**
@@ -450,223 +140,24 @@ class AddRecipeViewModelTest {
     fun persistEntitiesSuccessful() {
         val numberOfChildren = 3
 
-        beforeEach()
         insertTestData(numberOfChildren, numberOfChildren)
 
         val recipe = viewModel.recipe.getOrAwaitValue()
 
-        assertNotNull(recipe)
+        assertThat(recipe).isNotNull()
 
         val id = viewModel.persistEntities().getOrAwaitValue()
 
-        assertNotEquals(0L, id)
-        assertEquals(1, recipeRepository.getRecipeTotal().getOrAwaitValue())
+        assertThat(id).isNotEqualTo(0L)
+        assertThat(recipeRepository.getRecipeTotal().getOrAwaitValue()).isEqualTo(1)
 
         val recipeWithRelations = recipeRepository.getRecipeWithRelationsById(id).getOrAwaitValue()
 
-        assertEquals(numberOfChildren, recipeWithRelations.ingredients.size)
-        assertEquals(numberOfChildren, recipeWithRelations.cookingStepsWithIngredients.size)
+        assertThat(recipeWithRelations.ingredients.size).isEqualTo(numberOfChildren)
+        assertThat(recipeWithRelations.cookingStepsWithIngredients.size).isEqualTo(numberOfChildren)
     }
 
-    /**
-     * Test update of all entities
-     */
-//    @Test
-    fun updateEntitiesSuccessful() {
-        val numberOfChildren = 2
-
-        val name = "New Name"
-        val servings = "6"
-        val category = RecipeCategory.BREAKFAST
-
-        beforeEach()
-        insertTestData(numberOfChildren, numberOfChildren)
-
-        val recipeId = viewModel.persistEntities().getOrAwaitValue(10)
-
-        // Test if test insertion succeeded (May be deleted)
-        val recipeWithRelations2 =
-            recipeRepository.getRecipeWithRelationsById(recipeId).getOrAwaitValue(10)
-        assertEquals(numberOfChildren, recipeWithRelations2.ingredients.size)
-        assertEquals(numberOfChildren, recipeWithRelations2.cookingStepsWithIngredients.size)
-
-        GlobalScope.launch(Dispatchers.Main) {
-            delay(1000)
-            viewModel.initRecipe(1)
-        }
-
-        viewModel.recipe.getOrAwaitValue()
-        viewModel.ingredients.getOrAwaitValue()
-        viewModel.cookingStepsWithIngredients.getOrAwaitValue()
-
-        // change name, servings and category
-        viewModel.setRecipeAttributes(name, servings, category)
-
-        // add ingredient
-        viewModel.addIngredient(
-            getEditable("New Ingredient"),
-            getEditable("1"),
-            IngredientUnit.NONE
-        )
-        // delete ingredient
-        viewModel.ingredients.value!!.removeAt(1)
-        // edit ingredient
-        viewModel.prepareIngredientUpdate(0)
-        viewModel.updateIngredient(
-            getEditable("Updated Ingredient"),
-            getEditable("2"),
-            IngredientUnit.CAN
-        )
-
-        // add step
-        viewModel.addCookingStepWithIngredients(
-            getEditable("New Step"),
-            getEditable(""),
-            TimeUnit.SECOND,
-            mutableListOf()
-        )
-        // edit step
-        // remove step
-        // change (add/remove) ingredient in step
-
-        val newRecipeId = viewModel.persistEntities().getOrAwaitValue()
-        assertNotEquals(Recipe.DEFAULT_ID, newRecipeId)
-
-        val recipeWithRelations =
-            recipeRepository.getRecipeWithRelationsById(newRecipeId).getOrAwaitValue(10)
-
-        assertEquals(name, recipeWithRelations.recipe.name)
-        assertEquals(servings.toInt(), recipeWithRelations.recipe.servings)
-        assertEquals(category, recipeWithRelations.recipe.category)
-
-        assertEquals(2, recipeWithRelations.ingredients.size)
-        assertEquals(
-            Ingredient("Updated Ingredient", 2.0, IngredientUnit.CAN),
-            recipeWithRelations.ingredients[0]
-        )
-        assertEquals(
-            Ingredient("New Ingredient", 1.0, IngredientUnit.NONE),
-            recipeWithRelations.ingredients[1]
-        )
-
-        assertEquals(3, recipeWithRelations.cookingStepsWithIngredients.size)
-        assertEquals(
-            CookingStep("New Step", 0, TimeUnit.SECOND),
-            recipeWithRelations.cookingStepsWithIngredients[2].cookingStep
-        )
-    }
-
-    /**
-     * Test validating name
-     */
-    @Test
-    fun validateNameSuccessful() {
-        beforeEach()
-        assertEquals(0, viewModel.validateName(getEditable("n")))
-    }
-
-    /**
-     * Test validating name
-     */
-    @Test
-    fun validateNameUnsuccessful() {
-        beforeEach()
-        assertNotEquals(0, viewModel.validateName(getEditable("")))
-    }
-
-    /**
-     * Test validating servings
-     */
-    @Test
-    fun validateServingsSuccessful() {
-        beforeEach()
-        assertEquals(0, viewModel.validateServings(getEditable("1")))
-    }
-
-    /**
-     * Test validating servings
-     */
-    @Test
-    fun validateServingsUnsuccessful() {
-        beforeEach()
-        assertNotEquals(0, viewModel.validateServings(getEditable("0")))
-        assertNotEquals(0, viewModel.validateServings(getEditable("")))
-    }
-
-    /**
-     * Test if variables get reset on initRecipe()
-     */
-    @Test
-    fun clearValuesSuccessful() {
-        beforeEach()
-        insertTestData(1, 1)
-        viewModel.setRecipeAttributes("Name", "1", RecipeCategory.BREAKFAST)
-        viewModel.initRecipe(Recipe.DEFAULT_ID)
-
-        assertNotNull(viewModel.ingredients.value)
-        assertEquals(0, viewModel.ingredients.value!!.size)
-
-        assertNotNull(viewModel.cookingStepsWithIngredients)
-        assertEquals(0, viewModel.cookingStepsWithIngredients.value!!.size)
-
-        assertEquals("", viewModel.recipe.value!!.name)
-        // servings is private and can't be tested
-        assertEquals(RecipeCategory.MAIN_DISHES, viewModel.category.value)
-
-        // recipeToUpdate is private and can't be tested here
-    }
-
-    /**
-     * Test if a recipe can be created successful after another recipe has been updated before
-     */
-//    @Test
-    fun updateAndCreateRecipeSuccessful() {
-        beforeEach()
-//        insertTestData(1, 1)
-        val id = viewModel.persistEntities().getOrAwaitValue()
-        assertEquals(1, recipeRepository.getRecipeTotal().getOrAwaitValue())
-        // recipe saved
-
-        GlobalScope.launch(Dispatchers.Main) {
-            delay(1000)
-            viewModel.initRecipe(id)
-        }
-
-        viewModel.recipe.getOrAwaitValue()
-        viewModel.ingredients.getOrAwaitValue()
-        viewModel.cookingStepsWithIngredients.getOrAwaitValue()
-
-        viewModel.persistEntities().getOrAwaitValue(20)
-        assertEquals(1, recipeRepository.getRecipeTotal().getOrAwaitValue())
-        // recipe updated
-
-        viewModel.setCategory(RecipeCategory.MAIN_DISHES)
-        GlobalScope.launch(Dispatchers.Main) {
-            delay(1000)
-            viewModel.initRecipe(Recipe.DEFAULT_ID)
-        }
-
-        viewModel.recipe.getOrAwaitValue()
-        viewModel.ingredients.getOrAwaitValue()
-        viewModel.cookingStepsWithIngredients.getOrAwaitValue()
-
-//        insertTestData(1, 1)
-        viewModel.recipe.getOrAwaitValue()
-        viewModel.persistEntities().getOrAwaitValue()
-        assertEquals(2, recipeRepository.getRecipeTotal().getOrAwaitValue())
-        // second recipe saved
-    }
-
-    /////////////////////////////////////////////////////
-
-    /**
-     * Mock Editable text from EditText
-     */
-    private fun getEditable(s: String): Editable {
-        val editText = EditText(appContext)
-        editText.setText(s)
-        return editText.text
-    }
+    /////
 
     /**
      * Insert as many random ingredients and cooking steps to ViewModel as wanted.
@@ -678,15 +169,15 @@ class AddRecipeViewModelTest {
         runBlocking {
             for (j in 1..ingredients) {
                 viewModel.addIngredient(
-                    getEditable("Inserted name $j"),
-                    getEditable("$j"),
+                    "Inserted name $j".toEditable(),
+                    "$j".toEditable(),
                     IngredientUnit.PINCH
                 )
             }
             for (j in 1..cookingSteps) {
                 viewModel.addCookingStepWithIngredients(
-                    getEditable("Inserted text $j"),
-                    getEditable("$j"),
+                    "Inserted text $j".toEditable(),
+                    "$j".toEditable(),
                     TimeUnit.HOUR,
                     mutableListOf()
                 )

@@ -1,60 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profile_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?attr/colorOnPrimary">
 
         <include
             android:id="@+id/header"
             layout="@layout/material_header"
-            app:headlineText="@{@string/site_notice}"/>
+            app:headlineText="@{@string/site_notice}" />
 
-
-        <TextView
-            android:id="@+id/site_notice_beckbold"
-            style="@style/bold_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/outline_horizontal"
-            android:layout_marginTop="@dimen/space_below_headline_1"
-            android:text="@string/beckbold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/header" />
-
-        <TextView
-            android:id="@+id/site_notice_text"
-            style="@style/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/outline_horizontal"
-            android:text="@string/site_notice_text"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/site_notice_beckbold" />
-
-        <TextView
-            android:id="@+id/photo_credits_headline"
-            style="@style/headline_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/outline_horizontal"
-            android:layout_marginTop="@dimen/space_top"
-            android:text="@string/photo_credits"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/site_notice_text" />
-
-        <TextView
-            android:id="@+id/photo_credits_text"
-            style="@style/small_text"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/outline_horizontal"
-            android:layout_marginTop="@dimen/space_below_headline_2"
-            android:text="@string/photo_credits_text"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/photo_credits_headline" />
+            android:layout_height="0dp"
+            android:paddingHorizontal="@dimen/outline_horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/header">
+
+            <TextView
+                android:id="@+id/site_notice_beckbold"
+                style="@style/bold_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_below_headline_1"
+                android:text="@string/beckbold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/site_notice_text"
+                style="@style/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/site_notice_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/site_notice_beckbold" />
+
+            <TextView
+                android:id="@+id/photo_credits_headline"
+                style="@style/headline_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_space"
+                android:text="@string/photo_credits"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/site_notice_text" />
+
+            <TextView
+                android:id="@+id/photo_credits_text"
+                style="@style/small_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_below_headline_2"
+                android:text="@string/photo_credits_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/photo_credits_headline" />
+
+            <ImageView
+                android:id="@+id/version_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_space_button"
+                android:background="@drawable/ic_baseline_access_time_24"
+                android:contentDescription="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/version_text"
+                style="@style/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_button_text"
+                app:layout_constraintBottom_toBottomOf="@id/version_icon"
+                app:layout_constraintStart_toEndOf="@+id/version_icon"
+                app:layout_constraintTop_toTopOf="@+id/version_icon"
+                tools:text="@string/version" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

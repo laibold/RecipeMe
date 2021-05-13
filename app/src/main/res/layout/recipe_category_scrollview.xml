@@ -25,15 +25,15 @@
 
             <de.hs_rm.recipe_me.ui.component.UnscrollableRecyclerView
                 android:id="@+id/recipe_list"
-                android:overScrollMode="never"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
                 android:scrollbars="none"
+                app:layoutManager="LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/recipe_listitem"
-                app:layoutManager="LinearLayoutManager"
-                android:nestedScrollingEnabled="false" />
+                tools:listitem="@layout/recipe_listitem" />
 
             <TextView
                 android:id="@+id/add_hint_text"
@@ -42,7 +42,7 @@
                 android:paddingEnd="100dp"
                 android:text="@string/add_recipe_text"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

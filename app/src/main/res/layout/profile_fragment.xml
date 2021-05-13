@@ -6,7 +6,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profile_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?attr/colorOnPrimary">
 
         <include
             android:id="@+id/header"
@@ -29,11 +30,11 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/space_below_headline_1"
+            android:background="@color/gray"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header"
-            android:background="@color/gray"
             app:layout_constraintWidth_percent="0.4"
             app:shapeAppearanceOverlay="@style/rounded_image_view" />
 
@@ -43,13 +44,13 @@
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/space_below_headline_1"
             android:src="@drawable/profile_picture_default"
+            android:visibility="invisible"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header"
             app:layout_constraintWidth_percent="0.4"
-            app:shapeAppearanceOverlay="@style/rounded_image_view"
-            android:visibility="invisible"/>
+            app:shapeAppearanceOverlay="@style/rounded_image_view" />
 
         <TextView
             android:id="@+id/profile_greeting"
@@ -75,8 +76,8 @@
             tools:maxLines="2"
             tools:text="@tools:sample/lorem/random" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/to_site_notice_element"
+        <LinearLayout
+            android:id="@+id/to_settings_element"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/outline_horizontal"
@@ -85,50 +86,26 @@
             app:layout_constraintTop_toBottomOf="@id/profile_quantity_recipes_text">
 
             <TextView
-                android:id="@+id/to_site_notice_headline"
+                android:id="@+id/to_settings_headline"
                 style="@style/bold_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:text="@string/site_notice"
+                android:text="@string/settings"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/to_site_notice_button"
+                android:id="@+id/to_settings_button"
                 android:layout_width="@dimen/small_arrow_button"
                 android:layout_height="@dimen/small_arrow_button"
+                android:layout_gravity="center"
                 android:layout_marginStart="@dimen/space_button_text"
                 android:background="@drawable/ic_baseline_arrow_forward_ios_24"
                 android:clickable="false"
-                android:contentDescription="@string/to_site_notice"
-                android:focusable="false"
-                app:layout_constraintBottom_toBottomOf="@id/to_site_notice_headline"
-                app:layout_constraintStart_toEndOf="@id/to_site_notice_headline"
-                app:layout_constraintTop_toTopOf="@id/to_site_notice_headline" />
+                android:contentDescription="@string/to_settings"
+                android:focusable="false" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <ImageView
-            android:id="@+id/version_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/outline_horizontal"
-            android:layout_marginBottom="@dimen/default_space_button"
-            android:background="@drawable/ic_baseline_access_time_24"
-            android:contentDescription="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/version_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_button_text"
-            app:layout_constraintBottom_toBottomOf="@id/version_icon"
-            app:layout_constraintStart_toEndOf="@+id/version_icon"
-            app:layout_constraintTop_toTopOf="@+id/version_icon"
-            tools:text="@string/version" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

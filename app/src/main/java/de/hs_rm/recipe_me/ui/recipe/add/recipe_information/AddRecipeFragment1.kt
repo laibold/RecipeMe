@@ -123,7 +123,7 @@ class AddRecipeFragment1 : Fragment(), BottomSheetImagePicker.OnImagesSelectedLi
      */
     private fun spinnerAdapter(): ArrayAdapter<String> {
         val names = RecipeCategory.getStringList(resources)
-        return ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, names)
+        return ArrayAdapter(requireContext(), R.layout.spinner_item, names)
     }
 
     /**

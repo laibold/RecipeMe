@@ -1,20 +1,13 @@
 package de.hs_rm.recipe_me.ui.recipe.add.cooking_step
 
 import android.app.Activity
-import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
-import android.view.LayoutInflater
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.core.widget.doAfterTextChanged
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddCookingStepDialogBinding
@@ -23,34 +16,20 @@ import de.hs_rm.recipe_me.model.recipe.CookingStep
 import de.hs_rm.recipe_me.model.recipe.TimeUnit
 import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
 import de.hs_rm.recipe_me.service.Formatter
+import de.hs_rm.recipe_me.ui.component.CustomDialog
 import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
 
 class AddCookingStepDialog constructor(
     private val activity: Activity,
     private var recipeViewModel: AddRecipeViewModel,
     private val cookingStepWithIngredients: CookingStepWithIngredients? = null
-) : Dialog(activity) {
+) : CustomDialog<AddCookingStepDialogBinding>(activity, R.layout.add_cooking_step_dialog) {
 
-    lateinit var binding: AddCookingStepDialogBinding
     private val cookingStepViewModel = AddCookingStepViewModel()
     private lateinit var adapter: CookingStepIngredientListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        binding = DataBindingUtil.inflate(
-            LayoutInflater.from(context), R.layout.add_cooking_step_dialog, null, false
-        )
-        setContentView(binding.root)
-
-        // Set width to 90% of screen
-        val width = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
-        window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
-
-        ////////////////////////////
 
         setTimeAdapter(null)
         setButtons()
@@ -77,7 +56,7 @@ class AddCookingStepDialog constructor(
         }
 
         if (cookingStepWithIngredients != null) {
-            // Cooking Step has bin reached in and should be updated, set values to fields
+            // Cooking Step has been reached in and should be updated, set values to fields
             cookingStepViewModel.addAssignedIngredients(cookingStepWithIngredients.ingredients)
 
             binding.formContent.cookingStepField.setText(cookingStepWithIngredients.cookingStep.text)
@@ -96,11 +75,11 @@ class AddCookingStepDialog constructor(
     private fun setButtons() {
         if (cookingStepWithIngredients != null) {
             // Update
-            binding.addButton.text = activity.resources.getString(R.string.update)
+            binding.addButton.text = activity.getString(R.string.update)
             binding.addButton.setOnClickListener { updateCookingStepAndClose() }
         } else {
             // Add
-            binding.addButton.text = activity.resources.getString(R.string.add)
+            binding.addButton.text = activity.getString(R.string.add)
             binding.addButton.setOnClickListener { addCookingStepAndClose() }
         }
 
@@ -136,7 +115,7 @@ class AddCookingStepDialog constructor(
     private fun setTimeAdapter(number: Int?) {
         val names = TimeUnit.getNumberStringList(activity.resources, number)
 
-        val adapter = ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, names)
+        val adapter = ArrayAdapter(context, R.layout.spinner_item, names)
         binding.formContent.cookingStepTimeSpinner.adapter = adapter
     }
 
@@ -177,7 +156,7 @@ class AddCookingStepDialog constructor(
             dismiss()
         } else {
             binding.formContent.cookingStepField.error =
-                activity.resources.getString(R.string.err_enter_description)
+                activity.getString(R.string.err_enter_description)
         }
     }
 
@@ -196,7 +175,7 @@ class AddCookingStepDialog constructor(
             dismiss()
         } else {
             binding.formContent.cookingStepField.error =
-                activity.resources.getString(R.string.err_enter_description)
+                activity.getString(R.string.err_enter_description)
         }
     }
 

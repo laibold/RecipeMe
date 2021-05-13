@@ -1,7 +1,8 @@
-package de.hs_rm.recipe_me
+package test_shared
 
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
+import kotlin.math.round
 import kotlin.random.Random
 
 object TestDataProvider {
@@ -14,17 +15,17 @@ object TestDataProvider {
         return Recipe(name, servings, category)
     }
 
-    fun getRandomIngredient(recipeId: Long): Ingredient {
-        val name = getRandomString(10)
-        val quantity = getRandomDouble(100.0)
+    fun getRandomIngredient(recipeId: Long = 0L, minQuantity: Double = 0.0): Ingredient {
+        val name = getRandomString(5)
+        val quantity = getRandomDouble(minQuantity, 100.0)
         val unit = getRandomIngredientUnit()
 
         return Ingredient(recipeId, name, quantity, unit)
     }
 
-    fun getRandomCookingStep(recipeId: Long): CookingStep {
+    fun getRandomCookingStep(recipeId: Long = Recipe.DEFAULT_ID): CookingStep {
         val description = getRandomString(20)
-        val time = getRandomInt(60)
+        val time = getRandomInt(1, 60)
         val unit = getRandomTimeUnit()
 
         return CookingStep(recipeId, description, time, unit)
@@ -32,25 +33,27 @@ object TestDataProvider {
 
     fun getRandomShoppingListItem(): ShoppingListItem {
         val name = getRandomString(10)
-        val quantity = getRandomDouble(100.0)
+        val quantity = getRandomDouble(maxValue = 100.0)
         val ingredientUnit = getRandomIngredientUnit()
 
         return ShoppingListItem(name, quantity, ingredientUnit)
     }
 
-    private fun getRandomString(length: Int): String {
-        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+    fun getRandomString(length: Int): String {
+        val allowedChars = ('a'..'z') + (' ')
         return (1..length)
             .map { allowedChars.random() }
             .joinToString("")
+            .trim()
+            .capitalize()
     }
 
-    private fun getRandomDouble(maxValue: Double): Double {
-        return Random.nextDouble(0.0, maxValue)
+    private fun getRandomDouble(minValue: Double = 0.0, maxValue: Double): Double {
+        return Random.nextDouble(minValue, maxValue).round(2)
     }
 
-    private fun getRandomInt(maxValue: Int): Int {
-        return Random.nextInt(maxValue)
+    fun getRandomInt(minValue: Int, maxValue: Int): Int {
+        return Random.nextInt(minValue, maxValue)
     }
 
     private fun getRandomRecipeCategory(): RecipeCategory {
@@ -66,6 +69,12 @@ object TestDataProvider {
     private fun getRandomIngredientUnit(): IngredientUnit {
         val unitIndex = Random.nextInt(0, IngredientUnit.values().size)
         return IngredientUnit.values()[unitIndex]
+    }
+
+    private fun Double.round(decimals: Int): Double {
+        var multiplier = 1.0
+        repeat(decimals) { multiplier *= 10 }
+        return round(this * multiplier) / multiplier
     }
 
 }

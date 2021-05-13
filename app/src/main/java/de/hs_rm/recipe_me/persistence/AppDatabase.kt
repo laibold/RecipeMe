@@ -30,7 +30,7 @@ import de.hs_rm.recipe_me.persistence.dao.UserDao
         CookingStepIngredientCrossRef::class,
         User::class
     ],
-    version = 9
+    version = 10
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -40,33 +40,51 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
     companion object {
-        private const val DATABASE_NAME = "test_db"
-//        private const val ASSET_NAME = "database/data.db"
+        // be careful here!!!
+        private const val CREATE_FROM_ASSET = false
+        // really careful!!!
+
+        private const val ASSET_NAME = "database/data.db"
 
         // For Singleton instantiation
         @Volatile
         private var instance: AppDatabase? = null
 
-        fun getInstance(context: Context): AppDatabase {
+        fun getInstance(context: Context, env: Environment = Environment.PROD): AppDatabase {
             return instance ?: synchronized(this) {
-                instance ?: buildDatabase(context).also { instance = it }
+                instance ?: buildDatabase(context, env).also { instance = it }
             }
         }
 
         // Create and pre-populate the database. See this article for more details:
         // https://medium.com/google-developers/7-pro-tips-for-room-fbadea4bfbd1#4785
-        private fun buildDatabase(context: Context): AppDatabase {
-            return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
-//                .createFromAsset(ASSET_NAME).fallbackToDestructiveMigration()
+        private fun buildDatabase(context: Context, env: Environment): AppDatabase {
+            return Room.databaseBuilder(context, AppDatabase::class.java, env.dbName).also { db ->
+                if (env == Environment.TEST) {
+                    // allow main thread queries only in test environment
+                    db.allowMainThreadQueries()
+                }
+                if (CREATE_FROM_ASSET) {
+                    db.createFromAsset(ASSET_NAME).fallbackToDestructiveMigration()
+                }
+            }
                 .addMigrations(
                     AppMigration.MIGRATION_4_5,
                     AppMigration.MIGRATION_5_6,
                     AppMigration.MIGRATION_6_7,
                     AppMigration.MIGRATION_7_8,
-                    AppMigration.MIGRATION_8_9
+                    AppMigration.MIGRATION_8_9,
+                    AppMigration.MIGRATION_9_10
                 )
                 .build()
         }
 
+    }
+
+    /**
+     * Enum for environments with database names
+     */
+    enum class Environment(val dbName: String) {
+        PROD("test_db"), TEST("android_test_db")
     }
 }

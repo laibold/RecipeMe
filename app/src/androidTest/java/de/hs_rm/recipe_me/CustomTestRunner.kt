@@ -1,3 +1,4 @@
+@file:Suppress("unused")
 package de.hs_rm.recipe_me
 
 import android.app.Application

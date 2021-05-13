@@ -44,4 +44,28 @@ class ShoppingListItem(
         checked = !checked
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ShoppingListItem
+
+        if (name != other.name) return false
+        if (quantity != other.quantity) return false
+        if (unit != other.unit) return false
+        if (id != other.id) return false
+        if (checked != other.checked) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + quantity.hashCode()
+        result = 31 * result + unit.hashCode()
+        result = 31 * result + id.hashCode()
+        result = 31 * result + checked.hashCode()
+        return result
+    }
+
 }

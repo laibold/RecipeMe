@@ -5,7 +5,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        tools:background="?attr/colorOnPrimary">
 
         <TextView
             android:id="@+id/cooking_step_label"
@@ -104,10 +105,10 @@
             android:padding="@dimen/small_button_padding_small_icon"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_baseline_edit_24"
-            android:tint="@color/black"
-            app:tooltipTextCompat="@{@string/edit_assigned_ingredients}"
+            android:tint="?attr/colorOnSecondary"
             app:layout_constraintBottom_toBottomOf="@id/ingredients_text_view"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tooltipTextCompat="@{@string/edit_assigned_ingredients}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,23 +1,17 @@
 package de.hs_rm.recipe_me.ui.recipe.add.ingredient
 
 import android.app.Activity
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
-import android.view.LayoutInflater
-import android.view.Window
-import android.view.WindowManager
 import android.widget.ArrayAdapter
 import androidx.core.widget.doAfterTextChanged
-import androidx.databinding.DataBindingUtil
 import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.AddIngredientDialogBinding
 import de.hs_rm.recipe_me.declaration.ui.focusAndOpenKeyboard
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.recipe.IngredientUnit
 import de.hs_rm.recipe_me.service.Formatter
+import de.hs_rm.recipe_me.ui.component.CustomDialog
 import de.hs_rm.recipe_me.ui.recipe.add.AddRecipeViewModel
 import java.text.DecimalFormatSymbols
 import java.util.*
@@ -26,24 +20,10 @@ class AddIngredientDialog constructor(
     private val activity: Activity,
     private var viewModel: AddRecipeViewModel,
     private val ingredient: Ingredient? = null
-) : Dialog(activity) {
-
-    lateinit var binding: AddIngredientDialogBinding
+) : CustomDialog<AddIngredientDialogBinding>(activity, R.layout.add_ingredient_dialog) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        binding = DataBindingUtil.inflate(
-            LayoutInflater.from(context), R.layout.add_ingredient_dialog, null, false
-        )
-        setContentView(binding.root)
-
-        // Set width to 90% of screen
-        val width = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
-        window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
 
         setUnitAdapter(null)
 
@@ -82,7 +62,7 @@ class AddIngredientDialog constructor(
     private fun setUnitAdapter(amount: Double?) {
         val names = IngredientUnit.getNumberStringList(context.resources, amount)
 
-        val adapter = ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, names)
+        val adapter = ArrayAdapter(context, R.layout.spinner_item, names)
         binding.ingredientUnitSpinner.adapter = adapter
     }
 

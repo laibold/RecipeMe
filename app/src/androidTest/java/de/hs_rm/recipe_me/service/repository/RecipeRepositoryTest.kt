@@ -1,43 +1,32 @@
 package de.hs_rm.recipe_me.service.repository
 
-import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import de.hs_rm.recipe_me.declaration.getOrAwaitValue
+import com.google.common.truth.Truth.assertThat
 import de.hs_rm.recipe_me.model.recipe.*
 import de.hs_rm.recipe_me.model.relation.CookingStepIngredientCrossRef
 import de.hs_rm.recipe_me.model.relation.CookingStepWithIngredients
 import de.hs_rm.recipe_me.persistence.AppDatabase
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import java.util.concurrent.Executors
+import test_shared.declaration.getOrAwaitValue
 
-@RunWith(AndroidJUnit4::class)
 class RecipeRepositoryTest {
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var repository: RecipeRepository
-
-    private lateinit var appContext: Context
+    lateinit var repository: RecipeRepository
 
     @Before
-    fun init() {
-        appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        val db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java)
-            .setTransactionExecutor(Executors.newSingleThreadExecutor())
-            .build()
-
-        val recipeDao = db.recipeDao()
-        repository = RecipeRepository(recipeDao)
-
+    fun beforeEach() {
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        val db = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java).build()
+        val dao = db.recipeDao()
+        repository = RecipeRepository(dao)
         insertTestRecipe()
     }
 
@@ -49,7 +38,7 @@ class RecipeRepositoryTest {
         val recipeName = "TestRecipe"
         val servings = 2
         val category = RecipeCategory.SNACKS
-        var id = -1L
+        var id: Long
 
         runBlocking {
             id = repository.insert(Recipe(recipeName, servings, category))
@@ -58,20 +47,10 @@ class RecipeRepositoryTest {
 
         val recipe = repository.getRecipeWithRelationsById(id).getOrAwaitValue()
 
-        assertEquals(recipe.ingredients.size, 1)
-        assertEquals(
-            recipe.ingredients[0].name,
-            "Ingredient1"
-        )
-        assertEquals(
-            recipe.ingredients[0].quantity,
-            2.0, 0.0
-        )
-        assertEquals(
-            recipe.ingredients[0].unit,
-            IngredientUnit.GRAM
-        )
-
+        assertThat(recipe.ingredients.size).isEqualTo(1)
+        assertThat(recipe.ingredients[0].name).isEqualTo("Ingredient1")
+        assertThat(recipe.ingredients[0].quantity).isEqualTo(2.0)
+        assertThat(recipe.ingredients[0].unit).isEqualTo(IngredientUnit.GRAM)
     }
 
     /**
@@ -82,7 +61,7 @@ class RecipeRepositoryTest {
         val recipeName = "TestRecipe"
         val servings = 2
         val category = RecipeCategory.SNACKS
-        var id = -1L
+        var id: Long
 
         runBlocking {
             id = repository.insert(Recipe(recipeName, servings, category))
@@ -91,10 +70,10 @@ class RecipeRepositoryTest {
 
         val recipe = repository.getRecipeWithRelationsById(id).getOrAwaitValue()
 
-        assertEquals(recipe.cookingStepsWithIngredients.size, 1)
-        assertEquals(recipe.cookingStepsWithIngredients[0].cookingStep.text, "cook")
-        assertEquals(recipe.cookingStepsWithIngredients[0].cookingStep.time, 20)
-        assertEquals(recipe.cookingStepsWithIngredients[0].cookingStep.timeUnit, TimeUnit.SECOND)
+        assertThat(recipe.cookingStepsWithIngredients.size).isEqualTo(1)
+        assertThat(recipe.cookingStepsWithIngredients[0].cookingStep.text).isEqualTo("cook")
+        assertThat(recipe.cookingStepsWithIngredients[0].cookingStep.time).isEqualTo(20)
+        assertThat(recipe.cookingStepsWithIngredients[0].cookingStep.timeUnit).isEqualTo(TimeUnit.SECOND)
     }
 
     @Test
@@ -106,7 +85,7 @@ class RecipeRepositoryTest {
         var recipes = repository.getRecipes().getOrAwaitValue()
         val sizeBefore = recipes.size
 
-        var id = -1L
+        var id: Long
 
         runBlocking {
             id = repository.insert(Recipe(recipeName, servings, category))
@@ -122,13 +101,13 @@ class RecipeRepositoryTest {
         recipes = repository.getRecipes().getOrAwaitValue()
         val sizeAfter = recipes.size
 
-        assertEquals(sizeBefore + 1, sizeAfter)
-        assertEquals(recipe.recipe.name, recipeName)
-        assertEquals(recipe.recipe.servings, servings)
-        assertEquals(recipe.recipe.category, category)
+        assertThat(sizeAfter).isEqualTo(sizeBefore + 1)
+        assertThat(recipe.recipe.name).isEqualTo(recipeName)
+        assertThat(recipe.recipe.servings).isEqualTo(servings)
+        assertThat(recipe.recipe.category).isEqualTo(category)
 
-        assertEquals(recipe.ingredients.size, 2)
-        assertEquals(recipe.cookingStepsWithIngredients.size, 3)
+        assertThat(recipe.ingredients.size).isEqualTo(2)
+        assertThat(recipe.cookingStepsWithIngredients.size).isEqualTo(3)
     }
 
     @Test
@@ -142,7 +121,7 @@ class RecipeRepositoryTest {
         recipes = repository.getRecipes().getOrAwaitValue()
         val sizeAfter = recipes.size
 
-        assertEquals(sizeBefore - 1, sizeAfter)
+        assertThat(sizeAfter).isEqualTo(sizeBefore - 1)
     }
 
     /**
@@ -155,7 +134,7 @@ class RecipeRepositoryTest {
         val ingredient2 = Ingredient("Ingredient2", 2.2, IngredientUnit.GRAM)
         val cookingStep = CookingStep("StepText", 2, TimeUnit.MINUTE)
 
-        var recipeId = 0L
+        var recipeId: Long
 
         runBlocking {
             recipeId = repository.insert(Recipe())
@@ -173,12 +152,12 @@ class RecipeRepositoryTest {
 
         val recipe = repository.getRecipeWithRelationsById(recipeId).getOrAwaitValue()
 
-        assertEquals(1, recipe.cookingStepsWithIngredients.size)
-        assertEquals(cookingStep, recipe.cookingStepsWithIngredients[0].cookingStep)
+        assertThat(recipe.cookingStepsWithIngredients.size).isEqualTo(1)
+        assertThat(recipe.cookingStepsWithIngredients[0].cookingStep).isEqualTo(cookingStep)
 
-        assertEquals(recipe.cookingStepsWithIngredients[0].ingredients.size, 2)
-        assertEquals(recipe.cookingStepsWithIngredients[0].ingredients[0], ingredient1)
-        assertEquals(recipe.cookingStepsWithIngredients[0].ingredients[1], ingredient2)
+        assertThat(recipe.cookingStepsWithIngredients[0].ingredients.size).isEqualTo(2)
+        assertThat(recipe.cookingStepsWithIngredients[0].ingredients[0]).isEqualTo(ingredient1)
+        assertThat(recipe.cookingStepsWithIngredients[0].ingredients[1]).isEqualTo(ingredient2)
     }
 
     /**
@@ -186,7 +165,7 @@ class RecipeRepositoryTest {
      */
     @Test
     fun deleteIngredientsAndCookingStepsSuccessful() {
-        var recipeId = 0L
+        var recipeId: Long
 
         runBlocking {
             recipeId = repository.insert(Recipe())
@@ -200,14 +179,14 @@ class RecipeRepositoryTest {
         }
 
         val recipe = repository.getRecipeWithRelationsById(recipeId).getOrAwaitValue()
-        assertEquals(2, recipe.cookingStepsWithIngredients.size)
-        assertEquals(3, recipe.ingredients.size)
+        assertThat(recipe.cookingStepsWithIngredients.size).isEqualTo(2)
+        assertThat(recipe.ingredients.size).isEqualTo(3)
 
         runBlocking { repository.deleteIngredientsAndCookingSteps(recipeId) }
 
         val recipeAfter = repository.getRecipeWithRelationsById(recipeId).getOrAwaitValue()
-        assertEquals(0, recipeAfter.cookingStepsWithIngredients.size)
-        assertEquals(0, recipeAfter.ingredients.size)
+        assertThat(recipeAfter.cookingStepsWithIngredients.size).isEqualTo(0)
+        assertThat(recipeAfter.ingredients.size).isEqualTo(0)
     }
 
     /////
@@ -217,5 +196,4 @@ class RecipeRepositoryTest {
             repository.insert(Recipe("recipeName", 3, RecipeCategory.SNACKS))
         }
     }
-
 }

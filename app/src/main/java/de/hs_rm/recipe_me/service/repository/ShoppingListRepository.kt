@@ -1,6 +1,7 @@
 package de.hs_rm.recipe_me.service.repository
 
 import androidx.lifecycle.LiveData
+import de.hs_rm.recipe_me.OpenForTesting
 import de.hs_rm.recipe_me.model.recipe.Ingredient
 import de.hs_rm.recipe_me.model.shopping_list.ShoppingListItem
 import de.hs_rm.recipe_me.persistence.dao.ShoppingListDao
@@ -9,6 +10,7 @@ import javax.inject.Inject
 /**
  * Single Source of Truth for [ShoppingListItem]. Use it with Dependency Injection
  */
+@OpenForTesting
 class ShoppingListRepository @Inject constructor(
     private val shoppingListDao: ShoppingListDao
 ) {

@@ -47,5 +47,4 @@ class RecipeCategoryViewModel @Inject constructor(
             recipeRepository.deleteRecipeAndRelations(recipe)
         }
     }
-
 }

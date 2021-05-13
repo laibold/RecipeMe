@@ -15,7 +15,6 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.request.RequestOptions
@@ -25,9 +24,14 @@ import de.hs_rm.recipe_me.R
 import de.hs_rm.recipe_me.databinding.RecipeDetailFragmentBinding
 import de.hs_rm.recipe_me.model.relation.RecipeWithRelations
 import de.hs_rm.recipe_me.service.GlideApp
+import de.hs_rm.recipe_me.service.PreferenceService
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RecipeDetailFragment : Fragment() {
+
+    @Inject
+    lateinit var preferenceService: PreferenceService
 
     private lateinit var binding: RecipeDetailFragmentBinding
     private val args: RecipeDetailFragmentArgs by navArgs()
@@ -96,7 +100,7 @@ class RecipeDetailFragment : Fragment() {
                         recipeId = viewModel.recipe.value?.recipe!!.id,
                         clearValues = true
                     )
-                    view.findNavController().navigate(direction)
+                    findNavController().navigate(direction)
                 }
                 MotionEvent.ACTION_UP -> {
                     view.performClick()
@@ -160,8 +164,8 @@ class RecipeDetailFragment : Fragment() {
             }
         })
 
-        binding.forwardButton.setOnClickListener {
-            val direction = RecipeDetailFragmentDirections.toCookingStepFragment()
+        binding.toCookingStepsButton.setOnClickListener {
+            val direction = RecipeDetailFragmentDirections.toCookingStepFragment(recipeId)
             findNavController().navigate(direction)
         }
 
@@ -187,7 +191,7 @@ class RecipeDetailFragment : Fragment() {
         }
 
         if (recipeWithRelations.cookingStepsWithIngredients.isEmpty()) {
-            binding.forwardButton.visibility = View.GONE
+            binding.toCookingStepsButton.visibility = View.GONE
             binding.recipeInfo.cookingStepsHeadline.visibility = View.GONE
         } else {
             setCookingSteps(recipeWithRelations)
@@ -238,13 +242,19 @@ class RecipeDetailFragment : Fragment() {
     }
 
     /**
-     * Set CookingSteps to TextView
+     * Set CookingSteps to TextView if preview is enabled in preferences
      */
     private fun setCookingSteps(recipeWithRelations: RecipeWithRelations) {
-        var allCookingSteps = ""
-        for (cookingStep in recipeWithRelations.cookingStepsWithIngredients)
-            allCookingSteps += cookingStep.cookingStep.text + "\n\n"
-        binding.recipeInfo.steps.text = allCookingSteps
+        val showPreview = preferenceService.getShowCookingStepPreview(true)
+
+        if (showPreview) {
+            val cookingStepsTexts =
+                recipeWithRelations.cookingStepsWithIngredients.map { it.cookingStep.text }
+            val allCookingSteps = cookingStepsTexts.joinToString("\n\n")
+            binding.recipeInfo.cookingStepsText.text = allCookingSteps
+        } else {
+            binding.recipeInfo.cookingStepsHeadline.visibility = View.GONE
+        }
     }
 
     /**

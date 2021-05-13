@@ -28,13 +28,6 @@ class UserRepository @Inject constructor(
     }
 
     /**
-     * Clear [User]
-     */
-    suspend fun clear() {
-        userDao.clear()
-    }
-
-    /**
      * @return current [User] as LiveData
      */
     fun getUser(): LiveData<User?> {

@@ -107,7 +107,7 @@
             <action
                 android:id="@+id/to_add_recipe_nav_graph"
                 app:destination="@id/add_recipe_nav_graph"
-                app:popUpTo="@id/add_recipe_nav_graph"/>
+                app:popUpTo="@id/add_recipe_nav_graph" />
         </fragment>
 
         <fragment
@@ -128,17 +128,6 @@
         android:name="de.hs_rm.recipe_me.ui.shopping_list.ShoppingListFragment"
         android:label="Shopping List Fragment"
         tools:layout="@layout/shopping_list_fragment" />
-
-    <fragment
-        android:id="@+id/profile_fragment"
-        android:name="de.hs_rm.recipe_me.ui.profile.ProfileFragment"
-        android:label="Profile Fragment"
-        tools:layout="@layout/profile_fragment">
-
-        <action
-            android:id="@+id/to_site_notice_fragment"
-            app:destination="@+id/site_notice_fragment" />
-    </fragment>
 
     <fragment
         android:id="@+id/recipe_detail_fragment"
@@ -173,11 +162,39 @@
         android:id="@+id/cooking_step_fragment"
         android:name="de.hs_rm.recipe_me.ui.recipe.detail.CookingStepFragment"
         android:label="Cooking Step Fragment"
-        tools:layout="@layout/cooking_step_fragment" />
+        tools:layout="@layout/cooking_step_fragment">
+
+        <argument
+            android:name="recipeId"
+            app:argType="long" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/profile_fragment"
+        android:name="de.hs_rm.recipe_me.ui.profile.ProfileFragment"
+        android:label="Profile Fragment"
+        tools:layout="@layout/profile_fragment">
+
+        <action
+            android:id="@+id/to_settings_fragment"
+            app:destination="@+id/settings_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settings_fragment"
+        android:name="de.hs_rm.recipe_me.ui.profile.settings.SettingsFragment"
+        android:label="Settings Fragment">
+
+        <action
+            android:id="@+id/to_site_notice_fragment"
+            app:destination="@+id/site_notice_fragment" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/site_notice_fragment"
-        android:name="de.hs_rm.recipe_me.ui.profile.SiteNoticeFragment"
+        android:name="de.hs_rm.recipe_me.ui.profile.settings.SiteNoticeFragment"
         android:label="Site Notice Fragment"
         tools:layout="@layout/site_notice_fragment" />
 
